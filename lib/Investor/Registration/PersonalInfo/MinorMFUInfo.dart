@@ -720,21 +720,21 @@ class _MinorMFUInfoState extends State<MinorMFUInfo> {
                               return;
                             }
 
-                            bool emailValid = RegExp(
-                                    r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
-                                .hasMatch(guardianEmailController.text);
-                            if (guardianEmailController.text.isEmpty ||
-                                !emailValid) {
-                              Utils.showError(
-                                  context, "Invalid Guardian Email");
-                              return;
-                            }
-                            if (guardianMobileController.text.isEmpty ||
-                                mobile.length != 10) {
-                              Utils.showError(
-                                  context, "Invalid Guardian Mobile Number");
-                              return;
-                            }
+                            // bool emailValid = RegExp(
+                            //         r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
+                            //     .hasMatch(guardianEmailController.text);
+                            // if (guardianEmailController.text.isEmpty ||
+                            //     !emailValid) {
+                            //   Utils.showError(
+                            //       context, "Invalid Guardian Email");
+                            //   return;
+                            // }
+                            // if (guardianMobileController.text.isEmpty ||
+                            //     mobile.length != 10) {
+                            //   Utils.showError(
+                            //       context, "Invalid Guardian Mobile Number");
+                            //   return;
+                            // }
                             if (mobile.length != 10 ||
                                 residenceMobile.length != 10 ||
                                 officeMobile.length != 10) {
