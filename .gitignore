@@ -1,0 +1,15 @@
+# Ignore everything
+/*
+
+# Except the lib directory
+!/lib/
+
+# Except the pubspec.yaml file
+!/pubspec.yaml
+
+# Ignore the specific file inside lib
+#lib/api/ApiConfig.dart
+
+# Optionally, include other files
+!.gitignore
+!Makefile
