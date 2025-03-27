@@ -419,7 +419,6 @@ class _NomineeInfoState extends State<NomineeInfo> {
                                       return InkWell(
                                         onTap: () {
                                           type = title;
-                                          log('type:$type');
                                           typeController.collapse();
                                           bottomState(() {});
                                         },
@@ -430,7 +429,6 @@ class _NomineeInfoState extends State<NomineeInfo> {
                                               groupValue: type,
                                               onChanged: (value) {
                                                 type = title;
-                                                log('val:$value, type:$type');
                                                 typeController.collapse();
                                                 bottomState(() {});
                                               },
@@ -778,7 +776,6 @@ class _NomineeInfoState extends State<NomineeInfo> {
                                       return InkWell(
                                         onTap: () {
                                           type = title;
-                                          log('type:$type');
                                           typeCode = getTypeCode(type);
                                           typeController.collapse();
                                           bottomState(() {});
@@ -790,7 +787,6 @@ class _NomineeInfoState extends State<NomineeInfo> {
                                               groupValue: type,
                                               onChanged: (value) {
                                                 type = title;
-                                                log('type:$type');
                                                 typeCode = getTypeCode(type);
                                                 typeController.collapse();
                                                 bottomState(() {});
