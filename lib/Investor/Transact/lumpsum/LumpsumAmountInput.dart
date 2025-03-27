@@ -287,7 +287,7 @@ class _LumpsumAmountInputState extends State<LumpsumAmountInput> {
     }
 
     return Container(
-      margin: EdgeInsets.only(bottom: 16),
+      margin: EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: Theme(
@@ -343,76 +343,11 @@ class _LumpsumAmountInputState extends State<LumpsumAmountInput> {
     );
   }
 
-  Widget rupeeCard({required String title}) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: AppFonts.f50014Black),
-          SizedBox(height: 16),
-          Row(
-            children: [
-              Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 11.5),
-                  decoration: BoxDecoration(
-                    color: Config.appTheme.mainBgColor,
-                    border: Border(
-                      left: BorderSide(
-                          width: 1, color: Config.appTheme.lineColor),
-                      top: BorderSide(
-                          width: 1, color: Config.appTheme.lineColor),
-                      bottom: BorderSide(
-                          width: 1, color: Config.appTheme.lineColor),
-                    ),
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(25),
-                        topLeft: Radius.circular(25)),
-                  ),
-                  child: Text(rupee, style: AppFonts.f50014Grey)),
-              Expanded(
-                child: TextFormField(
-                  keyboardType: TextInputType.numberWithOptions(),
-                  onChanged: (val) => amount = num.tryParse(val) ?? 0,
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Config.appTheme.lineColor, width: 1),
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(25),
-                          bottomRight: Radius.circular(25),
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Config.appTheme.lineColor,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(25),
-                          bottomRight: Radius.circular(25),
-                        ),
-                      ),
-                      hintText: 'Enter Lumpsum Amount'),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 16),
-          Text('Min Investment ₹ ${Utils.formatNumber(minAmount)}',
-              style: AppFonts.f50012.copyWith(color: AppColors.readableGrey)),
-        ],
-      ),
-    );
-  }
+
 
   Widget folioExpansionTile(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: Theme(

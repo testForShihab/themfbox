@@ -48,20 +48,22 @@ class _SipCartState extends State<SipCart> {
   String sipDayCode = "";
   List sipdayList = [];
 
+  ExpansionTileController frequencyController = ExpansionTileController();
+  String frequency = "";
+  String frequencyCode = "";
+  List dateList = [];
+  String getSipDay = '';
+
   Future<int> getSipDays(SchemeList item) async {
-    print("sipdayList => ${transactController.startDate.value.toString().split(" ").first}");
-
-    DateTime? startdate = DateFormat('yyyy-MM-dd').parse(item.startDate ?? "");
-    String formattedDateForInvestment = DateFormat('yyyy-MM-dd').format(startdate!);
+    String formattedDate = DateFormat('yyyy-MM-dd').format(transactController.startDate.value);
     print("item.startDate ${item.startDate}");
-
-    if (sipdayList.isNotEmpty) return 0;
+    getSipDay = transactController.startDate.value.day.toString(); // Update to use selected date's day
 
     Map data = await TransactionApi.getSipDays(
       user_id: user_id,
       client_name: client_name,
       bse_nse_mfu_flag: "${item.vendor}",
-      start_date: formattedDateForInvestment,
+      start_date: formattedDate,
       frequency: "Weekly",
     );
 
@@ -70,13 +72,20 @@ class _SipCartState extends State<SipCart> {
       return -1;
     }
 
-    /*sipdayList = data['list'];
-    Map temp = sipdayList.first;
-    sipDay = temp['desc'];
-    sipDayCode = temp['code'];*/
 
+    sipdayList = data['list'];
+    if(sipdayList.isNotEmpty){
+      Map temp = sipdayList.first;
+      sipDay = temp['desc'];
+      sipDayCode = temp['code'];
+    }
+    else{
+      sipDay = '';
+      sipDayCode = '';
+    }
     return 0;
   }
+
 
 
 
@@ -145,8 +154,7 @@ class _SipCartState extends State<SipCart> {
     }
 
     dateAndFreq = data['list'];
-    Map temp = dateAndFreq.firstWhere(
-        (element) => element['sip_frequency_code'] == item.frequency);
+    Map temp = dateAndFreq.first;
     frequency = temp['sip_frequency'];
     frequencyCode = temp['sip_frequency_code'];
     dateList = temp['sip_dates'].split(",");
@@ -387,6 +395,18 @@ class _SipCartState extends State<SipCart> {
     }
   }
 
+  Map<String, String> frequencyMap = {
+    "Monthly": "OM",
+    "Quarterly": "Q",
+    "Weekly": "OW",
+    "Week Days": "WD",
+    "Fortnightly": "TM",
+    "Business Days": "BZ",
+    "Daily": "D",
+    "Yearly": "Y",
+    "Half Yearly": "H",
+  };
+
   editBottomSheet(SchemeList item, Result result) async {
     num amount = num.tryParse(item.amount ?? "0") ?? 0;
     Map client_code_map = result.toJson();
@@ -404,6 +424,15 @@ class _SipCartState extends State<SipCart> {
     // frequency = Utils.getKeyByValue(frequencyMap, frequencyCode) ?? "";
     sipEndType = (item.untilCancel!) ? "Until Cancelled" : "${item.endDate}";
     sipEndDate = convertStrToDt("${item.endDate}");
+    sipDay = "${item.sipDate}";
+    frequency = "${item.frequency}";
+    print("frequency  $frequency");
+
+    String getfrequency = "${item.frequency}";
+
+    frequency = frequencyMap.keys.firstWhere(
+          (key) => frequencyMap[key] == getfrequency,
+    );
 
     showModalBottomSheet(
       context: context,
@@ -435,22 +464,32 @@ class _SipCartState extends State<SipCart> {
                         SizedBox(height: 16),
                         folioExpansionTile(bottomState, item),
                         SizedBox(height: 16),
-                        frequencyExpansionTile(bottomState),
+                        frequencyExpansionTile(bottomState, item),
                         SizedBox(height: 16),
-                        // sipDateExpansionTile(bottomState),
                         InkWell(
                             onTap: () async {
+                              // Ensure initial date is valid
+                              DateTime initialDate = transactController.startDate.value;
+                              while (disableWeekdays.contains(initialDate.weekday)) {
+                                initialDate = initialDate.add(Duration(days: 1));
+                              }
+
                               DateTime? temp = await showDatePicker(
                                   selectableDayPredicate: (DateTime dateTime) => !disableWeekdays.contains(dateTime.weekday),
                                   context: Get.context!,
                                   firstDate: DateTime.now().add(Duration(days: 7)),
-                                  initialDate: transactController.startDate.value,
+                                  initialDate: initialDate,
                                   lastDate: DateTime(2030)
                               );
+
                               if (temp == null) return;
+
+                              // Update start date and trigger SIP days refresh
                               transactController.setStartDateWithCallback(temp, () async {
-                                sipdayList = [];
-                                setState(() {});
+                                sipdayList = []; // Clear existing SIP days
+                                await getSipDays(item); // Fetch new SIP days based on selected date
+                                sipDay = temp.day.toString(); // Update SIP day to match selected date
+                                bottomState(() {}); // Refresh UI
                               });
                             },
                             child: transactController.rpDatePicker("SIP Start Date")
@@ -461,7 +500,7 @@ class _SipCartState extends State<SipCart> {
                           child: Column(
                             children: [
                               SizedBox(height: 16),
-                              sipDaysExpansionTile(context),
+                              sipDaysExpansionTile(bottomState),
                             ],
                           ),
                         ),
@@ -496,7 +535,7 @@ class _SipCartState extends State<SipCart> {
                           amount: "$amount",
                           units: "",
                           frequency: frequencyCode,
-                          sip_date: sipStartDate.day.toString(),
+                          sip_date: (frequency == "Weekly") ? sipDayCode : "",
                           start_date: convertDtToStr(sipStartDate),
                           end_date: convertDtToStr(sipEndDate),
                           trnx_type: (folio.contains("New")) ? "FP" : "AP",
@@ -513,10 +552,10 @@ class _SipCartState extends State<SipCart> {
                           Utils.showError(context, data['msg']);
                           return -1;
                         }
-                        cartItems = [];
+
                         EasyLoading.dismiss();
-                        //setState(() {});
-                        bottomState((){});
+                        cartItems = [];
+                        setState(() {});
                       },
                       text: "UPDATE"),
                 ],
@@ -726,78 +765,107 @@ class _SipCartState extends State<SipCart> {
     );
   }
 
-  ExpansionTileController frequencyController = ExpansionTileController();
-  String frequency = "";
-  String frequencyCode = "";
-  List dateList = [];
-  Widget frequencyExpansionTile(Function bottomState) {
-    String title = frequency;
 
+  Widget frequencyExpansionTile(bottomState, SchemeList item) {
     if(frequency.toLowerCase() == "weekly"){
-      disableWeekdays = [
-        DateTime.sunday,
-        DateTime.saturday
-      ];
-    }
-    else {
-      disableWeekdays = [];
+        disableWeekdays = [
+            DateTime.sunday,
+            DateTime.saturday
+        ];
+    } else {
+        disableWeekdays = [];
     }
 
     return Container(
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(10)),
-      child: Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          controller: frequencyController,
-          title: Text("SIP Frequency", style: AppFonts.f50014Black),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title, style: AppFonts.f50012),
-            ],
-          ),
-          children: [
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: dateAndFreq.length,
-              itemBuilder: (context, index) {
-                Map data = dateAndFreq[index];
-
-                String tempCode = data['sip_frequency_code'];
-                String temp = data['sip_frequency'];
-
-                return InkWell(
-                  onTap: () {
-                    frequency = temp;
-                    frequencyCode = tempCode;
-                    //dateList = data['sip_dates'].split(",");
-                    frequencyController.collapse();
-                    setState(() {});
-                  },
-                  child: Row(
-                    children: [
-                      Radio(
-                        value: tempCode,
-                        groupValue: frequencyCode,
-                        onChanged: (value) {
-                          frequency = temp;
-                          frequencyCode = tempCode;
-                          //dateList = data['sip_dates'].split(",");
-                          frequencyController.collapse();
-                          setState(() {});
-                        },
-                      ),
-                      Text(temp),
-                    ],
-                  ),
-                );
-              },
-            )
-          ],
+        decoration: BoxDecoration(
+            color: Colors.white, 
+            borderRadius: BorderRadius.circular(10)
         ),
-      ),
+        child: Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+                controller: frequencyController,
+                title: Text("SIP Frequency", style: AppFonts.f50014Black),
+                subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                        Text(frequency, style: AppFonts.f50012),
+                    ],
+                ),
+                children: [
+                    ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: dateAndFreq.length,
+                        itemBuilder: (context, index) {
+                            Map data = dateAndFreq[index];
+                            String tempCode = data['sip_frequency_code'];
+                            String temp = data['sip_frequency'];
+
+                            return InkWell(
+                                onTap: () async {
+                                    frequency = temp;
+                                    frequencyCode = tempCode;
+                                    frequencyController.collapse();
+                                    
+                                    // Reset SIP day
+                                    sipDay = '';
+                                    sipDayCode = '';
+                                    
+                                    // Reset and update start date
+                                    DateTime newStartDate = DateTime.now().add(Duration(days: 7));
+                                    while (disableWeekdays.contains(newStartDate.weekday)) {
+                                        newStartDate = newStartDate.add(Duration(days: 1));
+                                    }
+                                    transactController.startDate.value = newStartDate;
+                                    
+                                    // Clear and refresh SIP days list if weekly frequency
+                                    if(frequency.toLowerCase() == "weekly") {
+                                        sipdayList = [];
+                                        await getSipDays(item); // Make sure to pass the correct SchemeList item
+                                    }
+                                    
+                                    bottomState(() {});
+                                },
+                                child: Row(
+                                    children: [
+                                        Radio(
+                                            value: tempCode,
+                                            groupValue: frequencyCode,
+                                            onChanged: (value) async {
+                                                frequency = temp;
+                                                frequencyCode = tempCode;
+                                                frequencyController.collapse();
+                                                
+                                                // Reset SIP day
+                                                sipDay = '';
+                                                sipDayCode = '';
+                                                
+                                                // Reset and update start date
+                                                DateTime newStartDate = DateTime.now().add(Duration(days: 7));
+                                                while (disableWeekdays.contains(newStartDate.weekday)) {
+                                                    newStartDate = newStartDate.add(Duration(days: 1));
+                                                }
+                                                transactController.startDate.value = newStartDate;
+                                                
+                                                // Clear and refresh SIP days list if weekly frequency
+                                                if(frequency.toLowerCase() == "weekly") {
+                                                    sipdayList = [];
+                                                    await getSipDays(item); // Make sure to pass the correct SchemeList item
+                                                }
+                                                
+                                                bottomState(() {});
+                                            },
+                                        ),
+                                        Text(temp),
+                                    ],
+                                ),
+                            );
+                        },
+                    )
+                ],
+            ),
+        ),
     );
   }
 
@@ -879,11 +947,9 @@ class _SipCartState extends State<SipCart> {
   }
 
   ExpansionTileController sipDaysController = ExpansionTileController();
-  Widget sipDaysExpansionTile(BuildContext context) {
+  Widget sipDaysExpansionTile(bottomState) {
 
-    /*if(frequency != "Weekly") return SizedBox();*/
     String title = sipDay;
-
 
     return Container(
       decoration: BoxDecoration(
@@ -896,7 +962,7 @@ class _SipCartState extends State<SipCart> {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: AppFonts.f50012),
+              Text(sipDay, style: AppFonts.f50012),
             ],
           ),
           children: [
@@ -915,7 +981,7 @@ class _SipCartState extends State<SipCart> {
                     sipDay = temp;
                     sipDayCode = tempCode;
                     sipDaysController.collapse();
-                    setState(() {});
+                    bottomState((){});
                   },
                   child: Row(
                     children: [
@@ -926,7 +992,7 @@ class _SipCartState extends State<SipCart> {
                           sipDay = temp;
                           sipDayCode = tempCode;
                           sipDaysController.collapse();
-                          setState(() {});
+                          bottomState((){});
                         },
                       ),
                       Text(temp),

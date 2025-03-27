@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:mymfbox2_0/Investor/Registration/PersonalInfo/Models/guardian_relation_response.dart';
 import 'package:mymfbox2_0/Investor/Registration/PersonalInfo/Models/relationship_proof_response.dart';
-import 'package:mymfbox2_0/Investor/Registration/RegistrationSuccessful/Model/nominee_auth_response.dart';
 import 'package:mymfbox2_0/api/ApiConfig.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';

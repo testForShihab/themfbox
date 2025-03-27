@@ -51,12 +51,35 @@ class ResearchApi {
       required String client_name}) async {
     String encodedSchemes = Uri.encodeComponent(scheme_name);
     String url =
-        "${ApiConfig.apiUrl}/mfresearch/getRollingReturnsVsBenchmark?&key=${ApiConfig.apiKey}"
+        "https://api.mymfbox.com/mfresearch/getRollingReturnsVsBenchmark?&key=${ApiConfig.apiKey}"
         "&scheme_name=$encodedSchemes&start_date=$start_date&period=$period&client_name=$client_name";
     print("getRollingReturnsVsBenchmark url = $url");
     http.Response response = await http.post(Uri.parse(url));
     Map data = jsonDecode(response.body);
     print("getRollingReturnsVsBenchmark Response = $data");
+    return data;
+  }
+
+  static Future getRollingReturnsSchemes() async {
+    String url =
+        "https://api.mymfbox.com/mfresearch/getRollingReturnsSchemes?&key=${ApiConfig.apiKey}";
+
+    print("getRollingReturnsSchemes url = $url");
+    http.Response response = await http.post(Uri.parse(url));
+    Map data = jsonDecode(response.body);
+    print("getRollingReturnsSchemes Response = $data");
+    return data;
+  }
+
+
+  static Future getSchemeInceptionAndLatestNavDate({required String scheme_name,required String start_date,}) async {
+    String encodedSchemes = Uri.encodeComponent(scheme_name);
+    String url =
+        "https://api.mymfbox.com/mfresearch/getSchemeInceptionAndLatestNavDate?&key=${ApiConfig.apiKey}&scheme_name=$encodedSchemes&start_date=$start_date";
+    print("getSchemeInceptionAndLatestNavDate url = $url");
+    http.Response response = await http.post(Uri.parse(url));
+    Map data = jsonDecode(response.body);
+    print("getSchemeInceptionAndLatestNavDate Response = $data");
     return data;
   }
 

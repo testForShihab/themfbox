@@ -13,6 +13,9 @@ void main() {
     ..appTheme = DropletTheme()
     ..supportEmail = "bksatpathy123@gmail.com"
     ..supportMobile = "+91 9040155155"
+    ..companyName = "BSWealth"
+    ..address1 = "r3/i2 JM Colony Budharaja"
+    ..address2 = "Sambalpur, Odisha 768004"
     ..privacyPolicy = ""
     ..pdfURL = "https://api.themfbox.com");
 }

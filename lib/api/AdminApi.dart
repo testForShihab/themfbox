@@ -832,7 +832,7 @@ class AdminApi {
     required String client_name,
     required String scheme,
   }) async {
-    String encodedSchemes = Uri.encodeComponent(scheme);
+     String encodedSchemes = Uri.encodeComponent(scheme);
     String url =
         "${ApiConfig.apiUrl}/advisor/getNewSchemeForModelPortfolio?key=${ApiConfig.apiKey}&"
         "user_id=$user_id&client_name=$client_name&scheme=$encodedSchemes";

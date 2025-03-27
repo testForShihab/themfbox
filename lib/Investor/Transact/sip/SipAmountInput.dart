@@ -146,6 +146,7 @@ class _SipAmountInputState extends State<SipAmountInput> {
   List sipdayList = [];
   Future getSipDays()async{
     print("sipdayList => ${transactController.startDate.value.toString().split(" ").first}");
+    EasyLoading.isShow ;
     if(sipdayList.isNotEmpty) return 0;
     Map data = await TransactionApi.getSipDays(
         user_id: user_id,
@@ -164,6 +165,7 @@ class _SipAmountInputState extends State<SipAmountInput> {
     Map temp = sipdayList.first;
     sipDay = temp['desc'];
     sipDayCode = temp['code'];
+    EasyLoading.dismiss();
 
     return 0;
   }
@@ -200,8 +202,9 @@ class _SipAmountInputState extends State<SipAmountInput> {
     await getFolioList();
     await getSipDatesAndFrequency();
     if(client_code_map['bse_nse_mfu_flag'].toUpperCase() == "NSE")await getSipDays();
-    await getMinAmount();
     await getSipDividendSchemeoptions();
+    await getMinAmount();
+
 
     EasyLoading.dismiss();
     return 0;
@@ -289,7 +292,7 @@ class _SipAmountInputState extends State<SipAmountInput> {
                                 );
                                 if (temp == null) return;
                                 transactController.setStartDateWithCallback(temp, () async {
-                                  sipdayList = [];
+                              if(frequency.toLowerCase() == "weekly") sipdayList = [];
                                   setState(() {});
                                 });
                               },
@@ -349,10 +352,6 @@ class _SipAmountInputState extends State<SipAmountInput> {
                 }
 
                 EasyLoading.show();
-                dividend_code = Utils.getDividendCode(
-                    schemeAmfi: widget.schemeAmfi,
-                    marketType: client_code_map['bse_nse_mfu_flag'],
-                    payout: payout);
 
                 int res = await saveCartByUserId();
                 if (res == 0) {
@@ -476,6 +475,7 @@ class _SipAmountInputState extends State<SipAmountInput> {
   Future saveCartByUserId() async {
     DateTime sipStartDate = transactController.startDate.value;
 
+
     Map data = await TransactionApi.saveCartByUserId(
       user_id: user_id,
       client_name: client_name,
@@ -487,7 +487,7 @@ class _SipAmountInputState extends State<SipAmountInput> {
       amount: "$amount",
       units: "",
       frequency: frequencyCode,
-      sip_date: (frequency == "Weekly") ? sipDay : "",
+      sip_date: (frequency == "Weekly") ? sipDayCode : "",
       start_date: convertDtToStr(sipStartDate),
       end_date: convertDtToStr(sipEndDate),
       until_cancelled: sipEndType.contains('Until') ? "1" : "0",
@@ -498,8 +498,8 @@ class _SipAmountInputState extends State<SipAmountInput> {
       total_units: "",
       nfo_flag: (widget.isNfo) ? "Y" : "N",
       context: context,
-      sip_first_date: (client_code_map['bse_nse_mfu_flag'] == "NSE" && frequency == "Fornightly") ? fornightlyFirstStartDate : "",
-      sip_second_date: (client_code_map['bse_nse_mfu_flag'] == "NSE" && frequency == "Fornightly") ? fornightlySecondStartDate : "",
+      sip_first_date: ((client_code_map['bse_nse_mfu_flag'] == "NSE") && (frequency.toLowerCase() == "fortnightly")) ? fornightlyFirstStartDate : "",
+      sip_second_date: ((client_code_map['bse_nse_mfu_flag'] == "NSE") && (frequency.toLowerCase() == "fortnightly")) ? fornightlySecondStartDate : "",
     );
 
     if (data['status'] != 200) {

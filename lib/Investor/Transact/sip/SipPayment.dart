@@ -239,6 +239,13 @@ class _SipPaymentState extends State<SipPayment> {
   @override
   void initState() {
     super.initState();
+    if(client_code_map['bse_nse_mfu_flag'] == "MFU"){
+      paymentMode = "Net Banking";
+      paymentCode = "Net Banking";
+    }else if((client_code_map['bse_nse_mfu_flag'] == "NSE")){
+      paymentMode = "Online";
+      paymentCode = "Online";
+    }
   }
 
   Future getDatas() async {
@@ -352,7 +359,7 @@ class _SipPaymentState extends State<SipPayment> {
     ];
   }
 
-  num mandateAmount = 0;
+  num mandateAmount = 1000000;
   Widget mandateAmountTile() {
     return Container(
       padding: EdgeInsets.all(16),
@@ -371,25 +378,29 @@ class _SipPaymentState extends State<SipPayment> {
           Row(
             children: [
               Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  padding:  EdgeInsets.fromLTRB(16, 9.5, 16, 9.5),
                   decoration: BoxDecoration(
                     color: Config.appTheme.mainBgColor,
                     border: Border(
                       left: BorderSide(
-                          width: 1, color: Config.appTheme.lineColor),
+                          width: 2, color: Config.appTheme.lineColor),
                       top: BorderSide(
-                          width: 1, color: Config.appTheme.lineColor),
+                          width: 2, color: Config.appTheme.lineColor),
                       bottom: BorderSide(
-                          width: 1, color: Config.appTheme.lineColor),
+                          width: 2, color: Config.appTheme.lineColor),
                     ),
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(16),
                         topLeft: Radius.circular(16)),
                   ),
-                  child: Text(rupee, style: AppFonts.f50014Grey)),
+                  child: Text(rupee,  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.grey))),
               Expanded(
                 child: TextFormField(
                   keyboardType: TextInputType.numberWithOptions(),
+                  initialValue: "$mandateAmount",
                   onChanged: (val) => mandateAmount = num.tryParse(val) ?? 0,
                   decoration: InputDecoration(
                       contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
@@ -802,13 +813,7 @@ class _SipPaymentState extends State<SipPayment> {
   List paymentModeList = [];
   Widget paymentModeExpansionTile(BuildContext context) {
     if (firstPayment.contains("without")) return SizedBox();
-    if(client_code_map['bse_nse_mfu_flag'] == "MFU"){
-      paymentMode = "Net Banking";
-      paymentCode = "Net Banking";
-    }else if((client_code_map['bse_nse_mfu_flag'] == "NSE")){
-      paymentMode = "Online";
-      paymentCode = "Online";
-    }
+
 
     return Container(
       margin: EdgeInsets.only(bottom: 16),

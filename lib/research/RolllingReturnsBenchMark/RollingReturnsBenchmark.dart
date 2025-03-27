@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
@@ -32,14 +33,14 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
   List allCategories = [];
 
   TextEditingController startDateController = TextEditingController();
-  String startDate = "17-04-2019";
+  String startDate = "26-04-2020";
   int selectedRadioIndex = -1;
-  String selectedCategory = "Equity Schemes";
+  // String selectedCategory = "Equity Schemes";
   String selectedSubCategory = "Equity: Flexi Cap";
-  String selectedFund = "ICICI Pru Small Cap Gr";
+  String selectedFund = "ICICI Pru BlueChip Gr";
   String selectedRollingPeriod = "3 Years";
   String rollingPeriods = "3 Year";
-  String scheme = "ICICI Prudential Smallcap Fund - Growth";
+  String scheme = "ICICI Pru BlueChip Gr";
   String btnNo = "";
   int percentage = 0;
   String shortName = "";
@@ -104,35 +105,82 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
 
   Future getDatas() async {
     isLoading = true;
-    await getTopLumpsumFunds();
+    await getRollingReturnsSchemes();
+    // await getTopLumpsumFunds();
     await getRollingReturnsVsBenchmark();
     isLoading = false;
     return 0;
   }
 
-  Future getTopLumpsumFunds() async {
+  // Future getTopLumpsumFunds() async {
+  //   if (fundList.isNotEmpty) return 0;
+  //   Map data = await ResearchApi.getTopLumpsumFunds(
+  //     amount: '',
+  //     category: '',
+  //     period: '',
+  //     amc: "",
+  //     client_name: client_name,
+  //   );
+  //   List<dynamic> list = data['list'];
+  //   if (data['status'] != SUCCESS) {
+  //     Utils.showError(context, data['msg']);
+  //     return 0;
+  //   }
+  //   list.forEach((fund) {
+  //     Map<String, dynamic> fundData = {
+  //       'scheme_amfi': fund['scheme_amfi'],
+  //       'scheme_amfi_short_name': fund['scheme_amfi_short_name']
+  //     };
+  //     fundList.add(fundData);
+  //   });
+  //   return 0;
+  // }
+
+  List SchemeName = [];
+
+  Future getRollingReturnsSchemes() async {
     if (fundList.isNotEmpty) return 0;
-    Map data = await ResearchApi.getTopLumpsumFunds(
-      amount: '',
-      category: '',
-      period: '',
-      amc: "",
-      client_name: client_name,
-    );
-    List<dynamic> list = data['list'];
+    Map data = await ResearchApi.getRollingReturnsSchemes();
     if (data['status'] != SUCCESS) {
       Utils.showError(context, data['msg']);
       return 0;
     }
-    list.forEach((fund) {
-      Map<String, dynamic> fundData = {
-        'scheme_amfi': fund['scheme_amfi'],
-        'scheme_amfi_short_name': fund['scheme_amfi_short_name']
-      };
-      fundList.add(fundData);
-    });
+    SchemeName = data['scheme_list'];
     return 0;
   }
+
+  String SchemeStartdate = '';
+
+  Future getSchemeInceptionAndLatestNavDate(String formattedDate) async {
+    Map data = await ResearchApi.getSchemeInceptionAndLatestNavDate(
+        scheme_name: scheme, start_date: formattedDate);
+
+    if (data['status'] != SUCCESS) {
+      if (context.mounted) {
+        Utils.showError(context, data['msg']);
+      }
+      return;
+    }
+
+    setState(() {
+      SchemeStartdate = data['scheme_start_date'];
+    });
+
+    DateTime schemeStart = DateFormat('dd-MM-yyyy').parse(SchemeStartdate);
+    DateTime selectedStart = DateFormat('dd-MM-yyyy').parse(startDate);
+
+    if (selectedStart.isBefore(schemeStart)) {
+      String formattedSchemeDate = DateFormat('dd-MM-yyyy').format(schemeStart);
+      if (context.mounted) {
+        Utils.showError(
+            context,
+            'Motilal Oswal Large Cap Reg Gr inception date is $formattedSchemeDate. '
+                'Please select a start date greater than or equal to the scheme inception date.');
+      }
+      return;
+    }
+  }
+
 
   Future getRollingReturnsVsBenchmark() async {
     if (rollingReturnBenchmarkList.isNotEmpty) return 0;
@@ -141,6 +189,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
         start_date: startDate,
         period: rollingPeriods,
         client_name: client_name);
+
     if (rollingReturnBenchmarkList != null &&
         rollingReturnBenchmarkList is List<dynamic>) {
       newRollingReturnBenchmarkList = data['rollingReturnsTable'];
@@ -236,7 +285,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
   void initState() {
     super.initState();
     btnNo = "1";
-    startDateController.text = startDate;
+     startDateController.text = startDate;
   }
 
   @override
@@ -299,21 +348,49 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                           showRollingPeriodBottomSheet();
                         },
                         child: appBarColumn(
-                            "Rolling Period",
-                            getFirst13(selectedRollingPeriod),
-                            Icon(Icons.keyboard_arrow_down,
-                                color: Config.appTheme.themeColor)),
+                          "Rolling Period",
+                          getFirst13(selectedRollingPeriod),
+                          Icon(Icons.keyboard_arrow_down,
+                              color: Config.appTheme.themeColor),
+                          devWidth * 0.3,
+                        ),
                       ),
                       GestureDetector(
                         onTap: () {
                           showDatePickerDialog(context);
                         },
                         child: appBarColumn(
-                            "Start Date",
-                            getFirst13(startDateController.text),
-                            Icon(Icons.keyboard_arrow_down,
-                                color: Config.appTheme.themeColor)),
+                          "Start Date",
+                          getFirst13(startDateController.text),
+                          Icon(Icons.keyboard_arrow_down,
+                              color: Config.appTheme.themeColor),
+                          devWidth * 0.33,
+                        ),
                       ),
+                      GestureDetector(
+                        onTap: () async{
+                           print("============print the inception date ");
+                          // await getSchemeInceptionAndLatestNavDate(startDate);
+                          setState(() {
+                            rollingReturnBenchmarkList = [];
+                            chartRollingReturnBenchmarkList = [];
+                          });
+
+                        },
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
+                          margin: EdgeInsets.only(top: 22),
+                          decoration: BoxDecoration(
+                            color: Color(0XFFDEE6E6),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text("Apply",
+                              style: TextStyle(
+                                  color: Config.appTheme.themeColor,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                      )
                     ],
                   ),
                 ],
@@ -425,7 +502,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
     // Calculate min and max values for Y axis
     double minY = double.infinity;
     double maxY = double.negativeInfinity;
-    
+
     for (var series in funChartData) {
       for (var data in series) {
         final value = data.scheme_rolling_returns?.toDouble() ?? 0;
@@ -468,7 +545,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                 interval: ((maxY - minY) / 4).roundToDouble(),
                 getTitlesWidget: (value, meta) {
                   return Text(
-                    '${value.toStringAsFixed(1)}%',
+                    '${value.toInt()}%',
                     style: TextStyle(fontSize: 10),
                   );
                 },
@@ -477,14 +554,17 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
-                interval: (funChartData[0].length / 5).floor().toDouble(),
+                interval: (funChartData[0].length / 10).floor().toDouble(),
                 getTitlesWidget: (value, meta) {
-                  if (value.toInt() >= funChartData[0].length) return const Text('');
-                  final date = funChartData[0][value.toInt()].nav_date?.split('\n')[0] ?? '';
+                  if (value.toInt() >= funChartData[0].length)
+                    return const Text('');
+                  final date =
+                      funChartData[0][value.toInt()].nav_date?.split('\n')[0] ??
+                          '';
                   return Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Transform.rotate(
-                      angle: -0.5,
+                      angle: -1.55,
                       child: Text(date, style: TextStyle(fontSize: 10)),
                     ),
                   );
@@ -501,7 +581,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
               }).toList(),
               isCurved: true,
               color: Config.appTheme.defaultProfit,
-              barWidth: 2,
+              barWidth: 1.5,
               isStrokeCapRound: true,
               dotData: FlDotData(show: false),
               belowBarData: BarAreaData(
@@ -524,7 +604,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                 }).toList(),
                 isCurved: true,
                 color: Config.appTheme.themeColor,
-                barWidth: 2,
+                barWidth: 1.5,
                 isStrokeCapRound: true,
                 dotData: FlDotData(show: false),
                 belowBarData: BarAreaData(
@@ -541,7 +621,30 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
               ),
           ],
           lineTouchData: LineTouchData(
-            enabled: true,
+            touchCallback:
+                (FlTouchEvent event, LineTouchResponse? touchResponse) {
+              if (event is FlTapUpEvent || event is FlPanUpdateEvent) {
+                if (touchResponse != null &&
+                    touchResponse.lineBarSpots != null) {
+                  final touchedSpot = touchResponse.lineBarSpots!.first;
+                  final data =
+                      funChartData[touchedSpot.barIndex][touchedSpot.x.toInt()];
+
+                  // Update tooltip values
+                  tooltipDateNotifier.value = data.dateFormatNav ?? '';
+                  if (touchedSpot.barIndex == 0) {
+                    tooltipFundNotifier.value =
+                        touchedSpot.y.toStringAsFixed(2);
+                  } else {
+                    tooltipValueBenchMarkNotifier.value =
+                        touchedSpot.y.toStringAsFixed(2);
+                  }
+                }
+              }
+            },
+            handleBuiltInTouches: true,
+            getTouchLineStart: (barData, index) => double.infinity,
+            getTouchLineEnd: (barData, index) => 0,
             touchTooltipData: LineTouchTooltipData(
               tooltipBgColor: Colors.white,
               tooltipBorder: BorderSide(color: Colors.grey.withOpacity(0.2)),
@@ -549,20 +652,40 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
               getTooltipItems: (List<LineBarSpot> touchedSpots) {
                 return touchedSpots.map((spot) {
                   final data = funChartData[spot.barIndex][spot.x.toInt()];
-                  
-                  // Update tooltip values
-                  Future.microtask(() {
-                    tooltipDateNotifier.value = data.dateFormatNav ?? '';
-                    if (spot.barIndex == 0) {
-                      tooltipFundNotifier.value = spot.y.toStringAsFixed(2);
-                    } else {
-                      tooltipValueBenchMarkNotifier.value = spot.y.toStringAsFixed(2);
-                    }
-                  });
+                  final isFund = spot.barIndex == 0;
+
+                  // Define names and colors for Fund & Benchmark
+                  final String label = isFund ? 'Fund' : 'Benchmark';
+                  final Color labelColor = isFund
+                      ? Config.appTheme.defaultProfit
+                      : Config.appTheme.themeColor;
+                  final Color valueColor =
+                      labelColor; // Use same color for value
 
                   return LineTooltipItem(
-                    '',
-                    const TextStyle(color: Colors.transparent),
+                    '${data.dateFormatNav ?? ''}\n', // Display Date
+                    const TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold),
+                    children: [
+                      TextSpan(
+                        text: '$label: ',
+                        style: TextStyle(
+                          color: labelColor,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextSpan(
+                        text: '${spot.y.toStringAsFixed(2)}%',
+                        style: TextStyle(
+                          color: valueColor, // Color-coded value
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   );
                 }).toList();
               },
@@ -943,13 +1066,8 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                                     selectedRollingPeriod =
                                         rollingPeriod[index];
                                   }
-                                  rollingReturnBenchmarkList = [];
-                                  chartRollingReturnBenchmarkList = [];
                                   bottomState(() {});
-                                  //  await getRollingReturnsVsBenchmark();
-
                                   Get.back();
-                                  setState(() {});
                                 },
                                 child: Row(
                                   children: [
@@ -991,10 +1109,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                                                 rollingPeriod[index];
                                           }
 
-                                          rollingReturnBenchmarkList = [];
-                                          chartRollingReturnBenchmarkList = [];
                                           bottomState(() {});
-                                          getRollingReturnsVsBenchmark();
                                         });
                                       },
                                     ),
@@ -1017,127 +1132,127 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
         });
   }
 
-  showCategoryBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10), topRight: Radius.circular(10))),
-      builder: (context) {
-        return StatefulBuilder(builder: (_, bottomState) {
-          return Container(
-            height: devHeight * 0.7,
-            padding: EdgeInsets.all(7),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("  Select Category",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16)),
-                    IconButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        icon: Icon(Icons.close))
-                  ],
-                ),
-                Divider(),
-                SizedBox(
-                  height: 40,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: allCategories.length,
-                    itemBuilder: (context, index) {
-                      Map temp = allCategories[index];
-
-                      return (selectedCategory == temp['name'])
-                          ? selectedCategoryChip(
-                              "${temp['name']}", "${temp['count']}")
-                          : InkWell(
-                              onTap: () async {
-                                selectedCategory = temp['name'];
-                                subCategoryList = [];
-                                EasyLoading.show();
-                                await getTopLumpsumFunds();
-                                EasyLoading.dismiss();
-                                bottomState(() {});
-                              },
-                              child: categoryChip(
-                                  "${temp['name']}", "${temp['count']}"));
-                    },
-                  ),
-                ),
-                SizedBox(height: 10),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: subCategoryList.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      String temp = subCategoryList[index].split(":").last;
-                      return InkWell(
-                        onTap: () async {
-                          selectedSubCategory = subCategoryList[index];
-                          EasyLoading.show();
-                          fundList = [];
-                          await getTopLumpsumFunds();
-                          EasyLoading.dismiss();
-                          rollingReturnBenchmarkList = [];
-                          chartRollingReturnBenchmarkList = [];
-                          bottomState(() {});
-                          // await getRollingReturnsVsBenchmark();
-
-                          Get.back();
-                          setState(() {});
-                        },
-                        child: Row(
-                          children: [
-                            Radio(
-                                value: subCategoryList[index],
-                                groupValue: selectedSubCategory,
-                                activeColor: Config.appTheme.themeColor,
-                                onChanged: (val) async {
-                                  selectedSubCategory = subCategoryList[index];
-                                  fundList = [];
-                                  rollingReturnBenchmarkList = [];
-                                  chartRollingReturnBenchmarkList = [];
-                                  bottomState(() {});
-                                  await getTopLumpsumFunds();
-                                  if (fundList.isNotEmpty) {
-                                    setState(() {
-                                      scheme = fundList[0]['scheme_amfi'];
-                                    });
-                                  }
-                                  rollingReturnBenchmarkList = [];
-                                  chartRollingReturnBenchmarkList = [];
-                                  //  await getRollingReturnsVsBenchmark();
-                                  Get.back();
-                                  setState(() {});
-                                }),
-                            Container(
-                                height: 30,
-                                width: 30,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffF8DFD5),
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Icon(Icons.bar_chart,
-                                    color: Colors.red, size: 20)),
-                            Expanded(child: Text(" $temp")),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                )
-              ],
-            ),
-          );
-        });
-      },
-    );
-  }
+  // showCategoryBottomSheet() {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.only(
+  //             topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+  //     builder: (context) {
+  //       return StatefulBuilder(builder: (_, bottomState) {
+  //         return Container(
+  //           height: devHeight * 0.7,
+  //           padding: EdgeInsets.all(7),
+  //           child: Column(
+  //             children: [
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                 children: [
+  //                   Text("  Select Category",
+  //                       style: TextStyle(
+  //                           fontWeight: FontWeight.bold, fontSize: 16)),
+  //                   IconButton(
+  //                       onPressed: () {
+  //                         Get.back();
+  //                       },
+  //                       icon: Icon(Icons.close))
+  //                 ],
+  //               ),
+  //               Divider(),
+  //               SizedBox(
+  //                 height: 40,
+  //                 child: ListView.builder(
+  //                   scrollDirection: Axis.horizontal,
+  //                   itemCount: allCategories.length,
+  //                   itemBuilder: (context, index) {
+  //                     Map temp = allCategories[index];
+  //
+  //                     return (selectedCategory == temp['name'])
+  //                         ? selectedCategoryChip(
+  //                             "${temp['name']}", "${temp['count']}")
+  //                         : InkWell(
+  //                             onTap: () async {
+  //                               selectedCategory = temp['name'];
+  //                               subCategoryList = [];
+  //                               EasyLoading.show();
+  //                               await getTopLumpsumFunds();
+  //                               EasyLoading.dismiss();
+  //                               bottomState(() {});
+  //                             },
+  //                             child: categoryChip(
+  //                                 "${temp['name']}", "${temp['count']}"));
+  //                   },
+  //                 ),
+  //               ),
+  //               SizedBox(height: 10),
+  //               Expanded(
+  //                 child: ListView.builder(
+  //                   itemCount: subCategoryList.length,
+  //                   shrinkWrap: true,
+  //                   itemBuilder: (context, index) {
+  //                     String temp = subCategoryList[index].split(":").last;
+  //                     return InkWell(
+  //                       onTap: () async {
+  //                         selectedSubCategory = subCategoryList[index];
+  //                         EasyLoading.show();
+  //                         fundList = [];
+  //                         await getTopLumpsumFunds();
+  //                         EasyLoading.dismiss();
+  //                         rollingReturnBenchmarkList = [];
+  //                         chartRollingReturnBenchmarkList = [];
+  //                         bottomState(() {});
+  //                         // await getRollingReturnsVsBenchmark();
+  //
+  //                         Get.back();
+  //                         setState(() {});
+  //                       },
+  //                       child: Row(
+  //                         children: [
+  //                           Radio(
+  //                               value: subCategoryList[index],
+  //                               groupValue: selectedSubCategory,
+  //                               activeColor: Config.appTheme.themeColor,
+  //                               onChanged: (val) async {
+  //                                 selectedSubCategory = subCategoryList[index];
+  //                                 fundList = [];
+  //                                 rollingReturnBenchmarkList = [];
+  //                                 chartRollingReturnBenchmarkList = [];
+  //                                 bottomState(() {});
+  //                                 await getTopLumpsumFunds();
+  //                                 if (fundList.isNotEmpty) {
+  //                                   setState(() {
+  //                                     scheme = fundList[0]['scheme_amfi'];
+  //                                   });
+  //                                 }
+  //                                 rollingReturnBenchmarkList = [];
+  //                                 chartRollingReturnBenchmarkList = [];
+  //                                 //  await getRollingReturnsVsBenchmark();
+  //                                 Get.back();
+  //                                 setState(() {});
+  //                               }),
+  //                           Container(
+  //                               height: 30,
+  //                               width: 30,
+  //                               decoration: BoxDecoration(
+  //                                   color: Color(0xffF8DFD5),
+  //                                   borderRadius: BorderRadius.circular(5)),
+  //                               child: Icon(Icons.bar_chart,
+  //                                   color: Colors.red, size: 20)),
+  //                           Expanded(child: Text(" $temp")),
+  //                         ],
+  //                       ),
+  //                     );
+  //                   },
+  //                 ),
+  //               )
+  //             ],
+  //           ),
+  //         );
+  //       });
+  //     },
+  //   );
+  // }
 
   showSchemeBottomSheet() {
     TextEditingController searchController = TextEditingController();
@@ -1204,30 +1319,25 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: fundList.length,
+                    itemCount: SchemeName.length,
                     itemBuilder: (context, index) {
                       if (searchController.text.isNotEmpty &&
-                          !fundList[index]['scheme_amfi_short_name']
+                          !SchemeName[index]
                               .toLowerCase()
                               .contains(searchController.text.toLowerCase())) {
                         return SizedBox.shrink();
                       }
                       return RadioListTile(
                         controlAffinity: ListTileControlAffinity.leading,
-                        title: Text(fundList[index]['scheme_amfi_short_name']),
+                        title: Text(SchemeName[index]),
                         value: index,
                         groupValue: selectedRadioIndex,
                         onChanged: (int? value) async {
                           if (value != null) {
                             selectedRadioIndex = value;
-                            selectedFund =
-                                fundList[value]['scheme_amfi_short_name'];
-                            scheme = fundList[value]['scheme_amfi'];
-                            rollingReturnBenchmarkList = [];
-                            chartRollingReturnBenchmarkList = [];
-
-                            //  await getRollingReturnsVsBenchmark();
-                            setState(() {});
+                            selectedFund = SchemeName[value];
+                            scheme = SchemeName[value];
+                             setState(() {});
                             Get.back();
                           }
                         },
@@ -1276,14 +1386,14 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
     );
   }
 
-  Widget appBarColumn(String title, String value, Widget suffix) {
+  Widget appBarColumn(String title, String value, Widget suffix, double width) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text(title, style: TextStyle(fontSize: 14)),
         Container(
-          width: devWidth * 0.42,
+          width: width,
           padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
           margin: EdgeInsets.only(top: 5),
           decoration: BoxDecoration(
@@ -1576,7 +1686,8 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
           child: LineChart(
             LineChartData(
               // minX: 0,
-              minX: startingPoint, // Set the starting point for x-axis
+              minX: startingPoint,
+              // Set the starting point for x-axis
               maxX: startingPoint + months.length.toDouble() - 1,
               // minY: 0,
               // maxY: 100,
@@ -1794,15 +1905,13 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
     if (pickedDate != null) {
       String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
 
-      startDateController.text = formattedDate;
-      startDate = formattedDate;
       setState(() {
+        startDateController.text = formattedDate;
         startDate = formattedDate;
+        print("-----$startDate");
+        getSchemeInceptionAndLatestNavDate(startDate);
       });
-      rollingReturnBenchmarkList = [];
-      chartRollingReturnBenchmarkList = [];
 
-      // await getRollingReturnsVsBenchmark();
     }
   }
 }
