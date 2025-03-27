@@ -8,7 +8,7 @@
 !/pubspec.yaml
 
 # Ignore the specific file inside lib
-#lib/api/ApiConfig.dart
+lib/api/ApiConfig.dart
 
 # Optionally, include other files
 !.gitignore
