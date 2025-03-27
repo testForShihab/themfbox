@@ -813,12 +813,13 @@ class _NomineeInfoState extends State<NomineeInfo> {
                               DateTime? temp = await showDatePicker(
                                   context: context,
                                   firstDate: DateTime(1880),
-                                  initialDate:
-                                      convertStrToDt(nominee.nomineeDob ?? ""),
+                                  initialDate: dob,
                                   lastDate: DateTime.now());
                               if (temp == null) return;
                               dob = temp;
-                              setState(() {});
+                              print(dob);
+                              bottomState(() {});
+                              // setState(() {});
                             },
                           ),
 
@@ -844,6 +845,9 @@ class _NomineeInfoState extends State<NomineeInfo> {
                                     keyboardType: TextInputType.name,
                                     suffixText: "",
                                     controller: guardianPanController,
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(10),
+                                    ],
                                     textCapitalization:
                                         TextCapitalization.characters,
                                     onChange: (val) {},
@@ -856,7 +860,7 @@ class _NomineeInfoState extends State<NomineeInfo> {
                                   onTap: () async {
                                     DateTime? temp = await showDatePicker(
                                         context: context,
-                                        initialDate: DateTime(2002, 06, 18),
+                                        initialDate: guardianDob,
                                         firstDate: DateTime(1880),
                                         lastDate: DateTime.now());
                                     if (temp == null) return;
@@ -1318,6 +1322,10 @@ class _NomineeInfoState extends State<NomineeInfo> {
           AmountInputCard(
             title: "1st Nominee Percentage",
             suffixText: "%",
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(3),
+              MaxValueCorrectionFormatter(100),
+            ],
             initialValue: "100",
             keyboardType: TextInputType.number,
             onChange: (val) {

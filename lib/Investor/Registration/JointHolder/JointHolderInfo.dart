@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -439,6 +440,9 @@ class _JointHolderInfoState extends State<JointHolderInfo> {
                           SizedBox(height: 16),
                           AmountInputCard(
                             title: "PAN Number",
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(10),
+                            ],
                             initialValue: "",
                             suffixText: "",
                             hasSuffix: false,

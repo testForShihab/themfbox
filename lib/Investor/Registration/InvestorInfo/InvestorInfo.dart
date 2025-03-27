@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -71,6 +72,7 @@ class _InvestorInfoState extends State<InvestorInfo> {
   }
 
   InvestorInfoPojo investorInfo = InvestorInfoPojo();
+
   Future getInvestorInfo() async {
     if (investorInfo.name != null) return 0;
 
@@ -99,6 +101,7 @@ class _InvestorInfoState extends State<InvestorInfo> {
   }
 
   List arnList = [];
+
   Future getArnCode() async {
     Map data = await CommonOnBoardApi.getArnCode(
       client_name: client_name,
@@ -183,7 +186,11 @@ class _InvestorInfoState extends State<InvestorInfo> {
       holding_nature_desc: holdingNature,
       broker_code: arn,
       pan: user_pan,
-      bse_client_code: (bse_nse_mfu_flag == "BSE" && ((keys.contains("adminAsInvestor")) || (keys.contains("adminAsFamily")) == true)) ? client_code : "",
+      bse_client_code: (bse_nse_mfu_flag == "BSE" &&
+              ((keys.contains("adminAsInvestor")) ||
+                  (keys.contains("adminAsFamily")) == true))
+          ? client_code
+          : "",
       inv_category: "",
       bse_nse_mfu_flag: bse_nse_mfu_flag,
     );
@@ -218,15 +225,18 @@ class _InvestorInfoState extends State<InvestorInfo> {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Column(
                       children: [
-                      if(bse_nse_mfu_flag == "BSE" && ((keys.contains("adminAsInvestor")) || (keys.contains("adminAsFamily")) == true))  AmountInputCard(
-                          title: "BSE Client Code (Optional)",
-                          initialValue: client_code ?? "",
-                          suffixText: "",
-                          hasSuffix: false,
-                          keyboardType: TextInputType.name,
-                          borderRadius: BorderRadius.circular(20),
-                          onChange: (val) => client_code = val,
-                        ),
+                        if (bse_nse_mfu_flag == "BSE" &&
+                            ((keys.contains("adminAsInvestor")) ||
+                                (keys.contains("adminAsFamily")) == true))
+                          AmountInputCard(
+                            title: "BSE Client Code (Optional)",
+                            initialValue: client_code ?? "",
+                            suffixText: "",
+                            hasSuffix: false,
+                            keyboardType: TextInputType.name,
+                            borderRadius: BorderRadius.circular(20),
+                            onChange: (val) => client_code = val,
+                          ),
                         SizedBox(height: 16),
                         arnTile(context),
                         SizedBox(height: 16),
@@ -236,6 +246,10 @@ class _InvestorInfoState extends State<InvestorInfo> {
                         SizedBox(height: 16),
                         AmountInputCard(
                           title: "PAN Number",
+
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(10),
+                          ],
                           initialValue: user_pan,
                           //readOnly: true,
                           suffixText: "",
@@ -343,6 +357,7 @@ class _InvestorInfoState extends State<InvestorInfo> {
 
   ExpansionTileController arnController = ExpansionTileController();
   String arn = "";
+
   Widget arnTile(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -431,7 +446,6 @@ class _InvestorInfoState extends State<InvestorInfo> {
                     holdingNatureList = [];
                     await getHoldingNature();
                     setState(() {});
-
                   },
                   child: Row(
                     children: [
@@ -446,7 +460,6 @@ class _InvestorInfoState extends State<InvestorInfo> {
                           holdingNatureList = [];
                           await getHoldingNature();
                           setState(() {});
-
                         },
                       ),
                       Text(status, style: AppFonts.f50014Grey),

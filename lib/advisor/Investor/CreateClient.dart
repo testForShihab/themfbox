@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -97,6 +98,7 @@ class _CreateClientState extends State<CreateClient> {
   bool iconStatus = false;
   String selectedOptionType = "Create Client";
   String investorName = 'Select Investor';
+
   String getGenderByCode(String? code) {
     if (code == "M") return "Male";
     if (code == "F") return "Female";
@@ -105,6 +107,7 @@ class _CreateClientState extends State<CreateClient> {
   }
 
   bool isFirst = true;
+
   String getFirst13(String text) {
     String s = text.split(":").last;
     if (s.length > 13) s = s.substring(0, 13);
@@ -159,13 +162,12 @@ class _CreateClientState extends State<CreateClient> {
     return 0;
   }
 
-
   Future createClient() async {
     EasyLoading.show();
     Map data = await AdminApi.createClient(
         mfd_id: mfd_id,
         client_name: clientName,
-        investor_id: (selected_id==0)?"":"$selected_id",
+        investor_id: (selected_id == 0) ? "" : "$selected_id",
         name: name,
         pan: pan,
         mobile: mobile,
@@ -201,9 +203,11 @@ class _CreateClientState extends State<CreateClient> {
     }
 
     EasyLoading.dismiss();
-    bool hasKyc = data['kyc_status']??false;
-    if(hasKyc) return 1;
-    else return 2;
+    bool hasKyc = data['kyc_status'] ?? false;
+    if (hasKyc)
+      return 1;
+    else
+      return 2;
   }
 
   Future getAllSubBroker() async {
@@ -219,7 +223,7 @@ class _CreateClientState extends State<CreateClient> {
       return -1;
     }
     subBrokerList = List<String>.from(data['list']);
-   // subBrokerList.insert(0, "All");
+    // subBrokerList.insert(0, "All");
     return 0;
   }
 
@@ -306,6 +310,7 @@ class _CreateClientState extends State<CreateClient> {
 
   num selected_id = 0;
   UserDataPojo userDataPojo = UserDataPojo();
+
   Future getUser(int investor_id) async {
     if (userDataPojo.id != null) return 0;
     EasyLoading.show();
@@ -320,7 +325,7 @@ class _CreateClientState extends State<CreateClient> {
     Map<String, dynamic> user = data['user'];
 
     userDataPojo = UserDataPojo.fromJson(user);
-    selected_id = userDataPojo.id??0;
+    selected_id = userDataPojo.id ?? 0;
 
     name = userDataPojo.name!;
     nameController.text = name;
@@ -330,7 +335,6 @@ class _CreateClientState extends State<CreateClient> {
 
     /*investor_id = userDataPojo.id!.toInt();
     print("investor id $investor_id");*/
-
 
     mobile = userDataPojo.mobile ?? "";
     mobileController.text = mobile;
@@ -394,6 +398,7 @@ class _CreateClientState extends State<CreateClient> {
 
   TextEditingController cityController = TextEditingController();
   TextEditingController stateController = TextEditingController();
+
   Future getCityStateByPincode() async {
     Map data = await CommonOnBoardApi.getCityStateByPincode(
       user_id: mfd_id,
@@ -526,6 +531,9 @@ class _CreateClientState extends State<CreateClient> {
                                   SizedBox(height: 16),
                                   AmountInputCard(
                                     title: "PAN Number",
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(10),
+                                    ],
                                     controller: panController,
                                     readOnly: false,
                                     suffixText: "",
@@ -702,11 +710,9 @@ class _CreateClientState extends State<CreateClient> {
         height: 45,
         child: ElevatedButton(
           onPressed: () async {
-
             print("arn = ${Config.appArn}");
             if (name.isEmpty) {
-              Utils.showError(
-                  context, "Please Enter Name as PAN");
+              Utils.showError(context, "Please Enter Name as PAN");
               return;
             }
             if (statusType == "Major") {
@@ -716,14 +722,12 @@ class _CreateClientState extends State<CreateClient> {
               }
             } else {
               if (guardPanController.text.length != 10) {
-                Utils.showError(
-                    context, "Invalid Guardian PAN");
+                Utils.showError(context, "Invalid Guardian PAN");
                 return;
               }
             }
             if (mobile.length != 10) {
-              Utils.showError(
-                  context, "Invalid Mobile Number");
+              Utils.showError(context, "Invalid Mobile Number");
               return;
             }
             if (!email.isEmail) {
@@ -731,8 +735,7 @@ class _CreateClientState extends State<CreateClient> {
               return;
             }
             if (pincode.length != 6) {
-              Utils.showError(
-                  context, "Please Enter Pincode");
+              Utils.showError(context, "Please Enter Pincode");
               return;
             }
             if (cityController.text.isEmpty) {
@@ -740,13 +743,11 @@ class _CreateClientState extends State<CreateClient> {
               return;
             }
             if (stateController.text.isEmpty) {
-              Utils.showError(
-                  context, "Please Enter State");
+              Utils.showError(context, "Please Enter State");
               return;
             }
             if (address1.isEmpty) {
-              Utils.showError(
-                  context, "Please Enter Address Line 1");
+              Utils.showError(context, "Please Enter Address Line 1");
               return;
             }
             if (containsSpecialCharacter(name)) {
@@ -755,22 +756,19 @@ class _CreateClientState extends State<CreateClient> {
             }
 
             if (rmList.isNotEmpty && selectedRmName.isEmpty) {
-              Utils.showError(
-                  context, "Please Select RM");
+              Utils.showError(context, "Please Select RM");
               return;
             }
             if (selectedSubBroker.isEmpty) {
-              Utils.showError(
-                  context, "Please select Sub Broker");
+              Utils.showError(context, "Please select Sub Broker");
               return;
             }
 
             int res = await createClient();
-            if(res.isNegative) return;
-            bool hasKyc = (res==1);
+            if (res.isNegative) return;
+            bool hasKyc = (res == 1);
 
             successAlert(context, hasKyc: hasKyc);
-
           },
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
@@ -794,14 +792,12 @@ class _CreateClientState extends State<CreateClient> {
     return regExp.hasMatch(s);
   }
 
-  void successAlert(BuildContext context,{required bool hasKyc}) {
+  void successAlert(BuildContext context, {required bool hasKyc}) {
     String createUpdate =
         (selectedOptionType == "Create Client") ? "Created" : "Updated";
     showDialog(
         context: context,
         builder: (BuildContext context) {
-
-
           return AlertDialog(
             title: Text(
               "Client  $createUpdate Successfully",
@@ -818,15 +814,14 @@ class _CreateClientState extends State<CreateClient> {
                     Get.back();
                   },
                   child: Text("OK")),
-              if(!hasKyc)
-              TextButton(
-                  onPressed: () async {
+              if (!hasKyc)
+                TextButton(
+                    onPressed: () async {
                       Get.back();
                       await GetStorage().write("user_id", userDataPojo.id);
                       Get.off(Ekyc());
-
-                  },
-                  child: Text("Complete eKYC")),
+                    },
+                    child: Text("Complete eKYC")),
             ],
           );
         });
@@ -1385,6 +1380,7 @@ class _CreateClientState extends State<CreateClient> {
   String addressType = "";
   String addressTypeCode = "";
   ExpansionTileController addressController = ExpansionTileController();
+
   Widget addressTile(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -1609,6 +1605,7 @@ class _CreateClientState extends State<CreateClient> {
   }
 
   ExpansionTileController subBrokerController = ExpansionTileController();
+
   Widget subBrokerExpansionTile(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -1699,6 +1696,7 @@ class _CreateClientState extends State<CreateClient> {
   }
 
   ExpansionTileController rmController = ExpansionTileController();
+
   Widget rmExpansionTile(BuildContext context) {
     return Container(
       decoration: BoxDecoration(

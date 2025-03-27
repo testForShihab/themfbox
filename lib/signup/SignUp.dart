@@ -66,22 +66,24 @@ class _SignUpState extends State<SignUp> {
           height: devHeight,
           width: devWidth,
           decoration: BoxDecoration(
-            image: (Config.app_client_name == "vbuildwealth"|| Config.app_client_name == "perpetualinvestments")
+            image: (Config.app_client_name == "vbuildwealth" ||
+                    Config.app_client_name == "perpetualinvestments")
                 ? DecorationImage(
                     image: AssetImage("assets/orange-bg.png"),
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
                         Config.appTheme.themeColor, BlendMode.color))
-                : (Config.app_client_name == "themfbox") ? DecorationImage(
-                image: AssetImage("assets/green-bg.png"),
-                fit: BoxFit.cover,
-                colorFilter: ColorFilter.mode(
-                    Config.appTheme.themeColor, BlendMode.color))
-                : DecorationImage(
-                image: AssetImage("assets/white-bg.png"),
-                fit: BoxFit.cover,
-                colorFilter: ColorFilter.mode(
-                    Config.appTheme.overlay85, BlendMode.color)),
+                : (Config.app_client_name == "themfbox")
+                    ? DecorationImage(
+                        image: AssetImage("assets/green-bg.png"),
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                            Config.appTheme.themeColor, BlendMode.color))
+                    : DecorationImage(
+                        image: AssetImage("assets/white-bg.png"),
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                            Config.appTheme.overlay85, BlendMode.color)),
           ),
           child: Column(
             children: [
@@ -109,19 +111,27 @@ class _SignUpState extends State<SignUp> {
                       color: logobgcolor,
                       padding: EdgeInsets.all(4),
                       child: (Config.appLogo.contains("http"))
-                          ? Image.network(Config.appLogo, height: setImageSize(100))
-                          : (Config.app_client_name == "themfbox") ?Image.asset(Config.appLogo)
-                          : Image.asset(Config.appLogo),
-              ),
+                          ? Image.network(Config.appLogo,
+                              height: setImageSize(100))
+                          : (Config.app_client_name == "themfbox")
+                              ? Image.asset(Config.appLogo)
+                              : Image.asset(Config.appLogo),
+                    ),
               SizedBox(height: devHeight * 0.06),
               Text("Sign Up",
                   style: TextStyle(
-
-                      color: (Config.app_client_name == "themfbox") ? Colors.white : Config.appTheme.themeColor ,
+                      color: (Config.app_client_name == "themfbox")
+                          ? Colors.white
+                          : Config.appTheme.themeColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 20)),
               SizedBox(height: devHeight * 0.01),
-              Text("Welcome", style: TextStyle(color: (Config.app_client_name == "themfbox") ? Colors.white : Config.appTheme.themeColor ,)),
+              Text("Welcome",
+                  style: TextStyle(
+                    color: (Config.app_client_name == "themfbox")
+                        ? Colors.white
+                        : Config.appTheme.themeColor,
+                  )),
               SizedBox(height: devHeight * 0.05),
               Expanded(
                 child: Container(
@@ -175,17 +185,18 @@ class _SignUpState extends State<SignUp> {
                           capitalization: TextCapitalization.characters,
                           label: "PAN Number"),
                       SizedBox(height: devHeight * 0.03),
-                     if(Config.appArn.isEmpty) RpTextField(
-                          focusNode: focusNode2,
-                          borderColor: borderColor2,
-                          controller: arnController,
-                          maxLength: 6,
-                          onChange: (val) {
-                            arn = val;
-                          },
-                          readOnly: Config.appArn.isNotEmpty,
-                          inputType: TextInputType.number,
-                          label: "ARN Number"),
+                      if (Config.appArn.isEmpty)
+                        RpTextField(
+                            focusNode: focusNode2,
+                            borderColor: borderColor2,
+                            controller: arnController,
+                            maxLength: 6,
+                            onChange: (val) {
+                              arn = val;
+                            },
+                            readOnly: Config.appArn.isNotEmpty,
+                            inputType: TextInputType.number,
+                            label: "ARN Number"),
                       SizedBox(height: 24),
                       SizedBox(
                         width: devWidth,

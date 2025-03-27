@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -466,6 +467,9 @@ class _MinorInfoState extends State<MinorInfo> {
                               AmountInputCard(
                                 title: "Guardian PAN Number",
                                 initialValue: guard_pan,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(10),
+                                ],
                                 suffixText: "",
                                 hasSuffix: false,
                                 textCapitalization:
@@ -496,6 +500,21 @@ class _MinorInfoState extends State<MinorInfo> {
                                   setState(() {});
                                 },
                               ),
+                              AmountInputCard(
+                                title: "Guardian PAN Number",
+                                initialValue: guard_pan,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(10),
+                                ],
+                                suffixText: "",
+                                hasSuffix: false,
+                                textCapitalization:
+                                    TextCapitalization.characters,
+                                maxLength: 10,
+                                keyboardType: TextInputType.name,
+                                borderRadius: BorderRadius.circular(20),
+                                onChange: (val) => guard_pan = val,
+                              ),
                               SizedBox(height: 16),
                               guardRelController.nomineeRelationTile(context,
                                   relationList: guardianRelationList,
@@ -516,7 +535,7 @@ class _MinorInfoState extends State<MinorInfo> {
                               SizedBox(height: 16),
                               DottedLine(verticalPadding: 8),
                               AmountInputCard(
-                                title: "Mobile Number",
+                                title: "Primary Mobile Number",
                                 initialValue: mobile,
                                 suffixText: "",
                                 hasSuffix: false,

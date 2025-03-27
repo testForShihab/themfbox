@@ -60,6 +60,10 @@ class _MinorMFUInfoState extends State<MinorMFUInfo> {
   DateTime? guardianDobDate;
   TextEditingController guardianDobController = TextEditingController();
   TextEditingController minorNameController = TextEditingController();
+  TextEditingController guardianMobileController = TextEditingController();
+  TextEditingController guardianEmailController = TextEditingController();
+
+  List mobileRelationList = [];
 
   DateTime selectedFolioDate = DateTime.now();
   ExpansionTileController controller1 = ExpansionTileController();
@@ -139,7 +143,7 @@ class _MinorMFUInfoState extends State<MinorMFUInfo> {
       Utils.showError(context, data['msg']);
       return -1;
     }
-    minor2List = data['list'];
+    // minor2List = data['list'];
     return 0;
   }
 
@@ -257,45 +261,48 @@ class _MinorMFUInfoState extends State<MinorMFUInfo> {
     EasyLoading.show();
 
     Map data = await CommonOnBoardApi.savePersonalInfo(
-        user_id: user_id,
-        client_name: client_name,
-        name: minorNameController.text,
-        dob: convertDtToStr(dob!),
-        gender: "",
-        email: email,
-        email_relation: emailRelationCode,
-        mobile: mobile,
-        mobile_relation: mobileRelationCode,
-        alter_mobile: alternateMobile,
-        alter_email: alternateMail,
-        phone_office: officeMobile,
-        phone_residence: residenceMobile,
-        place_birth: birthPlace,
-        country_birth: birthCountry,
-        country_birth_code: birthCountryCode,
-        occupation: employementStatus,
-        occupation_code: employementStatusCode,
-        occupation_other: "",
-        income: annualSalary,
-        income_code: annualSalaryCode,
-        source_wealth: incomeSource,
-        source_wealth_code: incomeSourceCode,
-        source_wealth_other: "",
-        political_status: politicalRelation,
-        political_status_code: politicalRelationCode,
-        guard_name: guard_name,
-        guard_pan: guard_pan,
-        mobile_isd_code: isdCode,
-        guard_dob: convertDtToStr(guardianDobDate!),
-        guard_relation: guardianRelationCode,
-        guard_account_relation: accountRelationCode,
-        guard_relation_proof: relationProofCode,
-        father_name: fatherName,
-        address_type_desc: addressType,
-        address_type: addressTypeCode,
-        networth_dob: "",
-        networth_amount: "",
-        bse_nse_mfu_flag: bse_nse_mfu_flag);
+      user_id: user_id,
+      client_name: client_name,
+      name: minorNameController.text,
+      dob: convertDtToStr(dob!),
+      gender: "",
+      email: email,
+      email_relation: emailRelationCode,
+      mobile: mobile,
+      mobile_relation: mobileRelationCode,
+      alter_mobile: alternateMobile,
+      alter_email: alternateMail,
+      phone_office: officeMobile,
+      phone_residence: residenceMobile,
+      place_birth: birthPlace,
+      country_birth: birthCountry,
+      country_birth_code: birthCountryCode,
+      occupation: employementStatus,
+      occupation_code: employementStatusCode,
+      occupation_other: "",
+      income: annualSalary,
+      income_code: annualSalaryCode,
+      source_wealth: incomeSource,
+      source_wealth_code: incomeSourceCode,
+      source_wealth_other: "",
+      political_status: politicalRelation,
+      political_status_code: politicalRelationCode,
+      guard_name: guard_name,
+      guard_pan: guard_pan,
+      mobile_isd_code: isdCode,
+      guard_dob: convertDtToStr(guardianDobDate!),
+      guard_relation: guardianRelationCode,
+      guard_account_relation: accountRelationCode,
+      guard_relation_proof: relationProofCode,
+      father_name: fatherName,
+      address_type_desc: addressType,
+      address_type: addressTypeCode,
+      networth_dob: "",
+      networth_amount: "",
+      bse_nse_mfu_flag: bse_nse_mfu_flag,
+      guardEmail: guardianMobileController.text,
+      guardMobileNumber: guardianEmailController.text,
+    );
     if (data['status'] != 200) {
       Utils.showError(context, data['msg']);
       return -1;
@@ -385,6 +392,9 @@ class _MinorMFUInfoState extends State<MinorMFUInfo> {
     guardianRelation =
         findGuardianRelationDesc(personalInfo.guardRelation ?? '') ?? "";
 
+    guardianMobileController.text = personalInfo.guardMob ?? '';
+    guardianEmailController.text = personalInfo.guardEmail ?? '';
+
     relationProofCode = '${personalInfo.guardRelationProof}';
     selectedRelation =
         findRelationShipProof(personalInfo.guardRelationProof ?? '') ?? "";
@@ -417,23 +427,27 @@ class _MinorMFUInfoState extends State<MinorMFUInfo> {
     politicalRelationCode = "${personalInfo.politicalStatusCode}";
   }
 
+  int reloadCount = 0;
+
   Future getDatas() async {
     EasyLoading.show();
 
-    await getInvestorInfo();
-    await getCountryList();
+    await getPersonalInfo();
+    await getGuardianRelationship();
+    await getRelationshipProof();
     await getRelationList();
     await getAddressList();
+    await getCountryList();
     await getEmpStatusList();
     await getAnnualSalaryList();
     await getIncomeSourceList();
     await getPoliticalRelationList();
-    await getPersonalInfo();
-    await getGuardianRelationship();
-    await getAccountRelationship();
-    await getRelationshipProof();
+    // await getAccountRelationship();
 
-    fillData();
+    if (reloadCount == 0) {
+      fillData();
+    }
+    reloadCount++;
     EasyLoading.dismiss();
 
     return 0;
@@ -502,6 +516,9 @@ class _MinorMFUInfoState extends State<MinorMFUInfo> {
                               AmountInputCard(
                                 title: "Guardian PAN Number",
                                 initialValue: guard_pan,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(10),
+                                ],
                                 suffixText: "",
                                 hasSuffix: false,
                                 textCapitalization:
@@ -512,8 +529,32 @@ class _MinorMFUInfoState extends State<MinorMFUInfo> {
                                 onChange: (val) => guard_pan = val,
                               ),
                               SizedBox(height: 16),
+                              AmountInputCard(
+                                title: "Guardian Mobile Number",
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(10),
+                                ],
+                                controller: guardianMobileController,
+                                suffixText: "",
+                                hasSuffix: false,
+                                maxLength: 10,
+                                keyboardType: TextInputType.number,
+                                borderRadius: BorderRadius.circular(20),
+                                onChange: (val) {},
+                              ),
+                              SizedBox(height: 16),
+                              AmountInputCard(
+                                title: "Guardian Email",
+                                controller: guardianEmailController,
+                                suffixText: "",
+                                hasSuffix: false,
+                                keyboardType: TextInputType.emailAddress,
+                                borderRadius: BorderRadius.circular(20),
+                                onChange: (val) {},
+                              ),
+                              SizedBox(height: 16),
                               dateInput(
-                                title: "Guardion DOB",
+                                title: "Guardian DOB",
                                 initialValue: convertDtToStr(
                                         guardianDobDate ?? DateTime.now()) ??
                                     convertDtToStr(DateTime(2002, 06, 18)),
@@ -533,7 +574,7 @@ class _MinorMFUInfoState extends State<MinorMFUInfo> {
 
                                   guardianDobController.text =
                                       "$day-$month-$year";
-                                  setState(() {});
+                                  // setState(() {});
                                 },
                               ),
                               SizedBox(height: 16),
@@ -546,7 +587,7 @@ class _MinorMFUInfoState extends State<MinorMFUInfo> {
                                   LengthLimitingTextInputFormatter(10),
                                   FilteringTextInputFormatter.digitsOnly,
                                 ],
-                                title: "Mobile Number",
+                                title: "Primary Mobile Number",
                                 initialValue: mobile,
                                 suffixText: "",
                                 // maxLength: 10,
@@ -678,6 +719,22 @@ class _MinorMFUInfoState extends State<MinorMFUInfo> {
                               Utils.showError(context, "Please Select DOB");
                               return;
                             }
+
+                            // bool emailValid = RegExp(
+                            //         r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
+                            //     .hasMatch(guardianEmailController.text);
+                            // if (guardianEmailController.text.isEmpty ||
+                            //     !emailValid) {
+                            //   Utils.showError(
+                            //       context, "Invalid Guardian Email");
+                            //   return;
+                            // }
+                            // if (guardianMobileController.text.isEmpty ||
+                            //     mobile.length != 10) {
+                            //   Utils.showError(
+                            //       context, "Invalid Guardian Mobile Number");
+                            //   return;
+                            // }
                             if (mobile.length != 10 ||
                                 residenceMobile.length != 10 ||
                                 officeMobile.length != 10) {
@@ -814,8 +871,6 @@ class _MinorMFUInfoState extends State<MinorMFUInfo> {
   OutlineInputBorder borderStyle = OutlineInputBorder(
       borderSide: BorderSide(color: AppColors.lineColor),
       borderRadius: BorderRadius.circular(20));
-
-  List mobileRelationList = [];
 
   Widget mobileRelationTile(BuildContext context) {
     return Container(
