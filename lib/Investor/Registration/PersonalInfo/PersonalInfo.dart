@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -311,7 +309,8 @@ class _PersonalInfoState extends State<PersonalInfo> {
       dobController.text = personalInfo.dob ?? '';
       dob = convertStrToDt("${personalInfo.dob}");
     }
-    alternateMobile = '${personalInfo.alterEmail}';
+    alternateMobile = '${personalInfo.alterMobile}';
+    isdCode = '${personalInfo.mobileIsdCode}';
 
     residenceMobile = '${personalInfo.phoneResidence}';
     officeMobile = '${personalInfo.phoneOffice}';
@@ -460,6 +459,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                                   (isdInfo.contains(investorInfo.taxStatus)))
                                 AmountInputCard(
                                     title: "Mobile ISD Code",
+                                    initialValue: isdCode,
                                     suffixText: "",
                                     hasSuffix: false,
                                     borderRadius: BorderRadius.circular(20),

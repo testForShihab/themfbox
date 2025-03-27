@@ -352,6 +352,8 @@ class CommonOnBoardApi {
     required String networth_amount,
     required String bse_nse_mfu_flag,
     required String mobile_isd_code,
+    String? guardMobileNumber,
+    String? guardEmail,
   }) async {
     String url =
         "${ApiConfig.apiUrl}/onboard/savePersonalInfo?key=${ApiConfig.apiKey}&"
@@ -370,7 +372,7 @@ class CommonOnBoardApi {
         "guard_relation=$guard_relation&guard_relation_proof=$guard_relation_proof&guard_account_relation=$guard_account_relation&"
         "father_name=$father_name&address_type=$address_type&"
         "address_type_desc=$address_type_desc&networth_dob=$networth_dob&"
-        "networth_amount=$networth_amount&bse_nse_mfu_flag=$bse_nse_mfu_flag&mobile_isd_code=$mobile_isd_code";
+        "networth_amount=$networth_amount&bse_nse_mfu_flag=$bse_nse_mfu_flag&mobile_isd_code=$mobile_isd_code&guard_mobile=${guardMobileNumber ?? ''}&guard_email=${guardEmail ?? ''}";
 
     print("savePersonalInfo url = $url");
 

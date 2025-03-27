@@ -411,6 +411,9 @@ class _AddJoinHolderInfoDetailPageState
                         SizedBox(height: 16),
                         AmountInputCard(
                           controller: panNumberController,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(10),
+                          ],
                           title: "PAN Number",
                           suffixText: "",
                           hasSuffix: false,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -42,6 +43,9 @@ class _ProofOfIdentity1State extends State<ProofOfIdentity1> {
             Text("Fetch PAN from Digilocker", style: AppFonts.f50014Grey),
             SizedBox(height: 16),
             AmountInputCard(
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(10),
+              ],
               title: "PAN Number",
               suffixText: "",
               hasSuffix: false,

@@ -35,6 +35,9 @@ class PersonalInfoPojo {
   String? addressTypeDesc;
   String? networthDob;
   String? networthAmount;
+  String? mobileIsdCode;
+  String? guardMob;
+  String? guardEmail;
 
   PersonalInfoPojo({
     this.name,
@@ -73,6 +76,9 @@ class PersonalInfoPojo {
     this.networthDob,
     this.networthAmount,
     this.mobileRelationDesc,
+    this.mobileIsdCode,
+    this.guardMob,
+    this.guardEmail,
   });
 
   PersonalInfoPojo.fromJson(Map<String, dynamic> json) {
@@ -112,6 +118,9 @@ class PersonalInfoPojo {
     addressTypeDesc = json['address_type_desc'];
     networthDob = json['networth_dob'];
     networthAmount = json['networth_amount'];
+    mobileIsdCode = json['mobile_isd_code'];
+    guardMob = json['guard_mobile'];
+    guardEmail = json['guard_email'];
   }
 
   Map<String, dynamic> toJson() {
@@ -152,6 +161,9 @@ class PersonalInfoPojo {
     data['address_type_desc'] = addressTypeDesc;
     data['networth_dob'] = networthDob;
     data['networth_amount'] = networthAmount;
+    data['mobile_isd_code'] = mobileIsdCode;
+    data['guard_mobile'] = guardMob;
+    data['guard_email'] = guardEmail;
     return data;
   }
 }
