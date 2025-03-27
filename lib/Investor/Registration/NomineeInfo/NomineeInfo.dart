@@ -419,6 +419,7 @@ class _NomineeInfoState extends State<NomineeInfo> {
                                       return InkWell(
                                         onTap: () {
                                           type = title;
+                                          log('type:$type');
                                           typeController.collapse();
                                           bottomState(() {});
                                         },
@@ -429,6 +430,7 @@ class _NomineeInfoState extends State<NomineeInfo> {
                                               groupValue: type,
                                               onChanged: (value) {
                                                 type = title;
+                                                log('val:$value, type:$type');
                                                 typeController.collapse();
                                                 bottomState(() {});
                                               },
@@ -651,7 +653,11 @@ class _NomineeInfoState extends State<NomineeInfo> {
   editBottomSheet(NomineePojo nominee, int index) {
     String name = "${nominee.nomineeName}";
 
-    String type = "${nominee.nomineeTypeDesc}";
+    String type = switch (nominee.nomineeType) {
+      'Y' => 'Minor',
+      'N' => 'Major (Above 18 yrs)',
+      _ => 'Minor',
+    };
     //type = getTypeCode(type);
 
     print("Type Nominee ${type}");
@@ -772,8 +778,8 @@ class _NomineeInfoState extends State<NomineeInfo> {
                                       return InkWell(
                                         onTap: () {
                                           type = title;
+                                          log('type:$type');
                                           typeCode = getTypeCode(type);
-
                                           typeController.collapse();
                                           bottomState(() {});
                                         },
@@ -784,6 +790,7 @@ class _NomineeInfoState extends State<NomineeInfo> {
                                               groupValue: type,
                                               onChanged: (value) {
                                                 type = title;
+                                                log('type:$type');
                                                 typeCode = getTypeCode(type);
                                                 typeController.collapse();
                                                 bottomState(() {});
