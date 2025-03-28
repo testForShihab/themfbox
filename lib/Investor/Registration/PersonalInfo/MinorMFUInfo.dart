@@ -183,8 +183,9 @@ class _MinorMFUInfoState extends State<MinorMFUInfo> {
     CountryDetails? defaultCountry = countryList.firstWhereOrNull(
       (e) => e.countryName == "India",
     );
-    birthCountry = defaultCountry?.countryName ?? '';
-    birthCountryCode = defaultCountry?.countryCode ?? "";
+    controller.changeCountryDetails(
+        code: defaultCountry?.countryCode ?? '',
+        name: defaultCountry?.countryName ?? '');
 
     return 0;
   }
@@ -435,6 +436,8 @@ class _MinorMFUInfoState extends State<MinorMFUInfo> {
 
   int reloadCount = 0;
 
+  final MinorDataController controller = Get.put(MinorDataController());
+
   Future getDatas() async {
     EasyLoading.show();
 
@@ -474,286 +477,297 @@ class _MinorMFUInfoState extends State<MinorMFUInfo> {
                 foregroundColor: Colors.white),
             body: (!snapshot.hasData)
                 ? Loading()
-                : SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        SizedBox(height: 16),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Column(
-                            children: [
-                              AmountInputCard(
-                                title: "Minor Name",
-                                controller: minorNameController,
-                                suffixText: "",
-                                hasSuffix: false,
-                                keyboardType: TextInputType.name,
-                                borderRadius: BorderRadius.circular(20),
-                                onChange: (val) {},
-                              ),
-                              SizedBox(height: 16),
-                              dateInput(
-                                title: "Minor DOB",
-                                controller: dobController,
-                                onTap: () async {
-                                  dob = await showDatePicker(
-                                    context: context,
-                                    initialDate: dob ?? DateTime(2002, 06, 18),
-                                    firstDate: DateTime(1960),
-                                    lastDate: DateTime.now(),
-                                  );
-                                  if (dob == null) return;
-
-                                  dobController.text = convertDtToStr(dob!);
-                                  setState(() {});
-                                },
-                              ),
-                              SizedBox(height: 16),
-                              AmountInputCard(
-                                title: "Guardian Name as on PAN",
-                                initialValue: guard_name,
-                                suffixText: "",
-                                hasSuffix: false,
-                                keyboardType: TextInputType.name,
-                                borderRadius: BorderRadius.circular(20),
-                                onChange: (val) => guard_name = val,
-                              ),
-                              SizedBox(height: 16),
-                              AmountInputCard(
-                                title: "Guardian PAN Number",
-                                initialValue: guard_pan,
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(10),
-                                ],
-                                suffixText: "",
-                                hasSuffix: false,
-                                textCapitalization:
-                                    TextCapitalization.characters,
-                                maxLength: 10,
-                                keyboardType: TextInputType.name,
-                                borderRadius: BorderRadius.circular(20),
-                                onChange: (val) => guard_pan = val,
-                              ),
-                              SizedBox(height: 16),
-                              AmountInputCard(
-                                title: "Guardian Mobile Number",
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(10),
-                                ],
-                                controller: guardianMobileController,
-                                suffixText: "",
-                                hasSuffix: false,
-                                maxLength: 10,
-                                keyboardType: TextInputType.number,
-                                borderRadius: BorderRadius.circular(20),
-                                onChange: (val) {},
-                              ),
-                              SizedBox(height: 16),
-                              AmountInputCard(
-                                title: "Guardian Email",
-                                controller: guardianEmailController,
-                                suffixText: "",
-                                hasSuffix: false,
-                                keyboardType: TextInputType.emailAddress,
-                                borderRadius: BorderRadius.circular(20),
-                                onChange: (val) {},
-                              ),
-                              SizedBox(height: 16),
-                              dateInput(
-                                title: "Guardian DOB",
-                                initialValue: convertDtToStr(
-                                        guardianDobDate ?? DateTime.now()) ??
-                                    convertDtToStr(DateTime(2002, 06, 18)),
-                                controller: guardianDobController,
-                                onTap: () async {
-                                  guardianDobDate = await showDatePicker(
-                                    context: context,
-                                    initialDate: guardianDobDate ??
-                                        DateTime(2002, 06, 18),
-                                    firstDate: DateTime(1900),
-                                    lastDate: DateTime.now(),
-                                  );
-                                  if (guardianDobDate == null) return;
-                                  int day = guardianDobDate!.day;
-                                  int month = guardianDobDate!.month;
-                                  int year = guardianDobDate!.year;
-
-                                  guardianDobController.text =
-                                      "$day-$month-$year";
-                                  // setState(() {});
-                                },
-                              ),
-                              SizedBox(height: 16),
-                              guardianRelationTile(),
-                              SizedBox(height: 16),
-                              relationShipTile(),
-                              SizedBox(height: 16),
-                              AmountInputCard(
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(10),
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],
-                                title: "Primary Mobile Number",
-                                initialValue: mobile,
-                                suffixText: "",
-                                // maxLength: 10,
-                                hasSuffix: false,
-                                keyboardType: TextInputType.phone,
-                                borderRadius: BorderRadius.circular(20),
-                                onChange: (val) => mobile = val,
-                              ),
-                              SizedBox(height: 16),
-                              mobileRelationTile(context),
-                              SizedBox(height: 16),
-                              if (bse_nse_mfu_flag == "MFU" &&
-                                  (isdInfo.contains(investorInfo.taxStatus)))
-                                AmountInputCard(
-                                    title: "Mobile ISD Code",
+                : Obx(
+                    () {
+                      birthCountry = controller.countryName.value;
+                      birthCountryCode = controller.countryCode.value;
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 16),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Column(
+                                children: [
+                                  AmountInputCard(
+                                    title: "Minor Name",
+                                    controller: minorNameController,
                                     suffixText: "",
                                     hasSuffix: false,
+                                    keyboardType: TextInputType.name,
                                     borderRadius: BorderRadius.circular(20),
+                                    onChange: (val) {},
+                                  ),
+                                  SizedBox(height: 16),
+                                  dateInput(
+                                    title: "Minor DOB",
+                                    controller: dobController,
+                                    onTap: () async {
+                                      dob = await showDatePicker(
+                                        context: context,
+                                        initialDate:
+                                            dob ?? DateTime(2002, 06, 18),
+                                        firstDate: DateTime(1960),
+                                        lastDate: DateTime.now(),
+                                      );
+                                      if (dob == null) return;
+
+                                      dobController.text = convertDtToStr(dob!);
+                                      setState(() {});
+                                    },
+                                  ),
+                                  SizedBox(height: 16),
+                                  AmountInputCard(
+                                    title: "Guardian Name as on PAN",
+                                    initialValue: guard_name,
+                                    suffixText: "",
+                                    hasSuffix: false,
+                                    keyboardType: TextInputType.name,
+                                    borderRadius: BorderRadius.circular(20),
+                                    onChange: (val) => guard_name = val,
+                                  ),
+                                  SizedBox(height: 16),
+                                  AmountInputCard(
+                                    title: "Guardian PAN Number",
+                                    initialValue: guard_pan,
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(10),
+                                    ],
+                                    suffixText: "",
+                                    hasSuffix: false,
+                                    textCapitalization:
+                                        TextCapitalization.characters,
+                                    maxLength: 10,
+                                    keyboardType: TextInputType.name,
+                                    borderRadius: BorderRadius.circular(20),
+                                    onChange: (val) => guard_pan = val,
+                                  ),
+                                  SizedBox(height: 16),
+                                  AmountInputCard(
+                                    title: "Guardian Mobile Number",
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(10),
+                                    ],
+                                    controller: guardianMobileController,
+                                    suffixText: "",
+                                    hasSuffix: false,
+                                    maxLength: 10,
+                                    keyboardType: TextInputType.number,
+                                    borderRadius: BorderRadius.circular(20),
+                                    onChange: (val) {},
+                                  ),
+                                  SizedBox(height: 16),
+                                  AmountInputCard(
+                                    title: "Guardian Email",
+                                    controller: guardianEmailController,
+                                    suffixText: "",
+                                    hasSuffix: false,
+                                    keyboardType: TextInputType.emailAddress,
+                                    borderRadius: BorderRadius.circular(20),
+                                    onChange: (val) {},
+                                  ),
+                                  SizedBox(height: 16),
+                                  dateInput(
+                                    title: "Guardian DOB",
+                                    initialValue: convertDtToStr(
+                                            guardianDobDate ??
+                                                DateTime.now()) ??
+                                        convertDtToStr(DateTime(2002, 06, 18)),
+                                    controller: guardianDobController,
+                                    onTap: () async {
+                                      guardianDobDate = await showDatePicker(
+                                        context: context,
+                                        initialDate: guardianDobDate ??
+                                            DateTime(2002, 06, 18),
+                                        firstDate: DateTime(1900),
+                                        lastDate: DateTime.now(),
+                                      );
+                                      if (guardianDobDate == null) return;
+                                      int day = guardianDobDate!.day;
+                                      int month = guardianDobDate!.month;
+                                      int year = guardianDobDate!.year;
+
+                                      guardianDobController.text =
+                                          "$day-$month-$year";
+                                      // setState(() {});
+                                    },
+                                  ),
+                                  SizedBox(height: 16),
+                                  guardianRelationTile(),
+                                  SizedBox(height: 16),
+                                  relationShipTile(),
+                                  SizedBox(height: 16),
+                                  AmountInputCard(
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(10),
+                                      FilteringTextInputFormatter.digitsOnly,
+                                    ],
+                                    title: "Primary Mobile Number",
+                                    initialValue: mobile,
+                                    suffixText: "",
+                                    // maxLength: 10,
+                                    hasSuffix: false,
                                     keyboardType: TextInputType.phone,
-                                    onChange: (val) => isdCode = val),
-                              SizedBox(height: 16),
-                              AmountInputCard(
-                                  title: "Alternate Mobile Number",
-                                  suffixText: "",
-                                  //maxLength: 10,
-                                  hasSuffix: false,
-                                  initialValue: alternateMobile,
-                                  keyboardType: TextInputType.phone,
-                                  borderRadius: BorderRadius.circular(20),
-                                  onChange: (val) => alternateMobile = val),
-                              SizedBox(
-                                height: 16,
+                                    borderRadius: BorderRadius.circular(20),
+                                    onChange: (val) => mobile = val,
+                                  ),
+                                  SizedBox(height: 16),
+                                  mobileRelationTile(context),
+                                  SizedBox(height: 16),
+                                  if (bse_nse_mfu_flag == "MFU" &&
+                                      (isdInfo
+                                          .contains(investorInfo.taxStatus)))
+                                    AmountInputCard(
+                                        title: "Mobile ISD Code",
+                                        suffixText: "",
+                                        hasSuffix: false,
+                                        borderRadius: BorderRadius.circular(20),
+                                        keyboardType: TextInputType.phone,
+                                        onChange: (val) => isdCode = val),
+                                  SizedBox(height: 16),
+                                  AmountInputCard(
+                                      title: "Alternate Mobile Number",
+                                      suffixText: "",
+                                      //maxLength: 10,
+                                      hasSuffix: false,
+                                      initialValue: alternateMobile,
+                                      keyboardType: TextInputType.phone,
+                                      borderRadius: BorderRadius.circular(20),
+                                      onChange: (val) => alternateMobile = val),
+                                  SizedBox(
+                                    height: 16,
+                                  ),
+                                  AmountInputCard(
+                                      title: "Residence Mobile Number",
+                                      inputFormatters: [
+                                        LengthLimitingTextInputFormatter(10),
+                                        FilteringTextInputFormatter.digitsOnly,
+                                      ],
+                                      initialValue: residenceMobile,
+                                      suffixText: "",
+                                      // maxLength: 10,
+                                      hasSuffix: false,
+                                      keyboardType: TextInputType.phone,
+                                      borderRadius: BorderRadius.circular(20),
+                                      onChange: (val) => residenceMobile = val),
+                                  SizedBox(
+                                    height: 16,
+                                  ),
+                                  AmountInputCard(
+                                      title: "Office Mobile Number",
+                                      inputFormatters: [
+                                        LengthLimitingTextInputFormatter(10),
+                                        FilteringTextInputFormatter.digitsOnly,
+                                      ],
+                                      initialValue: officeMobile,
+                                      suffixText: "",
+                                      hasSuffix: false,
+                                      keyboardType: TextInputType.phone,
+                                      borderRadius: BorderRadius.circular(20),
+                                      onChange: (val) => officeMobile = val),
+                                  SizedBox(
+                                    height: 16,
+                                  ),
+                                  AmountInputCard(
+                                    title: "Email Id",
+                                    initialValue: email,
+                                    suffixText: "",
+                                    hasSuffix: false,
+                                    keyboardType: TextInputType.emailAddress,
+                                    borderRadius: BorderRadius.circular(20),
+                                    onChange: (val) => email = val,
+                                  ),
+                                  SizedBox(height: 16),
+                                  emailRelationTile(context),
+                                  SizedBox(
+                                    height: 16,
+                                  ),
+                                  AmountInputCard(
+                                      title: "Alternate Email Id",
+                                      suffixText: "",
+                                      initialValue: alternateMail,
+                                      hasSuffix: false,
+                                      keyboardType: TextInputType.emailAddress,
+                                      borderRadius: BorderRadius.circular(20),
+                                      onChange: (val) => alternateMail = val),
+                                  SizedBox(height: 16),
+                                  addressTile(context),
+                                  DottedLine(verticalPadding: 8),
+                                  SizedBox(height: 16),
+                                  countryOfBrithTile(context),
+                                  SizedBox(height: 16),
+                                  AmountInputCard(
+                                      title: "Place (City) of Birth",
+                                      initialValue: birthPlace,
+                                      suffixText: "",
+                                      hasSuffix: false,
+                                      keyboardType: TextInputType.name,
+                                      borderRadius: BorderRadius.circular(20),
+                                      onChange: (val) => birthPlace = val),
+                                  DottedLine(verticalPadding: 8),
+                                  employementStatusTile(context),
+                                  SizedBox(height: 16),
+                                  annualSalaryTile(context),
+                                  SizedBox(height: 16),
+                                  incomeSourceTile(context),
+                                  DottedLine(verticalPadding: 8),
+                                  politicalRelationTile(context),
+                                  SizedBox(height: 32),
+                                ],
                               ),
-                              AmountInputCard(
-                                  title: "Residence Mobile Number",
-                                  inputFormatters: [
-                                    LengthLimitingTextInputFormatter(10),
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
-                                  initialValue: residenceMobile,
-                                  suffixText: "",
-                                  // maxLength: 10,
-                                  hasSuffix: false,
-                                  keyboardType: TextInputType.phone,
-                                  borderRadius: BorderRadius.circular(20),
-                                  onChange: (val) => residenceMobile = val),
-                              SizedBox(
-                                height: 16,
-                              ),
-                              AmountInputCard(
-                                  title: "Office Mobile Number",
-                                  inputFormatters: [
-                                    LengthLimitingTextInputFormatter(10),
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
-                                  initialValue: officeMobile,
-                                  suffixText: "",
-                                  hasSuffix: false,
-                                  keyboardType: TextInputType.phone,
-                                  borderRadius: BorderRadius.circular(20),
-                                  onChange: (val) => officeMobile = val),
-                              SizedBox(
-                                height: 16,
-                              ),
-                              AmountInputCard(
-                                title: "Email Id",
-                                initialValue: email,
-                                suffixText: "",
-                                hasSuffix: false,
-                                keyboardType: TextInputType.emailAddress,
-                                borderRadius: BorderRadius.circular(20),
-                                onChange: (val) => email = val,
-                              ),
-                              SizedBox(height: 16),
-                              emailRelationTile(context),
-                              SizedBox(
-                                height: 16,
-                              ),
-                              AmountInputCard(
-                                  title: "Alternate Email Id",
-                                  suffixText: "",
-                                  initialValue: alternateMail,
-                                  hasSuffix: false,
-                                  keyboardType: TextInputType.emailAddress,
-                                  borderRadius: BorderRadius.circular(20),
-                                  onChange: (val) => alternateMail = val),
-                              SizedBox(height: 16),
-                              addressTile(context),
-                              DottedLine(verticalPadding: 8),
-                              SizedBox(height: 16),
-                              countryOfBrithTile(context),
-                              SizedBox(height: 16),
-                              AmountInputCard(
-                                  title: "Place (City) of Birth",
-                                  initialValue: birthPlace,
-                                  suffixText: "",
-                                  hasSuffix: false,
-                                  keyboardType: TextInputType.name,
-                                  borderRadius: BorderRadius.circular(20),
-                                  onChange: (val) => birthPlace = val),
-                              DottedLine(verticalPadding: 8),
-                              employementStatusTile(context),
-                              SizedBox(height: 16),
-                              annualSalaryTile(context),
-                              SizedBox(height: 16),
-                              incomeSourceTile(context),
-                              DottedLine(verticalPadding: 8),
-                              politicalRelationTile(context),
-                              SizedBox(height: 32),
-                            ],
-                          ),
+                            ),
+                            CalculateButton(
+                              text: "CONTINUE",
+                              onPress: () async {
+                                int isValid = validator();
+                                if (isValid != 0) {
+                                  Utils.showError(
+                                      context, "All Fields are Mandatory");
+                                  return;
+                                }
+                                if (!email.isEmail) {
+                                  Utils.showError(context, "Invalid email id");
+                                  return;
+                                }
+
+                                if (dob == null ||
+                                    (dob?.toString() ?? '').isEmpty) {
+                                  Utils.showError(context, "Please Select DOB");
+                                  return;
+                                }
+
+                                // bool emailValid = RegExp(
+                                //         r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
+                                //     .hasMatch(guardianEmailController.text);
+                                // if (guardianEmailController.text.isEmpty ||
+                                //     !emailValid) {
+                                //   Utils.showError(
+                                //       context, "Invalid Guardian Email");
+                                //   return;
+                                // }
+                                // if (guardianMobileController.text.isEmpty ||
+                                //     mobile.length != 10) {
+                                //   Utils.showError(
+                                //       context, "Invalid Guardian Mobile Number");
+                                //   return;
+                                // }
+                                if (mobile.length != 10 ||
+                                    residenceMobile.length != 10 ||
+                                    officeMobile.length != 10) {
+                                  Utils.showError(
+                                      context, "Invalid Mobile Number");
+                                  return;
+                                }
+
+                                int res = await savePersonalInfo();
+                                if (res == 0) Get.back();
+                              },
+                            )
+                          ],
                         ),
-                        CalculateButton(
-                          text: "CONTINUE",
-                          onPress: () async {
-                            int isValid = validator();
-                            if (isValid != 0) {
-                              Utils.showError(
-                                  context, "All Fields are Mandatory");
-                              return;
-                            }
-                            if (!email.isEmail) {
-                              Utils.showError(context, "Invalid email id");
-                              return;
-                            }
-
-                            if (dob == null ||
-                                (dob?.toString() ?? '').isEmpty) {
-                              Utils.showError(context, "Please Select DOB");
-                              return;
-                            }
-
-                            // bool emailValid = RegExp(
-                            //         r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
-                            //     .hasMatch(guardianEmailController.text);
-                            // if (guardianEmailController.text.isEmpty ||
-                            //     !emailValid) {
-                            //   Utils.showError(
-                            //       context, "Invalid Guardian Email");
-                            //   return;
-                            // }
-                            // if (guardianMobileController.text.isEmpty ||
-                            //     mobile.length != 10) {
-                            //   Utils.showError(
-                            //       context, "Invalid Guardian Mobile Number");
-                            //   return;
-                            // }
-                            if (mobile.length != 10 ||
-                                residenceMobile.length != 10 ||
-                                officeMobile.length != 10) {
-                              Utils.showError(context, "Invalid Mobile Number");
-                              return;
-                            }
-
-                            int res = await savePersonalInfo();
-                            if (res == 0) Get.back();
-                          },
-                        )
-                      ],
-                    ),
+                      );
+                    },
                   ),
           );
         });
@@ -1448,5 +1462,20 @@ class _MinorMFUInfoState extends State<MinorMFUInfo> {
         ),
       ),
     );
+  }
+}
+
+class MinorDataController extends GetxController {
+  var countryCode = ''.obs;
+  var countryName = ''.obs;
+  var poltDesc = ''.obs;
+  var poltCode = ''.obs;
+
+  void changeCountryDetails({
+    required String code,
+    required String name,
+  }) {
+    countryCode.value = code;
+    countryName.value = name;
   }
 }
