@@ -345,6 +345,8 @@ class _PersonalInfoState extends State<PersonalInfo> {
     return "";
   }
 
+  int reloadCount = 0;
+
   Future getDatas() async {
     EasyLoading.show();
     await getPersonalInfo();
@@ -356,7 +358,11 @@ class _PersonalInfoState extends State<PersonalInfo> {
     await getAnnualSalaryList();
     await getIncomeSourceList();
     await getPoliticalRelationList();
-    fillData();
+
+    if (reloadCount == 0) {
+      fillData();
+    }
+    reloadCount++;
     EasyLoading.dismiss();
     return 0;
   }
