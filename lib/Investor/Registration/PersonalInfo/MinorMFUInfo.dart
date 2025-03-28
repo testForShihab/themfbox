@@ -180,6 +180,12 @@ class _MinorMFUInfoState extends State<MinorMFUInfo> {
 
     countryList = res.list ?? [];
 
+    CountryDetails? defaultCountry = countryList.firstWhereOrNull(
+      (e) => e.countryName == "India",
+    );
+    birthCountry = defaultCountry?.countryName ?? '';
+    birthCountryCode = defaultCountry?.countryCode ?? "";
+
     return 0;
   }
 

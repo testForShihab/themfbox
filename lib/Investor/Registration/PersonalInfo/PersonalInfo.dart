@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -115,6 +117,8 @@ class _PersonalInfoState extends State<PersonalInfo> {
 
   List<CountryDetails> countryList = [];
 
+  final DataController controller = Get.put(DataController());
+
   Future getCountryList() async {
     if (countryList.isNotEmpty) return -1;
 
@@ -134,8 +138,9 @@ class _PersonalInfoState extends State<PersonalInfo> {
       (e) => e.countryName == "India",
     );
 
-    birthCountry = defaultCountry?.countryName ?? '';
-    birthCountryCode = defaultCountry?.countryCode ?? '';
+    controller.changeCountryDetails(
+        code: defaultCountry?.countryCode ?? '',
+        name: defaultCountry?.countryName ?? '');
     return -1;
   }
 
@@ -352,8 +357,8 @@ class _PersonalInfoState extends State<PersonalInfo> {
     await getPersonalInfo();
     await getInvestorInfo();
     await getRelationList();
-    await getCountryList();
     await getAddressList();
+    await getCountryList();
     await getEmpStatusList();
     await getAnnualSalaryList();
     await getIncomeSourceList();
@@ -397,104 +402,60 @@ class _PersonalInfoState extends State<PersonalInfo> {
             }
           }
 
-          return Scaffold(
-            backgroundColor: Config.appTheme.mainBgColor,
-            appBar: rpAppBar(
-                title: "Personal Info",
-                bgColor: Config.appTheme.themeColor,
-                foregroundColor: Colors.white),
-            body: (!snapshot.hasData)
-                ? Loading()
-                : SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        SizedBox(height: 16),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Column(
-                            children: [
-                              AmountInputCard(
-                                title: "Name as on PAN",
-                                initialValue: user_name,
-                                suffixText: "",
-                                hasSuffix: false,
-                                readOnly: false,
-                                keyboardType: TextInputType.name,
-                                borderRadius: BorderRadius.circular(20),
-                                onChange: (val) => user_name = val,
-                              ),
-                              SizedBox(height: 16),
-                              dateInput(
-                                title: "DOB / Incorporation",
-                                controller: dobController,
-                                onTap: () async {
-                                  dob = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime(1990, 01, 01),
-                                    firstDate: DateTime(1890),
-                                    lastDate: DateTime.now(),
-                                  );
-                                  if (dob == null) return;
-                                  dobController.text = convertDtToStr(dob!);
-                                  setState(() {});
-                                },
-                              ),
-                              SizedBox(height: 16),
-                              if (bse_nse_mfu_flag == "BSE")
-                                genderTile(context),
-                              SizedBox(height: 16),
-                              AmountInputCard(
-                                title: "Mobile Number",
-                                initialValue: mobile,
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(10),
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],
-                                suffixText: "",
-                                // maxLength: 10,
-                                hasSuffix: false,
-                                keyboardType: TextInputType.phone,
-                                borderRadius: BorderRadius.circular(20),
-                                onChange: (val) => mobile = val,
-                              ),
-                              SizedBox(height: 16),
-                              mobileRelationTile(context),
-                              if (bse_nse_mfu_flag == "MFU")
-                                SizedBox(height: 16),
-                              if (bse_nse_mfu_flag == "MFU" &&
-                                  (isdInfo.contains(investorInfo.taxStatus)))
-                                AmountInputCard(
-                                    title: "Mobile ISD Code",
-                                    initialValue: isdCode,
+          return Obx(
+            () {
+              birthCountry = controller.countryName.value;
+              birthCountryCode = controller.countryCode.value;
+              return Scaffold(
+                backgroundColor: Config.appTheme.mainBgColor,
+                appBar: rpAppBar(
+                    title: "Personal Info",
+                    bgColor: Config.appTheme.themeColor,
+                    foregroundColor: Colors.white),
+                body: (!snapshot.hasData)
+                    ? Loading()
+                    : SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 16),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Column(
+                                children: [
+                                  AmountInputCard(
+                                    title: "Name as on PAN",
+                                    initialValue: user_name,
                                     suffixText: "",
                                     hasSuffix: false,
+                                    readOnly: false,
+                                    keyboardType: TextInputType.name,
                                     borderRadius: BorderRadius.circular(20),
-                                    keyboardType: TextInputType.phone,
-                                    onChange: (val) => isdCode = val),
-                              if (bse_nse_mfu_flag == "MFU")
-                                SizedBox(height: 16),
-                              if (bse_nse_mfu_flag == "MFU")
-                                AmountInputCard(
-                                    initialValue: alternateMobile,
-                                    title: "Alternate Mobile Number",
-                                    suffixText: "",
-                                    inputFormatters: [
-                                      LengthLimitingTextInputFormatter(10),
-                                      FilteringTextInputFormatter.digitsOnly,
-                                    ],
-                                    //maxLength: 10,
-                                    hasSuffix: false,
-                                    keyboardType: TextInputType.phone,
-                                    borderRadius: BorderRadius.circular(20),
-                                    onChange: (val) => alternateMobile = val),
-                              if (bse_nse_mfu_flag == "MFU")
-                                SizedBox(
-                                  height: 16,
-                                ),
-                              if (bse_nse_mfu_flag == "MFU")
-                                AmountInputCard(
-                                    title: "Residence Mobile Number",
-                                    initialValue: residenceMobile,
+                                    onChange: (val) => user_name = val,
+                                  ),
+                                  SizedBox(height: 16),
+                                  dateInput(
+                                    title: "DOB / Incorporation",
+                                    controller: dobController,
+                                    onTap: () async {
+                                      dob = await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime(1990, 01, 01),
+                                        firstDate: DateTime(1890),
+                                        lastDate: DateTime.now(),
+                                      );
+                                      if (dob == null) return;
+                                      dobController.text = convertDtToStr(dob!);
+                                      setState(() {});
+                                    },
+                                  ),
+                                  SizedBox(height: 16),
+                                  if (bse_nse_mfu_flag == "BSE")
+                                    genderTile(context),
+                                  SizedBox(height: 16),
+                                  AmountInputCard(
+                                    title: "Mobile Number",
+                                    initialValue: mobile,
                                     inputFormatters: [
                                       LengthLimitingTextInputFormatter(10),
                                       FilteringTextInputFormatter.digitsOnly,
@@ -504,113 +465,172 @@ class _PersonalInfoState extends State<PersonalInfo> {
                                     hasSuffix: false,
                                     keyboardType: TextInputType.phone,
                                     borderRadius: BorderRadius.circular(20),
-                                    onChange: (val) => residenceMobile = val),
-                              if (bse_nse_mfu_flag == "MFU")
-                                SizedBox(
-                                  height: 16,
-                                ),
-                              if (bse_nse_mfu_flag == "MFU")
-                                AmountInputCard(
-                                    initialValue: officeMobile,
-                                    title: "Office Mobile Number",
-                                    inputFormatters: [
-                                      LengthLimitingTextInputFormatter(10),
-                                      FilteringTextInputFormatter.digitsOnly,
-                                    ],
-                                    suffixText: "",
-                                    hasSuffix: false,
-                                    keyboardType: TextInputType.phone,
-                                    borderRadius: BorderRadius.circular(20),
-                                    onChange: (val) => officeMobile = val),
-                              SizedBox(
-                                height: 16,
-                              ),
-                              AmountInputCard(
-                                title: "Email Id",
-                                initialValue: email,
-                                suffixText: "",
-                                hasSuffix: false,
-                                keyboardType: TextInputType.emailAddress,
-                                borderRadius: BorderRadius.circular(20),
-                                onChange: (val) => email = val,
-                              ),
-                              SizedBox(height: 16),
-                              emailRelationTile(context),
-                              SizedBox(
-                                height: 16,
-                              ),
-                              if (bse_nse_mfu_flag == "MFU")
-                                AmountInputCard(
-                                    initialValue: alternateMail,
-                                    title: "Alternate Email Id",
+                                    onChange: (val) => mobile = val,
+                                  ),
+                                  SizedBox(height: 16),
+                                  mobileRelationTile(context),
+                                  if (bse_nse_mfu_flag == "MFU")
+                                    SizedBox(height: 16),
+                                  if (bse_nse_mfu_flag == "MFU" &&
+                                      (isdInfo
+                                          .contains(investorInfo.taxStatus)))
+                                    AmountInputCard(
+                                        title: "Mobile ISD Code",
+                                        initialValue: isdCode,
+                                        suffixText: "",
+                                        hasSuffix: false,
+                                        borderRadius: BorderRadius.circular(20),
+                                        keyboardType: TextInputType.phone,
+                                        onChange: (val) => isdCode = val),
+                                  if (bse_nse_mfu_flag == "MFU")
+                                    SizedBox(height: 16),
+                                  if (bse_nse_mfu_flag == "MFU")
+                                    AmountInputCard(
+                                        initialValue: alternateMobile,
+                                        title: "Alternate Mobile Number",
+                                        suffixText: "",
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(10),
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                        ],
+                                        //maxLength: 10,
+                                        hasSuffix: false,
+                                        keyboardType: TextInputType.phone,
+                                        borderRadius: BorderRadius.circular(20),
+                                        onChange: (val) =>
+                                            alternateMobile = val),
+                                  if (bse_nse_mfu_flag == "MFU")
+                                    SizedBox(
+                                      height: 16,
+                                    ),
+                                  if (bse_nse_mfu_flag == "MFU")
+                                    AmountInputCard(
+                                        title: "Residence Mobile Number",
+                                        initialValue: residenceMobile,
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(10),
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                        ],
+                                        suffixText: "",
+                                        // maxLength: 10,
+                                        hasSuffix: false,
+                                        keyboardType: TextInputType.phone,
+                                        borderRadius: BorderRadius.circular(20),
+                                        onChange: (val) =>
+                                            residenceMobile = val),
+                                  if (bse_nse_mfu_flag == "MFU")
+                                    SizedBox(
+                                      height: 16,
+                                    ),
+                                  if (bse_nse_mfu_flag == "MFU")
+                                    AmountInputCard(
+                                        initialValue: officeMobile,
+                                        title: "Office Mobile Number",
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(10),
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                        ],
+                                        suffixText: "",
+                                        hasSuffix: false,
+                                        keyboardType: TextInputType.phone,
+                                        borderRadius: BorderRadius.circular(20),
+                                        onChange: (val) => officeMobile = val),
+                                  SizedBox(
+                                    height: 16,
+                                  ),
+                                  AmountInputCard(
+                                    title: "Email Id",
+                                    initialValue: email,
                                     suffixText: "",
                                     hasSuffix: false,
                                     keyboardType: TextInputType.emailAddress,
                                     borderRadius: BorderRadius.circular(20),
-                                    onChange: (val) => alternateMail = val),
-                              if (bse_nse_mfu_flag == "MFU")
-                                SizedBox(height: 16),
-                              addressTile(context),
-                              DottedLine(verticalPadding: 8),
-                              SizedBox(height: 16),
-                              countryOfBrithTile(context),
-                              SizedBox(height: 16),
-                              AmountInputCard(
-                                  title: "Place (City) of Birth",
-                                  initialValue: birthPlace,
-                                  suffixText: "",
-                                  hasSuffix: false,
-                                  keyboardType: TextInputType.name,
-                                  borderRadius: BorderRadius.circular(20),
-                                  onChange: (val) => birthPlace = val),
-                              DottedLine(verticalPadding: 8),
-                              employementStatusTile(context),
-                              SizedBox(height: 16),
-                              annualSalaryTile(context),
-                              SizedBox(height: 16),
-                              incomeSourceTile(context),
-                              DottedLine(verticalPadding: 8),
-                              politicalRelationTile(context),
-                              SizedBox(height: 32),
-                            ],
-                          ),
+                                    onChange: (val) => email = val,
+                                  ),
+                                  SizedBox(height: 16),
+                                  emailRelationTile(context),
+                                  SizedBox(
+                                    height: 16,
+                                  ),
+                                  if (bse_nse_mfu_flag == "MFU")
+                                    AmountInputCard(
+                                        initialValue: alternateMail,
+                                        title: "Alternate Email Id",
+                                        suffixText: "",
+                                        hasSuffix: false,
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        borderRadius: BorderRadius.circular(20),
+                                        onChange: (val) => alternateMail = val),
+                                  if (bse_nse_mfu_flag == "MFU")
+                                    SizedBox(height: 16),
+                                  addressTile(context),
+                                  DottedLine(verticalPadding: 8),
+                                  SizedBox(height: 16),
+                                  countryOfBrithTile(context),
+                                  SizedBox(height: 16),
+                                  AmountInputCard(
+                                      title: "Place (City) of Birth",
+                                      initialValue: birthPlace,
+                                      suffixText: "",
+                                      hasSuffix: false,
+                                      keyboardType: TextInputType.name,
+                                      borderRadius: BorderRadius.circular(20),
+                                      onChange: (val) => birthPlace = val),
+                                  DottedLine(verticalPadding: 8),
+                                  employementStatusTile(context),
+                                  SizedBox(height: 16),
+                                  annualSalaryTile(context),
+                                  SizedBox(height: 16),
+                                  incomeSourceTile(context),
+                                  DottedLine(verticalPadding: 8),
+                                  politicalRelationTile(context),
+                                  SizedBox(height: 32),
+                                ],
+                              ),
+                            ),
+                            CalculateButton(
+                              text: "CONTINUE",
+                              onPress: () async {
+                                int isValid = validator();
+
+                                if (isValid != 0) {
+                                  return;
+                                }
+
+                                if (!email.isEmail) {
+                                  Utils.showError(context, "Invalid email id");
+                                  return;
+                                }
+
+                                if (gender == "" && bse_nse_mfu_flag == "BSE") {
+                                  Utils.showError(context, "Select Gender");
+                                  return;
+                                }
+
+                                if (dob == null ||
+                                    (dob?.toString() ?? '').isEmpty) {
+                                  Utils.showError(context, "Please Select DOB");
+                                  return;
+                                }
+                                if (mobile.length != 10) {
+                                  Utils.showError(
+                                      context, "Invalid Mobile Number");
+                                  return;
+                                }
+
+                                int res = await savePersonalInfo();
+                                if (res == 0) Get.back();
+                              },
+                            )
+                          ],
                         ),
-                        CalculateButton(
-                          text: "CONTINUE",
-                          onPress: () async {
-                            int isValid = validator();
-
-                            if (isValid != 0) {
-                              return;
-                            }
-
-                            if (!email.isEmail) {
-                              Utils.showError(context, "Invalid email id");
-                              return;
-                            }
-
-                            if (gender == "" && bse_nse_mfu_flag == "BSE") {
-                              Utils.showError(context, "Select Gender");
-                              return;
-                            }
-
-                            if (dob == null ||
-                                (dob?.toString() ?? '').isEmpty) {
-                              Utils.showError(context, "Please Select DOB");
-                              return;
-                            }
-                            if (mobile.length != 10) {
-                              Utils.showError(context, "Invalid Mobile Number");
-                              return;
-                            }
-
-                            int res = await savePersonalInfo();
-                            if (res == 0) Get.back();
-                          },
-                        )
-                      ],
-                    ),
-                  ),
+                      ),
+              );
+            },
           );
         });
   }
@@ -1232,5 +1252,20 @@ class _PersonalInfoState extends State<PersonalInfo> {
         ),
       ),
     );
+  }
+}
+
+class DataController extends GetxController {
+  var countryCode = ''.obs;
+  var countryName = ''.obs;
+  var poltDesc = ''.obs;
+  var poltCode = ''.obs;
+
+  void changeCountryDetails({
+    required String code,
+    required String name,
+  }) {
+    countryCode.value = code;
+    countryName.value = name;
   }
 }
