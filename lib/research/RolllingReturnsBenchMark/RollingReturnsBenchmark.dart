@@ -126,8 +126,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
 
   Future getRollingReturnsSchemes() async {
     if (fundList.isNotEmpty) return 0;
-    Map data =
-        await ResearchApi.getRollingReturnsSchemes(client_name: client_name);
+    Map data = await ResearchApi.getRollingReturnsSchemes(client_name: client_name);
     if (data['status'] != SUCCESS) {
       Utils.showError(context, data['msg']);
       return 0;
@@ -140,9 +139,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
 
   Future getSchemeInceptionAndLatestNavDate(String formattedDate) async {
     Map data = await ResearchApi.getSchemeInceptionAndLatestNavDate(
-        scheme_name: controller.selectedFund.value,
-        start_date: formattedDate,
-        clientName: client_name);
+        scheme_name: controller.selectedFund.value, start_date: formattedDate, clientName: client_name);
 
     if (data['status'] != SUCCESS) {
       if (context.mounted) {
@@ -179,6 +176,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
   List rollingReturnsTable = [];
 
   Future getRollingReturnsVsBenchmark() async {
+
     Map data = await ResearchApi.getRollingReturnsVsBenchmark(
         scheme_name: controller.selectedFund.value,
         start_date: controller.startDate.value,
@@ -370,7 +368,8 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                   },
                   child: Obx(() => appBarColumn(
                         "Rolling Period",
-                        getFirst13(controller.selectedRollingPeriod.value),
+                        getFirst13(
+                            controller.selectedRollingPeriod.value),
                         Icon(Icons.keyboard_arrow_down,
                             color: Config.appTheme.themeColor),
                         devWidth * 0.3,
@@ -392,15 +391,15 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                   onTap: () async {
                     bool isValid = await getSchemeInceptionAndLatestNavDate(
                         controller.startDate.value);
-                    if (isValid) {
-                      // Only set refresh flag if date is valid
+                    if (isValid) {  // Only set refresh flag if date is valid
                       controller.shouldRefresh.value = true;
                       setState(() {});
                     }
                   },
                   child: Container(
-                    margin: EdgeInsets.only(top: 18),
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    margin: EdgeInsets.only(top:18),
+                    padding:
+                    EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                     decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(8),
@@ -802,9 +801,9 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
               ? (isLoading
                   ? Utils.shimmerWidget(devHeight * 0.2,
                       margin: EdgeInsets.all(20))
-                  : (originalRollingReturnBenchmarkList.isEmpty ||
-                          rollingReturnsTable.isEmpty ||
-                          isInvalidDate)
+                  : (originalRollingReturnBenchmarkList.isEmpty || 
+                     rollingReturnsTable.isEmpty || 
+                     isInvalidDate)
                       ? NoData()
                       : Column(
                           children: [
@@ -825,9 +824,9 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
               : (isLoading
                   ? Utils.shimmerWidget(devHeight * 0.2,
                       margin: EdgeInsets.all(20))
-                  : (rollingReturnBenchmarkList.isEmpty ||
-                          rollingReturnsTable.isEmpty ||
-                          isInvalidDate)
+                  : (rollingReturnBenchmarkList.isEmpty || 
+                     rollingReturnsTable.isEmpty || 
+                     isInvalidDate)
                       ? NoData()
                       : Column(
                           children: [
@@ -844,7 +843,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                               },
                             ),
                             SizedBox(height: devHeight * 0.01),
-                            // blackBoxDistribution(),
+                           // blackBoxDistribution(),
                           ],
                         )),
           Column(
@@ -863,8 +862,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                       230,
                       margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
                     )
-                  : (chartRollingReturnBenchmarkList.isEmpty ||
-                          rollingReturnsTable.isEmpty)
+                  : (chartRollingReturnBenchmarkList.isEmpty || rollingReturnsTable.isEmpty)
                       ? NoData()
                       : chartArea(schemeData, benchMarkData)
             ],
@@ -1175,8 +1173,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                   children: [
                     Text(
                       "  Select Scheme",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     IconButton(
                       onPressed: () => Get.back(),
@@ -1195,8 +1192,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                       hintText: 'Search Fund...',
                       hintStyle: TextStyle(color: Colors.white),
                       prefixIcon: Icon(Icons.search, color: Colors.white),
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 16.0),
+                      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(color: Colors.grey),
@@ -1207,9 +1203,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                     onChanged: (value) {
                       bottomState(() {
                         filteredSchemes = schemeNameList
-                            .where((scheme) => scheme
-                                .toString()
-                                .toLowerCase()
+                            .where((scheme) => scheme.toString().toLowerCase()
                                 .contains(value.toLowerCase()))
                             .toList();
                       });
@@ -1229,7 +1223,9 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                           if (value != null) {
                             // Use the controller method to handle selection
                             controller.selectScheme(
-                                filteredSchemes[index], value);
+                              filteredSchemes[index],
+                              value
+                            );
                             Navigator.of(context).pop();
                           }
                         },
@@ -1394,9 +1390,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                               ? "${data['average'].toStringAsFixed(2)}"
                               : "0.00%",
                           alignment: CrossAxisAlignment.start),
-                      ColumnText(
-                          title: "Median (%)",
-                          value: data['median'].toStringAsFixed(2)),
+                      ColumnText(title: "Median (%)", value: data['median'].toStringAsFixed(2)),
                       ColumnText(
                           title: "Max (%)",
                           value: data['maximum'] != null
@@ -1409,6 +1403,8 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                             ? "${data['minimum'].toStringAsFixed(2)}"
                             : "0.00%",
                       ),
+
+
                     ],
                   ),
                 ],
@@ -1566,186 +1562,188 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
   }
 
   Widget lineChart() {
-    return Column(children: [
-      // Enable horizontal scrolling
-      SizedBox(
-        width: MediaQuery.of(context)
-            .size
-            .width, // Set the width to match the screen width
-        height: 400,
-        child: LineChart(
-          LineChartData(
-            // minX: 0,
-            minX: startingPoint,
-            // Set the starting point for x-axis
-            maxX: startingPoint + months.length.toDouble() - 1,
-            // minY: 0,
-            // maxY: 100,
-            borderData: FlBorderData(
-              show: false, // Set to false to hide the outer border
-            ),
-            gridData: FlGridData(show: false),
-            titlesData: FlTitlesData(
-              bottomTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  getTitlesWidget: (value, meta) {
-                    int skipInterval = 10;
-                    String month = "";
-                    // Only show labels for every skipInterval-th value
-                    if (value % skipInterval == 0) {
-                      month = months.isNotEmpty
-                          ? months[value.toInt() % months.length]
-                          : '';
-                    }
+    return Column(
+      children: [
+        // Enable horizontal scrolling
+        SizedBox(
+          width: MediaQuery.of(context)
+              .size
+              .width, // Set the width to match the screen width
+          height: 400,
+          child: LineChart(
+            LineChartData(
+              // minX: 0,
+              minX: startingPoint,
+              // Set the starting point for x-axis
+              maxX: startingPoint + months.length.toDouble() - 1,
+              // minY: 0,
+              // maxY: 100,
+              borderData: FlBorderData(
+                show: false, // Set to false to hide the outer border
+              ),
+              gridData: FlGridData(show: false),
+              titlesData: FlTitlesData(
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    getTitlesWidget: (value, meta) {
+                      int skipInterval = 10;
+                      String month = "";
+                      // Only show labels for every skipInterval-th value
+                      if (value % skipInterval == 0) {
+                        month = months.isNotEmpty
+                            ? months[value.toInt() % months.length]
+                            : '';
+                      }
 
-                    return Expanded(
-                      child: Center(
-                        child: Text(
-                          month,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 6,
+                      return Expanded(
+                        child: Center(
+                          child: Text(
+                            month,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 6,
+                            ),
+                            textAlign: TextAlign.center, // Align text center
                           ),
-                          textAlign: TextAlign.center, // Align text center
                         ),
-                      ),
-                    );
+                      );
+                    },
+                  ),
+                ),
+                leftTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: false,
+                    getTitlesWidget: (value, meta) {
+                      int percentage = (value + 5).toInt();
+                      return Expanded(
+                        child: Text(
+                          '$percentage%',
+                          style: TextStyle(
+                            color: Config.appTheme.themeColor,
+                            fontSize: 9,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                topTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: false,
+                  ),
+                ),
+                rightTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: false,
+                  ),
+                ),
+              ),
+              lineBarsData: [
+                LineChartBarData(
+                  // spots: List.generate(months.length, (index) {
+                  //   return FlSpot(index.toDouble(), series1Data[index]);
+                  // }),
+
+                  spots: List.generate(months.length, (index) {
+                    if (index < series1Data.length) {
+                      return FlSpot(index.toDouble(), series1Data[index]);
+                    } else {
+                      // Handle case where index exceeds series1Data length
+                      // This could be logging an error, returning a default value, etc.
+                      return FlSpot(index.toDouble(),
+                          0); // For example, returning 0 if index is out of range
+                    }
+                  }),
+
+                  isCurved: true,
+                  color: Colors.blue,
+                  barWidth: 1.5,
+                  isStrokeCapRound: true,
+                  belowBarData: BarAreaData(
+                    show: true,
+                    color: Config.appTheme.themeColor.withOpacity(
+                        0.09), // Adjust opacity and color as needed
+                  ),
+                  dotData: FlDotData(show: false),
+                ),
+                LineChartBarData(
+                  spots: List.generate(months.length, (index) {
+                    if (index < series2Data.length) {
+                      return FlSpot(index.toDouble(), series2Data[index]);
+                    } else {
+                      return FlSpot(index.toDouble(), 0);
+                    }
+                  }),
+                  isCurved: true,
+                  color: Config.appTheme.themeColor,
+                  barWidth: 1.5,
+                  isStrokeCapRound: true,
+                  belowBarData: BarAreaData(
+                    show: true,
+                    color: Config.appTheme.themeColorDark.withOpacity(
+                        0.09), // Adjust opacity and color as needed
+                  ),
+                  // belowBarData: BarAreaData(
+                  //     show: true,
+                  //     gradient: LinearGradient(
+                  //         begin: Alignment.bottomRight,
+                  //         stops: [
+                  //           0.5,
+                  //           0.9
+                  //         ],
+                  //         colors: [
+                  //           Config.appTheme.themeColor.withOpacity(.5),
+                  //           Config.appTheme.themeColorDark.withOpacity(.6),
+                  //         ])),
+                  dotData: FlDotData(show: false),
+                ),
+              ],
+              lineTouchData: LineTouchData(
+                touchTooltipData: LineTouchTooltipData(
+                  tooltipBgColor: Colors.blue.withOpacity(0.8),
+                  tooltipRoundedRadius: 6,
+                  maxContentWidth: 400,
+                  tooltipPadding: EdgeInsets.all(8),
+                  getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                    return touchedSpots.map((LineBarSpot touchedSpot) {
+                      final TextStyle textStyle = TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 8,
+                      );
+
+                      // Concatenate month, series1 data, and series2 data
+                      String tooltipText = '';
+                      String month = months.isNotEmpty
+                          ? months[touchedSpot.x.toInt() % months.length]
+                          : '';
+                      month = month.replaceAll('\n', ' ');
+                      String series1Text = touchedSpot.barIndex == 0
+                          ? '$shortName ${touchedSpot.y}'
+                          : '';
+                      String series2Text = touchedSpot.barIndex == 1
+                          ? '$benchMarkName ${touchedSpot.y}'
+                          : '';
+                      tooltipText =
+                          '$month\n$series1Text${touchedSpot.barIndex == 1 ? series2Text : ''}';
+
+                      return LineTooltipItem(
+                        tooltipText,
+                        textStyle,
+                        textAlign: TextAlign.left,
+                      );
+                    }).toList();
                   },
                 ),
+                handleBuiltInTouches: true,
+                touchSpotThreshold: 16,
               ),
-              leftTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: false,
-                  getTitlesWidget: (value, meta) {
-                    int percentage = (value + 5).toInt();
-                    return Expanded(
-                      child: Text(
-                        '$percentage%',
-                        style: TextStyle(
-                          color: Config.appTheme.themeColor,
-                          fontSize: 9,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              topTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: false,
-                ),
-              ),
-              rightTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: false,
-                ),
-              ),
-            ),
-            lineBarsData: [
-              LineChartBarData(
-                // spots: List.generate(months.length, (index) {
-                //   return FlSpot(index.toDouble(), series1Data[index]);
-                // }),
-
-                spots: List.generate(months.length, (index) {
-                  if (index < series1Data.length) {
-                    return FlSpot(index.toDouble(), series1Data[index]);
-                  } else {
-                    // Handle case where index exceeds series1Data length
-                    // This could be logging an error, returning a default value, etc.
-                    return FlSpot(index.toDouble(),
-                        0); // For example, returning 0 if index is out of range
-                  }
-                }),
-
-                isCurved: true,
-                color: Colors.blue,
-                barWidth: 1.5,
-                isStrokeCapRound: true,
-                belowBarData: BarAreaData(
-                  show: true,
-                  color: Config.appTheme.themeColor
-                      .withOpacity(0.09), // Adjust opacity and color as needed
-                ),
-                dotData: FlDotData(show: false),
-              ),
-              LineChartBarData(
-                spots: List.generate(months.length, (index) {
-                  if (index < series2Data.length) {
-                    return FlSpot(index.toDouble(), series2Data[index]);
-                  } else {
-                    return FlSpot(index.toDouble(), 0);
-                  }
-                }),
-                isCurved: true,
-                color: Config.appTheme.themeColor,
-                barWidth: 1.5,
-                isStrokeCapRound: true,
-                belowBarData: BarAreaData(
-                  show: true,
-                  color: Config.appTheme.themeColorDark
-                      .withOpacity(0.09), // Adjust opacity and color as needed
-                ),
-                // belowBarData: BarAreaData(
-                //     show: true,
-                //     gradient: LinearGradient(
-                //         begin: Alignment.bottomRight,
-                //         stops: [
-                //           0.5,
-                //           0.9
-                //         ],
-                //         colors: [
-                //           Config.appTheme.themeColor.withOpacity(.5),
-                //           Config.appTheme.themeColorDark.withOpacity(.6),
-                //         ])),
-                dotData: FlDotData(show: false),
-              ),
-            ],
-            lineTouchData: LineTouchData(
-              touchTooltipData: LineTouchTooltipData(
-                tooltipBgColor: Colors.blue.withOpacity(0.8),
-                tooltipRoundedRadius: 6,
-                maxContentWidth: 400,
-                tooltipPadding: EdgeInsets.all(8),
-                getTooltipItems: (List<LineBarSpot> touchedSpots) {
-                  return touchedSpots.map((LineBarSpot touchedSpot) {
-                    final TextStyle textStyle = TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 8,
-                    );
-
-                    // Concatenate month, series1 data, and series2 data
-                    String tooltipText = '';
-                    String month = months.isNotEmpty
-                        ? months[touchedSpot.x.toInt() % months.length]
-                        : '';
-                    month = month.replaceAll('\n', ' ');
-                    String series1Text = touchedSpot.barIndex == 0
-                        ? '$shortName ${touchedSpot.y}'
-                        : '';
-                    String series2Text = touchedSpot.barIndex == 1
-                        ? '$benchMarkName ${touchedSpot.y}'
-                        : '';
-                    tooltipText =
-                        '$month\n$series1Text${touchedSpot.barIndex == 1 ? series2Text : ''}';
-
-                    return LineTooltipItem(
-                      tooltipText,
-                      textStyle,
-                      textAlign: TextAlign.left,
-                    );
-                  }).toList();
-                },
-              ),
-              handleBuiltInTouches: true,
-              touchSpotThreshold: 16,
             ),
           ),
         ),
-      ),
-    ]);
+      ]
+    );
   }
 
   void showDatePickerDialog(BuildContext context) async {
@@ -1866,7 +1864,7 @@ class RollingReturnsController extends GetxController {
 
   void selectScheme(String schemeName, int index) {
     if (isProcessingSelection.value) return;
-
+    
     _debouncer.run(() {
       isProcessingSelection.value = true;
       selectedRadioIndex.value = index;
