@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+//import 'package:matomo_tracker/matomo_tracker.dart';
 import 'package:mymfbox2_0/api/Api.dart';
 import 'package:mymfbox2_0/login/CheckAuth.dart';
 import 'package:mymfbox2_0/login/ForgotPassword.dart';
@@ -20,6 +21,13 @@ class Password extends StatefulWidget {
 }
 
 class _PasswordState extends State<Password> {
+
+/*  with TraceableClientMixin @override
+  String get actionName => Config.app_client_name + " Password Page"; // optional
+
+  @override
+  String get path => '/password';*/
+
   late double devHeight, devWidth;
   FocusNode focusNode = FocusNode();
   Color borderColor = Colors.grey;
@@ -253,6 +261,8 @@ class _PasswordState extends State<Password> {
       // if (type_id == 1) Get.offAll(() => InvestorDashboard());
       // if (type_id == 3) Get.offAll(() => FamilyDashboard());
 
+
+
       Get.offAll(() => CheckAuth());
     } else {
       Utils.showError(context, data['msg']);
@@ -262,6 +272,9 @@ class _PasswordState extends State<Password> {
   Future writeDataLocally(Map data) async {
     Map<String, dynamic> user = data['user'];
     int type_id = user['type_id'];
+
+/*    int userId = user['user_id'];
+    MatomoTracker.instance.setVisitorUserId(userId.toString());*/
 
     await GetStorage().write("isLoggedIn", true);
     await GetStorage().write("type_id", type_id);

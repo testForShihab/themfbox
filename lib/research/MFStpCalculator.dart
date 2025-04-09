@@ -36,14 +36,6 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
 
-  // TextEditingController initialLumpsumAmountController =
-  //     TextEditingController();
-  // TextEditingController stpAmountController = TextEditingController();
-
-  // String lumpsumDate = "01-07-2015";
-
-  // String initialLumpsumAmount = "200000";
-
   TextStyle underlineText = TextStyle(
       color: Config.appTheme.themeColor,
       decoration: TextDecoration.underline,
@@ -54,16 +46,9 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
   int selectedToRadioIndex = -1;
   String selectedCategory = "Equity Schemes";
   String selectedSubCategory = "Equity: Flexi Cap";
-
-  // String selectedFromScheme = "ICICI Pru Liquid Gr";
-  // String selectedToScheme = "ICICI Pru Equity & Debt Gr";
   String selectedRollingPeriod = "3 Years";
   String rollingPeriods = "3 Year";
 
-  // String startDate = "05-07-2015";
-  // String endDate = "01-04-2024";
-  // String lumpsumDate = "01-07-2015";
-  // String scheme = "ICICI Prudential Smallcap Fund - Growth";
   String toScheme = "Mirae Asset Large Cap Fund - Growth Plan";
 
   String btnNo = "";
@@ -104,7 +89,7 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
     "15 Years"
   ];
   List subCategoryList = [];
-  List rollingReturnBenchmarkList = [];
+
   final List<String> months = [];
   List<double> series1Data = [];
   List<double> series2Data = [];
@@ -132,10 +117,24 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
   List Tocash = [];
   List to_SchemeMapping = [];
 
-  Future getDatas() async {
-    isLoading = true;
-    await getTopLumpsumFunds();
-    await getSTPReturns();
+
+
+
+  List amcList = [];
+
+  Future getAllAmc() async {
+    if (amcList.isNotEmpty) return 0;
+    try {
+      isLoading = true;
+      Map data = await ResearchApi.getAllAmc(client_name: client_name);
+      if (data['status'] != 200) {
+        Utils.showError(context, data['msg']);
+        return 0;
+      }
+      amcList = data['list'];
+    } catch (e) {
+      print("getTopAmc exception = $e");
+    }
     isLoading = false;
     return 0;
   }
@@ -189,7 +188,6 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
       initial_amount: lamount,
       transfer_amount: samount,
     );
-    print("-----------camehere");
     if (data['status'] != SUCCESS) {
       Utils.showError(context, data['msg']);
       return -1;
@@ -199,17 +197,39 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
     Tocash = stpCalculatorList['to_scheme_list'];
   }
 
+  String schemeStartDate = '';
+
+  Future getSchemeInceptionAndLatestNavDate(String formattedDate) async {
+    if (schemeStartDate.isNotEmpty) return 0;
+    Map data = await ResearchApi.getSchemeInceptionAndLatestNavDate(
+        scheme_name: controller.selectedFromScheme.value,
+        start_date: formattedDate,
+        clientName: client_name);
+    schemeStartDate = data['scheme_start_date'];
+    return;
+  }
+
+  Future getDatas() async {
+    isLoading = true;
+    await getAllAmc();
+    await getTopLumpsumFunds();
+    await getSTPReturns();
+    isLoading = false;
+    return 0;
+  }
+
+  late Future future;
+
   @override
   void initState() {
     super.initState();
-    btnNo = "1";
-    // lumpsumDateController.text = controller.lumpsumDate.value;
-    // startDateController.text = controller.startDate.value;
-    // endDateController.text = controller.endDate.value;
+    future = getDatas();
+  }
 
-    // stpAmountController = TextEditingController(text: "10000");
-    // stpAmountController = TextEditingController(text: "10000");
-    // initialLumpsumAmountController = TextEditingController(text: "200000");
+  void _refreshData() {
+    setState(() {
+      future = getDatas();
+    });
   }
 
   @override
@@ -217,14 +237,14 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
     devHeight = MediaQuery.of(context).size.height;
     devWidth = MediaQuery.of(context).size.width;
     return FutureBuilder(
-        future: getDatas(),
+        future: future,
         builder: (context, snapshot) {
           return Scaffold(
             backgroundColor: Color(0XFFECF0F0),
             appBar: AppBar(
               backgroundColor: Config.appTheme.themeColor,
               leadingWidth: 0,
-              toolbarHeight: 350,
+              toolbarHeight: 420,
               foregroundColor: Colors.white,
               elevation: 0,
               leading: SizedBox(),
@@ -248,19 +268,34 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
                       //MfAboutIcon(context: context),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
                         onTap: () {
-                          showSchemeBottomSheet();
+                          showSchemeAMCBottomSheet();
+                        },
+                        child: Obx(() => appBarColumnAmc(
+                            "Select AMC",
+                            Utils.getFirst24C(controller.scheme.value),
+                            Icon(Icons.keyboard_arrow_down,
+                                color: Config.appTheme.themeColor))),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          showSchemeFromBottomSheet();
                         },
                         child: Obx(() => appBarColumn(
                             "From",
-                            Utils.getFirst10(controller.scheme.value.isEmpty
-                                ? controller.scheme.value
-                                : controller.selectedFromScheme.value),
+                            Utils.getFirst10(
+                                controller.selectedFromScheme.value),
                             Icon(Icons.keyboard_arrow_down,
                                 color: Config.appTheme.themeColor))),
                       ),
@@ -276,7 +311,7 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 16),
+                  SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -300,6 +335,7 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
                                 border:
                                     Border.all(color: Colors.white, width: 1),
                                 borderRadius: BorderRadius.circular(8),
+                                color: Color(0XFFDEE6E6),
                               ),
                               child: TextFormField(
                                 cursorColor: Colors.white,
@@ -307,7 +343,7 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
                                     signed: true, decimal: true),
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(8),
+                                  LengthLimitingTextInputFormatter(9),
                                 ],
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
@@ -320,18 +356,19 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
                                       vertical: 13,
                                       horizontal: 8), // Style for hint text
                                 ),
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(color: Config.appTheme.themeColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
                                 controller:
                                     controller.initialLumpsumAmountController,
                                 onChanged: (text) async {
-                                  if (text.length <= 6) {
+                                  if (text.length <= 9) {
                                     controller.stpAmount.value = text;
                                     print(
                                         "stpAmount ${controller.stpAmount.value}");
-                                    // rollingReturnBenchmarkList = [];
                                   } else {
                                     controller.stpAmountController.text =
-                                        text.substring(0, 6);
+                                        text.substring(0, 9);
                                     controller.stpAmountController.selection =
                                         TextSelection.fromPosition(
                                       TextPosition(
@@ -347,8 +384,6 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          // lumpsumDateController.text = "";
-                          // lumpsumDate = "";
                           showDatePickerDialog(context, 0);
                         },
                         child: Obx(() => appBarColumn(
@@ -359,7 +394,7 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 16),
+                  SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -378,21 +413,22 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(left: 26.0),
+                              padding: EdgeInsets.only(left: 34),
                               child: Text(
-                                "STP Amount",
+                                "STP Transfer Amount",
                                 style: AppFonts.f40013
                                     .copyWith(color: Colors.white),
                               ),
                             ),
                             Container(
-                              width: devWidth * 0.44,
+                              width: devWidth * 0.42,
                               height: devHeight * 0.04,
-                              margin: EdgeInsets.only(top: 4, left: 26),
+                              margin: EdgeInsets.only(top: 4, left: 34),
                               decoration: BoxDecoration(
                                 border:
                                     Border.all(color: Colors.white, width: 1),
                                 borderRadius: BorderRadius.circular(8),
+                                color: Color(0XFFDEE6E6),
                               ),
                               child: TextFormField(
                                 cursorColor: Colors.white,
@@ -400,7 +436,7 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
                                     signed: true, decimal: true),
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(6),
+                                  LengthLimitingTextInputFormatter(9),
                                 ],
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
@@ -413,18 +449,17 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
                                       vertical: 13,
                                       horizontal: 8), // Style for hint text
                                 ),
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(color: Config.appTheme.themeColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
                                 controller: controller.stpAmountController,
                                 onChanged: (text) async {
                                   isLoading = false;
-                                  if (text.length <= 6) {
+                                  if (text.length <= 9) {
                                     controller.stpAmount.value = text;
-                                    print(
-                                        "stpAmount ${controller.stpAmount.value}");
-                                    // rollingReturnBenchmarkList = [];
                                   } else {
                                     controller.stpAmountController.text =
-                                        text.substring(0, 6);
+                                        text.substring(0, 9);
                                     controller.stpAmountController.selection =
                                         TextSelection.fromPosition(
                                       TextPosition(
@@ -440,14 +475,12 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 16),
+                  SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
                         onTap: () {
-                          // startDateController.text = "";
-                          // controller.startDate.value = "";
                           showDatePickerDialog(context, 1);
                         },
                         child: Obx(() => appBarColumn1(
@@ -458,8 +491,6 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          // endDateController.text = "";
-                          // controller.endDate.value = "";
                           showDatePickerDialog(context, 2);
                         },
                         child: Obx(() => appBarColumn1(
@@ -470,91 +501,132 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          if (controller.startDate.value.isNotEmpty) {
-                            DateTime lumpsumDate = convertStrToDt(controller.lumpsumDate.value);
-                            DateTime startDate = convertStrToDt(controller.startDate.value);
-                            DateTime endDate = convertStrToDt(controller.endDate.value);
-                            print("startDate $startDate");
-                            print("endDate $endDate");
+                          setState(() {
+                          DateTime lumpsumDate =
+                              convertStrToDt(controller.lumpsumDate.value);
+                          DateTime startDate =
+                              convertStrToDt(controller.startDate.value);
+                          DateTime endDate =
+                              convertStrToDt(controller.endDate.value);
 
-                            // First validate if start and end dates are same
-                            if (endDate.year == startDate.year &&
-                                endDate.month == startDate.month &&
-                                endDate.day == startDate.day) {
-                              Utils.showError(context, "Please select a valid start date and end date.");
-                              return;
-                            }
+                          DateTime schemeStart = convertStrToDt(schemeStartDate);
 
-                              if (startDate.isBefore(lumpsumDate)) {
-                                Utils.showError(context, "Please select STP start date less than intial amount start date.");
-                                return;
-                              }
 
-                            if (controller.stpFrequency.value == "daily") {
-                              if (startDate.isAfter(endDate)) {
-                                Utils.showError(context, "Please select a valid start date and end date.");
-                                return;
-                              }
-                            }
-
-                            if (controller.stpFrequency.value == "weekly") {
-                              DateTime oneWeekBeforeEndDate = endDate.subtract(const Duration(days: 7));
-                              if (startDate.isAfter(oneWeekBeforeEndDate)) {
-                                Utils.showError(context, "Please select a valid start date and end date.");
-                                return;
-                              }
-                            }
-
-                            if (controller.stpFrequency.value == "Monthly") {
-                              DateTime oneMonthBeforeEndDate = DateTime(endDate.year, endDate.month - 1, endDate.day);
-                              if (startDate.isAfter(oneMonthBeforeEndDate)) {
-                                Utils.showError(context, "Please select a valid start date and end date.");
-                                return;
-                              }
-                            }
-
-                            if (controller.stpFrequency.value == "Quarterly") {
-                              DateTime threeMonthsBeforeEndDate = DateTime(endDate.year, endDate.month - 3, endDate.day);
-                              if (startDate.isAfter(threeMonthsBeforeEndDate)) {
-                                Utils.showError(context, "Please select a valid start date and end date.");
-                                return;
-                              }
-                            }
-
-                            if (controller.stpFrequency.value == "Fortnightly") {
-                              DateTime fourteenDaysBeforeEndDate = endDate.subtract(Duration(days: 14));
-                              if (startDate.isAfter(fourteenDaysBeforeEndDate)) {
-                                Utils.showError(context, "Please select a valid start date and end date.");
-                                return;
-                              }
-                            }
-
-                            // Validate if from and to schemes are same
-                            if (controller.selectedFromScheme.value == controller.selectedToScheme.value) {
-                              Utils.showError(context, 'Transfer from scheme and to scheme should not be same');
-                              return;
-                            }
-
-                            stpCalculatorList = {};
-                            rollingReturnBenchmarkList = [];
-                            setState(() {});
+                          if (controller.selectedFromScheme.value ==
+                              controller.selectedToScheme.value) {
+                            Utils.showError(context,
+                                'Transfer from scheme and to scheme should not be same');
+                            return;
                           }
+                          if (double.parse(
+                                  controller.initialLumpsumAmount.value) <
+                              double.parse(controller.stpAmount.value)) {
+                            Utils.showError(context,
+                                "Please enter the initial amount greater than transfer amount.");
+                            return;
+                          }
+                          getSchemeInceptionAndLatestNavDate(
+                              controller.lumpsumDate.value);
+                          if (lumpsumDate.isBefore(schemeStart)) {
+                            String formattedSchemeDate = DateFormat('dd-MM-yyyy').format(schemeStart);
+                            if (context.mounted) {
+                              Utils.showError(
+                                  context,
+                                  ' ${controller.selectedFromScheme.value} inception date is $formattedSchemeDate. '
+                                      'Please select a start date greater than or equal to the scheme inception date.');
+                            }
+                            return ;
+                          }
+
+                          getSchemeInceptionAndLatestNavDate(
+                              controller.startDate.value);
+                          if (startDate.isBefore(schemeStart)) {
+                            String formattedSchemeDate = DateFormat('dd-MM-yyyy').format(schemeStart);
+                            if (context.mounted) {
+                              Utils.showError(
+                                  context,
+                                  ' ${controller.selectedFromScheme.value} inception date is $formattedSchemeDate. '
+                                      'Please select a start date greater than or equal to the scheme inception date.');
+                            }
+                            return ;
+                          }
+
+                          if (startDate.isBefore(lumpsumDate)) {
+                            Utils.showError(context,
+                                "Please select STP start date less than initial amount start date.");
+                            return;
+                          }
+                          if (endDate.year == startDate.year &&
+                              endDate.month == startDate.month &&
+                              endDate.day == startDate.day) {
+                            Utils.showError(context,
+                                "Please select a valid start date and end date.");
+                            return;
+                          }
+                          if (controller.stpFrequency.value == "daily") {
+                            if (startDate.isAfter(endDate)) {
+                              Utils.showError(context,
+                                  "Please select a valid start date and end date.");
+                              return;
+                            }
+                          }
+                          if (controller.stpFrequency.value ==
+                              "weekly") {
+                            DateTime oneWeekBeforeEndDate =
+                                endDate.subtract(const Duration(days: 7));
+                            if (startDate.isAfter(oneWeekBeforeEndDate)) {
+                              Utils.showError(context,
+                                  "Please select a valid start date and end date.");
+                              return;
+                            }
+                          }
+                          if (controller.stpFrequency.value ==
+                              "Monthly") {
+                            DateTime oneMonthBeforeEndDate = DateTime(
+                                endDate.year, endDate.month - 1, endDate.day);
+                            if (startDate.isAfter(oneMonthBeforeEndDate)) {
+                              Utils.showError(context,
+                                  "Please select a valid start date and end date.");
+                              return;
+                            }
+                          }
+                          if (controller.stpFrequency.value ==
+                              "Quarterly") {
+                            DateTime threeMonthsBeforeEndDate = DateTime(
+                                endDate.year, endDate.month - 3, endDate.day);
+                            if (startDate.isAfter(threeMonthsBeforeEndDate)) {
+                              Utils.showError(context,
+                                  "Please select a valid start date and end date.");
+                              return;
+                            }
+                          }
+                          if (controller.stpFrequency.value ==
+                              "Fortnightly") {
+                            DateTime fourteenDaysBeforeEndDate =
+                                endDate.subtract(Duration(days: 14));
+                            if (startDate.isAfter(fourteenDaysBeforeEndDate)) {
+                              Utils.showError(context,
+                                  "Please select a valid start date and end date.");
+                              return;
+                            }
+                          }
+                            stpCalculatorList = {};
+                            _refreshData();
+                          });
                         },
                         child: Container(
-                          width: devWidth * 0.22,
-                          padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
                           margin: EdgeInsets.only(top: 22),
+                          padding:
+                          EdgeInsets.symmetric(horizontal: 18, vertical: 7),
                           decoration: BoxDecoration(
-                            color: Config.appTheme.defaultProfit,
+                            color: Colors.black,
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Center(
-                            child: Text("Submit",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold)),
-                          ),
+                          child: Text("Submit",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold)),
                         ),
                       )
                     ],
@@ -726,23 +798,23 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
   }
 
   Widget schemeSummaryCard() {
-    num remaining_units = stpCalculatorList['from_scheme_remaining_units'];
-    num accumulated_units = stpCalculatorList['to_scheme_accumulated_units'];
-    String from_current_value_date =
-        stpCalculatorList['from_scheme_current_value_date'];
-    String to_current_value_date =
-        stpCalculatorList['to_scheme_current_value_date'];
-    num from_current_value = stpCalculatorList['from_scheme_current_value'];
-    num to_current_value = stpCalculatorList['to_scheme_current_value'];
-    String from_end_date = stpCalculatorList['from_scheme_end_value_date'];
-    String to_end_date = stpCalculatorList['to_scheme_end_value_date'];
-    num from_end_value = stpCalculatorList['from_scheme_end_value'];
-    num to_end_value = stpCalculatorList['to_scheme_end_value'];
-    num from_scheme_profit = stpCalculatorList['from_scheme_profit'];
-    num to_scheme_profit = stpCalculatorList['to_scheme_profit'];
-    num from_scheme_returns = stpCalculatorList['from_scheme_returns'];
-    num to_scheme_returns = stpCalculatorList['to_scheme_returns'];
-    String logo = stpCalculatorList['amc_logo'];
+    num remainingUnits = stpCalculatorList['from_scheme_remaining_units'] ?? 0;
+    num accumulatedUnits = stpCalculatorList['to_scheme_accumulated_units'] ?? 0;
+    String fromCurrentValueDate =
+        stpCalculatorList['from_scheme_current_value_date'] ?? '';
+    String toCurrentValueDate =
+        stpCalculatorList['to_scheme_current_value_date'] ?? '';
+    num fromCurrentValue = stpCalculatorList['from_scheme_current_value'] ?? 0;
+    num toCurrentValue = stpCalculatorList['to_scheme_current_value'] ?? 0;
+    String fromEndDate = stpCalculatorList['from_scheme_end_value_date'] ?? '';
+    String toEndDate = stpCalculatorList['to_scheme_end_value_date'] ?? '';
+    num fromEndValue = stpCalculatorList['from_scheme_end_value'] ?? 0;
+    num toEndValue = stpCalculatorList['to_scheme_end_value'] ?? 0;
+    num fromSchemeProfit = stpCalculatorList['from_scheme_profit'] ?? 0;
+    num toSchemeProfit = stpCalculatorList['to_scheme_profit'] ?? 0;
+    num fromSchemeReturns = stpCalculatorList['from_scheme_returns'] ?? 0;
+    num toSchemeReturns = stpCalculatorList['to_scheme_returns'] ?? 0;
+    String logo = stpCalculatorList['amc_logo'] ?? '';
     return Container(
       width: devWidth,
       padding: EdgeInsets.all(16),
@@ -756,8 +828,8 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Image.network(stpCalculatorList["amc_logo"] ?? "", height: 30),
-              Image.network(stpCalculatorList["amc_logo"] ?? "", height: 30),
+              Image.network(stpCalculatorList["amc_logo"] ?? '' , height: 30),
+              Image.network(stpCalculatorList["amc_logo"] ?? '' , height: 30),
             ],
           ),
           SizedBox(height: 8),
@@ -765,14 +837,14 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Text("${controller.selectedFromScheme.value}",
+                child: Text(controller.selectedFromScheme.value,
                     style: AppFonts.f50014Black
                         .copyWith(color: Config.appTheme.themeColor)),
               ),
               TransferCircle(),
               Expanded(
                 child: Text(
-                  "${controller.selectedToScheme.value}",
+                  controller.selectedToScheme.value,
                   style: AppFonts.f50014Black
                       .copyWith(color: Config.appTheme.themeColor),
                   textAlign: TextAlign.end,
@@ -787,11 +859,11 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
               ColumnText(
                   title: "Units Remaining",
                   value:
-                      "$rupee ${Utils.formatNumber(remaining_units.round())}"),
+                      "$rupee ${Utils.formatNumber(remainingUnits.round())}"),
               ColumnText(
                   title: "Units Accumulated",
                   value:
-                      "$rupee ${Utils.formatNumber(accumulated_units.round())}",
+                      "$rupee ${Utils.formatNumber(accumulatedUnits.round())}",
                   alignment: CrossAxisAlignment.end),
             ],
           ),
@@ -800,13 +872,13 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ColumnText(
-                  title: "Value on $from_current_value_date",
+                  title: "Value on $fromCurrentValueDate",
                   value:
-                      "$rupee ${Utils.formatNumber(from_current_value.round())}"),
+                      "$rupee ${Utils.formatNumber(fromCurrentValue.round())}"),
               ColumnText(
-                  title: "Value on $to_current_value_date",
+                  title: "Value on $toCurrentValueDate",
                   value:
-                      "$rupee ${Utils.formatNumber(to_current_value.round())}",
+                      "$rupee ${Utils.formatNumber(toCurrentValue.round())}",
                   alignment: CrossAxisAlignment.end),
             ],
           ),
@@ -815,12 +887,12 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ColumnText(
-                  title: "Value on $from_end_date",
+                  title: "Value on $fromEndDate",
                   value:
-                      "$rupee ${Utils.formatNumber(from_end_value.round())}"),
+                      "$rupee ${Utils.formatNumber(fromEndValue.round())}"),
               ColumnText(
-                  title: "Value on $to_end_date",
-                  value: "$rupee ${Utils.formatNumber(to_end_value.round())}",
+                  title: "Value on $toEndDate",
+                  value: "$rupee ${Utils.formatNumber(toEndValue.round())}",
                   alignment: CrossAxisAlignment.end),
             ],
           ),
@@ -831,11 +903,11 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
               ColumnText(
                   title: "Profit",
                   value:
-                      "$rupee ${Utils.formatNumber(from_scheme_profit.round())}"),
+                      "$rupee ${Utils.formatNumber(fromSchemeProfit.round())}"),
               ColumnText(
                   title: "Profit",
                   value:
-                      "$rupee ${Utils.formatNumber(to_scheme_profit.round())}",
+                      "$rupee ${Utils.formatNumber(toSchemeProfit.round())}",
                   alignment: CrossAxisAlignment.end),
             ],
           ),
@@ -845,17 +917,17 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
             children: [
               ColumnText(
                 title: "Return",
-                value: "${from_scheme_returns.toStringAsFixed(2)}%",
+                value: "${fromSchemeReturns.toStringAsFixed(2)}%",
                 valueStyle: AppFonts.f50014Black.copyWith(
-                    color: (from_scheme_returns > 0)
+                    color: (fromSchemeReturns > 0)
                         ? Config.appTheme.defaultProfit
                         : Config.appTheme.defaultLoss),
               ),
               ColumnText(
                   title: "Return",
-                  value: "${to_scheme_returns.toStringAsFixed(2)}%",
+                  value: "${toSchemeReturns.toStringAsFixed(2)}%",
                   valueStyle: AppFonts.f50014Black.copyWith(
-                      color: (to_scheme_returns > 0)
+                      color: (toSchemeReturns > 0)
                           ? Config.appTheme.defaultProfit
                           : Config.appTheme.defaultLoss),
                   alignment: CrossAxisAlignment.end),
@@ -1413,10 +1485,138 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
   //   );
   // }
 
-  showSchemeBottomSheet() {
+  showSchemeAMCBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
+      ),
+      builder: (context) {
+        return StatefulBuilder(builder: (_, bottomState) {
+          return Container(
+            height: devHeight * 0.7,
+            padding: EdgeInsets.all(7),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Select AMC",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      icon: Icon(Icons.close),
+                    )
+                  ],
+                ),
+                Divider(),
+                SizedBox(height: 10),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: TextField(
+                    controller: controller.fromsearchController,
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      hintText: 'Search Fund...',
+                      hintStyle: TextStyle(color: Colors.white),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 16.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      filled: true,
+                      fillColor: Config.appTheme.themeColor,
+                    ),
+                    onChanged: (value) {
+                      bottomState(() {});
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: amcList.length,
+                    itemBuilder: (context, index) {
+                      String amcName = amcList[index]['amc_name'] ?? "";
+
+                      if (controller.fromsearchController.text.isNotEmpty &&
+                          !amcName.toLowerCase().contains(controller
+                              .fromsearchController.text
+                              .toLowerCase())) {
+                        return SizedBox.shrink();
+                      }
+
+                      return RadioListTile(
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title: Text(amcName),
+                        value: index,
+                        groupValue: selectedRadioIndex,
+                        onChanged: (int? value) async {
+                          if (value != null) {
+                            selectedRadioIndex = value;
+
+                            controller.selectedAMC.value = amcName;
+
+                            controller.scheme.value =
+                                controller.selectedAMC.value;
+
+                            controller.fromsearchController.clear();
+
+
+                            String fromScheme = controller.scheme.value.split(" ").elementAt(0);
+
+                            EasyLoading.show();
+                            Map data = await PropoaslApi.autoSuggestScheme(
+                                user_id: user_id, query: fromScheme, client_name: client_name);
+                            suggestions = data['list'];
+                            EasyLoading.dismiss();
+
+                            controller.selectedFromScheme.value = suggestions[0]['scheme_amfi_short_name'];
+                            controller.selectedToScheme.value = suggestions[0]['scheme_amfi_short_name'];
+                            setState(() {});
+                            Get.back();
+                          }
+                        },
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
+          );
+        });
+      },
+    );
+  }
+
+  List suggestions = [];
+  List fromSuggestions = [];
+
+  showSchemeFromBottomSheet() async {
     List<bool> isSelectedList = List.filled(fundList.length, false);
     List<String> selectedSchemes = List.filled(fundList.length, '');
-    // TextEditingController searchController = TextEditingController();
+
+    String fromScheme = controller.scheme.value.split(" ").elementAt(0);
+
+    EasyLoading.show();
+    Map data = await PropoaslApi.autoSuggestScheme(
+        user_id: user_id, query: fromScheme, client_name: client_name);
+    fromSuggestions = data['list'];
+    EasyLoading.dismiss();
+
     print("fundList.length bottomsheet ${fundList.length}");
     showModalBottomSheet(
       context: context,
@@ -1473,44 +1673,42 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
                       filled: true,
                       fillColor: Config.appTheme.themeColor,
                     ),
-                    onChanged: (value) {
+                    onChanged: (value) async {
+                      Map data = await PropoaslApi.autoSuggestScheme(
+                          user_id: user_id,
+                          query: fromScheme.split(" ").elementAt(0),
+                          client_name: client_name);
+                      bottomState(() {
+                        fromSuggestions = data['list'];
+                      });
                       bottomState(() {});
-                      
                     },
                   ),
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: fundList.length,
+                    itemCount: fromSuggestions.length,
                     itemBuilder: (context, index) {
+                      Map temp = fromSuggestions[index];
+                      String name = temp['scheme_amfi_short_name'];
+
                       if (controller.fromsearchController.text.isNotEmpty &&
-                          !fundList[index]['scheme_amfi_short_name']
-                              .toLowerCase()
-                              .contains(controller.fromsearchController.text
-                                  .toLowerCase())) {
+                          !name.toLowerCase().contains(controller
+                              .fromsearchController.text
+                              .toLowerCase())) {
                         return SizedBox.shrink();
                       }
+
                       return RadioListTile(
                         controlAffinity: ListTileControlAffinity.leading,
-                        title: Text(fundList[index]['scheme_amfi_short_name']),
+                        title: Text(name),
                         value: index,
                         groupValue: selectedRadioIndex,
                         onChanged: (int? value) {
                           if (value != null) {
                             selectedRadioIndex = value;
 
-                            controller.selectedValues.value =
-                                fundList[0]['scheme_amfi'];
-
-                            selectedSchemes = [];
-                            selectedSchemes.add(fundList[value]['scheme_amfi']);
-
-                            controller.selectedFromScheme.value =
-                                fundList[value]['scheme_amfi_short_name'];
-
-                            controller.scheme.value =
-                                fundList[value]['scheme_amfi'];
-                            controller.scheme.value = selectedSchemes.join(',');
+                            controller.selectedFromScheme.value = name;
 
                             controller.fromsearchController.clear();
                             // rollingReturnBenchmarkList = [];
@@ -1529,16 +1727,17 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
     );
   }
 
+  List tosuggestions = [];
+
   showToSchemeBottomSheet() async {
     List<bool> isSelectedList = List.filled(fundList.length, false);
     List<String> selectedSchemes = List.filled(fundList.length, '');
-    String toscheme =
-        controller.selectedFromScheme.value.split(" ").elementAt(0);
-    List suggestions = [];
+    String toscheme = controller.scheme.value.split(" ").elementAt(0);
+
     EasyLoading.show();
     Map data = await PropoaslApi.autoSuggestScheme(
         user_id: user_id, query: toscheme, client_name: client_name);
-    suggestions = data['list'];
+    tosuggestions = data['list'];
     EasyLoading.dismiss();
     print("fundList.length bottomsheet ${fundList.length}");
     showModalBottomSheet(
@@ -1603,7 +1802,7 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
                               .split(" ")
                               .elementAt(0),
                           client_name: client_name);
-                      suggestions = data['list'];
+                      tosuggestions = data['list'];
                       bottomState(() {});
                     },
                   ),
@@ -1611,9 +1810,9 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
                 Expanded(
                   child: ListView.builder(
                     shrinkWrap: true,
-                    itemCount: suggestions.length,
+                    itemCount: tosuggestions.length,
                     itemBuilder: (context, index) {
-                      Map temp = suggestions[index];
+                      Map temp = tosuggestions[index];
                       String name = temp['scheme_amfi_short_name'];
 
                       if (controller.tosearchController.text.isNotEmpty &&
@@ -1694,6 +1893,38 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
           width: devWidth * 0.42,
           padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
           margin: EdgeInsets.only(top: 5),
+          decoration: BoxDecoration(
+            color: Color(0XFFDEE6E6),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Center(
+            child: Row(
+              children: [
+                Text(value,
+                    style: TextStyle(
+                        color: Config.appTheme.themeColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold)),
+                Spacer(),
+                suffix
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget appBarColumnAmc(String title, String value, Widget suffix) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(title, style: TextStyle(fontSize: 14)),
+        Container(
+          width: devWidth * 0.92,
+          padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
+          margin: EdgeInsets.only(top: 15),
           decoration: BoxDecoration(
             color: Color(0XFFDEE6E6),
             borderRadius: BorderRadius.circular(8),
@@ -2280,15 +2511,17 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
 }
 
 class RollingReturnsController extends GetxController {
-  var scheme = "ICICI Prudential Smallcap Fund - Growth".obs;
-  var selectedValues = "ICICI Prudential Smallcap Fund - Growth".obs;
+  var scheme = "ICICI Prudential Mutual Fund".obs;
+  var selectedAMC = "ICICI Prudential Mutual Fund".obs;
   var selectedFromScheme = "ICICI Pru Liquid Gr".obs;
   var selectedToScheme = "ICICI Pru Equity & Debt Gr".obs;
   var initialLumpsumAmount = "200000".obs;
   var startDate = "05-07-2015".obs;
-  var endDate = DateFormat('dd-MM-yyyy').format(
-    DateTime.now().subtract(Duration(days: 1)),
-  ).obs;
+  var endDate = DateFormat('dd-MM-yyyy')
+      .format(
+        DateTime.now().subtract(Duration(days: 1)),
+      )
+      .obs;
   var lumpsumDate = "01-07-2015".obs;
   var stpFrequency = "Monthly".obs;
   var stpAmount = "10000".obs;

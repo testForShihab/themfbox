@@ -262,7 +262,8 @@ class _FamilyXirrReportState extends State<FamilyXirrReport> {
                   children: [
                     Icon(Icons.arrow_back),
                     SizedBox(width: 10),
-                    Text("Point to Point \nFamily XIRR Report", style: AppFonts.appBarTitle),
+                    Text("Point to Point Family XIRR \nReport",
+                        style: AppFonts.appBarTitle),
                     Spacer(),
                     GestureDetector(
                         onTap: () {
@@ -367,16 +368,38 @@ class _FamilyXirrReportState extends State<FamilyXirrReport> {
           color: Config.appTheme.themeColor,
           child: Column(
             children: [
-              topArea(),
+              // topArea(),
               middleArea(),
             ],
           ),
         ),
         SizedBox(height: 16),
+        tabbutton(),
+        SizedBox(height: 16),
         countArea(),
         SizedBox(height: 4),
         bottomArea(),
       ],
+    );
+  }
+
+  Widget tabbutton() {
+    return Container(
+      height: devHeight* 0.06,
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: membersList.length,
+        itemBuilder: (context, index) {
+          String type = membersList[index];
+
+          if (selectedType == type)
+            return getButton(text: type, type: ButtonType.filled);
+          return getButton(text: type, type: ButtonType.plain);
+        },
+        separatorBuilder: (BuildContext context, int index) =>
+            SizedBox(width: 16),
+      )
     );
   }
 
@@ -632,11 +655,15 @@ class _FamilyXirrReportState extends State<FamilyXirrReport> {
       );
   }
 
+
+
   int length = 0;
 
   Widget countArea() {
     int length = familyList.length;
-    return Padding(
+    return isLoading
+        ? Utils.shimmerWidget(devHeight * 0.03,)
+        : Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
@@ -975,7 +1002,9 @@ class _FamilyXirrReportState extends State<FamilyXirrReport> {
 
   Widget bottomArea() {
     if (selectedType == "Family") return getAllFamilyDetails();
-    return individualDetails();
+    return isLoading
+        ? Utils.shimmerWidget(devHeight )
+        : individualDetails();
   }
 
   List<FamilyList> schemeList = [];
@@ -1145,8 +1174,7 @@ class _FamilyXirrReportState extends State<FamilyXirrReport> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   blackText(
-                                      "$rupee ${Utils.formatNumber(
-                                          totalInflow.round())}"),
+                                      "$rupee ${Utils.formatNumber(totalInflow.round())}"),
                                   GestureDetector(
                                     onTap: () {
                                       bottomSheetShowDetails =
@@ -1188,7 +1216,8 @@ class _FamilyXirrReportState extends State<FamilyXirrReport> {
                                       initial: "H",
                                       bgColor: Color(0xFFE79C23),
                                       title: "Gain/Loss \n(D-B)-(E)+F+G",
-                                      value: Utils.formatNumber(realisedGainLoss)),
+                                      value:
+                                          Utils.formatNumber(realisedGainLoss)),
                                 ],
                               )),
                           DottedLine(),
@@ -1267,23 +1296,6 @@ class _FamilyXirrReportState extends State<FamilyXirrReport> {
           Text(
             "Family Head: $familyName",
             style: TextStyle(color: Colors.white),
-          ),
-          SizedBox(height: 16),
-          SizedBox(
-            height: 50,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: membersList.length,
-              itemBuilder: (context, index) {
-                String type = membersList[index];
-
-                if (selectedType == type)
-                  return getButton(text: type, type: ButtonType.filled);
-                return getButton(text: type, type: ButtonType.plain);
-              },
-              separatorBuilder: (BuildContext context, int index) =>
-                  SizedBox(width: 16),
-            ),
           ),
         ],
       ),
@@ -1394,12 +1406,11 @@ class _FamilyXirrReportState extends State<FamilyXirrReport> {
                     valueStyle: AppFonts.f40013,
                   ),
                 ),
-                 Icon(
-                          Icons.arrow_forward_ios,
-                          size: 20,
-                          color:
-                              Config.appTheme.placeHolderInputTitleAndArrow,
-                        )
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 20,
+                  color: Config.appTheme.placeHolderInputTitleAndArrow,
+                )
               ],
             ),
             SizedBox(height: 16),
@@ -1774,13 +1785,14 @@ class PlainRButton extends StatelessWidget {
         padding: padding ??
             EdgeInsets.symmetric(horizontal: devWidth * 0.15, vertical: 2),
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.white),
+            border: Border.all(color: Config.appTheme.themeColor),
             borderRadius: BorderRadius.circular(10)),
         child: Center(
           child: Text(
             text,
             textAlign: TextAlign.center,
-            style: AppFonts.f50014Black.copyWith(color: Colors.white),
+            style: AppFonts.f50014Black
+                .copyWith(color: Config.appTheme.themeColor),
           ),
         ),
       ),

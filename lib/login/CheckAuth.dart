@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+//import 'package:matomo_tracker/matomo_tracker.dart';
 import 'package:mymfbox2_0/login/Biometric.dart';
 import 'package:mymfbox2_0/login/Login.dart';
 import 'package:mymfbox2_0/utils/Constants.dart';
@@ -61,6 +62,7 @@ class _CheckAuthState extends State<CheckAuth> {
     timer.cancel();
     initTimer();
   }
+
 
   @override
   Widget build(BuildContext context) {

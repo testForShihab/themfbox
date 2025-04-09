@@ -34,13 +34,6 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
 
-  late DateTime formattedDate;
-
-  late DateTime currentDate;
-  late DateTime previousDate;
-  late String formattedPreviousDate;
-  late String formattedStartDate;
-
   String selectedFund = "1 Fund Selected";
   int selectedRadioIndex = 0;
   String schemes = "ICICI Prudential Value Discovery Fund - Growth";
@@ -56,9 +49,7 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
     "\u20b91,00,000",
     "\u20b910,00,000",
   ];
-  String lumpsumAmount = "100000";
 
-  late TextEditingController lumpsumAmountController;
   List fundList = [];
   bool isLoading = true;
 
@@ -69,30 +60,6 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
   int? selectedIndex;
 
   String scheme = "";
-
-  @override
-  void initState() {
-    super.initState();
-    user_id = GetStorage().read("mfd_id") ?? GetStorage().read("user_id");
-    client_name = GetStorage().read("client_name");
-
-    currentDate = DateTime.now();
-    // Get previous date
-    previousDate = currentDate.subtract(Duration(days: 1));
-    // Format dates
-    DateFormat formatter = DateFormat("dd-MM-yyyy");
-    formattedPreviousDate = formatter.format(previousDate);
-
-    formattedDate =
-        DateTime(currentDate.year - 10, currentDate.month, currentDate.day - 1);
-    print("formattedDate $formattedDate");
-    // Assign endDate
-    controller.startDate.value = formatter.format(formattedDate);
-    controller.endDate.value = formattedPreviousDate;
-    startDateController.text = controller.startDate.value;
-    endDateController.text = controller.endDate.value;
-    lumpsumAmountController = TextEditingController(text: "100000");
-  }
 
   Future getDatas() async {
     isLoading = true;
@@ -136,20 +103,24 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
         user_id: user_id,
         client_name: client_name,
         scheme: schemes,
-        amount: lumpsumAmount,
+        amount: controller.lumpsumAmount.value,
         startdate: controller.startDate.value,
         enddate: controller.endDate.value);
 
     lumpsumAmountCalc = data['schemePerformance_list'];
     containingSchemes = [];
     notContainingSchemes = [];
+
     for (var scheme in lumpsumAmountCalc) {
-      if (schemes.contains(scheme['scheme'])) {
+      bool isValidMF = scheme['scheme_amfi_code'] != null &&
+          scheme['scheme_amfi_code'].toString().isNotEmpty;
+      if (isValidMF && schemes.contains(scheme['scheme'])) {
         containingSchemes.add(scheme);
       } else {
         notContainingSchemes.add(scheme);
       }
     }
+
     print("Containing Schemes:");
     containingSchemes.forEach((scheme) {
       print(scheme['scheme']);
@@ -164,10 +135,26 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
 
   Timer? _debounce;
 
+  late Future future;
+
+  @override
+  void initState() {
+    super.initState();
+    user_id = GetStorage().read("mfd_id") ?? GetStorage().read("user_id");
+    client_name = GetStorage().read("client_name");
+    future = getDatas();
+  }
+
   @override
   void dispose() {
     super.dispose();
     _debounce?.cancel();
+  }
+
+  void _refreshData() {
+    setState(() {
+      future = getDatas();
+    });
   }
 
   @override
@@ -175,7 +162,7 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
     devHeight = MediaQuery.of(context).size.height;
     devWidth = MediaQuery.of(context).size.width;
     return FutureBuilder(
-        future: getDatas(),
+        future: future,
         builder: (context, snapshot) {
           return Scaffold(
             backgroundColor: Color(0XFFECF0F0),
@@ -225,6 +212,7 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
                               margin: EdgeInsets.only(top: 4, left: 0),
                               padding: EdgeInsets.only(left: 8, bottom: 5),
                               decoration: BoxDecoration(
+                                color: Color(0XFFDEE6E6),
                                 border:
                                     Border.all(color: Colors.white, width: 1),
                                 borderRadius: BorderRadius.circular(8),
@@ -239,26 +227,25 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
                                 ],
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
+                                  // filled: true,
                                   fillColor: Colors.white,
                                   labelStyle: TextStyle(color: Colors.white),
                                   hintStyle: TextStyle(color: Colors.white),
                                   contentPadding:
                                       EdgeInsets.symmetric(vertical: 11),
                                 ),
-                                style: TextStyle(color: Colors.white),
-                                controller: lumpsumAmountController,
+                                style: TextStyle(color: Config.appTheme.themeColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                                controller: controller.lumpsumAmountController,
                                 onChanged: (text) async {
                                   if (_debounce?.isActive ?? false)
                                     _debounce?.cancel();
                                   _debounce =
                                       Timer(const Duration(milliseconds: 500),
                                           () async {
-                                    lumpsumAmount = text;
-                                    lumpsumAmountCalc = [];
-                                    containingSchemes = [];
-                                    notContainingSchemes = [];
-                                    await getLumpSumReturns();
-                                    setState(() {});
+                                    controller.lumpsumAmount.value = text;
+
                                   });
                                 },
                               ),
@@ -287,27 +274,57 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          // startDateController.text = "";
-                          // controller.startDate.value = "";
                           showDatePickerDialog(context, 1);
                         },
-                        child: appBarColumn(
+                        child: Obx(() => appBarColumn1(
                             "Start Date",
-                            getFirst13(startDateController.text),
+                            getFirst13(controller.startDate.value),
                             Icon(Icons.keyboard_arrow_down,
-                                color: Config.appTheme.themeColor)),
+                                color: Config.appTheme.themeColor))),
                       ),
                       GestureDetector(
                         onTap: () {
-                          // endDateController.text = "";
-                          // controller.endDate.value = "";
                           showDatePickerDialog(context, 2);
                         },
-                        child: appBarColumn(
+                        child: Obx(() => appBarColumn1(
                             "End Date",
-                            getFirst13(endDateController.text),
+                            getFirst13(controller.endDate.value),
                             Icon(Icons.keyboard_arrow_down,
-                                color: Config.appTheme.themeColor)),
+                                color: Config.appTheme.themeColor))),
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          DateTime endDate =
+                              convertStrToDt(controller.endDate.value);
+                          DateTime startDate =
+                              convertStrToDt(controller.startDate.value);
+                          if (endDate.year == startDate.year &&
+                              endDate.month == startDate.month &&
+                              endDate.day == startDate.day) {
+                            Utils.showError(context,
+                                "Please select a valid start date and end date.");
+                            return;
+                          }
+
+                          lumpsumAmountCalc = [];
+                          containingSchemes = [];
+                          notContainingSchemes = [];
+                          _refreshData();
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(top: 22),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 18, vertical: 7),
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text("Submit",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold)),
+                        ),
                       ),
                     ],
                   ),
@@ -351,7 +368,7 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
                         ),
                       ],
                     )),
-          SizedBox(height: devHeight * 0.3),
+          SizedBox(height: devHeight * 0.03),
         ],
       ),
     );
@@ -371,6 +388,7 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
 
   Widget blackBoxStatistics(Map data) {
     double cagrReturns = data["returns"] ?? 0;
+    double absoluteReturns = data["absolute_returns"] ?? 0;
     double endValue = data["current_value"] ?? 0;
     double roundedEndValue = (endValue /*  /100  */).roundToDouble();
     double profit = data["current_value"] - data["current_cost"] ?? 0;
@@ -402,14 +420,14 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ColumnText(
-                  title: "Value as on end date",
-                  value:
-                      "$rupee ${Utils.formatNumber(roundedEndValue, isAmount: false)}",
-                  titleStyle: AppFonts.f40013.copyWith(
-                      color: Config.appTheme.placeHolderInputTitleAndArrow),
-                  valueStyle:
-                      AppFonts.f50014Black.copyWith(color: Colors.white),
-                ),
+                    title: "Value as on end date",
+                    value:
+                        "$rupee ${Utils.formatNumber(roundedEndValue, isAmount: false)}",
+                    titleStyle: AppFonts.f40013.copyWith(
+                        color: Config.appTheme.placeHolderInputTitleAndArrow),
+                    valueStyle:
+                        AppFonts.f50014Black.copyWith(color: Colors.white),
+                    alignment: CrossAxisAlignment.start),
                 ColumnText(
                     title: "Profit",
                     value:
@@ -418,7 +436,22 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
                         color: Config.appTheme.placeHolderInputTitleAndArrow),
                     valueStyle:
                         AppFonts.f50014Black.copyWith(color: Colors.white),
-                    alignment: CrossAxisAlignment.center),
+                    alignment: CrossAxisAlignment.end),
+              ],
+            ),
+            DottedLine(),
+            // SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ColumnText(
+                    title: "Abs rtn (%)",
+                    value: Utils.formatNumber(absoluteReturns),
+                    titleStyle: AppFonts.f40013.copyWith(
+                        color: Config.appTheme.placeHolderInputTitleAndArrow),
+                    valueStyle:
+                        AppFonts.f50014Black.copyWith(color: Colors.white),
+                    alignment: CrossAxisAlignment.start),
                 ColumnText(
                     title: "XIRR (%)",
                     value: "$cagrReturns",
@@ -444,7 +477,39 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
       children: [
         Text(title, style: TextStyle(fontSize: 14)),
         Container(
-          width: devWidth * 0.42,
+          width: devWidth * 0.45,
+          padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
+          margin: EdgeInsets.only(top: 5),
+          decoration: BoxDecoration(
+            color: Color(0XFFDEE6E6),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Center(
+            child: Row(
+              children: [
+                Text(value,
+                    style: TextStyle(
+                        color: Config.appTheme.themeColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold)),
+                Spacer(),
+                suffix
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget appBarColumn1(String title, String value, Widget suffix) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(title, style: TextStyle(fontSize: 14)),
+        Container(
+          width: devWidth * 0.324,
           padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
           margin: EdgeInsets.only(top: 5),
           decoration: BoxDecoration(
@@ -471,6 +536,7 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
 
   Widget returnsMFLumpsumCard(Map data) {
     double cagrReturns = data["returns"] ?? 0;
+    double absoluteReturns = data["absolute_returns"] ?? 0;
     double endValue = data["current_value"] ?? 0;
     double roundedEndValue = (endValue /* /100 */).roundToDouble();
     double profit = data["profit"] ?? 0;
@@ -495,26 +561,25 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
                 children: [
                   Image.network(data["logo"] ?? "", height: 30),
                   SizedBox(width: 5),
-                  SizedBox(
-                      width: 200,
+                  Expanded(
                       child: Text(data["scheme_amfi_short_name"],
                           style: AppFonts.f50014Black
                               .copyWith(color: Config.appTheme.themeColor))),
-                  Spacer(),
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-                    decoration: BoxDecoration(
-                        color: Color(0xffEDFFFF),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                        )),
-                    child: Row(children: [
-                      Text(schemeRating,
-                          style: TextStyle(color: Config.appTheme.themeColor)),
-                      Icon(Icons.star, color: Config.appTheme.themeColor)
-                    ]),
-                  )
+                  // Spacer(),
+                  // Container(
+                  //   padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+                  //   decoration: BoxDecoration(
+                  //       color: Color(0xffEDFFFF),
+                  //       borderRadius: BorderRadius.only(
+                  //         topLeft: Radius.circular(10),
+                  //         bottomLeft: Radius.circular(10),
+                  //       )),
+                  //   child: Row(children: [
+                  //     Text(schemeRating,
+                  //         style: TextStyle(color: Config.appTheme.themeColor)),
+                  //     Icon(Icons.star, color: Config.appTheme.themeColor)
+                  //   ]),
+                  // )
                 ],
               ),
             ),
@@ -532,12 +597,14 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
                         value: data['inception_date'],
                       ),
                       ColumnText(
-                        alignment: CrossAxisAlignment.end,
+                        alignment: CrossAxisAlignment.center,
                         title: "Amount Invested",
-                        value: Utils.formatNumber(num.parse(lumpsumAmount)),
+                        value: Utils.formatNumber(data["current_cost"]),
                       ),
-
-
+                      ColumnText(
+                          title: "Abs rtn (%)",
+                          value: "${Utils.formatNumber(absoluteReturns)}",
+                          alignment: CrossAxisAlignment.end),
                     ],
                   ),
                 ],
@@ -556,12 +623,12 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
                         alignment: CrossAxisAlignment.start,
                         title: "Value as on end date",
                         value:
-                        "$rupee ${Utils.formatNumber(roundedEndValue, isAmount: true)}",
+                            "$rupee ${Utils.formatNumber(roundedEndValue, isAmount: true)}",
                       ),
                       ColumnText(
                           title: "Profit",
                           value:
-                          "$rupee ${Utils.formatNumber(roundedProfit, isAmount: true)}",
+                              "$rupee ${Utils.formatNumber(roundedProfit, isAmount: true)}",
                           alignment: CrossAxisAlignment.center),
                       ColumnText(
                           title: "XIRR (%)",
@@ -571,7 +638,6 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
                                   ? Config.appTheme.defaultProfit
                                   : Config.appTheme.defaultLoss),
                           alignment: CrossAxisAlignment.end),
-
                     ],
                   ),
                 ],
@@ -628,7 +694,7 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
       builder: (context) {
         return StatefulBuilder(builder: (_, bottomState) {
           return Container(
-            height: devHeight * 0.7,
+            height: devHeight * 0.8,
             padding: EdgeInsets.all(7),
             child: Column(
               children: [
@@ -637,7 +703,8 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
                   children: [
                     Text(
                       "Select Schemes",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     Spacer(),
                     ElevatedButton(
@@ -653,12 +720,12 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
                         print('Selected values: $selectedValues');
                         schemes = selectedValues;
                         selectedFund = "${selectedItems.length} Funds Selected";
-                        lumpsumAmountCalc = [];
-                        containingSchemes = [];
-                        notContainingSchemes = [];
-                        bottomState(() {});
-                        await getLumpSumReturns();
-                        setState(() {});
+                        // lumpsumAmountCalc = [];
+                        // containingSchemes = [];
+                        // notContainingSchemes = [];
+                        // bottomState(() {});
+                        // await getLumpSumReturns();
+                        // setState(() {});
                         Get.back();
                         EasyLoading.dismiss();
                       },
@@ -682,22 +749,24 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Selected Schemes",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Config.appTheme.themeColor,
-                        ),
-                      ),
+                      // Text(
+                      //   "Selected Schemes",
+                      //   style: TextStyle(
+                      //     fontWeight: FontWeight.bold,
+                      //     color: Config.appTheme.themeColor,
+                      //   ),
+                      // ),
                       SizedBox(height: 8),
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
                         children: selectedFundDetails.map((fund) {
                           return Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 6),
                             decoration: BoxDecoration(
-                              color: Config.appTheme.themeColor.withOpacity(0.1),
+                              color:
+                                  Config.appTheme.themeColor.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
                                 color: Config.appTheme.themeColor,
@@ -720,9 +789,10 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
                                 GestureDetector(
                                   onTap: () {
                                     bottomState(() {
-                                      int index = fundList.indexWhere((element) =>
-                                        element['scheme_amfi'] == fund['scheme_amfi']
-                                      );
+                                      int index = fundList.indexWhere(
+                                          (element) =>
+                                              element['scheme_amfi'] ==
+                                              fund['scheme_amfi']);
                                       if (index != -1) {
                                         isSelectedList[index] = false;
                                         selectedSchemes[index] = '';
@@ -741,6 +811,7 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
                           );
                         }).toList(),
                       ),
+                      SizedBox(height: 8),
                     ],
                   ),
                   Divider(),
@@ -793,20 +864,25 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
                         onChanged: (bool? value) {
                           bottomState(() {
                             if (value == true) {
-                              if (isSelectedList.where((element) => element == true).length <= 4) {
+                              if (isSelectedList
+                                      .where((element) => element == true)
+                                      .length <=
+                                  4) {
                                 isSelectedList[index] = value!;
-                                selectedSchemes[index] = fundList[index]['scheme_amfi'];
+                                selectedSchemes[index] =
+                                    fundList[index]['scheme_amfi'];
                                 selectedFundDetails.add(fundList[index]);
                               } else {
                                 isSelectedList[index] = false;
-                                Utils.showError(context, "Maximum Five Funds Only Select");
+                                Utils.showError(
+                                    context, "Maximum Five Funds Only Select");
                               }
                             } else {
                               isSelectedList[index] = value!;
                               selectedSchemes[index] = '';
-                              selectedFundDetails.removeWhere(
-                                (element) => element['scheme_amfi'] == fundList[index]['scheme_amfi']
-                              );
+                              selectedFundDetails.removeWhere((element) =>
+                                  element['scheme_amfi'] ==
+                                  fundList[index]['scheme_amfi']);
                             }
                           });
                         },
@@ -939,24 +1015,13 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
 
     if (pickedDate != null) {
       String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
-
       if (dateType == 1) {
         startDateController.text = formattedDate;
         controller.startDate.value = formattedDate;
-        setState(() {
-          controller.startDate.value = formattedDate;
-        });
       } else {
         endDateController.text = formattedDate;
         controller.endDate.value = formattedDate;
-        setState(() {
-          controller.endDate.value = formattedDate;
-        });
       }
-      lumpsumAmountCalc = [];
-      containingSchemes = [];
-      notContainingSchemes = [];
-      await getLumpSumReturns();
     }
   }
 }
@@ -964,4 +1029,34 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
 class RollingReturnsController extends GetxController {
   var endDate = "".obs;
   var startDate = "".obs;
+  var lumpsumAmount = "".obs;
+
+  var shouldRefresh = false.obs;
+
+  late DateTime formattedDate;
+
+  DateTime currentDate = DateTime.now();
+  DateTime previousDate = DateTime.now().subtract(Duration(days: 1));
+  DateFormat formatter = DateFormat("dd-MM-yyyy");
+  late String formattedPreviousDate;
+
+  late TextEditingController lumpsumAmountController;
+
+  @override
+  void onInit() {
+    super.onInit();
+    lumpsumAmountController = TextEditingController(text: "100000");
+    shouldRefresh.value = true;
+    formattedPreviousDate = formatter.format(previousDate);
+    formattedDate =
+        DateTime(currentDate.year - 10, currentDate.month, currentDate.day - 1);
+    print("formattedDate $formattedDate");
+    startDate.value = formatter.format(formattedDate);
+    endDate.value = formattedPreviousDate;
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+  }
 }

@@ -49,7 +49,7 @@ class BrokerageCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppFonts.f40016,
+                    style: AppFonts.f40016.copyWith(fontWeight: FontWeight.w500),
                   ),
                   if (hasArrow)
                     Icon(Icons.arrow_forward, color: Config.appTheme.themeColor)
@@ -69,7 +69,7 @@ class BrokerageCard extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Text("$lHead", style: AppFonts.f70024),
+                            Text("$lHead", style: AppFonts.f70024.copyWith(fontSize: 18)),
                           ],
                         ),
                         Row(
@@ -92,7 +92,7 @@ class BrokerageCard extends StatelessWidget {
                      children: [
                        Row(
                          children: [
-                           Text("$rHead", style: AppFonts.f70024),
+                           Text("$rHead", style: AppFonts.f70024.copyWith(fontSize: 18)),
                          ],
                        ),
                        Row(

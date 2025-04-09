@@ -46,13 +46,13 @@ class _InvestorMenuState extends State<InvestorMenu> {
       'goTo': InvestorProfile(),
       'img': "assets/familyMenu/my_profile.png"
     },
-    /*{
+    {
       'title': "Create Risk Profile",
       'subTitle': "",
       'goTo': RiskProfile(),
       'img': "assets/risk_profile.png"
     },
-     {
+    /*  {
       'title': "FAQ's",
       'subTitle': "Neque porro quisquam",
       'goTo': null,
@@ -115,8 +115,8 @@ class _InvestorMenuState extends State<InvestorMenu> {
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
-            listContainer(list: data.getRange(0, 1).toList()),
-            listContainer(list: data.getRange(1, 4).toList()),
+            listContainer(list: data.getRange(0, 2).toList()),
+            listContainer(list: data.getRange(2, 5).toList()),
             SizedBox(height: 16),
             TextButton(
                 onPressed: () {

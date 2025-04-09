@@ -231,8 +231,8 @@ class _BranchWiseSipState extends State<BranchWiseSip> {
                         itemBuilder: (context, index) {
                           Map data = investorList[index];
 
-                          String title = data['branch'];
-                          num amount = data['amount'];
+                          String title = data['branch'] ?? '';
+                          num amount = data['amount'] ?? 0;
 
                           return InkWell(
                             splashColor: Colors.transparent,
@@ -262,7 +262,7 @@ class _BranchWiseSipState extends State<BranchWiseSip> {
                                 ),
                                 l1: title,
                                 l2: "",
-                                r1: Utils.formatNumber(amount, isAmount: true),
+                                r1: Utils.formatNumber(amount.toInt()),
                                 r2: ""),
                           );
                         },
@@ -375,7 +375,7 @@ class _BranchWiseSipState extends State<BranchWiseSip> {
                       value: "$rupee ${Utils.formatNumber(data["sip_amount"])}"),
                   RowText(
                       title: "Monthly Amount",
-                      value: "$rupee ${Utils.formatNumber(data["amount"])}"),
+                      value: "$rupee ${Utils.formatNumber(data["amount"].toInt())}"),
                   RowText(
                       title: "SIP Count",
                       value: "${data["sip_counts"]}"),

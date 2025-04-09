@@ -237,7 +237,7 @@ class _LoginWithOtpState extends State<LoginWithOtp> {
             num mobileNumber = num.parse(mobileNo);
             Map data = await Api.sendPasswordChangeOTP(
               user_id: "",
-              mobile: mobileNumber,
+              mobile: mobileNo,
               client_name: clientName,
               broker_code: "",
             );

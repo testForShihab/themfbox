@@ -412,9 +412,10 @@ class CommonOnBoardApi {
     required int user_id,
     required String client_name,
     required String pincode,
+    String bse_nse_mfu_flag = "",
   }) async {
     String url =
-        "${ApiConfig.apiUrl}/onboard/getCityStateByPincode?key=${ApiConfig.apiKey}&user_id=$user_id"
+        "${ApiConfig.apiUrl}/onboard/getCityStateByPincode?key=${ApiConfig.apiKey}&user_id=$user_id&bse_nse_mfu_flag=$bse_nse_mfu_flag"
         "&client_name=$client_name&pincode=$pincode";
 
     print("getCityStateByPincode url= $url");

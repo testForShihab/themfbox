@@ -33,6 +33,7 @@ class _CreateClientState extends State<CreateClient> {
   int type_id = 0;
   String clientName = GetStorage().read("client_name") ?? "null";
   String adminMobile = GetStorage().read("mfd_mobile") ?? "null";
+  Map client_code_map = GetStorage().read('client_code_map') ?? {};
   late double devHeight, devWidth;
   ExpansionTileController investorController = ExpansionTileController();
   TextEditingController nameController = TextEditingController();
@@ -50,8 +51,8 @@ class _CreateClientState extends State<CreateClient> {
   TextStyle errorStyle = TextStyle(
       fontWeight: FontWeight.w500, fontSize: 12, color: AppColors.lossRed);
 
-  DateTime selectedDob = DateTime.now();
-  DateTime selectedAnniversary = DateTime.now();
+  DateTime? selectedDob;
+  DateTime? selectedAnniversary;
 
   ExpansionTileController politicalRelationshipController =
       ExpansionTileController();
@@ -121,6 +122,9 @@ class _CreateClientState extends State<CreateClient> {
   String pan = "";
   TextEditingController panController = TextEditingController();
   TextEditingController guardPanController = TextEditingController();
+  TextEditingController address1Controller = TextEditingController();
+  TextEditingController address2Controller = TextEditingController();
+  TextEditingController address3Controller = TextEditingController();
   String email = "";
   String addr = "";
   String rmName = "";
@@ -181,21 +185,21 @@ class _CreateClientState extends State<CreateClient> {
         address2: address2,
         address3: address3,
         city: cityController.text,
-        pincode: pincode,
+        pincode: pincodeController.text,
         state: stateController.text,
         country: "",
         phone_off: mobile,
         phone_res: "",
-        dob: convertDtToStr(selectedDob),
-        anniversary_date:
-            isAnniversary ? convertDtToStr(selectedAnniversary) : "",
+        dob: selectedDob == null ? "" : convertDtToStr(selectedDob!),
+        anniversary_date: selectedAnniversary == null ? "" : convertDtToStr(selectedAnniversary!),
         occupation: "",
         guard_name: guardNameController.text,
         guard_pan: guardPanController.text,
         cust_type: customerType,
         cus_ref: "",
         login_status: loginStatus == "Enable" ? 1 : 0,
-        salutation: "");
+        salutation: "",
+    );
 
     if (data['status'] != 200) {
       Utils.showError(context, data['msg']);
@@ -224,6 +228,9 @@ class _CreateClientState extends State<CreateClient> {
     }
     subBrokerList = List<String>.from(data['list']);
     // subBrokerList.insert(0, "All");
+    if(subBrokerList.isNotEmpty){
+      selectedSubBroker = subBrokerList[0];
+    }
     return 0;
   }
 
@@ -343,13 +350,17 @@ class _CreateClientState extends State<CreateClient> {
 
     guardianNameController.text = userDataPojo.pan!;
 
-    selectedDob = convertStrToDt(userDataPojo.dateOfBirth ?? "2002");
+    selectedDob = convertStrToDt(userDataPojo.dateOfBirth ?? " ");
 
     address1 = userDataPojo.street1!;
+    address1Controller.text = address1;
     address2 = userDataPojo.street2!;
+    address2Controller.text = address2;
     address3 = userDataPojo.street3!;
+    address3Controller.text = address3;
     cityController.text = userDataPojo.city!;
     pincode = userDataPojo.pincode!;
+    pincodeController.text = pincode;
     stateController.text = userDataPojo.state!;
     selectedRmName = userDataPojo.rmName!;
     selectedSubBroker = userDataPojo.subbrokerName!;
@@ -361,9 +372,11 @@ class _CreateClientState extends State<CreateClient> {
     statusType = guardPan.isEmpty ? "Major" : "Minor";
     guardNameController.text = guardName;
     guardPanController.text = guardPan;
+
+
     if (userDataPojo.anniversaryDate!.isNotEmpty) {
       selectedAnniversary =
-          convertStrToDt(userDataPojo.anniversaryDate ?? "2002");
+          convertStrToDt(userDataPojo.anniversaryDate ?? " ");
       isAnniversary = true;
     }
 
@@ -389,7 +402,7 @@ class _CreateClientState extends State<CreateClient> {
     if (!isFirst) return 0;
     EasyLoading.show();
     await getInitialInvestor();
-    authorizeUser();
+    await authorizeUser();
     await getAllRM();
     await getAllSubBroker();
     EasyLoading.dismiss();
@@ -399,6 +412,7 @@ class _CreateClientState extends State<CreateClient> {
 
   TextEditingController cityController = TextEditingController();
   TextEditingController stateController = TextEditingController();
+  TextEditingController pincodeController = TextEditingController();
   Future getCityStateByPincode() async {
     Map data = await CommonOnBoardApi.getCityStateByPincode(
       user_id: mfd_id,
@@ -476,10 +490,10 @@ class _CreateClientState extends State<CreateClient> {
                               ],
                               if (selectedOptionType == "Create Client" ||
                                   investorName != "Select Investor") ...[
-                                statusCard(context),
+                                //statusCard(context),
                                 AmountInputCard(
                                   title: statusType == "Major"
-                                      ? "Name as on PAN"
+                                      ? "Name *"
                                       : "Minor Name",
                                   controller: nameController,
                                   suffixText: "",
@@ -490,7 +504,7 @@ class _CreateClientState extends State<CreateClient> {
                                   onChange: (val) => name = val,
                                 ),
                                 //nameCard(),
-                                if (statusType == "Minor") ...[
+                               /* if (statusType == "Minor") ...[
                                   SizedBox(height: 16),
                                   AmountInputCard(
                                     title: "Guardian Name as on PAN",
@@ -526,7 +540,7 @@ class _CreateClientState extends State<CreateClient> {
                                       }
                                     },
                                   ),
-                                ],
+                                ],*/
                                 if (statusType == "Major") ...[
                                   SizedBox(height: 16),
                                   AmountInputCard(
@@ -540,23 +554,23 @@ class _CreateClientState extends State<CreateClient> {
                                     maxLength: 10,
                                     keyboardType: TextInputType.name,
                                     borderRadius: BorderRadius.circular(20),
-                                    subTitle: Text(
+                                    /*subTitle: Text(
                                       kycMsg,
                                       style: (kycMsg == successMsg)
                                           ? successStyle
                                           : errorStyle,
-                                    ),
+                                    ),*/
                                     onChange: (val) async {
                                       pan = val;
-                                      if (val.length == 10) {
+                                      /*if (val.length == 10) {
                                         await checkPanKycStatus(val);
-                                      }
+                                      }*/
                                     },
                                   ),
                                 ],
                                 DottedLine(verticalPadding: 8),
                                 AmountInputCard(
-                                  title: "Mobile Number",
+                                  title: "Mobile Number *",
                                   controller: mobileController,
                                   suffixText: "",
                                   maxLength: 10,
@@ -567,7 +581,7 @@ class _CreateClientState extends State<CreateClient> {
                                 ),
                                 SizedBox(height: 16),
                                 AmountInputCard(
-                                  title: "Email",
+                                  title: "Email ID *",
                                   controller: emailController,
                                   suffixText: "",
                                   hasSuffix: false,
@@ -577,7 +591,7 @@ class _CreateClientState extends State<CreateClient> {
                                 ),
                                 DottedLine(verticalPadding: 8),
                                 dobExpansionTile(context),
-                                if (!isAnniversary)
+                               /* if (!isAnniversary)
                                   GestureDetector(
                                     onTap: () {
                                       isAnniversary = true;
@@ -594,20 +608,26 @@ class _CreateClientState extends State<CreateClient> {
                                 if (isAnniversary) ...[
                                   SizedBox(height: 16),
                                   anniversaryExpansionTile(context),
-                                ],
+                                ],*/
+                                SizedBox(height: 16),
+                                anniversaryExpansionTile(context),
                                 DottedLine(verticalPadding: 8),
                                 AmountInputCard(
-                                  title: 'Pin Code',
+                                  title: 'Pin Code *',
                                   suffixText: '',
-                                  initialValue: pincode,
+                                  controller: pincodeController,
                                   hasSuffix: false,
+                                  maxLength: 6,
                                   keyboardType: TextInputType.number,
                                   borderRadius: BorderRadius.circular(20),
                                   onChange: (val) async {
                                     pincode = val;
                                     if (pincode.length != 6) return;
                                     await getCityStateByPincode();
-                                    setState(() {});
+                                    setState(() {
+                                      pincode = val;
+                                    });
+                                    pincodeController.text = val;
                                   },
                                 ),
                                 SizedBox(height: 16),
@@ -644,7 +664,7 @@ class _CreateClientState extends State<CreateClient> {
                                 AmountInputCard(
                                   title: 'Address Line 1',
                                   suffixText: '',
-                                  initialValue: address1,
+                                  controller: address1Controller,
                                   hasSuffix: false,
                                   keyboardType: TextInputType.name,
                                   borderRadius: BorderRadius.circular(20),
@@ -654,7 +674,7 @@ class _CreateClientState extends State<CreateClient> {
                                 AmountInputCard(
                                   title: 'Address Line 2 [Optional]',
                                   suffixText: '',
-                                  initialValue: address2,
+                                  controller: address2Controller,
                                   hasSuffix: false,
                                   keyboardType: TextInputType.name,
                                   borderRadius: BorderRadius.circular(20),
@@ -664,16 +684,14 @@ class _CreateClientState extends State<CreateClient> {
                                 AmountInputCard(
                                   title: 'Address Line 3 [Optional]',
                                   suffixText: '',
-                                  initialValue: '',
+                                  controller: address3Controller,
                                   hasSuffix: false,
                                   keyboardType: TextInputType.name,
                                   borderRadius: BorderRadius.circular(20),
                                   onChange: (val) => address3 = val,
                                 ),
                                 SizedBox(height: 16),
-
                                 rmExpansionTile(context),
-
                                 SizedBox(height: 16),
                                 subBrokerExpansionTile(context),
                                 SizedBox(height: 16),
@@ -709,10 +727,10 @@ class _CreateClientState extends State<CreateClient> {
           onPressed: () async {
             print("arn = ${Config.appArn}");
             if (name.isEmpty) {
-              Utils.showError(context, "Please Enter Name as PAN");
+              Utils.showError(context, "Please Enter Name");
               return;
             }
-            if (statusType == "Major") {
+         /*   if (statusType == "Major") {
               if (pan.length != 10) {
                 Utils.showError(context, "Invalid PAN");
                 return;
@@ -722,17 +740,31 @@ class _CreateClientState extends State<CreateClient> {
                 Utils.showError(context, "Invalid Guardian PAN");
                 return;
               }
+            }*/
+            if (mobile.isEmpty ) {
+              Utils.showError(context, "Please Enter Mobile Number");
+              return;
             }
-            if (mobile.length != 10) {
+            if (mobile.length != 10 ) {
               Utils.showError(context, "Invalid Mobile Number");
               return;
             }
             if (!email.isEmail) {
-              Utils.showError(context, "Invalid email id");
+              Utils.showError(context, "Please Enter valid Email ID");
               return;
             }
-            if (pincode.length != 6) {
+            if (email.isEmpty) {
+              Utils.showError(context, "Please Enter Email ID");
+              return;
+            }
+
+            if (pincodeController.text.isEmpty) {
               Utils.showError(context, "Please Enter Pincode");
+              return;
+            }
+
+            if (pincodeController.text.length != 6 ) {
+              Utils.showError(context, "Please Enter valid Pincode");
               return;
             }
             if (cityController.text.isEmpty) {
@@ -743,23 +775,23 @@ class _CreateClientState extends State<CreateClient> {
               Utils.showError(context, "Please Enter State");
               return;
             }
-            if (address1.isEmpty) {
+            /*  if (address1.isEmpty) {
               Utils.showError(context, "Please Enter Address Line 1");
               return;
             }
-            if (containsSpecialCharacter(name)) {
+           if (containsSpecialCharacter(name)) {
               Utils.showError(context, "Invalid Name");
               return;
-            }
+            }*/
 
             if (rmList.isNotEmpty && selectedRmName.isEmpty) {
               Utils.showError(context, "Please Select RM");
               return;
             }
-            if (selectedSubBroker.isEmpty) {
+            /*if (selectedSubBroker.isEmpty) {
               Utils.showError(context, "Please select Sub Broker");
               return;
-            }
+            }*/
 
             int res = await createClient();
             if (res.isNegative) return;
@@ -801,9 +833,10 @@ class _CreateClientState extends State<CreateClient> {
               style: AppFonts.f50014Black.copyWith(fontSize: 16),
             ),
             content: Text(
-              "$name has been  $createUpdate. Register online to start investing in mutual funds.",
+              "$name has been $createUpdate.",
               style: AppFonts.f50012Grey.copyWith(fontSize: 14),
             ),
+            /*Register online to start investing in mutual funds.*/
             actions: [
               TextButton(
                   onPressed: () {
@@ -811,14 +844,14 @@ class _CreateClientState extends State<CreateClient> {
                     Get.back();
                   },
                   child: Text("OK")),
-              if (!hasKyc)
+              /*if (!hasKyc)
                 TextButton(
                     onPressed: () async {
                       Get.back();
                       await GetStorage().write("user_id", userDataPojo.id);
                       Get.off(Ekyc());
                     },
-                    child: Text("Complete eKYC")),
+                    child: Text("Complete eKYC")),*/
             ],
           );
         });
@@ -851,7 +884,9 @@ class _CreateClientState extends State<CreateClient> {
                               return GestureDetector(
                                 onTap: () async {
                                   selectedOptionType = optionType[index];
-
+                                  if (selectedOptionType == "Create Client"){
+                                    clearFormValues();
+                                  }
                                   setState(() {});
                                   Get.back();
                                 },
@@ -863,6 +898,9 @@ class _CreateClientState extends State<CreateClient> {
                                       value: optionType[index],
                                       onChanged: (val) async {
                                         selectedOptionType = optionType[index];
+                                        if (selectedOptionType == "Create Client"){
+                                          clearFormValues();
+                                        }
                                         setState(() {});
                                         Get.back();
                                       },
@@ -1359,20 +1397,6 @@ class _CreateClientState extends State<CreateClient> {
     );
   }
 
-  int validator() {
-    List list = [
-      customerType,
-      addressType,
-      email,
-      emailRelation,
-      birthCountry,
-    ];
-    if (list.contains(""))
-      return -1;
-    else
-      return 0;
-  }
-
   List addressTypeList = [];
   String addressType = "";
   String addressTypeCode = "";
@@ -1446,21 +1470,26 @@ class _CreateClientState extends State<CreateClient> {
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(Utils.getFormattedDate(date: selectedDob),
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
-                        color: Config.appTheme.themeColor)),
+                Text(
+                  selectedDob == null
+                      ? "Select DOB"
+                      : Utils.getFormattedDate(date: selectedDob),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12,
+                      color: Config.appTheme.themeColor),
+                ),
               ],
             ),
             children: [
               SizedBox(
                 height: 200,
                 child: ScrollDatePicker(
-                  selectedDate: selectedDob,
+                  selectedDate: selectedDob ?? DateTime.now(), // Default to current date if null
                   onDateTimeChanged: (value) {
-                    selectedDob = value;
-                    setState(() {});
+                    setState(() {
+                      selectedDob = value;
+                    });
                   },
                 ),
               ),
@@ -1468,6 +1497,7 @@ class _CreateClientState extends State<CreateClient> {
           )),
     );
   }
+
 
   Widget anniversaryExpansionTile(BuildContext context) {
     return Container(
@@ -1481,7 +1511,9 @@ class _CreateClientState extends State<CreateClient> {
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(Utils.getFormattedDate(date: selectedAnniversary),
+                Text(selectedAnniversary == null
+                      ? "Select Anniversary Date"
+                : Utils.getFormattedDate(date: selectedAnniversary),
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 12,
@@ -1492,7 +1524,7 @@ class _CreateClientState extends State<CreateClient> {
               SizedBox(
                 height: 200,
                 child: ScrollDatePicker(
-                  selectedDate: selectedAnniversary,
+                  selectedDate: selectedAnniversary ?? DateTime.now(),
                   onDateTimeChanged: (value) {
                     selectedAnniversary = value;
                     setState(() {});
@@ -1546,7 +1578,7 @@ class _CreateClientState extends State<CreateClient> {
     "5 Star",
     "Not Applicable"
   ];
-  String customerType = "1 Star";
+  String customerType = "Not Applicable";
 
   Widget customerTypeTile(BuildContext context) {
     return Container(
@@ -1684,7 +1716,7 @@ class _CreateClientState extends State<CreateClient> {
     if (type_id == 4) {
       selectedSubBroker = name;
       subBrokerList = [name];
-      // await getUser(mfd_id);
+     //await getUser(mfd_id);
       setState(() {});
       rmList = [selectedRmName];
     }
@@ -1692,6 +1724,11 @@ class _CreateClientState extends State<CreateClient> {
 
   ExpansionTileController rmController = ExpansionTileController();
   Widget rmExpansionTile(BuildContext context) {
+    if(type_id == 4){
+      selectedRmName = userDataPojo.rmName ?? '';
+      rmList = [];
+      print("selectedRmName $selectedRmName");
+    }
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -1729,8 +1766,6 @@ class _CreateClientState extends State<CreateClient> {
                       itemCount: rmList.length,
                       itemBuilder: (context, index) {
                         String title = rmList[index];
-                        print("rmList.length = ${rmList.length}");
-                        print("title $title");
                         return InkWell(
                           onTap: () async {
                             selectedRmName = title;
@@ -1739,6 +1774,7 @@ class _CreateClientState extends State<CreateClient> {
                             await getAllSubBroker();
                             EasyLoading.dismiss();
                             rmController.collapse();
+                            selectedSubBroker = '';
                             setState(() {});
                           },
                           child: Row(
@@ -1753,6 +1789,7 @@ class _CreateClientState extends State<CreateClient> {
                                   await getAllSubBroker();
                                   EasyLoading.dismiss();
                                   rmController.collapse();
+                                  selectedSubBroker = '';
                                   setState(() {});
                                 },
                               ),
@@ -1771,4 +1808,43 @@ class _CreateClientState extends State<CreateClient> {
       ),
     );
   }
+  void clearFormValues() {
+    // Reset variables
+    name = '';
+    investorName = 'Select Investor';
+    pan = '';
+    email = '';
+    mobile = '';
+    selectedDob = null;
+    selectedAnniversary = null;
+    address1 = '';
+    address2 = '';
+    address3 = '';
+    city = '';
+    state = '';
+    pincode = '';
+    selectedRmName = '';
+    selectedSubBroker = '';
+    loginStatus = 'Enable';
+    selected_id = 0;
+    clientStatus = 'Active';
+    customerType = 'Not Applicable';
+
+
+    // Clear the TextEditingControllers
+    nameController.text = '';
+    panController.text = '';
+    emailController.text = '';
+    mobileController.text = '';
+    guardianNameController.text = '';
+    cityController.text = '';
+    stateController.text = '';
+    pincodeController.text = '';
+    address1Controller.text = '';
+    address2Controller.text = '';
+    address3Controller.text = '';
+
+    selectedDob = null;
+  }
+
 }

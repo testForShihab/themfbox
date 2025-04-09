@@ -20,9 +20,11 @@ class GoalBasedSipTopUpCalculatorOutput extends StatefulWidget {
   const GoalBasedSipTopUpCalculatorOutput(
       {super.key,
       required this.goalBasedSipTopUpResult,
-      required this.goalBasedAnnualtopUp});
+      required this.goalBasedAnnualtopUp,
+      required this.inflationRate});
   final Map goalBasedSipTopUpResult;
   final String goalBasedAnnualtopUp;
+  final num inflationRate;
 
   @override
   State<GoalBasedSipTopUpCalculatorOutput> createState() =>
@@ -34,6 +36,7 @@ class _GoalBasedSipTopUpCalculatorState
   late double devHeight, devWidth;
   late Map goalBasedSipTopUpResult;
   late String goalBasedAnnualtopUp = "";
+  num annualInflationRate = 0 ;
   List<dynamic> data = [];
   String client_name = GetStorage().read("client_name");
   int type_id = GetStorage().read("type_id");
@@ -46,6 +49,7 @@ class _GoalBasedSipTopUpCalculatorState
     super.initState();
     goalBasedSipTopUpResult = widget.goalBasedSipTopUpResult;
     goalBasedAnnualtopUp = widget.goalBasedAnnualtopUp;
+    annualInflationRate = widget.inflationRate;
   }
 
   String getFirst22(String text) {
@@ -76,7 +80,7 @@ class _GoalBasedSipTopUpCalculatorState
                       "expected_rate_of_return=${goalBasedSipTopUpResult['expected_rate_of_return']}"
                       "&investment_period=${goalBasedSipTopUpResult['investment_period']}"
                       "&sip_topup_value=$goalBasedAnnualtopUp"
-                      "&client_name=$client_name";
+                      "&client_name=$client_name&inflation_rate=$annualInflationRate";
                   print("downloadExpensePlannerCalcResult $url");
                   SharedWidgets().shareBottomSheet(context, url);
                   //shareBottomSheet();

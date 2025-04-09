@@ -326,7 +326,7 @@ class RoseWaterTheme extends AppTheme {
             placeHolderInputTitleAndArrow: Color(0xffB4B4B4),
             lineColor: Color(0XFFDFDFDF),
             Bg2Color: Color(0xffF1F1F1),
-            overlay85: Color(0xffDDDFE1),
+            overlay85: Color(0xfff6d8e0),
             mainBgColor: Color(0xffECECF2),
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
@@ -870,6 +870,26 @@ class AnubandhTheme extends AppTheme {
       lineColor: Color(0XFFDFDFDF),
       Bg2Color: Color(0xffF1F1F1),
       overlay85: Color(0xffb8cdb2),
+      mainBgColor: Color(0xffECECF2),
+      whiteOverlay: Color(0xffFFFFFF),
+      defaultProfit: Color(0xff3CB66D),
+      defaultLoss: Color(0xffD10B0B),
+      themeProfit: Color(0xff50FF00),
+      themeLoss: Color(0xffFF6657));
+}
+
+class DarkRoseTheme extends AppTheme {
+  DarkRoseTheme()
+      : super(
+      themeColor: Color(0xff9f0e54),
+      themeColorDark: Color(0xff8b0c49),
+      themeColor25: Color(0xffeeb7d2),
+      universalTitle: Color(0xff242424),
+      readableGreyTitle: Color(0xff646c6c),
+      placeHolderInputTitleAndArrow: Color(0xffB4B4B4),
+      lineColor: Color(0XFFDFDFDF),
+      Bg2Color: Color(0xffF1F1F1),
+      overlay85: Color(0xfffeeb7d2),
       mainBgColor: Color(0xffECECF2),
       whiteOverlay: Color(0xffFFFFFF),
       defaultProfit: Color(0xff3CB66D),

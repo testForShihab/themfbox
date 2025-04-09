@@ -276,7 +276,7 @@ class _HealthInsuranceHoldingsState extends State<HealthInsuranceHoldings> {
 
                                       columnText("Frequency",
                                           "${healthInsuranceList.premiumMode}",
-                                          alignment: CrossAxisAlignment.center),
+                                          alignment: CrossAxisAlignment.start),
                                       columnText(
                                         "Policy Number",
                                         "${healthInsuranceList.policyNumber}",
@@ -328,13 +328,13 @@ class _HealthInsuranceHoldingsState extends State<HealthInsuranceHoldings> {
                                         flex: 1,
                                         child: columnText(
                                           "Premium Amount\nWithout GST",
-                                          "$rupee ${Utils.formatNumber(healthInsuranceList.netPremiumAmount)}",
+                                          "$rupee ${Utils.formatNumber(healthInsuranceList.premiumAmount)}",
                                         ),
                                       ),
                                       Expanded(
                                         child: columnText(
                                             "Premium Amount\nWith GST",
-                                            "$rupee ${Utils.formatNumber(healthInsuranceList.netPremiumAmountStr as num?)}",
+                                            "$rupee ${Utils.formatNumber(healthInsuranceList.totalAmount)}",
                                             alignment:
                                                 CrossAxisAlignment.center),
                                       ),

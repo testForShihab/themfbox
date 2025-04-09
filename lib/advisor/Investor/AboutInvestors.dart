@@ -34,6 +34,7 @@ class _AboutInvestorsState extends State<AboutInvestors> {
   late String client_name;
   bool isLoading = true;
   ScrollController _scrollController = ScrollController();
+  int type_id = GetStorage().read("type_id");
 
   Map summary = {};
   late num totalInvestors, totalFamilies;
@@ -112,7 +113,10 @@ class _AboutInvestorsState extends State<AboutInvestors> {
                               } ,
                               padding: EdgeInsets.zero,
                               extraWidgets: [
-                                SizedBox(height: 20),
+                                if (type_id == UserType.ADMIN ||
+                                    type_id == UserType.RM ||
+                                    type_id == UserType.ASSOCIATE)
+                                ...[SizedBox(height: 20),
                                 GestureDetector(
                                   onTap: () {
                                     Get.to(() => CreateClient());
@@ -130,6 +134,7 @@ class _AboutInvestorsState extends State<AboutInvestors> {
                                   ),
                                 ),
                                 SizedBox(height: 20),
+                                ]
                                 /*    extraButton(
                                     image: "assets/contacts.png",
                                     text: "Help 15 Investors in KYC",

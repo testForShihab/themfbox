@@ -415,6 +415,7 @@ class _MFSwpCalculatorState extends State<MFSwpCalculator> {
                                 border:
                                     Border.all(color: Colors.white, width: 1),
                                 borderRadius: BorderRadius.circular(8),
+                                color: Color(0XFFDEE6E6),
                               ),
                               child: TextFormField(
                                 cursorColor: Colors.white,
@@ -435,7 +436,9 @@ class _MFSwpCalculatorState extends State<MFSwpCalculator> {
                                       vertical: 13,
                                       horizontal: 8), // Style for hint text
                                 ),
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(color: Config.appTheme.themeColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
                                 controller: initialLumpsumAmountController,
                                 onChanged: (text) async {
                                   if (text.length <= 8) {
@@ -518,6 +521,7 @@ class _MFSwpCalculatorState extends State<MFSwpCalculator> {
                                   border:
                                       Border.all(color: Colors.white, width: 1),
                                   borderRadius: BorderRadius.circular(8),
+                                  color: Color(0XFFDEE6E6),
                                 ),
                                 child: TextFormField(
                                   cursorColor: Colors.white,
@@ -538,7 +542,9 @@ class _MFSwpCalculatorState extends State<MFSwpCalculator> {
                                         vertical: 13,
                                         horizontal: 8), // Style for hint text
                                   ),
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(color: Config.appTheme.themeColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                   controller: swpAmountController,
                                   onChanged: (text) async {
                                     if (text.length <= 8) {
@@ -610,19 +616,18 @@ class _MFSwpCalculatorState extends State<MFSwpCalculator> {
                           }
                         },
                         child: Container(
+                          margin: EdgeInsets.only(top: 22),
                           padding:
-                              EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                          EdgeInsets.symmetric(horizontal: 18, vertical: 7),
                           decoration: BoxDecoration(
                             color: Colors.black,
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Text(
-                            "Submit",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold),
-                          ),
+                          child: Text("Submit",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold)),
                         ),
                       ),
                     ],

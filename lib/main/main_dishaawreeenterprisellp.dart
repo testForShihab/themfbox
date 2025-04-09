@@ -7,9 +7,10 @@ void main() {
     ..appTitle = "Client Ally"
     ..appClientName = "dishaawreeenterprisellp"
     ..appArn = "273950"
-    ..appLogo = "assets/dishaawree_logo.png"
+    //..appLogo = "assets/dishaawree_logo.png"
+    ..appLogo = "assets/dishaawreeenterprisellp_logo.png"
     ..apiKey = "1b4062b9-b131-43ef-9c71-266e9ee89d1d"
-    ..appTheme = OrangeTheme()
+    ..appTheme = DarkBlueTheme()
     ..supportEmail = ""
     ..supportMobile = ""
     ..privacyPolicy = "https://www.dishaawree.com/privacy-policy"

@@ -63,17 +63,12 @@ class AdminColumnText extends StatelessWidget {
           children: [
             Text(
               title,
-              style: titleStyle ?? TextStyle(fontSize: 13),
+              style: AppFonts.f70024.copyWith(fontSize: 18),
               softWrap: true,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
             ),
-            SizedBox(width: 5,),
-            Icon(
-              Icons.arrow_forward,
-              size: 16,
-              color: Colors.black,
-            ),
+
           ],
         ),
 
@@ -84,7 +79,12 @@ class AdminColumnText extends StatelessWidget {
               style: valueStyle ??
                   TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
             ),
-
+            SizedBox(width: 5,),
+            Icon(
+              Icons.arrow_forward,
+              size: 16,
+              color: Colors.black,
+            ),
           ],
         ),
 

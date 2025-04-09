@@ -125,15 +125,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           focusNode: focusNode,
                           borderColor: borderColor,
                           maxLines: 1,
-                          inputType: TextInputType.phone,
+                          maxLength: 10,
+                          capitalization: TextCapitalization.characters,
                           onChange: (val) => mobileNo = val,
-                          label: "Mobile No"),
+                          label: "Mobile / PAN"),
                       Visibility(
                         visible: hasError,
                         child: Row(
                           children: [
                             SizedBox(width: 5),
-                            Text("Invalid Mobile No.",
+                            Text("Invalid Mobile / PAN",
                                 style: TextStyle(color: Colors.red)),
                           ],
                         ),
@@ -160,12 +161,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               setState(() {});
                               return;
                             }
-                            num mobileNumber = num.parse(mobileNo);
+                          //num mobileNumber = num.parse(mobileNo);
                             EasyLoading.show();
 
                             Map data = await Api.sendPasswordChangeOTP(
                               user_id: "",
-                              mobile: mobileNumber,
+                              mobile: mobileNo,
                               client_name: clientName,
                               broker_code: arn,
                             );
@@ -193,7 +194,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             EasyLoading.dismiss();
 
                             Get.to(() => ForgotPasswordOtp(
-                                  mobile_number: mobileNumber,
+                                  mobile_number: mobileNo,
                                   broker_code: arn,
                                 ));
                           },

@@ -199,17 +199,7 @@ class _MfResearchState extends State<MfResearch> {
   //   }
   // }
 
-  @override
-  initState() {
-    // TODO: implement initState
-    super.initState();
-    init(query);
-    scrollController = ScrollController();
-    fieldTextController.addListener(() {
-      print(fieldTextController.text);
-      init(fieldTextController.text);
-    });
-  }
+
 
   void init(String query) async {
     schemeSuggestionsTemp = [];
@@ -267,15 +257,34 @@ class _MfResearchState extends State<MfResearch> {
       throw Exception('Failed to load suggestions');
     }
   }
+  final FocusNode _searchFocusNode = FocusNode();
+  @override
+  initState() {
+    super.initState();
+    init(query);
+    scrollController = ScrollController();
+    fieldTextController.addListener(() {
+      print(fieldTextController.text);
+      init(fieldTextController.text);
+    });
+    _searchFocusNode.addListener(() {
+      if (!_searchFocusNode.hasFocus) {
+        setState(() {
+          _isCardVisible = false;
+        });
+      }
+    });
+  }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     scrollController.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
     fieldTextController.dispose();
 
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -450,7 +459,9 @@ class _MfResearchState extends State<MfResearch> {
             SizedBox(
               height: 50,
               child: TextFormField(
+                focusNode: _searchFocusNode,
                 controller: fieldTextController,
+                textCapitalization: TextCapitalization.none,
                 onTap: () {
                   setState(() {
                     _isCardVisible = true;

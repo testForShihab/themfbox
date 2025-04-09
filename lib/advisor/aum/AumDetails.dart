@@ -1139,7 +1139,7 @@ class _AumDetailsState extends State<AumDetails> {
   Widget aumCard(Map aumData) {
     //if (isLoading)return Utils.shimmerWidget(devHeight * 0.18, margin: EdgeInsets.zero);
 
-    String aum = Utils.formatNumber(aumData['aum_total'], isShortAmount: true);
+    String aum = Utils.formatNumber(aumData['aum_total'], isShortAmount: false);
 
     return Container(
       decoration: BoxDecoration(
@@ -1175,7 +1175,7 @@ class _AumDetailsState extends State<AumDetails> {
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
-                  fontSize: 32),
+                  fontSize: 25),
             ),
             if (type_id == UserType.ADMIN) ...[
               SizedBox(height: 5),
@@ -1309,10 +1309,10 @@ class _AumDetailsState extends State<AumDetails> {
 
   Widget dayChange(Map aumData) {
     String change =
-        Utils.formatNumber(aumData['aum_change_value'], isAmount: true);
+        Utils.formatNumber(aumData['aum_change_value'], isAmount: false);
     double percentage = aumData['aum_change_percentage'] ?? 0;
     String invested =
-        Utils.formatNumber(aumData['aum_invested_amount'], isShortAmount: true);
+        Utils.formatNumber(aumData['aum_invested_amount'], isShortAmount: false);
     return Row(
       children: [
         Text(

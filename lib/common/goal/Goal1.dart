@@ -65,7 +65,7 @@ class _Goal1State extends State<Goal1> {
     return Scaffold(
       backgroundColor: Config.appTheme.mainBgColor,
       appBar: (user_id != 0)
-          ? adminAppBar(title: "Goals",hasAction: false)
+          ? adminAppBar(title: "Goals", hasAction: false)
           : rpAppBar(title: "Goals"),
       body: SingleChildScrollView(
         child: Column(
@@ -270,7 +270,7 @@ class _Goal1State extends State<Goal1> {
     String? timeHorizon = goal.horizon;
     String? sipAmount = goal.sipAmount;
     String? riskProfile = goal.risk;
-    String? achievedpercentage = goal.achievedPercentage;
+    String achievedpercentage = goal.achievedPercentage!;
     double? target = double.parse(targetedAmount!).roundToDouble();
     double? achieved = double.parse(achievedAmount!).roundToDouble();
     String? cleanedInflation =
@@ -280,7 +280,8 @@ class _Goal1State extends State<Goal1> {
     //double inflation = double.parse(goal.inflation).roundToDouble();
     double? sip = double.parse(goal.sipAmount!).roundToDouble();
 
-    //double achievedPercentage = double.parse(goal.achievedPercentage).roundToDouble();
+    double achievedPercentage =
+        double.parse(goal.achievedPercentage!).roundToDouble();
     // double existingCurrentValue = double.parse(goal.existingSchemeCurrentValue).roundToDouble();
 
     return GestureDetector(
@@ -299,34 +300,60 @@ class _Goal1State extends State<Goal1> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  flex: 2,
-                  child: Container(
-                    alignment: Alignment.topLeft,
-                    child: Text("$goalName",
-                        textAlign: TextAlign.left,
-                        maxLines: 3,
-                        softWrap: true,
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontFamily: 'Mulish',
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF666666))),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Goal Name",
+                          textAlign: TextAlign.left,
+                          maxLines: 2,
+                          softWrap: true,
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'Mulish',
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFF9099A7))),
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: Text("$goalName",
+                            textAlign: TextAlign.left,
+                            maxLines: 3,
+                            softWrap: true,
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontFamily: 'Mulish',
+                                fontWeight: FontWeight.w400,
+                                color: Color(0xFF666666))),
+                      ),
+                    ],
                   ),
                 ),
                 Expanded(
-                  flex: 1,
-                  child: Container(
-                    padding: EdgeInsets.only(top: 2),
-                    // child: Text('\u{20B9} ' + numberFormat.format(email),
-                    child: Text('\u20B9' + numberFormat.format(achieved),
-                        textAlign: TextAlign.end,
-                        maxLines: 2,
-                        softWrap: true,
-                        style: TextStyle(
-                            fontSize: 13,
-                            fontFamily: 'Mulish',
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF666666))),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text("Archived Amount",
+                          textAlign: TextAlign.left,
+                          maxLines: 2,
+                          softWrap: true,
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'Mulish',
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFF9099A7))),
+                      Container(
+                        padding: EdgeInsets.only(top: 2),
+                        // child: Text('\u{20B9} ' + numberFormat.format(email),
+                        child: Text('\u20B9' + numberFormat.format(achieved),
+                            textAlign: TextAlign.end,
+                            maxLines: 2,
+                            softWrap: true,
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontFamily: 'Mulish',
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFF666666))),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -356,7 +383,7 @@ class _Goal1State extends State<Goal1> {
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                     color: Colors.white,
-                    child: Text("${achievedpercentage!}%",
+                    child: Text("$achievedPercentage%",
                         textAlign: TextAlign.end,
                         maxLines: 2,
                         softWrap: true,

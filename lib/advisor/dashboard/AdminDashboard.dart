@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+//import 'package:matomo_tracker/matomo_tracker.dart';
 import 'package:mymfbox2_0/Investor/Transact/cart/rpExports.dart';
 import 'package:mymfbox2_0/advisor/BirthdayAnniversary.dart';
 import 'package:mymfbox2_0/advisor/Investor/AllFamilies.dart';
@@ -42,7 +43,7 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../rp_widgets/SortButton.dart';
 
-class AdminDashboard extends StatefulWidget {
+class AdminDashboard extends StatefulWidget  {
   const AdminDashboard({super.key});
 
   @override
@@ -50,6 +51,13 @@ class AdminDashboard extends StatefulWidget {
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
+
+/*  with TraceableClientMixin @override
+  String get actionName => Config.app_client_name + mfd_name + " Admin Dashboard"; // optional
+
+  @override
+  String get path => '/admin-dashboard';*/
+
   late double devHeight, devWidth;
   String mfd_name = GetStorage().read('mfd_name');
   String client_name = GetStorage().read("client_name");
@@ -244,6 +252,19 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                     margin: EdgeInsets.all(0))
                                 : GestureDetector(
                                     onTap: () {
+
+                                     /* MatomoTracker.instance.trackEvent(
+
+                                        eventInfo: EventInfo(
+                                          category: 'Navigation',
+                                          name: 'Aum Details',
+                                          action: 'eventAction',
+
+                                          value: 18,
+
+                                        ),
+                                      );*/
+
                                       Get.to(() => AumDetails());
                                     },
                                     child:
@@ -598,35 +619,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     },
                     child: AdminColumnText(
                       title:
-                          "$rupee ${Utils.formatNumber(get30DayData['purchase_amount'],isShortAmount: true)}",
+                          "$rupee ${Utils.formatNumber(get30DayData['purchase_amount'].round(),isShortAmount: false)}",
                       value: "Purchases (${get30DayData['purchase_count']})",
-                      titleStyle: AppFonts.f70024,
+                      titleStyle: AppFonts.f70024.copyWith(fontSize: 20),
                       valueStyle: AppFonts.f50014Grey,
                     ),
                   ),
-                  InkWell(
-                     onTap: (){
-
-                       Get.to(TransactionReport(
-                           selectStartDate: transactStartDate,
-                           selectEndDate: transactEndDate,
-                           type: "Redemption"));
-                     },
-                    child: AdminColumnText(
-                      title:
-                          "$rupee ${Utils.formatNumber(get30DayData['redemption_amount'],isShortAmount: true)}",
-                      alignment: CrossAxisAlignment.end,
-                      value: "Redemptions(${get30DayData['redemption_count']})",
-                      titleStyle: AppFonts.f70024,
-                      valueStyle: AppFonts.f50014Grey,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
                   InkWell(
                     onTap: (){
                       Get.to(TransactionReport(
@@ -636,12 +634,39 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     },
                     child: AdminColumnText(
                       title:
-                          "$rupee ${Utils.formatNumber(get30DayData['sip_amount'],isShortAmount: true)}",
+                      "$rupee ${Utils.formatNumber(get30DayData['sip_amount'].round(),isShortAmount: false)}",
                       value: "SIP (${get30DayData['sip_count']})",
-                      titleStyle: AppFonts.f70024,
+                      alignment: CrossAxisAlignment.end,
+                      titleStyle: AppFonts.f70024.copyWith(fontSize: 20),
                       valueStyle: AppFonts.f50014Grey,
                     ),
                   ),
+
+                ],
+              ),
+              SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+
+                  InkWell(
+                    onTap: (){
+
+                      Get.to(TransactionReport(
+                          selectStartDate: transactStartDate,
+                          selectEndDate: transactEndDate,
+                          type: "Redemption"));
+                    },
+                    child: AdminColumnText(
+                      title:
+                      "$rupee ${Utils.formatNumber(get30DayData['redemption_amount'].round(),isShortAmount: false)}",
+                      alignment: CrossAxisAlignment.start,
+                      value: "Redemptions (${get30DayData['redemption_count']})",
+                      titleStyle: AppFonts.f70024.copyWith(fontSize: 20),
+                      valueStyle: AppFonts.f50014Grey,
+                    ),
+                  ),
+
                   InkWell(
                     onTap: (){
                       Get.to(TransactionReport(
@@ -651,10 +676,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     },
                     child: AdminColumnText(
                       title:
-                          "$rupee ${Utils.formatNumber(get30DayData['rejection_amount'],isShortAmount: true)}",
+                          "$rupee ${Utils.formatNumber(get30DayData['rejection_amount'].round(),isShortAmount: false)}",
                       alignment: CrossAxisAlignment.end,
                       value: "Rejection (${get30DayData['rejection_count']})",
-                      titleStyle: AppFonts.f70024,
+                      titleStyle: AppFonts.f70024.copyWith(fontSize: 20),
                       valueStyle: AppFonts.f50014Grey,
                     ),
                   ),
@@ -667,7 +692,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     });
   }
 
-  Widget oldCard() {
+  /*Widget oldCard() {
     return Obx(() {
       if (summaryLoading.isTrue)
         return Utils.shimmerWidget(200, margin: EdgeInsets.zero);
@@ -764,7 +789,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
         ),
       );
     });
-  }
+  }*/
 
   Widget infoRow({
     required String lHead,
@@ -852,9 +877,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
       child: AdminCard(
           title: "Brokerage",
           lHead:
-              "$rupee ${Utils.formatNumber(monthAmount, isShortAmount: true)}",
+              "$rupee ${Utils.formatNumber(monthAmount, isShortAmount: false)}",
           rHead:
-              "$rupee ${Utils.formatNumber(yearAmount, isShortAmount: true)}",
+              "$rupee ${Utils.formatNumber(yearAmount, isShortAmount: false)}",
           lSubHead: "For $month",
           rSubHead: "Current FY",
           borderColor: AppFonts.brokerageBorder,
@@ -934,7 +959,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           lHead: Utils.formatNumber(dashboardData['sip_total_count']),
           lSubHead: "Number of SIPs",
           rHead:
-              "$rupee ${Utils.formatNumber(dashboardData['sip_total_amount'], isShortAmount: true)}",
+              "$rupee ${Utils.formatNumber(dashboardData['sip_total_amount'].round(), isShortAmount: false)}",
           rSubHead: "Average $rupee ${Utils.formatNumber(dashboardData['sip_avg_amount'])}",
           borderColor: AppFonts.sipBorder,
           brokerageBackground: AppFonts.sipBackground),
@@ -951,7 +976,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           lHead: Utils.formatNumber(dashboardData['sip_total_count']),
           lSubHead: "Number of SIPs",
           rHead:
-              "$rupee ${Utils.formatNumber(dashboardData['sip_total_amount'], isShortAmount: true)}",
+              "$rupee ${Utils.formatNumber(dashboardData['sip_total_amount'], isShortAmount: false)}",
           rSubHead: "Average $rupee ${dashboardData['sip_avg_amount']}",
           borderColor: AppFonts.sipBorder,
           brokerageBackground: AppFonts.sipBackground),
@@ -1095,9 +1120,9 @@ class AdminCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("$lHead", style: AppFonts.f70024.copyWith(fontSize: 22)),
+                Text("$lHead", style: AppFonts.f70024.copyWith(fontSize: 18)),
                 if (isSubVisible)
-                  Text("$rHead", style: AppFonts.f70024.copyWith(fontSize: 22)),
+                  Text("$rHead", style: AppFonts.f70024.copyWith(fontSize: 18)),
               ],
             ),
             SizedBox(height: 0),

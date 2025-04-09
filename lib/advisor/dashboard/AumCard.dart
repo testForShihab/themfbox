@@ -19,7 +19,7 @@ class _AumCardState extends State<AumCard> {
   Widget build(BuildContext context) {
     double devWidth = MediaQuery.of(context).size.width;
     String aum =
-        Utils.formatNumber(widget.dashboardData['aum_total'], isShortAmount: true);
+        Utils.formatNumber(widget.dashboardData['aum_total'], isShortAmount: false);
 
     return Container(
       width: devWidth,
@@ -56,7 +56,7 @@ class _AumCardState extends State<AumCard> {
           Text(
             "$rupee $aum",
             style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w700, fontSize: 26),
+                color: Colors.white, fontWeight: FontWeight.w700, fontSize: 25),
           ),
           if(type_id == UserType.ADMIN)
           dayChange(),

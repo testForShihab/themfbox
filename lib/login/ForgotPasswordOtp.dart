@@ -15,7 +15,7 @@ class ForgotPasswordOtp extends StatefulWidget {
     required this.mobile_number,
     required this.broker_code,
   });
-  final num mobile_number;
+  final String mobile_number;
   final String broker_code;
   @override
   State<ForgotPasswordOtp> createState() => _ForgotPasswordOtpState();
@@ -30,7 +30,7 @@ class _ForgotPasswordOtpState extends State<ForgotPasswordOtp> {
   TextEditingController textController = TextEditingController();
   String otpNo = "";
   final otpFocusNode = FocusNode();
-  late num mobileNumber;
+  late String mobileNumber;
   String broker_code = "";
 
   @override

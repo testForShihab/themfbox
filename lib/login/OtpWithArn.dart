@@ -65,7 +65,7 @@ class _OtpWithArnState extends State<OtpWithArn> {
     num mobileNumber = num.parse(mobile);
     Map data = await Api.sendPasswordChangeOTP(
       user_id: "",
-      mobile: mobileNumber,
+      mobile: mobile,
       client_name: clientName,
       broker_code: arn,
     );

@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+//import 'package:matomo_tracker/matomo_tracker.dart';
 import 'package:mymfbox2_0/api/Api.dart';
 import 'package:mymfbox2_0/login/OtpWithArn.dart';
 import 'package:mymfbox2_0/login/Password.dart';
@@ -25,6 +26,15 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
+/*  with TraceableClientMixin @override
+  String get actionName => Config.app_client_name + " Login Page"; // optional
+
+  @override
+  String get path => '/login';*/
+
+
+
   late double devHeight, devWidth;
   FocusNode focusNode = FocusNode();
   Color borderColor = Colors.grey;
@@ -183,7 +193,7 @@ class _LoginState extends State<Login> {
                           },
                           text: "Login With OTP",
                           hasCallIcon: true),
-                      SizedBox(height: devHeight * 0.03),
+                      SizedBox(height: devHeight * 0.02),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -202,9 +212,9 @@ class _LoginState extends State<Login> {
                           )
                         ],
                       ),
-                      SizedBox(height: devHeight * 0.02),
+                      SizedBox(height: 0),
                       if (Config.app_client_name != "themfbox") topCard(),
-                      SizedBox(height: devHeight * 0.01),
+                      SizedBox(height:0),
                       // Visibility(
                       //     visible: kDebugMode,
                       //     child: ElevatedButton(

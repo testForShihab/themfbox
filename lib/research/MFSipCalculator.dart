@@ -310,7 +310,7 @@ class _MFSipCalculatorState extends State<MFSipCalculator> {
                                 keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(5),
+                                  LengthLimitingTextInputFormatter(8),
                                 ],
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
@@ -324,10 +324,10 @@ class _MFSipCalculatorState extends State<MFSipCalculator> {
                                     fontWeight: FontWeight.bold),
                                 controller: controller.sipAmountController,
                                 onChanged: (text) async {
-                                  if (text.length <= 5) {
+                                  if (text.length <= 8) {
                                     controller.sipAmount.value = text;
                                   } else {
-                                    controller.sipAmountController.text = text.substring(0, 5);
+                                    controller.sipAmountController.text = text.substring(0, 8);
                                     controller.sipAmountController.selection = TextSelection.fromPosition(
                                       TextPosition(offset: controller.sipAmountController.text.length),
                                     );
@@ -380,15 +380,10 @@ class _MFSipCalculatorState extends State<MFSipCalculator> {
                           if (controller.startDate.value.isNotEmpty) {
                             DateTime startDate = convertStrToDt(controller.startDate.value);
                             DateTime endDate = convertStrToDt(controller.endDate.value);
-                            print("startDate $startDate");
-                            print("endDate $endDate");
-
-
                             /*if(endDate.day <= startDate.day) {
                               Utils.showError(context, "Please select a valid start date and end date.");
                               return;
                             }*/
-
                             DateTime oneMonthBeforeEndDate = DateTime(endDate.year, endDate.month - 1, endDate.day);
 
                             DateTime threeMonthsBeforeEndDate = DateTime(endDate.year, endDate.month - 3, endDate.day);
@@ -418,20 +413,18 @@ class _MFSipCalculatorState extends State<MFSipCalculator> {
                           }
                         },
                         child: Container(
-                          width: devWidth * 0.22,
-                          padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
                           margin: EdgeInsets.only(top: 22),
+                          padding:
+                          EdgeInsets.symmetric(horizontal: 18, vertical: 7),
                           decoration: BoxDecoration(
-                            color: Config.appTheme.defaultProfit,
+                            color: Colors.black,
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Center(
-                            child: Text("Submit",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold)),
-                          ),
+                          child: Text("Submit",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold)),
                         ),
                       )
 

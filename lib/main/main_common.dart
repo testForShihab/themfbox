@@ -15,8 +15,21 @@ import '../FlavorConfig.dart';
 
 var flavorConfigProvider;
 
+/*const _matomoEndpoint = 'https://analytics.themfbox.in/matomo.php';
+int _sideId = 4;*/
+
 void mainCommon(FlavorConfig config) async {
   WidgetsFlutterBinding.ensureInitialized();
+
+ /* await MatomoTracker.instance.initialize(
+    siteId: _sideId,
+    url: _matomoEndpoint,
+    verbosityLevel: Level.all,
+    // dispatchSettings: dispatchSettingsEndToEndTest,
+  );
+  MatomoTracker.instance.visitor.id;
+  MatomoTracker.instance.attachLastScreenInfo;
+  print("last screen info --> ${MatomoTracker.instance.attachLastScreenInfo}");*/
 
   flavorConfigProvider = StateProvider((ref) => config);
 
@@ -150,6 +163,8 @@ class SplashState extends State<Splash> {
         useMaterial3: true,
       ),
       home: CheckAuth(),
+     // navigatorObservers: [matomoObserver],
+
     );
   }
 

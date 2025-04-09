@@ -858,7 +858,7 @@ class Api {
 
   static Future sendPasswordChangeOTP(
       {required String user_id,
-      required num mobile,
+      required String mobile,
       required String client_name,
       required String broker_code}) async {
     String url =
@@ -874,7 +874,7 @@ class Api {
 
   static Future verifyPasswordChangeOTP({
     required String user_id,
-    required num mobile,
+    required String mobile,
     required String client_name,
     required String otp,
     required String broker_code,
@@ -891,7 +891,7 @@ class Api {
 
   static Future changePasswordUsingOTP({
     required String user_id,
-    required num mobile,
+    required String mobile,
     required String client_name,
     required String broker_code,
     required String password,

@@ -16,7 +16,7 @@ class ResetPassword extends StatefulWidget {
     required this.broker_code,
   });
 
-  final num mobile_number;
+  final String mobile_number;
   final String broker_code;
 
   @override
@@ -30,7 +30,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   String password = "", confirmPassword = "";
   List<bool> isVisible = [];
   bool hasError = false;
-  late num mobileNumber;
+  late String mobileNumber;
   late String broker_code;
 
   @override

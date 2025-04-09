@@ -286,6 +286,7 @@ class _GoalBasedSipCalculatorInputState
                           Get.to(() => GoalBasedSipTopUpCalculatorOutput(
                                 goalBasedSipTopUpResult: data['result'],
                                 goalBasedAnnualtopUp: '$annualTopUp',
+                                inflationRate: annualInflationRate,
                               ));
                         }
                         EasyLoading.dismiss();

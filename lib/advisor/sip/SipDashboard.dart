@@ -334,7 +334,7 @@ class _SipDashboardState extends State<SipDashboard> {
                           lHead: stpData['total_stp_count'],
                           lSubHead: "STPs",
                           rHead:
-                              "$rupee ${Utils.formatNumber(stpData['total_stp_amount'], isShortAmount: true)}",
+                              "$rupee ${Utils.formatNumber(stpData['total_stp_amount'], isShortAmount: false)}",
                           rSubHead: "STP Amount",
                           padding: EdgeInsets.zero,
                         ),
@@ -359,7 +359,7 @@ class _SipDashboardState extends State<SipDashboard> {
                           lHead: swpData['total_swp_count'],
                           lSubHead: "SWPs",
                           rHead:
-                              "$rupee ${Utils.formatNumber(swpData['total_swp_amount'], isShortAmount: true)}",
+                              "$rupee ${Utils.formatNumber(swpData['total_swp_amount'].round(), isShortAmount: false)}",
                           rSubHead: "SWP Amount",
                           padding: EdgeInsets.zero,
                         ),
@@ -447,7 +447,7 @@ class _SipDashboardState extends State<SipDashboard> {
                 summaryCard(
                     hasArrow: false,
                     heading:
-                        '$rupee ${Utils.formatNumber(sipData['total_sip_amount'], isShortAmount: true)}',
+                        '$rupee ${Utils.formatNumber(sipData['total_sip_amount'].round(), isShortAmount: false)}',
                     subHeading:
                         "SIP Amount"),
               //   Avg $rupee ${Utils.formatNumber(sipData['average_sip_amount'], isShortAmount: true)}
@@ -644,7 +644,7 @@ class _SipDashboardState extends State<SipDashboard> {
           ),
           SizedBox(width: 5),
           Text(
-            "$rupee ${Utils.formatNumber(sipAmount, isAmount: true)}",
+            "$rupee ${Utils.formatNumber(sipAmount.round(), isAmount: true)}",
             style: AppFonts.f50014Black,
           ),
           /*ColumnText(
@@ -679,7 +679,7 @@ class _SipDashboardState extends State<SipDashboard> {
           ),
           SizedBox(width: 5),
           Text(
-            "$rupee ${Utils.formatNumber(sipAmount, isAmount: true)}",
+            "$rupee ${Utils.formatNumber(sipAmount.round(), isAmount: true)}",
             style: AppFonts.f50014Black,
           ),
 
@@ -1215,7 +1215,7 @@ class _SipDashboardState extends State<SipDashboard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("$heading",
-                      style: AppFonts.f70024.copyWith(fontSize: 22)),
+                      style: AppFonts.f70024.copyWith(fontSize: 18)),
                   if (hasArrow)
                     Icon(
                       Icons.arrow_forward,

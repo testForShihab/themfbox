@@ -1146,7 +1146,7 @@ class AdminApi {
     required String? salutation,
   }) async {
     String url =
-        "${ApiConfig.apiUrl}/advisor/createClient?key=${ApiConfig.apiKey}&user_id=$mfd_id&client_name=$client_name&id=$investor_id&name=$name&pan=$pan"
+        "${ApiConfig.apiUrl}/advisor/v1/createClient?key=${ApiConfig.apiKey}&user_id=$mfd_id&client_name=$client_name&id=$investor_id&name=$name&pan=$pan"
         "&mobile=$mobile&alter_mobile=$alter_mobile&email=$email&alter_email=$alter_email&rm_name=$rm_name&subbroker_name=$subbroker_name&status=$status&address1=$address1&address2=$address2&address3=$address3"
         "&city=$city&pincode=$pincode&state=$state&country=$country&phone_off=$phone_off&phone_res=$phone_res&dob=$dob&anniversary_date=$anniversary_date"
         "&occupation=$occupation&guard_name=$guard_name&guard_pan=$guard_pan&cust_type=$cust_type&cus_ref=$cus_ref&login_status=$login_status&salutation=$salutation";

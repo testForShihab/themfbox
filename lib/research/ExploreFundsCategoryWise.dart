@@ -27,12 +27,13 @@ class _ExploreFundsCategoryWiseState extends State<ExploreFundsCategoryWise> {
   String selectedSubCategory = "Equity: Large Cap";
   List allCategories = [];
   List subCategoryList = [];
+  bool isLoading = true;
 
   Future getDatas() async {
-    EasyLoading.isShow;
+    isLoading = true;
     await getBroadCategoryList();
     await getCategoryList();
-    EasyLoading.dismiss();
+    isLoading = false;
     return 0;
   }
 
@@ -72,9 +73,11 @@ class _ExploreFundsCategoryWiseState extends State<ExploreFundsCategoryWise> {
             //backgroundColor: Config.appTheme.mainBgColor,
             backgroundColor: Colors.white,
             appBar: appBar(),
-            body: SingleChildScrollView(
+            body: (isLoading)
+                ? Utils.shimmerWidget(devHeight * 0.8, margin: EdgeInsets.all(20))
+                : SingleChildScrollView(
               child: Container(
-                margin: EdgeInsets.only(bottom: 16),
+                margin: EdgeInsets.only(bottom: 40),
                 padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
                 decoration: BoxDecoration(
                   //color: Colors.white,
@@ -272,7 +275,9 @@ class _ExploreFundsCategoryWiseState extends State<ExploreFundsCategoryWise> {
                     style: AppFonts.appBarTitle.copyWith(fontSize: 18)),
               ],
             ),
-            Container(
+            (isLoading)
+                ? Utils.shimmerWidget(devHeight * 0.04 , margin: EdgeInsets.only(left : 20, right: 20))
+                : Container(
               color: Colors.white,
               padding: EdgeInsets.only(
                 left: 16,

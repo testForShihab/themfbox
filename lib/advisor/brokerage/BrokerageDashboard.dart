@@ -393,10 +393,10 @@ class _BrokerageDashboardState extends State<BrokerageDashboard> {
       return BrokerageCard(
         title: "Brokerage",
         lHead:
-            "$rupee ${Utils.formatNumber(widget.monthAmount, isShortAmount: true)}",
+            "$rupee ${Utils.formatNumber(widget.monthAmount, isShortAmount: false)}",
         lSubHead: "For ${widget.month}",
         rHead:
-            "$rupee ${Utils.formatNumber(widget.yearAmount, isShortAmount: true)}",
+            "$rupee ${Utils.formatNumber(widget.yearAmount, isShortAmount: false)}",
         rSubHead: "Current FY",
         padding: EdgeInsets.zero,
         hasArrow: false,

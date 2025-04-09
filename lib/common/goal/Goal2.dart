@@ -312,11 +312,13 @@ class Goal2State extends State<Goal2> {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text("Please fill all Fields"),
               ));
-            } else if (inflation == 0) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text("Please fill all Fields"),
-              ));
-            } else if (yearsController.text.isEmpty) {
+            }
+            // else if (inflation == 0) {
+            //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            //     content: Text("Please fill all Fields"),
+            //   ));
+            // }
+            else if (yearsController.text.isEmpty) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text("Please fill all Fields"),
               ));

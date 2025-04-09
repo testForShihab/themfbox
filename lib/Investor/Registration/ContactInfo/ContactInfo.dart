@@ -45,6 +45,7 @@ class _ContactInfoState extends State<ContactInfo> {
       user_id: user_id,
       client_name: client_name,
       pincode: pincode,
+      bse_nse_mfu_flag: bse_nse_mfu_flag,
     );
 
     if (data['status'] != 200) {

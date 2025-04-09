@@ -192,15 +192,12 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
     // }
 
     rollingReturnsTable = data['rollingReturnsTable'];
-    print("---------${rollingReturnsTable.length}");
 
     if (rollingReturnsTable.isEmpty) {
-      print("----------------came here");
       Utils.showError(context,
           "Choose a period lesser than ${controller.selectedRollingPeriod.value} or change the start date to ${controller.selectedRollingPeriod.value} back from now.");
       return 0;
     } else {
-      print("----------------came here");
       if (data['list'] != null) {
         chartRollingReturnBenchmarkList = data['list'];
       } else {
@@ -397,9 +394,9 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                     }
                   },
                   child: Container(
-                    margin: EdgeInsets.only(top:18),
+                    margin: EdgeInsets.only(top: 22),
                     padding:
-                    EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    EdgeInsets.symmetric(horizontal: 18, vertical: 7),
                     decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(8),
@@ -407,7 +404,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                     child: Text("Submit",
                         style: TextStyle(
                             color: Colors.white,
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold)),
                   ),
                 )

@@ -1282,7 +1282,7 @@ class _NomineeInfoState extends State<NomineeInfo> {
               onChange: (val) async {
                 n1Pincode = val;
                 if (n1Pincode.length != 6) return;
-                Map data = await CommonOnBoardApi.getCityStateByPincode(
+                Map data = await CommonOnBoardApi.getCityStateByPincode(bse_nse_mfu_flag: bse_nse_mfu_flag,
                     user_id: user_id, client_name: client_name, pincode: val);
                 if (data['status'] != 200) {
                   Utils.showError(context, data['msg']);
