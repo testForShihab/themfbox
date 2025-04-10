@@ -1214,6 +1214,7 @@ class _AllInvestorState extends State<AllInvestor> {
                                 }
                               },
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                   SizedBox(width: 5),
                                   WhatsappIcon(

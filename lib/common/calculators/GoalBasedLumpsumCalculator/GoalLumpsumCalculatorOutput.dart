@@ -258,7 +258,7 @@ class _GoalLumpsumCalculatorOutputState
                         style: AppFonts.f50014Black, // Default text style
                         children: [
                           TextSpan(
-                            text: "${sipData.category}  ",
+                            text: "${sipData.category}" ,style: AppFonts.f50014Black,
                           ),
                         ],
                       ),

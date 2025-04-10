@@ -1115,6 +1115,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                                 onTap: () async {
                                   controller.selectedRollingPeriod.value =
                                       rollingPeriodList[index];
+                                  updateStartDate();
                                   Get.back();
                                 },
                                 child: Row(
@@ -1128,6 +1129,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                                         Get.back();
                                         controller.selectedRollingPeriod.value =
                                             rollingPeriodList[index];
+                                        updateStartDate();
                                       },
                                     ),
                                     Expanded(
@@ -1829,17 +1831,23 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
           now.second,
         );
     }
+    return pastDate;
+  }
+
+  updateStartDate() {
+    final pastDate = getStartDatePastLimit();
     try {
       if (convertStrToDt(controller.startDate.value).isAfter(pastDate)) {
         controller.startDate.value = convertDtToStr(pastDate.copyWith(
           day: pastDate.day - 7,
         ));
         print(controller.startDate.value);
+      } else {
+        controller.startDate.value = convertDtToStr(pastDate);
       }
     } catch (e) {
       print(e);
     }
-    return pastDate;
   }
 
   void showDatePickerDialog(BuildContext context) async {

@@ -1127,7 +1127,7 @@ class _BrokerageDashboardState extends State<BrokerageDashboard> {
   }
 
   Widget amcWiseBrokerageTile(Map data) {
-    String name = data["amc_name"];
+    String name = data["amc_short_name"];
     String amount =
         Utils.formatNumber(data["brokerage_amount"], isAmount: true);
     String logo = data['logo'];

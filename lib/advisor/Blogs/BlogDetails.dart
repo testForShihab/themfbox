@@ -66,6 +66,7 @@ class _BlogDetailsState extends State<BlogDetails> {
       future: getData(),
       builder: (context, snapshot) {
         return Scaffold(
+          backgroundColor: Config.appTheme.mainBgColor,
           appBar: rpAppBar(
               title: Utils.getFirst13(title, count: 18),
               bgColor: Config.appTheme.themeColor,
@@ -73,18 +74,44 @@ class _BlogDetailsState extends State<BlogDetails> {
               IconButton(onPressed: () {
                 EasyLoading.showInfo("Under Development");
                 //_onShare(context);
-              }, icon: Icon(Icons.share)),
+              }, icon: Icon(Icons.share)),//Html(data: htmlStrings)
             ],*/
               foregroundColor: Colors.white),
           body: SingleChildScrollView(
-            padding: EdgeInsets.all(0),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Html(data: htmlStrings),
+            padding: EdgeInsets.all(5),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8,0 , 8, 0),
+                  child: Card(
+
+                    elevation: 0,
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                      child:  Html(data: htmlStrings)
+                                  ),
+                                ],
+                              ),
+
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
+          )
         );
       },
     );

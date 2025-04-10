@@ -66,6 +66,7 @@ class _NewsDetailsState extends State<NewsDetails> {
       future: getData(),
       builder: (context, snapshot) {
         return Scaffold(
+          backgroundColor: Config.appTheme.mainBgColor,
           appBar: rpAppBar(
               title: Utils.getFirst13(title, count: 18),
               bgColor: Config.appTheme.themeColor,
@@ -79,11 +80,35 @@ class _NewsDetailsState extends State<NewsDetails> {
             padding: EdgeInsets.all(5),
             child: Column(
               children: [
-                Text(
-                  title,
-                  style: AppFonts.f50014Black,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8,0 , 8, 0),
+                  child: Card(
+
+                    elevation: 0,
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Column(
+                            children: [
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child:  Html(data: htmlStrings)
+                                  ),
+                                ],
+                              ),
+
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                Html(data: htmlStrings),
               ],
             ),
           ),

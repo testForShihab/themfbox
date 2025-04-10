@@ -921,16 +921,16 @@ class _SchemeInfoState extends State<SchemeInfo> {
                   flex: 4,
                   child: ColumnText(
                     alignment: CrossAxisAlignment.start,
-                    title: "Min Lumpsum",
+                    title: "Min Investment",
                     value:
-                        "$rupee ${Utils.formatNumber(schemeInfoController.minLumpsum.round(), isAmount: false)}",
+                        "$rupee ${Utils.formatNumber(schemeInfoController.minimumInvestment.round(), isAmount: false)}",
                   )),
               Expanded(
                   flex: 3,
                   child: ColumnText(
-                      title: "Min SIP",
+                      title: "Min Topup",
                       value:
-                          "$rupee ${Utils.formatNumber(schemeInfoController.minSip.round(), isAmount: false)}",
+                          "$rupee ${Utils.formatNumber(schemeInfoController.minimumTopup.round(), isAmount: false)}",
                       alignment: CrossAxisAlignment.center)),
               Expanded(
                   flex: 4,
@@ -996,10 +996,8 @@ class _SchemeInfoState extends State<SchemeInfo> {
                       alignment: CrossAxisAlignment.start)),
             ],
           ),
-          DottedLine(
-            verticalPadding: 4,
-          ),
-          /* Row(
+          /* DottedLine(verticalPadding: 4,),
+          Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(
@@ -1500,7 +1498,7 @@ class _SchemeInfoState extends State<SchemeInfo> {
                               ),
                             ),
                           ),
-                          DataColumn(
+                         /* DataColumn(
                             label: SizedBox(
                               width: 60,
                               child: Text(
@@ -1509,7 +1507,7 @@ class _SchemeInfoState extends State<SchemeInfo> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                          ),
+                          ),*/
                           DataColumn(
                             label: SizedBox(
                               width: 50,
@@ -1622,8 +1620,7 @@ class _SchemeInfoState extends State<SchemeInfo> {
                                   ],
                                 ),
                               ),
-                              DataCell(Text("$rupee ${Utils.formatNumber(aum)}",
-                                  textAlign: TextAlign.center)),
+                             // DataCell(Text("$rupee ${Utils.formatNumber(aum)}", textAlign: TextAlign.center)),
                               DataCell(Text("$oneYear%",
                                   textAlign: TextAlign.center)),
                               DataCell(Text("$twoYear%",
@@ -2067,7 +2064,8 @@ class SchemeInfoController extends GetxController {
   var scheme_status = "".obs;
   var formattedschemeInceptionDate = "".obs;
   var formattedYearsMonth = "".obs;
-  var minLumpsum = 0.obs;
+  var minimumInvestment = 0.obs;
+  var minimumTopup = 0.obs;
   var minSip = 0.obs;
   RxDouble aum = 0.0.obs;
   RxDouble ter = 0.0.obs;
@@ -2159,7 +2157,8 @@ class SchemeInfoController extends GetxController {
           "$yearsDifference yrs ${monthsDifference.toString()}m";
     }
 
-    minLumpsum.value = (data.minimumInvestment ?? 0).toInt();
+    minimumInvestment.value = (data.minimumInvestment ?? 0).toInt();
+    minimumTopup.value = (data.minimumTopup ?? 0).toInt();
     minSip.value = data.schemeMapping?.sipMinimumAmount?.toInt() ?? 0;
     aum.value = data.schemeAssets?.toDouble() ?? 0;
     assetDate.value = data.schemeAssetDate ?? "";

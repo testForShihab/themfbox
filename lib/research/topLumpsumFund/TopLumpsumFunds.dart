@@ -347,7 +347,7 @@ class _TopLumpsumFundsState extends State<TopLumpsumFunds> {
       child: ListView.builder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
-        itemCount: 2,
+        itemCount: 1,
         itemBuilder: (context, index) {
           Map data = summary[index];
 

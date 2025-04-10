@@ -1726,8 +1726,8 @@ class _CreateClientState extends State<CreateClient> {
   Widget rmExpansionTile(BuildContext context) {
     if(type_id == 4){
       selectedRmName = userDataPojo.rmName ?? '';
-      rmList = [];
-      print("selectedRmName $selectedRmName");
+      rmList = [selectedRmName];
+      print("selectedRmName--- $selectedRmName");
     }
     return Container(
       decoration: BoxDecoration(
