@@ -59,6 +59,7 @@ class _FolioMasterState extends State<FolioMaster> {
   }
 
   bool isLoading = true;
+
   Future getDatas() async {
     isLoading = true;
     await getFolioMaster();
@@ -72,6 +73,7 @@ class _FolioMasterState extends State<FolioMaster> {
   }
 
   late double devWidth, devHeight;
+
   @override
   Widget build(BuildContext context) {
     devHeight = MediaQuery.of(context).size.height;
@@ -267,7 +269,6 @@ class _FolioMasterState extends State<FolioMaster> {
               chead: "Holding",
               cSubHead: modeHld,
             ),
-
             SizedBox(height: 16),
             DottedLine(),
           ],
@@ -288,9 +289,36 @@ class _FolioMasterState extends State<FolioMaster> {
   }) {
     return Row(
       children: [
-        Expanded(child: ColumnText(title: lhead, value: lSubHead,alignment: CrossAxisAlignment.start)),
-        Expanded(child: ColumnText(title: rhead, value: rSubHead,alignment: CrossAxisAlignment.center,valueStyle: valueStyle,titleStyle: titleStyle,)),
-        Expanded(child: ColumnText(title: chead,value: cSubHead,alignment: CrossAxisAlignment.end)),
+        Expanded(
+            child: ColumnText(
+                title: lhead,
+                value: lSubHead,
+                alignment: CrossAxisAlignment.start)),
+        Expanded(
+            child: ColumnText(
+          title: rhead,
+          value: rSubHead,
+          alignment: CrossAxisAlignment.center,
+          valueStyle: valueStyle,
+          titleStyle: titleStyle,
+        )),
+        Expanded(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              chead,
+              style: AppFonts.f40013,
+            ),
+            Text(
+              cSubHead,
+              softWrap: true,
+              textAlign: TextAlign.end,
+              style: valueStyle ??
+                  AppFonts.f50014Grey.copyWith(color: Colors.black),
+            ),
+          ],
+        )),
       ],
     );
   }
