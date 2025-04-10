@@ -36,7 +36,8 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
 
   late double devWidth, devHeight;
   List allCategories = [];
-  String client_name = GetStorage().read("client_name");
+  int user_id = getUserId();
+  String client_name = GetStorage().read("client_name") ?? '';
 
   TextEditingController startDateController = TextEditingController();
 
@@ -86,6 +87,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
     await getCategoryList();
     await getTopLumpsumFunds();
     await getRollingReturnsVsCategory();
+    await autoSuggestAllMfSchemesShortNames();
     // await getRollingReturnsVsBenchmark();
     isLoading = false;
     return 0;
@@ -100,6 +102,24 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
       return 0;
     }
     allCategories = data['list'];
+
+    return 0;
+  }
+
+  List categoriesList = [];
+
+  Future autoSuggestAllMfSchemesShortNames() async {
+    if (categoriesList.isNotEmpty) return 0;
+    Map data = await ResearchApi.autoSuggestAllMfSchemesShortNames(
+        userId: user_id,
+        category: controller.selectedSubCategory.value,
+        clientName: client_name,
+        );
+    if (data['status'] != SUCCESS) {
+      Utils.showError(context, data['msg']);
+      return 0;
+    }
+    categoriesList = data['list'];
 
     return 0;
   }
@@ -328,10 +348,10 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           showCategoryBottomSheet();
                         },
-                        child:Obx(() => appBarColumn(
+                        child: Obx(() => appBarColumn(
                             "Category",
                             getFirst13(controller.selectedSubCategory.value),
                             Icon(Icons.keyboard_arrow_down,
@@ -341,7 +361,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                         onTap: () {
                           showSchemeBottomSheet();
                         },
-                        child:Obx(() => appBarColumn(
+                        child: Obx(() => appBarColumn(
                             "Select Up To 5 Funds",
                             getFirst16(controller.selectedFund.value),
                             Icon(Icons.keyboard_arrow_down,
@@ -400,11 +420,17 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                             getSchemeInceptionAndLatestNavDate(
                                 controller.startDate.value);
 
+                            if(controller.schemes.value.isEmpty) {
+                              Utils.showError(context,
+                                  "Please select a scheme to proceed.");
+                              return;
+                            }
+
                             if (controller.rollingPeriods.value == "1 Month") {
                               DateTime oneMonthBeforeDate = DateTime(
                                   todayDate.year,
                                   todayDate.month - 1,
-                                  todayDate.day);
+                                  todayDate.day - 7);
                               if (startDate.isAfter(oneMonthBeforeDate)) {
                                 Utils.showError(context,
                                     "Choose a period lesser than ${controller.rollingPeriods.value} or change the start date to ${controller.rollingPeriods.value} back from now.");
@@ -415,7 +441,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                               DateTime oneMonthBeforeDate = DateTime(
                                   todayDate.year - 1,
                                   todayDate.month,
-                                  todayDate.day);
+                                  todayDate.day - 7);
                               if (startDate.isAfter(oneMonthBeforeDate)) {
                                 Utils.showError(context,
                                     "Choose a period lesser than ${controller.rollingPeriods.value} or change the start date to ${controller.rollingPeriods.value} back from now.");
@@ -426,7 +452,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                               DateTime oneMonthBeforeDate = DateTime(
                                   todayDate.year - 2,
                                   todayDate.month,
-                                  todayDate.day);
+                                  todayDate.day - 7 );
                               if (startDate.isAfter(oneMonthBeforeDate)) {
                                 Utils.showError(context,
                                     "Choose a period lesser than ${controller.rollingPeriods.value} or change the start date to ${controller.rollingPeriods.value} back from now.");
@@ -437,7 +463,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                               DateTime oneMonthBeforeDate = DateTime(
                                   todayDate.year - 3,
                                   todayDate.month,
-                                  todayDate.day);
+                                  todayDate.day - 7 );
                               if (startDate.isAfter(oneMonthBeforeDate)) {
                                 Utils.showError(context,
                                     "Choose a period lesser than ${controller.rollingPeriods.value} or change the start date to ${controller.rollingPeriods.value} back from now.");
@@ -448,7 +474,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                               DateTime oneMonthBeforeDate = DateTime(
                                   todayDate.year - 5,
                                   todayDate.month,
-                                  todayDate.day);
+                                  todayDate.day - 7 );
                               if (startDate.isAfter(oneMonthBeforeDate)) {
                                 Utils.showError(context,
                                     "Choose a period lesser than ${controller.rollingPeriods.value} or change the start date to ${controller.rollingPeriods.value} back from now.");
@@ -459,7 +485,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                               DateTime oneMonthBeforeDate = DateTime(
                                   todayDate.year - 7,
                                   todayDate.month,
-                                  todayDate.day);
+                                  todayDate.day - 7 );
                               if (startDate.isAfter(oneMonthBeforeDate)) {
                                 Utils.showError(context,
                                     "Choose a period lesser than ${controller.rollingPeriods.value} or change the start date to ${controller.rollingPeriods.value} back from now.");
@@ -470,7 +496,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                               DateTime oneMonthBeforeDate = DateTime(
                                   todayDate.year - 10,
                                   todayDate.month,
-                                  todayDate.day);
+                                  todayDate.day - 7);
                               if (startDate.isAfter(oneMonthBeforeDate)) {
                                 Utils.showError(context,
                                     "Choose a period lesser than ${controller.rollingPeriods.value} or change the start date to ${controller.rollingPeriods.value} back from now.");
@@ -481,7 +507,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                               DateTime oneMonthBeforeDate = DateTime(
                                   todayDate.year - 15,
                                   todayDate.month,
-                                  todayDate.day);
+                                  todayDate.day - 7);
                               if (startDate.isAfter(oneMonthBeforeDate)) {
                                 Utils.showError(context,
                                     "Choose a period lesser than ${controller.rollingPeriods.value} or change the start date to ${controller.rollingPeriods.value} back from now.");
@@ -514,7 +540,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                         child: Container(
                           margin: EdgeInsets.only(top: 22),
                           padding:
-                          EdgeInsets.symmetric(horizontal: 18, vertical: 7),
+                              EdgeInsets.symmetric(horizontal: 18, vertical: 7),
                           decoration: BoxDecoration(
                             color: Colors.black,
                             borderRadius: BorderRadius.circular(8),
@@ -1003,7 +1029,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
       child: Column(
         children: [
           Row(
-             mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
                 margin: EdgeInsets.only(right: 10),
@@ -1222,28 +1248,69 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                   Get.back();
                                   controller.selectedRollingPeriod.value =
                                       rollingPeriod[index];
+                                  DateTime todayDate = DateTime.now();
 
                                   if (rollingPeriod[index] == "1 Month") {
                                     controller.rollingPeriods.value = "1 Month";
+                                    DateTime oneMonthBeforeDate = DateTime(
+                                        todayDate.year,
+                                        todayDate.month - 1,
+                                        todayDate.day - 7);
+                                    controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
                                   } else if (rollingPeriod[index] == "1 Year") {
                                     controller.rollingPeriods.value = "1 Year";
+                                    DateTime oneMonthBeforeDate = DateTime(
+                                        todayDate.year - 1,
+                                        todayDate.month,
+                                        todayDate.day - 7);
+                                    controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
                                   } else if (rollingPeriod[index] == "2 Year") {
                                     controller.rollingPeriods.value = "2 Year";
+                                    DateTime oneMonthBeforeDate = DateTime(
+                                        todayDate.year - 2,
+                                        todayDate.month,
+                                        todayDate.day - 7);
+                                    controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
                                   } else if (rollingPeriod[index] == "3 Year") {
                                     controller.rollingPeriods.value = "3 Year";
+                                    DateTime oneMonthBeforeDate = DateTime(
+                                        todayDate.year - 3,
+                                        todayDate.month,
+                                        todayDate.day - 7);
+                                    controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
                                   } else if (rollingPeriod[index] == "5 Year") {
                                     controller.rollingPeriods.value = "5 Year";
+                                    DateTime oneMonthBeforeDate = DateTime(
+                                        todayDate.year - 5,
+                                        todayDate.month,
+                                        todayDate.day - 7);
+                                    controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
                                   } else if (rollingPeriod[index] == "7 Year") {
                                     controller.rollingPeriods.value = "7 Year";
+                                    DateTime oneMonthBeforeDate = DateTime(
+                                        todayDate.year - 7,
+                                        todayDate.month,
+                                        todayDate.day - 7);
+                                    controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
                                   } else if (rollingPeriod[index] ==
                                       "10 Year") {
                                     controller.rollingPeriods.value = "10 Year";
+                                    DateTime oneMonthBeforeDate = DateTime(
+                                        todayDate.year - 10,
+                                        todayDate.month,
+                                        todayDate.day - 7);
+                                    controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
                                   } else if (rollingPeriod[index] ==
                                       "15 Year") {
                                     controller.rollingPeriods.value = "15 Year";
+                                    DateTime oneMonthBeforeDate = DateTime(
+                                        todayDate.year - 15,
+                                        todayDate.month,
+                                        todayDate.day - 7);
+                                    controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
                                   } else {
-                                    controller.selectedRollingPeriod.value =
-                                        rollingPeriod[index];
+                                    controller.selectedRollingPeriod
+                                        .value = rollingPeriod[index];
                                   }
                                   rollingReturnCategoryList = [];
                                 },
@@ -1259,37 +1326,66 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                         controller.selectedRollingPeriod.value =
                                             rollingPeriod[index];
 
+                                        DateTime todayDate = DateTime.now();
+
                                         if (rollingPeriod[index] == "1 Month") {
-                                          controller.rollingPeriods.value =
-                                              "1 Month";
-                                        } else if (rollingPeriod[index] ==
-                                            "1 Year") {
-                                          controller.rollingPeriods.value =
-                                              "1 Year";
-                                        } else if (rollingPeriod[index] ==
-                                            "2 Year") {
-                                          controller.rollingPeriods.value =
-                                              "2 Year";
-                                        } else if (rollingPeriod[index] ==
-                                            "3 Year") {
-                                          controller.rollingPeriods.value =
-                                              "3 Year";
-                                        } else if (rollingPeriod[index] ==
-                                            "5 Year") {
-                                          controller.rollingPeriods.value =
-                                              "5 Year";
-                                        } else if (rollingPeriod[index] ==
-                                            "7 Year") {
-                                          controller.rollingPeriods.value =
-                                              "7 Year";
+                                          controller.rollingPeriods.value = "1 Month";
+                                          DateTime oneMonthBeforeDate = DateTime(
+                                              todayDate.year,
+                                              todayDate.month - 1,
+                                              todayDate.day - 7);
+                                          controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
+                                        } else if (rollingPeriod[index] == "1 Year") {
+                                          controller.rollingPeriods.value = "1 Year";
+                                          DateTime oneMonthBeforeDate = DateTime(
+                                              todayDate.year - 1,
+                                              todayDate.month,
+                                              todayDate.day - 7);
+                                          controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
+                                        } else if (rollingPeriod[index] == "2 Year") {
+                                          controller.rollingPeriods.value = "2 Year";
+                                          DateTime oneMonthBeforeDate = DateTime(
+                                              todayDate.year - 2,
+                                              todayDate.month,
+                                              todayDate.day - 7);
+                                          controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
+                                        } else if (rollingPeriod[index] == "3 Year") {
+                                          controller.rollingPeriods.value = "3 Year";
+                                          DateTime oneMonthBeforeDate = DateTime(
+                                              todayDate.year - 3,
+                                              todayDate.month,
+                                              todayDate.day - 7);
+                                          controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
+                                        } else if (rollingPeriod[index] == "5 Year") {
+                                          controller.rollingPeriods.value = "5 Year";
+                                          DateTime oneMonthBeforeDate = DateTime(
+                                              todayDate.year - 5,
+                                              todayDate.month,
+                                              todayDate.day - 7);
+                                          controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
+                                        } else if (rollingPeriod[index] == "7 Year") {
+                                          controller.rollingPeriods.value = "7 Year";
+                                          DateTime oneMonthBeforeDate = DateTime(
+                                              todayDate.year - 7,
+                                              todayDate.month,
+                                              todayDate.day - 7);
+                                          controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
                                         } else if (rollingPeriod[index] ==
                                             "10 Year") {
-                                          controller.rollingPeriods.value =
-                                              "10 Year";
+                                          controller.rollingPeriods.value = "10 Year";
+                                          DateTime oneMonthBeforeDate = DateTime(
+                                              todayDate.year - 10,
+                                              todayDate.month,
+                                              todayDate.day - 7);
+                                          controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
                                         } else if (rollingPeriod[index] ==
                                             "15 Year") {
-                                          controller.rollingPeriods.value =
-                                              "15 Year";
+                                          controller.rollingPeriods.value = "15 Year";
+                                          DateTime oneMonthBeforeDate = DateTime(
+                                              todayDate.year - 15,
+                                              todayDate.month,
+                                              todayDate.day - 7);
+                                          controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
                                         } else {
                                           controller.selectedRollingPeriod
                                               .value = rollingPeriod[index];
@@ -1362,7 +1458,6 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                     temp['name'];
                                 subCategoryList = [];
                                 await getCategoryList();
-                                // await getTopLumpsumFunds();
                                 EasyLoading.dismiss();
                                 bottomState(() {});
                               },
@@ -1382,12 +1477,23 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                         onTap: () async {
                           controller.selectedSubCategory.value =
                               subCategoryList[index];
-                          // rollingReturnCategoryList = [];
+                          categoriesList = [];
+                          controller.schemes.value = '';
                           bottomState(() {});
                           EasyLoading.show();
-                          // fundList = [];
-                          // await getTopLumpsumFunds();
-                          // await getRollingReturnsVsCategory();
+                          controller.selectedFund.value =
+                          "1 Fund Selected";
+                          await autoSuggestAllMfSchemesShortNames();
+                          controller.selectedValues.value = '';
+                          if (categoriesList.isNotEmpty) {
+                            setState(() {
+                              controller.schemes.value =
+                              categoriesList[0]['scheme_amfi'];
+                              controller.selectedValues.value =
+                              categoriesList[0]['scheme_amfi'];
+                            });
+                          }
+                          bottomState(() {});
                           EasyLoading.dismiss();
 
                           Get.back();
@@ -1404,21 +1510,21 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                   EasyLoading.show();
                                   controller.selectedSubCategory.value =
                                       subCategoryList[index];
+                                  categoriesList = [];
+                                  controller.schemes.value = '';
                                   controller.selectedFund.value =
-                                      "1 Fund Selected";
-                                  // fundList = [];
-                                  // rollingReturnCategoryList = [];
+                                  "1 Fund Selected";
                                   bottomState(() {});
-                                  // await getTopLumpsumFunds();
-                                  if (fundList.isNotEmpty) {
+                                  await autoSuggestAllMfSchemesShortNames();
+                                  controller.selectedValues.value = '';
+                                  if (categoriesList.isNotEmpty) {
                                     setState(() {
                                       controller.schemes.value =
-                                          fundList[0]['scheme_amfi'];
+                                      categoriesList[0]['scheme_amfi'];
                                       controller.selectedValues.value =
-                                          fundList[0]['scheme_amfi'];
+                                      categoriesList[0]['scheme_amfi'];
                                     });
                                   }
-                                  // await getRollingReturnsVsCategory();
                                   Get.back();
                                   EasyLoading.dismiss();
                                   setState(() {});
@@ -1447,18 +1553,17 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
   }
 
   showSchemeBottomSheet() {
-    List<bool> isSelectedList = List.filled(fundList.length, false);
-    List<String> selectedSchemes = List.filled(fundList.length, '');
-    List<Map<String, dynamic>> selectedFundDetails = [];
+    List<bool> isSelectedList = List.filled(categoriesList.length, false);
+    List<String> selectedSchemes = List.filled(categoriesList.length, '');
+
 
     TextEditingController searchController = TextEditingController();
     if (controller.selectedValues.value.isNotEmpty) {
       List<String> selectedItems = controller.selectedValues.value.split(',');
-      for (int i = 0; i < fundList.length; i++) {
-        if (selectedItems.contains(fundList[i]['scheme_amfi'])) {
+      for (int i = 0; i < categoriesList.length; i++) {
+        if (selectedItems.contains(categoriesList[i]['scheme_amfi'])) {
           isSelectedList[i] = true;
-          selectedSchemes[i] = fundList[i]['scheme_amfi'];
-          selectedFundDetails.add(fundList[i]);
+          selectedSchemes[i] = categoriesList[i]['scheme_amfi'];
         }
       }
     }
@@ -1474,6 +1579,16 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
       ),
       builder: (context) {
         return StatefulBuilder(builder: (_, bottomState) {
+          List<Map<String, dynamic>> selectedFundDetails = [];
+          for (int i = 0; i < isSelectedList.length; i++) {
+            if (isSelectedList[i]) {
+              selectedFundDetails.add({
+                'index': i,
+                'scheme': categoriesList[i]['scheme_amfi_short_name'],
+                'scheme_amfi': categoriesList[i]['scheme_amfi']
+              });
+            }
+          }
           return Container(
             height: devHeight * 0.82,
             padding: EdgeInsets.all(7),
@@ -1503,11 +1618,8 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                         controller.schemes.value =
                             controller.selectedValues.value;
                         controller.selectedFund.value =
-                            "${selectedItems.length} ${selectedItems.length > 1 ? "Funds" : "Fund"} Selected";
-                        // rollingReturnCategoryList = [];
-                        // bottomState(() {});
-                        // await getRollingReturnsVsCategory();
-                        // setState(() {});
+                        "${selectedItems.length} Funds Selected";
+
                         Get.back();
                         EasyLoading.dismiss();
                       },
@@ -1526,73 +1638,59 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                   ],
                 ),
                 Divider(),
+
                 if (selectedFundDetails.isNotEmpty) ...[
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Text(
-                      //   "Selected Schemes",
-                      //   style: TextStyle(
-                      //     fontWeight: FontWeight.bold,
-                      //     color: Config.appTheme.themeColor,
-                      //   ),
-                      // ),
-                      SizedBox(height: 8),
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: selectedFundDetails.map((fund) {
-                          return Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 6),
-                            decoration: BoxDecoration(
-                              color:
-                                  Config.appTheme.themeColor.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: Config.appTheme.themeColor,
-                                width: 1,
+                      Container(
+                        height: 50,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: selectedFundDetails.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Config.appTheme.themeColor.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: Config.appTheme.themeColor,
+                                ),
                               ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    fund['scheme_amfi_short_name'],
-                                    style: TextStyle(
-                                      color: Config.appTheme.themeColor,
-                                      fontSize: 14,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      selectedFundDetails[index]['scheme'],
+                                      style: TextStyle(
+                                        color: Config.appTheme.themeColor,
+                                        fontSize: 12,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(width: 4),
-                                GestureDetector(
-                                  onTap: () {
-                                    bottomState(() {
-                                      int index = fundList.indexWhere(
-                                          (element) =>
-                                              element['scheme_amfi'] ==
-                                              fund['scheme_amfi']);
-                                      if (index != -1) {
-                                        isSelectedList[index] = false;
-                                        selectedSchemes[index] = '';
-                                        selectedFundDetails.remove(fund);
-                                      }
-                                    });
-                                  },
-                                  child: Icon(
-                                    Icons.close,
-                                    size: 16,
-                                    color: Config.appTheme.themeColor,
+                                  SizedBox(width: 4),
+                                  InkWell(
+                                    onTap: () {
+                                      bottomState(() {
+                                        int originalIndex = selectedFundDetails[index]['index'];
+                                        isSelectedList[originalIndex] = false;
+                                        selectedSchemes[originalIndex] = '';
+                                      });
+                                    },
+                                    child: Icon(
+                                      Icons.close,
+                                      size: 16,
+                                      color: Config.appTheme.themeColor,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                      SizedBox(height: 8),
                     ],
                   ),
                   Divider(),
@@ -1627,29 +1725,28 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: fundList.length,
+                    itemCount: categoriesList.length,
                     itemBuilder: (context, index) {
                       if (searchController.text.isNotEmpty &&
-                          !fundList[index]['scheme_amfi_short_name']
+                          !categoriesList[index]['scheme_amfi_short_name']
                               .toLowerCase()
                               .contains(searchController.text.toLowerCase())) {
                         return SizedBox.shrink();
                       }
                       return CheckboxListTile(
                         controlAffinity: ListTileControlAffinity.leading,
-                        title: Text(fundList[index]['scheme_amfi_short_name']),
+                        title: Text(categoriesList[index]['scheme_amfi_short_name']),
                         value: isSelectedList[index],
                         onChanged: (bool? value) {
                           bottomState(() {
                             if (value == true) {
                               if (isSelectedList
-                                      .where((element) => element == true)
-                                      .length <=
+                                  .where((element) => element == true)
+                                  .length <=
                                   4) {
                                 isSelectedList[index] = value!;
                                 selectedSchemes[index] =
-                                    fundList[index]['scheme_amfi'];
-                                selectedFundDetails.add(fundList[index]);
+                                fundList[index]['scheme_amfi'];
                               } else {
                                 isSelectedList[index] = false;
                                 Utils.showError(
@@ -1658,9 +1755,6 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                             } else {
                               isSelectedList[index] = value!;
                               selectedSchemes[index] = '';
-                              selectedFundDetails.removeWhere((element) =>
-                                  element['scheme_amfi'] ==
-                                  fundList[index]['scheme_amfi']);
                             }
                           });
                         },
@@ -1965,18 +2059,40 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
   }
 
   void showDatePickerDialog(BuildContext context) async {
+    String period = controller.rollingPeriods.value;
+
+    DateTime now = DateTime.now();
+    DateTime lastDate = now;
+
+    if (period.contains("Year")) {
+      int years = int.parse(period.split(" ")[0]);
+      lastDate = DateTime(now.year - years, now.month, now.day).subtract(Duration(days: 7));
+    } else if (period.contains("Month")) {
+      int months = int.parse(period.split(" ")[0]);
+      int targetMonth = now.month - months;
+      int targetYear = now.year;
+
+      while (targetMonth <= 0) {
+        targetMonth += 12;
+        targetYear -= 1;
+      }
+
+      lastDate = DateTime(targetYear, targetMonth, now.day).subtract(Duration(days: 7));
+    }
+
+
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: convertStrToDt(controller.startDate.value),
       firstDate: DateTime(1947),
-      lastDate: DateTime.now(),
+      lastDate: lastDate,
     );
+
     if (pickedDate != null) {
       EasyLoading.show();
       String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
 
       startDateController.text = formattedDate;
-      controller.startDate.value = formattedDate;
       controller.startDate.value = formattedDate;
       rollingReturnCategoryList = [];
       // await getRollingReturnsVsCategory();
@@ -1984,11 +2100,14 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
       EasyLoading.dismiss();
     }
   }
+
 }
 
 class RollingReturnsController extends GetxController {
   var startDate = "26-04-2020".obs;
   final selectedRadioIndex = RxInt(-1);
+
+
 
   // var selectedFund = "ICICI Pru BlueChip Gr".obs;
   // var scheme = "ICICI Pru BlueChip Gr".obs;
@@ -2016,10 +2135,18 @@ class RollingReturnsController extends GetxController {
     shouldRefresh.value = true;
   }
 
+  @override
+  void onClose() {
+    // selectedFundDetails.clear();
+    // stpAmountController.dispose();
+    super.onClose();
+  }
+
   void selectScheme(String schemeName, int index) {
     if (isProcessingSelection.value) return;
 
     _debouncer.run(() {
+
       isProcessingSelection.value = true;
       selectedRadioIndex.value = index;
       selectedFund.value = schemeName;

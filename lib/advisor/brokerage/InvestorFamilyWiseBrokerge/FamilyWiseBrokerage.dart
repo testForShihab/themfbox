@@ -247,7 +247,9 @@ class _FamilyWiseBrokerageState extends State<FamilyWiseBrokerage> {
       return Expanded(
         child: SingleChildScrollView(
           controller: scrollController,
-          child: ListView.separated(
+          child: (isLoading)
+              ? Utils.shimmerWidget(devHeight)
+              :  ListView.separated(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemCount: list.length,
@@ -377,7 +379,7 @@ class _FamilyWiseBrokerageState extends State<FamilyWiseBrokerage> {
                                     r2: ""),
                                 children: [
                                   SizedBox(
-                                    height: schemeList.length * 75,
+                                    height: schemeList.length * 60,
                                     child: ListView.separated(
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),

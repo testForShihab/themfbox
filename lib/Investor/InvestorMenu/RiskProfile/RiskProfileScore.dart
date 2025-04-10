@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get_storage/get_storage.dart';
@@ -9,6 +10,8 @@ import 'package:mymfbox2_0/rp_widgets/SideBar.dart';
 import 'package:mymfbox2_0/utils/AppFonts.dart';
 import 'package:mymfbox2_0/utils/Config.dart';
 import '../../../api/InvestorApi.dart';
+import '../../../api/ReportApi.dart';
+import '../../../utils/Utils.dart';
 
 class RiskProfileScore extends StatefulWidget {
   final String responsemsg;
@@ -47,6 +50,7 @@ class _RiskProfileScoreState extends State<RiskProfileScore> {
   @override
   Widget build(BuildContext context) {
     devHeight = MediaQuery.sizeOf(context).height;
+    double devWidth = MediaQuery.sizeOf(context).width;
     var msg = widget.responsemsg;
     return FutureBuilder(
         future: getDatas(),
@@ -99,15 +103,65 @@ class _RiskProfileScoreState extends State<RiskProfileScore> {
                               )),
                         ),
                         SizedBox(height: 25),
-                        SizedBox(
-                            width: 195,
-                            child: RpFilledButton(
-                              onPressed: () {
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                            width: devWidth* 0.2,
+                            child: InkWell(
+                              onTap: () {
                                 Get.to(InvestorDashboard());
                               },
-                              text: "Home",
-                              padding: EdgeInsets.symmetric(vertical: 10),
-                            )),
+                              child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 8.1),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: Config.appTheme.themeColor,width: 1.8,)
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                        "Home",
+                                        textAlign: TextAlign.center,
+                                        style: AppFonts.f50014Black.copyWith(color:Config.appTheme.themeColor ,fontSize: 14,),
+                                      ))),
+                            ),
+                                                  ),
+                            SizedBox(width: 15),
+                            SizedBox(
+                              width: devWidth* 0.4,
+                              child: InkWell(
+                                onTap: () async {
+                                  EasyLoading.show();
+                                  Map data = await ReportApi.downloadRiskProfilePdf(
+                                    user_id: user_id,
+                                    client_name: client_name,
+                                  );
+                                  if (data['status'] != 200) {
+                                    Utils.showError(context, data['msg']);
+                                    return;
+                                  }
+                                  EasyLoading.dismiss();
+                                  // Get.back();
+                                  rpDownloadFile(
+                                      url: data['msg'], context: context, index: 1);
+                                  setState(() {});
+                                },
+                                child: Container(
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                    decoration: BoxDecoration(
+                                        color: Config.appTheme.themeColor,
+                                        borderRadius: BorderRadius.circular(10)),
+                                    child: Center(
+                                        child: Text(
+                                          "Download Report",
+                                          textAlign: TextAlign.center,
+                                          style: AppFonts.f50014Black.copyWith(color: Colors.white,fontSize: 14,),
+                                        ))),
+                              ),
+                            ),
+                          ],
+                        ),
                         SizedBox(height: devHeight * 0.2),
                       ],
                     ),

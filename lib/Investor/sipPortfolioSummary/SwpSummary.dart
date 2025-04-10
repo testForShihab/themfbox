@@ -214,12 +214,12 @@ class _SwpSummaryState extends State<SwpSummary> {
                       lSubHead: "$rupee ${Utils.formatNumber(swpList['unrealised_gain'])}",
                       rhead: "Realised Gain",
                       rSubHead: "$rupee ${Utils.formatNumber(swpList['realised_gain'])}",
-                      chead: "Abs Rtn(%)",
+                      chead: "Abs Rtn (%)",
                       cSubHead: Utils.formatNumber(swpList['absolute_return'])),
 
                   SizedBox(height: 16,),
                   rpRow(
-                      lhead: "XIRR(%)",
+                      lhead: "XIRR (%)",
                       lSubHead: Utils.formatNumber(swpList['xirr']),
                       rhead: (userData.oneDayChange == 1 || ((keys.contains("adminAsInvestor")) || (keys.contains("adminAsFamily")) != false))
                           ? "1 Day Change" : " ",

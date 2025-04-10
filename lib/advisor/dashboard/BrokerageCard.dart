@@ -17,6 +17,7 @@ class BrokerageCard extends StatelessWidget {
     this.extraWidgets = const [],
     this.hasArrow = true,
     this.hasTitle = true,
+    this.titleArrow = true,
     this.lHeadonTap,
     this.rHeadonTap,
   });
@@ -29,6 +30,7 @@ class BrokerageCard extends StatelessWidget {
   final bool hasTitle;
   final Function()? lHeadonTap;
   final Function()? rHeadonTap;
+  final bool titleArrow;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +78,7 @@ class BrokerageCard extends StatelessWidget {
                           children: [
                             Text("$lSubHead", style: AppFonts.f50014Grey),
                             SizedBox(width: 5), // Add spacing between text and icon
-                            Icon(Icons.arrow_forward, size: 14, color: Colors.black),
+                            if (titleArrow)  Icon(Icons.arrow_forward, size: 14, color: Colors.black),
                           ],
                         ),
                       ],
@@ -99,7 +101,7 @@ class BrokerageCard extends StatelessWidget {
                          children: [
                            Text("$rSubHead", style: AppFonts.f50014Grey),
                            SizedBox(width: 5), // Add spacing between text and icon
-                           Icon(Icons.arrow_forward, size: 14, color: Colors.black),
+                           if (titleArrow) Icon(Icons.arrow_forward, size: 14, color: Colors.black),
                          ],
                        ),
                      ],

@@ -718,6 +718,23 @@ class ReportApi {
     return data;
   }
 
+  static Future downloadRiskProfilePdf({
+    required int user_id,
+    required String client_name,
+  }) async {
+
+    String url =
+        "${ApiConfig.apiUrl}/investor/common/downloadRiskProfilePdf?key=${ApiConfig.apiKey}"
+        "&user_id=$user_id&client_name=$client_name";
+    print("downloadRiskProfilePdf url = $url");
+
+    http.Response response = await http.post(Uri.parse(url));
+    Map data = jsonDecode(response.body);
+
+    print("downloadRiskProfilePdf response = $data");
+    return data;
+  }
+
   static Future familyCurrentPortfolio({
     required int user_id,
     required String client_name,

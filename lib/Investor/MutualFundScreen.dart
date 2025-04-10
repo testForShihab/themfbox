@@ -1264,13 +1264,13 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
                       rhead: "Realised Gain",
                       rSubHead:
                           "$rupee ${Utils.formatNumber(scheme.realisedProfitLoss)}",
-                      chead: "Abs Rtn(%)",
+                      chead: "Abs Rtn (%)",
                       cSubHead: Utils.formatNumber(scheme.absoluteReturn)),
                   SizedBox(
                     height: 16,
                   ),
                   rpRow(
-                      lhead: "XIRR(%)",
+                      lhead: "XIRR (%)",
                       lSubHead: Utils.formatNumber(scheme.xirr),
                       rhead: (userData.oneDayChange == 1 ||
                               ((keys.contains("adminAsInvestor")) ||

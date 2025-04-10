@@ -423,13 +423,13 @@ class _FamilyCurrentPortfolioState extends State<FamilyCurrentPortfolio> {
                       rhead: "Realised Gain",
                       rSubHead:
                           "$rupee ${Utils.formatNumber(realisedProfitLoss)}",
-                      chead: "Abs Rtn(%)",
+                      chead: "Abs Rtn (%)",
                       cSubHead: Utils.formatNumber(absoluteReturn)),
                   SizedBox(
                     height: 16,
                   ),
                   rpRow(
-                      lhead: "XIRR(%)",
+                      lhead: "XIRR (%)",
                       lSubHead: Utils.formatNumber(xirr),
                       rhead: "",
                       rSubHead: '',

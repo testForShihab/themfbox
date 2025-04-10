@@ -242,12 +242,12 @@ class _SipSummaryState extends State<SipSummary> {
                         lSubHead: "$rupee ${Utils.formatNumber(scheme['unrealisedProfitLoss']) }",
                         rhead: "Realised Gain",
                         rSubHead: "$rupee ${Utils.formatNumber(scheme['realisedProfitLoss'])}",
-                        chead: "Abs Rtn(%)",
+                        chead: "Abs Rtn (%)",
                         cSubHead: Utils.formatNumber(scheme['absolute_return'])),
 
                     SizedBox(height: 16,),
                     rpRow(
-                        lhead: "XIRR(%)",
+                        lhead: "XIRR (%)",
                         lSubHead: Utils.formatNumber(scheme['xirr']),
                         rhead: (userData.oneDayChange == 1 || ((keys.contains("adminAsInvestor")) || (keys.contains("adminAsFamily")) != false)) ? "1 Day Change" : " ",
                         rSubHead: (userData.oneDayChange == 1 || ((keys.contains("adminAsInvestor")) || (keys.contains("adminAsFamily")) != false)) ? "$rupee ${Utils.formatNumber(scheme['day_change_value'])}" : " " ,titleStyle: AppFonts.f40014,

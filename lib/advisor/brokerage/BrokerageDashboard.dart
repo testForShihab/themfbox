@@ -400,6 +400,7 @@ class _BrokerageDashboardState extends State<BrokerageDashboard> {
         rSubHead: "Current FY",
         padding: EdgeInsets.zero,
         hasArrow: false,
+        titleArrow: false,
       );
     });
   }

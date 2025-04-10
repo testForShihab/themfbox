@@ -382,7 +382,7 @@ class _PortfolioAnalysisReportState extends State<PortfolioAnalysisReport> {
                     textAlign: TextAlign.end,
                     style: AppFonts.f40013
                         .copyWith(color: Config.appTheme.lineColor)),
-                Text("XIRR(%)",
+                Text("XIRR (%)",
                     textAlign: TextAlign.end,
                     style: AppFonts.f40013
                         .copyWith(color: Config.appTheme.lineColor)),

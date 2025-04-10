@@ -644,7 +644,9 @@ class _AmcWiseBrokerageState extends State<AmcWiseBrokerage> {
               chartBottomSheet(amcName: amcName, logo: logo, amount: amount);
             }
           : null,
-      child: Padding(
+      child: (isLoading)
+          ? Utils.shimmerWidget(devHeight)
+          : Padding(
         padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
         child: Row(
           children: [

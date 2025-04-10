@@ -47,6 +47,24 @@ class ResearchApi {
     return data;
   }
 
+
+  static Future autoSuggestAllMfSchemesShortNames(
+      {required int userId,
+      required String category,
+      required String clientName}) async {
+
+    String url =
+        "${ApiConfig.apiUrl}/mfresearch/autoSuggestAllMfSchemesShortNames?&key=${ApiConfig.apiKey}"
+        "&user_id=$userId&client_name=$clientName&category=$category";
+
+    print("autoSuggestAllMfSchemesShortNames url = $url");
+    http.Response response = await http.post(Uri.parse(url));
+    Map data = jsonDecode(response.body);
+    print("autoSuggestAllMfSchemesShortNames Response = $data");
+    return data;
+  }
+
+
   static Future getRollingReturnsVsBenchmark(
       {required String scheme_name,
       required String start_date,

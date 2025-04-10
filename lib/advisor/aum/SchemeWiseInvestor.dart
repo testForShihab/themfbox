@@ -232,6 +232,7 @@ class _SchemeWiseInvestorState extends State<SchemeWiseInvestor> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       l1: name,
+
                       l2: branch,
                       r1: "$rupee ${Utils.formatNumber(aum, isAmount: true)}",
                       r2: "${returns.toStringAsFixed(2)} %",
@@ -279,7 +280,7 @@ class _SchemeWiseInvestorState extends State<SchemeWiseInvestor> {
                 },
                 separatorBuilder: (context, index) {
                   return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(horizontal: 8),
                     child: Divider(height: 0),
                   );
                 },
@@ -781,8 +782,8 @@ class _SchemeWiseInvestorState extends State<SchemeWiseInvestor> {
                             trailing:
                                 Icon(Icons.arrow_forward, color: Colors.white),
                             bgColor: Config.appTheme.themeColor),
-                        SizedBox(height: 15),
-                        Row(
+                       // SizedBox(height: 15),
+                       /* Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             GestureDetector(
@@ -874,11 +875,11 @@ class _SchemeWiseInvestorState extends State<SchemeWiseInvestor> {
                                 },
                                 child: button("Email Portfolio")),
                           ],
-                        ),
+                        ),*/
                       ],
                     ),
                   ),
-                  SizedBox(height: 20),
+                 // SizedBox(height: 20),
                 ],
               ),
             ),

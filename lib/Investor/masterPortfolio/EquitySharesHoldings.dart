@@ -300,9 +300,9 @@ class _EquitySharesHoldingsState extends State<EquitySharesHoldings> {
                               rpRow(
                                   lhead: 'Gain/Loss',
                                   lSubHead: Utils.formatNumber(equityList.unReliasedProfitLoss?.toInt()),
-                                  rhead: 'Abs Rtn(%)',
+                                  rhead: 'Abs Rtn (%)',
                                   rSubHead: '${rupee} ${Utils.formatNumber(equityList.unReliasedProfitLoss?.toInt())}',
-                                  chead: 'XIRR(%)',
+                                  chead: 'XIRR (%)',
                                   cSubHead: '${equityList.xirrValue}'),
                             ]),
                       ),

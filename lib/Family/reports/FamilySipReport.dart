@@ -366,7 +366,7 @@ class _FamilySipReportState extends State<FamilySipReport> {
                       alignment: CrossAxisAlignment.center,
                     ),
                     ColumnText(
-                      title: "XIRR(%)",
+                      title: "XIRR (%)",
                       value: "$returns",
                       alignment: CrossAxisAlignment.end,
                     ),
@@ -468,7 +468,7 @@ class _FamilySipReportState extends State<FamilySipReport> {
                 alignment: CrossAxisAlignment.center,
               ),
               ColumnText(
-                title: "XIRR(%)",
+                title: "XIRR (%)",
                 value: "$returns",
                 alignment: CrossAxisAlignment.end,
               ),

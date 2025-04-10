@@ -212,12 +212,12 @@ class _StpSummaryState extends State<StpSummary> {
                       lSubHead: "$rupee ${Utils.formatNumber(stpList['unrealised_gain'])}",
                       rhead: "Realised Gain",
                       rSubHead: "$rupee ${Utils.formatNumber(stpList['realised_gain'])}",
-                      chead: "Abs Rtn(%)",
+                      chead: "Abs Rtn (%)",
                       cSubHead: Utils.formatNumber(stpList['absolute_return'])),
 
                   SizedBox(height: 16,),
                   rpRow(
-                      lhead: "XIRR(%)",
+                      lhead: "XIRR (%)",
                       lSubHead: Utils.formatNumber(stpList['xirr']),
                       rhead: (userData.oneDayChange == 1 || ((keys.contains("adminAsInvestor")) || (keys.contains("adminAsFamily")) != false))
                           ? "1 Day Change" : " ",

@@ -57,7 +57,6 @@ class _AumDetailsState extends State<AumDetails> {
     "Moderate": Color(0xFFFFD507),
     "Low to Moderate": Color(0xffBDD527),
     "Low": Color(0xff5EC214),
-    "NA": Colors.blueGrey,
   };
 
   List broadCategoryList = [];
@@ -537,8 +536,7 @@ class _AumDetailsState extends State<AumDetails> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(title,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
+                                    style: cardHeadingSmall),
                                 Text("${percent.toStringAsFixed(2)} %",
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold))
@@ -706,6 +704,28 @@ class _AumDetailsState extends State<AumDetails> {
   }
 
   Widget riskAum({required String title}) {
+
+    Map<String, int> riskPriority = {
+      "Very High": 1,
+      "High": 2,
+      "Moderately High": 3,
+      "Moderate": 4,
+      "Low to Moderate": 5,
+      "Low": 6,
+    };
+
+
+
+    riskData.clear();
+
+    // Sort the selectedRiskList based on the custom priority order
+    selectedRiskList.sort((a, b) {
+      int priorityA = riskPriority[a['risk']] ?? 6; // Default to 7 if not found
+      int priorityB = riskPriority[b['risk']] ?? 6; // Default to 7 if not found
+
+      return priorityA.compareTo(priorityB);
+    });
+
     for (var element in selectedRiskList) {
       riskData.add(RiskWiseAumPojo.fromJson(element));
     }
@@ -730,13 +750,14 @@ class _AumDetailsState extends State<AumDetails> {
             Padding(
               padding: EdgeInsets.only(right: 16),
               child: ListView.separated(
-                itemCount: (riskData.length > 7) ? 7 : riskData.length,
+                itemCount: (riskData.length > 6) ? 6 : riskData.length,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   RiskWiseAumPojo risk = riskData[index];
                   String key = riskColors.keys.elementAt(index);
 
+                  String riskName = risk.risk ?? "";
                   num amount = risk.aumAmount ?? 0;
                   num percentage = risk.returns ?? 0;
 
@@ -748,6 +769,7 @@ class _AumDetailsState extends State<AumDetails> {
                     child: Padding(
                       padding: EdgeInsets.only(bottom: 6, top: 6),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CircleAvatar(
                             backgroundColor: riskColors[key],
@@ -756,12 +778,13 @@ class _AumDetailsState extends State<AumDetails> {
                           SizedBox(width: 10),
                           SizedBox(
                               width: 120,
-                              child: Text(key, style: cardHeadingSmall)),
+                              child: Text(riskName, style: cardHeadingSmall)),
                           SizedBox(width: 8),
                           Expanded(
                             child: Text(
                               "$rupee ${Utils.formatNumber(amount, isAmount: true)} (${percentage.toStringAsFixed(2)}%)",
                               style: cardHeadingSmall,
+                              textAlign: TextAlign.end,
                             ),
                           ),
                           SizedBox(width: 5),
@@ -903,6 +926,7 @@ class _AumDetailsState extends State<AumDetails> {
     }
 
   Widget topAmc({required String title}) {
+    topAmcListPojo.clear();
     for (var element in topAmcList) {
       topAmcListPojo.add(AmcWiseAumPojo.fromJson(element));
     }

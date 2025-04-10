@@ -1538,7 +1538,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                           style: TextStyle(
                               color: Config.appTheme.themeColor,
                               fontWeight: FontWeight.w700,
-                              fontSize: 32),
+                              fontSize: 25),
                         ),
                         Text(
                           "As on ${Utils.getFormattedDate()}",
@@ -1654,7 +1654,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
           Text(
             "$rupee ${Utils.formatNumber(mutualFund.mutualFundCurrentValue)}",
             style: AppFonts.f70024
-                .copyWith(fontSize: 32, color: Config.appTheme.themeColor),
+                .copyWith(fontSize: 25, color: Config.appTheme.themeColor),
           ),
           if (userData.oneDayChange == 1 ||
               ((keys.contains("adminAsInvestor")) ||

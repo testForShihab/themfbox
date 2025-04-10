@@ -250,7 +250,7 @@ class _TopSipFundsState extends State<TopSipFunds> {
                               Icon(Icons.keyboard_arrow_down,
                                   color: Config.appTheme.themeColor)),
                         ),
-                       /* GestureDetector(
+                        /* GestureDetector(
                           onTap: () {
                             showPlanBottomSheet();
                           },
@@ -292,7 +292,7 @@ class _TopSipFundsState extends State<TopSipFunds> {
                         ),
                       ],
                     ),
-                  /*  SizedBox(height: 16),
+                    /*  SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -324,10 +324,10 @@ class _TopSipFundsState extends State<TopSipFunds> {
                   children: [
                     displayPage(),
                     //displayPage(),
-                   // displayPage(),
-                   // displayPage(),
+                    // displayPage(),
+                    // displayPage(),
                     //displayPage(),
-                   // displayPage(),
+                    // displayPage(),
                   ]),
             ),
           );
@@ -403,8 +403,7 @@ class _TopSipFundsState extends State<TopSipFunds> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Text(
-                    data['title'] ,
+                child: Text(data['title'],
                     // == 'Category Average'
                     // ? selectedSubCategory
                     // : data['title'],
@@ -964,9 +963,13 @@ class _TopSipFundsState extends State<TopSipFunds> {
                     title: "$schemeShortName",
                     value: "Launch Date : ${fund.schemeInceptionDate}",
                     valueStyle: AppFonts.f40013.copyWith(fontSize: 12),
-                    titleStyle: AppFonts.f40016.copyWith(fontWeight: FontWeight.bold,fontSize: 14,color: Colors.black),),
+                    titleStyle: AppFonts.f40016.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: Colors.black),
+                  ),
 
-                /*  Spacer(),
+                  /*  Spacer(),
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
                     decoration: BoxDecoration(
@@ -991,24 +994,27 @@ class _TopSipFundsState extends State<TopSipFunds> {
               child: Column(
                 children: [
                   rpRow(
-                      lhead: "AUM (Cr)",
-                      lSubHead: "$rupee ${Utils.formatNumber(aum)}",
-                      rhead: "TER (%)",
-                      rSubHead:  "${fund.ter ?? 0}",
-                      chead: "Invested Amount",
-                      cSubHead: Utils.formatNumber((fund.investedAmount ?? 0).round()),),
+                    lhead: "AUM (Cr)",
+                    lSubHead: "$rupee ${Utils.formatNumber(aum)}",
+                    rhead: "TER (%)",
+                    rSubHead: "${fund.ter ?? 0}",
+                    chead: "INV Amount",
+                    cSubHead:
+                        Utils.formatNumber((fund.investedAmount ?? 0).round()),
+                  ),
                   DottedLine(verticalPadding: 8),
                   rpRow(
-                    lhead: "Current Value",
-                    lSubHead: Utils.formatNumber((fund.currentValue ?? 0).round()),
-                    rhead: "Returns (%)",
-                    rSubHead:  "${(returnsAbs == 0) ? "-" : returnsAbs}",
+                      lhead: "Current Value",
+                      lSubHead:
+                          Utils.formatNumber((fund.currentValue ?? 0).round()),
+                      rhead: "Returns (%)",
+                      rSubHead: "${(returnsAbs == 0) ? "-" : returnsAbs}",
                       valueStyle: AppFonts.f50014Theme.copyWith(
                           color: (returnsAbs > 0)
                               ? Config.appTheme.defaultProfit
                               : Config.appTheme.defaultLoss),
-                    chead: "",
-                    cSubHead: ""),
+                      chead: "",
+                      cSubHead: ""),
                 ],
               ),
             ),
@@ -1090,6 +1096,7 @@ class _TopSipFundsState extends State<TopSipFunds> {
       ),
     );
   }
+
   Widget rpRow({
     required String lhead,
     required String lSubHead,
@@ -1110,12 +1117,12 @@ class _TopSipFundsState extends State<TopSipFunds> {
                 alignment: CrossAxisAlignment.start)),
         Expanded(
             child: ColumnText(
-              title: rhead,
-              value: rSubHead,
-              alignment: CrossAxisAlignment.center,
-              valueStyle: valueStyle,
-              titleStyle: titleStyle,
-            )),
+          title: rhead,
+          value: rSubHead,
+          alignment: CrossAxisAlignment.center,
+          valueStyle: valueStyle,
+          titleStyle: titleStyle,
+        )),
         Expanded(
             child: ColumnText(
                 title: chead,
