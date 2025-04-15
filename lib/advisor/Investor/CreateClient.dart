@@ -702,10 +702,14 @@ class _CreateClientState extends State<CreateClient> {
                                   onChange: (val) => address3 = val,
                                 ),
                                 SizedBox(height: 16),
-                                if (rmList.isNotEmpty) rmExpansionTile(context),
-                                SizedBox(height: 16),
-                                subBrokerExpansionTile(context),
-                                SizedBox(height: 16),
+                                if (rmList.isNotEmpty) ...[
+                                  rmExpansionTile(context),
+                                  SizedBox(height: 16),
+                                ],
+                                if (subBrokerList.isNotEmpty) ...[
+                                  subBrokerExpansionTile(context),
+                                  SizedBox(height: 16),
+                                ],
                                 customerTypeTile(context),
                                 SizedBox(height: 16),
                                 clientStatusCard(context),
