@@ -485,7 +485,7 @@ class _SchemeInfoState extends State<SchemeInfo> {
                   SizedBox(height: 12),
 
                   Text(
-                    "Investment Objective & Documents",
+                    "Investment Objective",
                     style: AppFonts.f50014Black
                         .copyWith(color: Config.appTheme.readableGreyTitle),
                     textAlign: TextAlign.left,
@@ -626,7 +626,7 @@ class _SchemeInfoState extends State<SchemeInfo> {
     );
   }
 
-  String sectorHoldings = "Top Sectors";
+  String sectorHoldings = "Top 10 Sectors";
 
   Widget sectorHoldingsCard() {
     return Container(
@@ -646,19 +646,19 @@ class _SchemeInfoState extends State<SchemeInfo> {
               children: [
                 Expanded(
                     child: localAmcChip(
-                  value: "Top Sectors",
+                  value: "Top 10 Sectors",
                   groupValue: schemeInfoController.sectorHoldings.value,
                   onTap: () {
-                    schemeInfoController.updateSectorHoldings("Top Sectors");
+                    schemeInfoController.updateSectorHoldings("Top 10 Sectors");
                   },
                 )),
                 SizedBox(width: 16),
                 Expanded(
                     child: localAmcChip(
-                  value: "Top Holdings",
+                  value: "Top 10 Stocks",
                   groupValue: schemeInfoController.sectorHoldings.value,
                   onTap: () {
-                    schemeInfoController.updateSectorHoldings("Top Holdings");
+                    schemeInfoController.updateSectorHoldings("Top 10 Stocks");
                   },
                 ))
               ],
@@ -704,6 +704,11 @@ class _SchemeInfoState extends State<SchemeInfo> {
   Widget sectorHoldingsArea(String title) {
     double totalWidth = devWidth - 64;
     String key = schemeInfoController.getKeyFromTitle(title);
+    if(key == 'top_10_sectors'){
+      key = 'top_sectors';
+    }else{
+      key = 'top_holdings';
+    }
     List list = schemeInfoController.portfolioAnalysis[key] ?? [];
     if (list.isEmpty) return SizedBox();
 
@@ -722,8 +727,8 @@ class _SchemeInfoState extends State<SchemeInfo> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("$temp", style: AppFonts.f50014Black),
-                Text("$percentage %", style: AppFonts.f50014Black)
+                Expanded(child: Text("$temp", style: AppFonts.f40013)),
+                Text("$percentage %", style: AppFonts.f40013)
               ],
             ),
             PercentageBar(percentage, width: totalWidth)
@@ -1074,16 +1079,16 @@ class _SchemeInfoState extends State<SchemeInfo> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 8),
+               /* SizedBox(height: 8),
                 Text(
                   "Investment Objective",
                   style: AppFonts.f40013,
-                ),
+                ),*/
                 Text(
                   schemeInfoController.schemeObjective.value,
-                  style: AppFonts.f40016.copyWith(
+                  style: AppFonts.f40013.copyWith(
                     fontSize: 14,
-                    color: Config.appTheme.universalTitle,
+                    color:Colors.black,
                   ),
                   textAlign: TextAlign.justify,
                 ),
@@ -1293,7 +1298,7 @@ class _SchemeInfoState extends State<SchemeInfo> {
           ColumnText(
               title: "Invested",
               value: "$rupee ${Utils.formatNumber(amount, isAmount: true)}"),
-          roundedIcon("+"),
+          //roundedIcon("+"),
           ColumnText(
             title: "Profit/Loss",
             value: "$rupee ${Utils.formatNumber(profitLoss, isAmount: true)}",
@@ -1301,7 +1306,7 @@ class _SchemeInfoState extends State<SchemeInfo> {
                 .copyWith(color: Config.appTheme.defaultProfit),
             alignment: CrossAxisAlignment.center,
           ),
-          roundedIcon("="),
+          //roundedIcon("="),
           ColumnText(
             title: "Current Value",
             value: "$rupee ${Utils.formatNumber(currValue, isAmount: true)}",
@@ -1344,7 +1349,7 @@ class _SchemeInfoState extends State<SchemeInfo> {
           num percent = map['ann_growth'];
 
           num amount = map['current_value'];
-          title = Utils.getFirst13(title, count: 20);
+          //title = Utils.getFirst13(title, count: 20);
 
           print("title = ${title} ,amount = ${amount} , percent $percent");
 
@@ -1356,10 +1361,16 @@ class _SchemeInfoState extends State<SchemeInfo> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(title, style: AppFonts.f50014Black),
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: AppFonts.f40013,
+                        softWrap: true,
+                      ),
+                    ),
                     Text(
                       "$rupee ${Utils.formatNumber(amount)}",
-                      style: AppFonts.f50014Black,
+                      style: AppFonts.f40013,
                     ),
                   ],
                 ),
@@ -1469,7 +1480,7 @@ class _SchemeInfoState extends State<SchemeInfo> {
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: SizedBox(
-              height: devHeight * 0.60,
+              height: devHeight * 0.30,
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Container(
@@ -1508,6 +1519,16 @@ class _SchemeInfoState extends State<SchemeInfo> {
                               ),
                             ),
                           ),*/
+                          DataColumn(
+                            label: SizedBox(
+                              width: 100,
+                              child: Text(
+                                'Inception Date',
+                                style: TextStyle(color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
                           DataColumn(
                             label: SizedBox(
                               width: 50,
@@ -1562,8 +1583,7 @@ class _SchemeInfoState extends State<SchemeInfo> {
                         rows: List<DataRow>.generate(
                             schemeInfoController
                                 .peerComparisionTableData.length, (index) {
-                          final rowData = schemeInfoController
-                              .peerComparisionTableData[index];
+                          final rowData = schemeInfoController.peerComparisionTableData[index];
                           String schemeShort =
                               rowData['scheme_amfi_short_name'] ?? "";
                           String amcLogo = rowData['amc_logo'] ?? "";
@@ -1573,6 +1593,7 @@ class _SchemeInfoState extends State<SchemeInfo> {
                           num threeYear = rowData['returns_cmp_3year'] ?? 0;
                           num fiveYear = rowData['returns_cmp_5year'] ?? 0;
                           num tenYear = rowData['returns_cmp_10year'] ?? 0;
+                          String inceptiondate = rowData['inception_date_str'] ?? "";
                           final color = index == 0
                               ? Config.appTheme.themeColor.withOpacity(0.1)
                               : Colors.white;
@@ -1621,6 +1642,7 @@ class _SchemeInfoState extends State<SchemeInfo> {
                                 ),
                               ),
                              // DataCell(Text("$rupee ${Utils.formatNumber(aum)}", textAlign: TextAlign.center)),
+                              DataCell(Text("$inceptiondate", textAlign: TextAlign.center)),
                               DataCell(Text("$oneYear%",
                                   textAlign: TextAlign.center)),
                               DataCell(Text("$twoYear%",
@@ -2401,7 +2423,7 @@ class SchemeInfoController extends GetxController {
     }
   }
 
-  var sectorHoldings = "Top Sectors".obs;
+  var sectorHoldings = "Top 10 Sectors".obs;
   var viewAllSector = false.obs;
   var portfolioAnalysis = {}.obs;
 
@@ -2439,11 +2461,16 @@ class SchemeInfoController extends GetxController {
     return title.replaceAll(" ", "_");
   }
 
+  String getSectorsKeyFromTitle(String title) {
+    title = title.toLowerCase();
+    return title.replaceAll(" ", "_");
+  }
+
   var holdingsDistribution = "Asset Allocation".obs;
   var holdingsDistributionList = [
     "Asset Allocation",
     "Market Caps",
-    "Credit Ratings",
+   // "Credit Ratings",
   ].obs;
 
   void updateHoldingsDistribution(String value) {

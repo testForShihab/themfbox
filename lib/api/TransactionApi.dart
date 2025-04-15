@@ -1279,4 +1279,27 @@ class TransactionApi {
     print("pauseSip reponse = $data");
     return data;
   }
+
+
+  static Future generateBseAchAuthLink({
+    required int user_id,
+    required String client_name,
+    required String bse_nse_mfu_flag,
+    required String mandate_id,
+    required String investor_code,
+  }) async {
+    String url =
+        "${ApiConfig.apiUrl}/transact/v1/generateBseAchAuthLink?key=${ApiConfig.apiKey}"
+        "&user_id=$user_id&client_name=$client_name&bse_nse_mfu_flag=$bse_nse_mfu_flag"
+        "&mandate_id=$mandate_id&investor_code=$investor_code";
+
+    print("generateBseAchAuthLink url $url");
+
+    http.Response response = await http.post(Uri.parse(url));
+    Map data = jsonDecode(response.body);
+
+    print("generateBseAchAuthLink reponse = $data");
+    return data;
+  }
+
 }

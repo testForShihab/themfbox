@@ -13,8 +13,8 @@ void main() {
     ..apiKey = "50732c09-87d6-4208-b843-72aef02fb2cd"
     ..theme = ThemeData.dark()
     ..appTheme = LightBlueTheme()
-    ..supportEmail = "info@eurekasec.com"
-    ..supportMobile = "+91 3366 280000"
+    ..supportEmail = ""
+    ..supportMobile = ""
     ..privacyPolicy = "https://www.eurekasec.com/privacy-policy-2/"
     ..pdfURL = "https://api.themfbox.com");
 }

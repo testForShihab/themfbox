@@ -188,6 +188,7 @@ class _NewLumpsumTransactionState extends State<NewLumpsumTransaction> {
   }
 
   String searchKey = "";
+
   Widget topFilterArea() {
     return Container(
       color: Config.appTheme.themeColor,
@@ -201,8 +202,7 @@ class _NewLumpsumTransactionState extends State<NewLumpsumTransaction> {
                   child: GestureDetector(
                     onTap: () {
                       // showAmcFilter();
-
-                      showDoubleFilter();
+                      showDoubleFilter(1);
                     },
                     child: appBarColumn(
                         "AMC",
@@ -217,7 +217,7 @@ class _NewLumpsumTransactionState extends State<NewLumpsumTransaction> {
                     onTap: () {
                       // showCategoryBottomSheet();
 
-                      showDoubleFilter();
+                      showDoubleFilter(2);
                     },
                     child: appBarColumn(
                         "Category",
@@ -333,7 +333,7 @@ class _NewLumpsumTransactionState extends State<NewLumpsumTransaction> {
     );
   }
 
-  showDoubleFilter() {
+  showDoubleFilter(int type) {
     ExpansionTileController amcController = ExpansionTileController();
     ExpansionTileController categoryController = ExpansionTileController();
     String amcSearch = "";
@@ -353,109 +353,111 @@ class _NewLumpsumTransactionState extends State<NewLumpsumTransaction> {
                   BottomSheetTitle(title: "Filter Schemes"),
                   SizedBox(height: 16),
                   // amc filter
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Theme(
-                      data: Theme.of(context)
-                          .copyWith(dividerColor: Colors.transparent),
-                      child: ExpansionTile(
-                        controller: amcController,
-                        onExpansionChanged: (val) {},
-                        title: Text("AMC Name", style: AppFonts.f50014Black),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                  if (type == 1)
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Theme(
+                        data: Theme.of(context)
+                            .copyWith(dividerColor: Colors.transparent),
+                        child: ExpansionTile(
+                          controller: amcController,
+                          onExpansionChanged: (val) {},
+                          title: Text("AMC Name", style: AppFonts.f50014Black),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(selectedAmcName,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 13,
+                                      color: Config.appTheme.themeColor)),
+                            ],
+                          ),
                           children: [
-                            Text(selectedAmcName,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13,
-                                    color: Config.appTheme.themeColor)),
-                          ],
-                        ),
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(12, 0, 12, 10),
-                            child: SizedBox(
-                              height: 40,
-                              child: TextFormField(
-                                initialValue: amcSearch,
-                                onChanged: (val) {
-                                  amcSearch = val;
-                                  bottomState(() {});
-                                },
-                                decoration: InputDecoration(
-                                    // suffixIcon: Icon(Icons.close,
-                                    //     color: Config.appTheme.themeColor),
-                                    contentPadding:
-                                        EdgeInsets.fromLTRB(10, 2, 12, 2),
-                                    border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10))),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(12, 0, 12, 10),
+                              child: SizedBox(
+                                height: 40,
+                                child: TextFormField(
+                                  initialValue: amcSearch,
+                                  onChanged: (val) {
+                                    amcSearch = val;
+                                    bottomState(() {});
+                                  },
+                                  decoration: InputDecoration(
+                                      // suffixIcon: Icon(Icons.close,
+                                      //     color: Config.appTheme.themeColor),
+                                      contentPadding:
+                                          EdgeInsets.fromLTRB(10, 2, 12, 2),
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10))),
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 400,
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              // physics: NeverScrollableScrollPhysics(),
-                              itemCount: amcList.length,
-                              itemBuilder: (context, index) {
-                                Map data = amcList[index];
-                                String name = data['amc_name'];
-                                String code = data['amc_code'];
-                                String img = data['amc_logo'];
+                            SizedBox(
+                              height: 400,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                // physics: NeverScrollableScrollPhysics(),
+                                itemCount: amcList.length,
+                                itemBuilder: (context, index) {
+                                  Map data = amcList[index];
+                                  String name = data['amc_name'];
+                                  String code = data['amc_code'];
+                                  String img = data['amc_logo'];
 
-                                return Visibility(
-                                  visible: searchVisibility(name, amcSearch),
-                                  child: InkWell(
-                                    onTap: () async {
-                                      selectedAmcName = name;
-                                      selectedAmcCode = code;
-                                      EasyLoading.show();
-                                      categoryList = [];
-                                      await getCategoryList();
-                                      EasyLoading.dismiss();
-                                      bottomState(() {});
-                                      amcController.collapse();
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Radio(
-                                            value: code,
-                                            groupValue: selectedAmcCode,
-                                            onChanged: (val) async {
-                                              selectedAmcName = name;
-                                              selectedAmcCode = code;
-                                              EasyLoading.show();
-                                              categoryList = [];
-                                              await getCategoryList();
-                                              EasyLoading.dismiss();
-                                              bottomState(() {});
-                                              amcController.collapse();
-                                            }),
-                                       // Image.network(img, height: 32),
-                                        //SizedBox(width: 10),
-                                        Expanded(
-                                            child: Text(name,
-                                                style: AppFonts.f50014Grey)),
-                                      ],
+                                  return Visibility(
+                                    visible: searchVisibility(name, amcSearch),
+                                    child: InkWell(
+                                      onTap: () async {
+                                        selectedAmcName = name;
+                                        selectedAmcCode = code;
+                                        EasyLoading.show();
+                                        categoryList = [];
+                                        await getCategoryList();
+                                        EasyLoading.dismiss();
+                                        bottomState(() {});
+                                        amcController.collapse();
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Radio(
+                                              value: code,
+                                              groupValue: selectedAmcCode,
+                                              onChanged: (val) async {
+                                                selectedAmcName = name;
+                                                selectedAmcCode = code;
+                                                EasyLoading.show();
+                                                categoryList = [];
+                                                await getCategoryList();
+                                                EasyLoading.dismiss();
+                                                bottomState(() {});
+                                                amcController.collapse();
+                                              }),
+                                          // Image.network(img, height: 32),
+                                          //SizedBox(width: 10),
+                                          Expanded(
+                                              child: Text(name,
+                                                  style: AppFonts.f50014Grey)),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
-                          )
-                        ],
+                                  );
+                                },
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
 
                   SizedBox(height: 16),
                   // category filter
+                  if (type == 2)
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
@@ -552,6 +554,7 @@ class _NewLumpsumTransactionState extends State<NewLumpsumTransaction> {
   }
 
   String amcSearchKey = "";
+
   showAmcFilter() {
     showModalBottomSheet(
       context: context,
@@ -691,6 +694,7 @@ class _NewLumpsumTransactionState extends State<NewLumpsumTransaction> {
   }
 
   String categorySearchKey = "";
+
   showCategoryBottomSheet() {
     showModalBottomSheet(
       context: context,

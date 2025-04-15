@@ -217,7 +217,7 @@ class _TopSipFundsState extends State<TopSipFunds> {
                           Icon(Icons.arrow_back),
                           SizedBox(width: 5),
                           Text(
-                            "SIP Funds",
+                            "SIP Returns",
                             style: AppFonts.f50014Black
                                 .copyWith(fontSize: 20, color: Colors.white),
                           ),

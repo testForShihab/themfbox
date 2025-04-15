@@ -983,6 +983,7 @@ class _BseSipPaymentState extends State<BseSipPayment> {
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
           controller: arnController,
+          enabled: false,
           title: Text("Select ARN Number", style: AppFonts.f50014Black),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

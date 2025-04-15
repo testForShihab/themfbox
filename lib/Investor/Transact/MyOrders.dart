@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:mymfbox2_0/Investor/Transact/cart/rpExports.dart';
@@ -117,11 +119,11 @@ class _MyOrdersState extends State<MyOrders> {
   }
 
   Widget myOrdersTile(Map data) {
-    String logo = data['logo'] ??"";
-    String schemeName = data['scheme_name'] ??"";
-    String amountUnits = data['amount_units'] ??"";
-    String transactionType = data['transaction_type'] ??"";
-    String transactionDate = data['transaction_date'] ??"";
+    String logo = data['logo'] ?? "";
+    String schemeName = data['scheme_name'] ?? "";
+    String amountUnits = data['amount_units'] ?? "";
+    String transactionType = data['transaction_type'] ?? "";
+    String transactionDate = data['transaction_date'] ?? "";
     String folioNo = data['folio_no'] ?? "";
     String transactionStatus = data['transaction_status'] ?? "null";
     String platform = data['transaction_platform'] ?? "";
@@ -179,7 +181,6 @@ class _MyOrdersState extends State<MyOrders> {
                       folioNo, // Your additional text here
                       style: AppFonts.f40013,
                     ),
-
                   ],
                 ),
               ),
@@ -241,73 +242,70 @@ class _MyOrdersState extends State<MyOrders> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+              Expanded(
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+                   width: devWidth,
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   decoration: BoxDecoration(
                     color: getStatusColor(serviceMsg),
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            "Order Status:",
-                            style: AppFonts.f40013.copyWith(fontSize: 12),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            serviceMsg,
-                            style: AppFonts.f50012
-                                .copyWith(color: getStatusTextColor(serviceMsg),fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ],
+                  child: RichText(
+                    textAlign: TextAlign.justify,
+                    text: TextSpan(
+                      style: AppFonts.f50012.copyWith(fontSize: 12), // base style
+                      children: [
+                        TextSpan(
+                          text: 'Order Status:  ',
+                          style: AppFonts.f40013.copyWith(fontSize: 12), // your "key" color here
+                        ),
+                        TextSpan(
+                          text: serviceMsg,
+                          style: AppFonts.f50012.copyWith(
+                              color: getStatusTextColor(serviceMsg), fontSize: 12),
+                        ),
+                      ],
+                    ),
+                    maxLines: 9,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: getStatusColor(transactionStatus),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          "Transaction Status:", // Your additional text here
-                          style: AppFonts.f40013.copyWith(fontSize: 12),
-                        ),
-
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          transactionStatus, // Your additional text here
-                          style: AppFonts.f50012
-                              .copyWith(color: getStatusTextColor(transactionStatus),fontSize: 12),
-                        ),
-
-                      ],
-                    ),
-                  ],
-                )
-              )
             ],
           ),
+          SizedBox(height: 16),
+          Row(
+            children: [
+              Flexible(
+                child: Container(
+                  width: devWidth,
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: getStatusColor(transactionStatus),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: RichText(
+                      textAlign: TextAlign.justify,
+                      text: TextSpan(
+                        style: AppFonts.f50012.copyWith(fontSize: 12), // base style
+                        children: [
+                          TextSpan(
+                            text: 'Transaction Status:  ',
+                            style: AppFonts.f40013.copyWith(fontSize: 12), // your "key" color here
+                          ),
+                          TextSpan(
+                            text: transactionStatus,
+                            style: AppFonts.f50012.copyWith(
+                                color: getStatusTextColor(transactionStatus), fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      maxLines: 9,
+                      overflow: TextOverflow.ellipsis,
+                    )),
+              ),
+            ],
+          )
         ],
       ),
     );

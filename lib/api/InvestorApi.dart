@@ -10,7 +10,9 @@ import 'package:mymfbox2_0/rp_widgets/InvAppBar.dart';
 import 'package:mymfbox2_0/utils/Utils.dart';
 
 class InvestorApi {
+
   int user_id = GetStorage().read("user_id");
+
   static Future getMutualFundPortfolio({
     required int user_id,
     required String client_name,

@@ -143,7 +143,7 @@ class _TopConsistentState extends State<TopConsistent> {
                           ),
                           SizedBox(width: 5),
                           Text(
-                            "Top Consistent Funds",
+                            "Consistent Funds",
                             style: AppFonts.f50014Black
                                 .copyWith(fontSize: 20, color: Colors.white),
                           ),
@@ -199,6 +199,7 @@ class _TopConsistentState extends State<TopConsistent> {
                     onTap: (val) {
                       print("tab tap = $val");
                       consistentFunds = [];
+                      selectedSort = "Returns";
                       setState(() {
                         isLoading = true;
                         period = periodMap[val];

@@ -75,96 +75,94 @@ class _RiskProfileScoreState extends State<RiskProfileScore> {
                 ),
               ),
             ),
-            body: SideBar(
+            body: Center(
               child: SingleChildScrollView(
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Text("Based on your responses,\n Your Risk Profile is",
-                            textAlign: TextAlign.center,
-                            style: AppFonts.f50014Grey),
-                        SizedBox(height: 20),
-                        selectRiskImage(msg),
-                        SizedBox(height: 20),
-                        Text("Risk Score: $score",
-                            style: TextStyle(fontSize: 14)),
-                        SizedBox(height: 45),
-                        InkWell(
-                          onTap: () {
-                            Get.to(RiskProfile());
-                          },
-                          child: Text("Retake Risk Assessment?",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Config.appTheme.themeColor,
-                                decoration: TextDecoration.underline,
-                              )),
-                        ),
-                        SizedBox(height: 25),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                            width: devWidth* 0.2,
+                  child: Column(
+                    children: [
+                      Text("Based on your responses,\n Your Risk Profile is",
+                          textAlign: TextAlign.center,
+                          style: AppFonts.f50014Grey),
+                      SizedBox(height: 20),
+                      selectRiskImage(msg),
+                      SizedBox(height: 20),
+                      Text("Risk Score: $score",
+                          style: TextStyle(fontSize: 14)),
+                      SizedBox(height: 45),
+                      InkWell(
+                        onTap: () {
+                          Get.to(RiskProfile());
+                        },
+                        child: Text("Retake Risk Assessment?",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Config.appTheme.themeColor,
+                              decoration: TextDecoration.underline,
+                            )),
+                      ),
+                      SizedBox(height: 25),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                          width: devWidth* 0.2,
+                          child: InkWell(
+                            onTap: () {
+                              Get.to(InvestorDashboard());
+                            },
+                            child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 8.1),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: Config.appTheme.themeColor,width: 1.8,)
+                                ),
+                                child: Center(
+                                    child: Text(
+                                      "Home",
+                                      textAlign: TextAlign.center,
+                                      style: AppFonts.f50014Black.copyWith(color:Config.appTheme.themeColor ,fontSize: 14,),
+                                    ))),
+                          ),
+                                                ),
+                          SizedBox(width: 15),
+                          SizedBox(
+                            width: devWidth* 0.4,
                             child: InkWell(
-                              onTap: () {
-                                Get.to(InvestorDashboard());
+                              onTap: () async {
+                                EasyLoading.show();
+                                Map data = await ReportApi.downloadRiskProfilePdf(
+                                  user_id: user_id,
+                                  client_name: client_name,
+                                );
+                                if (data['status'] != 200) {
+                                  Utils.showError(context, data['msg']);
+                                  return;
+                                }
+                                EasyLoading.dismiss();
+                                // Get.back();
+                                rpDownloadFile(
+                                    url: data['msg'], context: context, index: 1);
+                                setState(() {});
                               },
                               child: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 8.1),
+                                  padding: EdgeInsets.symmetric(vertical: 10),
                                   decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: Config.appTheme.themeColor,width: 1.8,)
-                                  ),
+                                      color: Config.appTheme.themeColor,
+                                      borderRadius: BorderRadius.circular(10)),
                                   child: Center(
                                       child: Text(
-                                        "Home",
+                                        "Download Report",
                                         textAlign: TextAlign.center,
-                                        style: AppFonts.f50014Black.copyWith(color:Config.appTheme.themeColor ,fontSize: 14,),
+                                        style: AppFonts.f50014Black.copyWith(color: Colors.white,fontSize: 14,),
                                       ))),
                             ),
-                                                  ),
-                            SizedBox(width: 15),
-                            SizedBox(
-                              width: devWidth* 0.4,
-                              child: InkWell(
-                                onTap: () async {
-                                  EasyLoading.show();
-                                  Map data = await ReportApi.downloadRiskProfilePdf(
-                                    user_id: user_id,
-                                    client_name: client_name,
-                                  );
-                                  if (data['status'] != 200) {
-                                    Utils.showError(context, data['msg']);
-                                    return;
-                                  }
-                                  EasyLoading.dismiss();
-                                  // Get.back();
-                                  rpDownloadFile(
-                                      url: data['msg'], context: context, index: 1);
-                                  setState(() {});
-                                },
-                                child: Container(
-                                    padding: EdgeInsets.symmetric(vertical: 10),
-                                    decoration: BoxDecoration(
-                                        color: Config.appTheme.themeColor,
-                                        borderRadius: BorderRadius.circular(10)),
-                                    child: Center(
-                                        child: Text(
-                                          "Download Report",
-                                          textAlign: TextAlign.center,
-                                          style: AppFonts.f50014Black.copyWith(color: Colors.white,fontSize: 14,),
-                                        ))),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: devHeight * 0.2),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: devHeight * 0.2),
+                    ],
                   ),
                 ),
               ),

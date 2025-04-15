@@ -109,6 +109,9 @@ class _BsePaymentWebViewState extends State<BsePaymentWebView> {
               if(purchase_type=='Redemption Purchase' || purchase_type== 'Switch Purchase' ){
                 Get.to(BseLumpsumPaymentSuccess(paymentId: widget.paymentId ,purchase_type: purchase_type,));
               }
+              if(purchase_type=='Mandate Generated'){
+                Get.to(BseLumpsumPaymentSuccess(paymentId: widget.paymentId ,purchase_type: purchase_type,));
+              }
             }
             return NavigationDecision.navigate;
           },

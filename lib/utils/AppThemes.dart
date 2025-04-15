@@ -52,7 +52,7 @@ class BlueTheme extends AppTheme {
       whiteOverlay: Color(0xffFFFFFF),
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffFF0000),
-      themeProfit: Color(0xff50FF00),
+      themeProfit: Color(0xff3CB66D),
       themeLoss: Color(0xffF3857B));
 }
 
@@ -72,7 +72,7 @@ class SolidBlueTheme extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffFF0000),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xffF3857B));
 }
 class CoralTheme extends AppTheme {
@@ -91,7 +91,7 @@ class CoralTheme extends AppTheme {
       whiteOverlay: Color(0xffFFFFFF),
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffFF0000),
-      themeProfit: Color(0xff50FF00),
+      themeProfit: Color(0xff3CB66D),
       themeLoss: Color(0xffF3857B));
 }
 
@@ -111,7 +111,7 @@ class RedTheme extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -131,7 +131,7 @@ class RaspberryTheme extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xffF3857B));
 }
 
@@ -151,7 +151,7 @@ class PurpleTheme extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xffF3857B));
 }
 
@@ -171,7 +171,7 @@ class DarkOrangeTheme extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xff7D0003));
 }
 
@@ -191,7 +191,7 @@ class PinkTheme extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xff7D0003));
 }
 
@@ -211,7 +211,7 @@ class CyanTheme extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xffAD0000));
 }
 
@@ -231,7 +231,7 @@ class OrangeTheme extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xffAD0000));
 }
 
@@ -246,12 +246,12 @@ class DarkGreyTheme extends AppTheme {
             placeHolderInputTitleAndArrow: Color(0xffB4B4B4),
             lineColor: Color(0XFFDFDFDF),
             Bg2Color: Color(0xffF1F1F1),
-            overlay85: Color(0xffDDDFE1),
+            overlay85: Color(0xffb7b7b7),
             mainBgColor: Color(0xffECECF2),
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -271,7 +271,7 @@ class BeigeTheme extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -291,7 +291,7 @@ class BlueirisTheme extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -311,7 +311,7 @@ class BurntOrange extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -331,7 +331,7 @@ class RoseWaterTheme extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -351,7 +351,7 @@ class NavyblueTheme extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -371,7 +371,7 @@ class PloutiaTheme extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -391,7 +391,7 @@ class InvestateaseTheme extends AppTheme {
       whiteOverlay: Color(0xffFFFFFF),
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
-      themeProfit: Color(0xff50FF00),
+      themeProfit: Color(0xff3CB66D),
       themeLoss: Color(0xffFF6657));
 }
 //#2d5c68
@@ -411,7 +411,7 @@ class nextFreedomTheme extends AppTheme{
       whiteOverlay: Color(0xffFFFFFF),
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
-      themeProfit: Color(0xff50FF00),
+      themeProfit: Color(0xff3CB66D),
       themeLoss: Color(0xffFF6657));
 }
 
@@ -452,7 +452,7 @@ class GoldTheme extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -472,7 +472,7 @@ class UparjanTheme extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -512,7 +512,7 @@ class FinatriumTheme extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -552,7 +552,7 @@ class AjTheme extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xffF3857B));
 }
 
@@ -572,7 +572,7 @@ class AjfundsproTheme extends AppTheme {
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff50FF00),
+            themeProfit: Color(0xff3CB66D),
             themeLoss: Color(0xffF3857B));
 }
 
@@ -612,7 +612,7 @@ class AbhivirudhiTheme extends AppTheme {
       whiteOverlay: Color(0xffFFFFFF),
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
-      themeProfit: Color(0xff50FF00),
+      themeProfit: Color(0xff3CB66D),
       themeLoss: Color(0xffF3857B));
 }
 
@@ -632,7 +632,7 @@ class FinvisionTheme extends AppTheme {
       whiteOverlay: Color(0xffFFFFFF),
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
-      themeProfit: Color(0xff50FF00),
+      themeProfit: Color(0xff3CB66D),
       themeLoss: Color(0xffF3857B));
 }
 
@@ -652,7 +652,7 @@ class PerpetualTheme extends AppTheme {
       whiteOverlay: Color(0xffFFFFFF),
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
-      themeProfit: Color(0xff50FF00),
+      themeProfit: Color(0xff3CB66D),
       themeLoss: Color(0xffAD0000));
 }
 
@@ -672,7 +672,7 @@ class DropletTheme extends AppTheme {
       whiteOverlay: Color(0xffFFFFFF),
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
-      themeProfit: Color(0xff50FF00),
+      themeProfit: Color(0xff3CB66D),
       themeLoss: Color(0xffAD0000));
 }
 
@@ -692,7 +692,7 @@ class BlackTheme extends AppTheme {
       whiteOverlay: Color(0xffFFFFFF),
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
-      themeProfit: Color(0xff50FF00),
+      themeProfit: Color(0xff3CB66D),
       themeLoss: Color(0xffFF6657));
 }
 
@@ -712,7 +712,7 @@ class WhiteTheme extends AppTheme {
       whiteOverlay: Color(0xffFFFFFF),
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
-      themeProfit: Color(0xff50FF00),
+      themeProfit: Color(0xff3CB66D),
       themeLoss: Color(0xffAD0000));
 }
 
@@ -752,7 +752,7 @@ class MkcapitalTheme extends AppTheme {
       whiteOverlay: Color(0xffFFFFFF),
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
-      themeProfit: Color(0xff50FF00),
+      themeProfit: Color(0xff3CB66D),
       themeLoss: Color(0xffFF6657));
 }
 
@@ -772,7 +772,7 @@ class BohoTheme extends AppTheme {
       whiteOverlay: Color(0xffFFFFFF),
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
-      themeProfit: Color(0xff50FF00),
+      themeProfit: Color(0xff3CB66D),
       themeLoss: Color(0xffFF6657));
 }
 
@@ -832,7 +832,7 @@ class MsindiaTheme extends AppTheme {
       whiteOverlay: Color(0xffFFFFFF),
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
-      themeProfit: Color(0xff50FF00),
+      themeProfit: Color(0xff3CB66D),
       themeLoss: Color(0xffFF6657));
 }
 
@@ -874,7 +874,7 @@ class AnubandhTheme extends AppTheme {
       whiteOverlay: Color(0xffFFFFFF),
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
-      themeProfit: Color(0xff50FF00),
+      themeProfit: Color(0xff3CB66D),
       themeLoss: Color(0xffFF6657));
 }
 

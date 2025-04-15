@@ -307,6 +307,7 @@ class _MfResearchState extends State<MfResearch> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    SizedBox(height: 10),
                     topFilterArea(),
                     //SearchField(bgColor: Colors.white, hintText: "Search"),
                     SizedBox(height: 16),
@@ -323,19 +324,19 @@ class _MfResearchState extends State<MfResearch> {
                     Row(
                       children: [
                         FundCard(
-                          title: "Top\nConsistent\nFunds",
+                          title: "Consistent\nFunds",
                           goTo: TopConsistent(),
                           icon: Image.asset('assets/consistentFund.png'),
                           iconColor: Colors.white,
                         ),
                         FundCard(
-                          title: "Top\nLumpsum\nFunds",
+                          title: "Lumpsum\nReturns",
                           goTo: TopLumpsumFunds(),
                           icon: Image.asset('assets/lumpsumFund.png'),
                           iconColor: Colors.white,
                         ),
                         FundCard(
-                          title: "Top SIP\n Funds\n",
+                          title: "SIP\nReturns",
                           goTo: TopSipFunds(),
                           icon: Image.asset('assets/sipFund.png'),
                           iconColor: Colors.white,
@@ -357,7 +358,7 @@ class _MfResearchState extends State<MfResearch> {
                           iconColor: Colors.white,
                         ),
                         FundCard(
-                          title: "New Fund\nOffering",
+                          title: "New Fund \nOffer (NFO)",
                           goTo: NewFundOffering(),
                           icon: Image.asset('assets/nfoFund.png'),
                           iconColor: Colors.white,

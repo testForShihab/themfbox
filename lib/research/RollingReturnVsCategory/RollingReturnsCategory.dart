@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'dart:math' as math;
-
+import 'dart:developer' as dev;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -111,10 +111,10 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
   Future autoSuggestAllMfSchemesShortNames() async {
     if (categoriesList.isNotEmpty) return 0;
     Map data = await ResearchApi.autoSuggestAllMfSchemesShortNames(
-        userId: user_id,
-        category: controller.selectedSubCategory.value,
-        clientName: client_name,
-        );
+      userId: user_id,
+      category: controller.selectedSubCategory.value,
+      clientName: client_name,
+    );
     if (data['status'] != SUCCESS) {
       Utils.showError(context, data['msg']);
       return 0;
@@ -420,100 +420,13 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                             getSchemeInceptionAndLatestNavDate(
                                 controller.startDate.value);
 
-                            if(controller.schemes.value.isEmpty) {
+                            if (controller.schemes.value.isEmpty) {
                               Utils.showError(context,
                                   "Please select a scheme to proceed.");
                               return;
                             }
-
-                            if (controller.rollingPeriods.value == "1 Month") {
-                              DateTime oneMonthBeforeDate = DateTime(
-                                  todayDate.year,
-                                  todayDate.month - 1,
-                                  todayDate.day - 7);
-                              if (startDate.isAfter(oneMonthBeforeDate)) {
-                                Utils.showError(context,
-                                    "Choose a period lesser than ${controller.rollingPeriods.value} or change the start date to ${controller.rollingPeriods.value} back from now.");
-                                return;
-                              }
-                            }
-                            if (controller.rollingPeriods.value == "1 Year") {
-                              DateTime oneMonthBeforeDate = DateTime(
-                                  todayDate.year - 1,
-                                  todayDate.month,
-                                  todayDate.day - 7);
-                              if (startDate.isAfter(oneMonthBeforeDate)) {
-                                Utils.showError(context,
-                                    "Choose a period lesser than ${controller.rollingPeriods.value} or change the start date to ${controller.rollingPeriods.value} back from now.");
-                                return;
-                              }
-                            }
-                            if (controller.rollingPeriods.value == "2 Year") {
-                              DateTime oneMonthBeforeDate = DateTime(
-                                  todayDate.year - 2,
-                                  todayDate.month,
-                                  todayDate.day - 7 );
-                              if (startDate.isAfter(oneMonthBeforeDate)) {
-                                Utils.showError(context,
-                                    "Choose a period lesser than ${controller.rollingPeriods.value} or change the start date to ${controller.rollingPeriods.value} back from now.");
-                                return;
-                              }
-                            }
-                            if (controller.rollingPeriods.value == "3 Year") {
-                              DateTime oneMonthBeforeDate = DateTime(
-                                  todayDate.year - 3,
-                                  todayDate.month,
-                                  todayDate.day - 7 );
-                              if (startDate.isAfter(oneMonthBeforeDate)) {
-                                Utils.showError(context,
-                                    "Choose a period lesser than ${controller.rollingPeriods.value} or change the start date to ${controller.rollingPeriods.value} back from now.");
-                                return;
-                              }
-                            }
-                            if (controller.rollingPeriods.value == "5 Year") {
-                              DateTime oneMonthBeforeDate = DateTime(
-                                  todayDate.year - 5,
-                                  todayDate.month,
-                                  todayDate.day - 7 );
-                              if (startDate.isAfter(oneMonthBeforeDate)) {
-                                Utils.showError(context,
-                                    "Choose a period lesser than ${controller.rollingPeriods.value} or change the start date to ${controller.rollingPeriods.value} back from now.");
-                                return;
-                              }
-                            }
-                            if (controller.rollingPeriods.value == "7 Year") {
-                              DateTime oneMonthBeforeDate = DateTime(
-                                  todayDate.year - 7,
-                                  todayDate.month,
-                                  todayDate.day - 7 );
-                              if (startDate.isAfter(oneMonthBeforeDate)) {
-                                Utils.showError(context,
-                                    "Choose a period lesser than ${controller.rollingPeriods.value} or change the start date to ${controller.rollingPeriods.value} back from now.");
-                                return;
-                              }
-                            }
-                            if (controller.rollingPeriods.value == "10 Year") {
-                              DateTime oneMonthBeforeDate = DateTime(
-                                  todayDate.year - 10,
-                                  todayDate.month,
-                                  todayDate.day - 7);
-                              if (startDate.isAfter(oneMonthBeforeDate)) {
-                                Utils.showError(context,
-                                    "Choose a period lesser than ${controller.rollingPeriods.value} or change the start date to ${controller.rollingPeriods.value} back from now.");
-                                return;
-                              }
-                            }
-                            if (controller.rollingPeriods.value == "15 Year") {
-                              DateTime oneMonthBeforeDate = DateTime(
-                                  todayDate.year - 15,
-                                  todayDate.month,
-                                  todayDate.day - 7);
-                              if (startDate.isAfter(oneMonthBeforeDate)) {
-                                Utils.showError(context,
-                                    "Choose a period lesser than ${controller.rollingPeriods.value} or change the start date to ${controller.rollingPeriods.value} back from now.");
-                                return;
-                              }
-                            }
+                            getRollingPeriodDate(
+                                controller.rollingPeriods.value, todayDate);
 
                             if (startDate.isBefore(schemeStart)) {
                               String formattedSchemeDate =
@@ -560,6 +473,37 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
             body: displayPage(),
           );
         });
+  }
+
+  DateTime getRollingPeriodDate(String period, DateTime todayDate) {
+    switch (period) {
+      case "1 Month":
+        return DateTime(todayDate.year, todayDate.month - 1, todayDate.day)
+            .subtract(Duration(days: 7));
+      case "1 Year":
+        return DateTime(todayDate.year - 1, todayDate.month, todayDate.day)
+            .subtract(Duration(days: 7));
+      case "2 Year":
+        return DateTime(todayDate.year - 2, todayDate.month, todayDate.day)
+            .subtract(Duration(days: 7));
+      case "3 Year":
+        return DateTime(todayDate.year - 3, todayDate.month, todayDate.day)
+            .subtract(Duration(days: 7));
+      case "5 Year":
+        return DateTime(todayDate.year - 5, todayDate.month, todayDate.day)
+            .subtract(Duration(days: 7));
+      case "7 Year":
+        return DateTime(todayDate.year - 7, todayDate.month, todayDate.day)
+            .subtract(Duration(days: 7));
+      case "10 Year":
+        return DateTime(todayDate.year - 10, todayDate.month, todayDate.day)
+            .subtract(Duration(days: 7));
+      case "15 Year":
+        return DateTime(todayDate.year - 15, todayDate.month, todayDate.day)
+            .subtract(Duration(days: 7));
+      default:
+        return todayDate;
+    }
   }
 
   Widget displayPage() {
@@ -1256,50 +1200,57 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                         todayDate.year,
                                         todayDate.month - 1,
                                         todayDate.day - 7);
-                                    controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
+                                    controller.startDate.value =
+                                        convertDtToStr(oneMonthBeforeDate);
                                   } else if (rollingPeriod[index] == "1 Year") {
                                     controller.rollingPeriods.value = "1 Year";
                                     DateTime oneMonthBeforeDate = DateTime(
                                         todayDate.year - 1,
                                         todayDate.month,
                                         todayDate.day - 7);
-                                    controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
+                                    controller.startDate.value =
+                                        convertDtToStr(oneMonthBeforeDate);
                                   } else if (rollingPeriod[index] == "2 Year") {
                                     controller.rollingPeriods.value = "2 Year";
                                     DateTime oneMonthBeforeDate = DateTime(
                                         todayDate.year - 2,
                                         todayDate.month,
                                         todayDate.day - 7);
-                                    controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
+                                    controller.startDate.value =
+                                        convertDtToStr(oneMonthBeforeDate);
                                   } else if (rollingPeriod[index] == "3 Year") {
                                     controller.rollingPeriods.value = "3 Year";
                                     DateTime oneMonthBeforeDate = DateTime(
                                         todayDate.year - 3,
                                         todayDate.month,
                                         todayDate.day - 7);
-                                    controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
+                                    controller.startDate.value =
+                                        convertDtToStr(oneMonthBeforeDate);
                                   } else if (rollingPeriod[index] == "5 Year") {
                                     controller.rollingPeriods.value = "5 Year";
                                     DateTime oneMonthBeforeDate = DateTime(
                                         todayDate.year - 5,
                                         todayDate.month,
-                                        todayDate.day - 7);
-                                    controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
+                                        todayDate.day - 8);
+                                    controller.startDate.value =
+                                        convertDtToStr(oneMonthBeforeDate);
                                   } else if (rollingPeriod[index] == "7 Year") {
                                     controller.rollingPeriods.value = "7 Year";
                                     DateTime oneMonthBeforeDate = DateTime(
                                         todayDate.year - 7,
                                         todayDate.month,
                                         todayDate.day - 7);
-                                    controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
+                                    controller.startDate.value =
+                                        convertDtToStr(oneMonthBeforeDate);
                                   } else if (rollingPeriod[index] ==
                                       "10 Year") {
                                     controller.rollingPeriods.value = "10 Year";
                                     DateTime oneMonthBeforeDate = DateTime(
                                         todayDate.year - 10,
                                         todayDate.month,
-                                        todayDate.day - 7);
-                                    controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
+                                        todayDate.day - 10);
+                                    controller.startDate.value =
+                                        convertDtToStr(oneMonthBeforeDate);
                                   } else if (rollingPeriod[index] ==
                                       "15 Year") {
                                     controller.rollingPeriods.value = "15 Year";
@@ -1307,10 +1258,11 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                         todayDate.year - 15,
                                         todayDate.month,
                                         todayDate.day - 7);
-                                    controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
+                                    controller.startDate.value =
+                                        convertDtToStr(oneMonthBeforeDate);
                                   } else {
-                                    controller.selectedRollingPeriod
-                                        .value = rollingPeriod[index];
+                                    controller.selectedRollingPeriod.value =
+                                        rollingPeriod[index];
                                   }
                                   rollingReturnCategoryList = [];
                                 },
@@ -1329,63 +1281,100 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                         DateTime todayDate = DateTime.now();
 
                                         if (rollingPeriod[index] == "1 Month") {
-                                          controller.rollingPeriods.value = "1 Month";
-                                          DateTime oneMonthBeforeDate = DateTime(
-                                              todayDate.year,
-                                              todayDate.month - 1,
-                                              todayDate.day - 7);
-                                          controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
-                                        } else if (rollingPeriod[index] == "1 Year") {
-                                          controller.rollingPeriods.value = "1 Year";
-                                          DateTime oneMonthBeforeDate = DateTime(
-                                              todayDate.year - 1,
-                                              todayDate.month,
-                                              todayDate.day - 7);
-                                          controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
-                                        } else if (rollingPeriod[index] == "2 Year") {
-                                          controller.rollingPeriods.value = "2 Year";
-                                          DateTime oneMonthBeforeDate = DateTime(
-                                              todayDate.year - 2,
-                                              todayDate.month,
-                                              todayDate.day - 7);
-                                          controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
-                                        } else if (rollingPeriod[index] == "3 Year") {
-                                          controller.rollingPeriods.value = "3 Year";
-                                          DateTime oneMonthBeforeDate = DateTime(
-                                              todayDate.year - 3,
-                                              todayDate.month,
-                                              todayDate.day - 7);
-                                          controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
-                                        } else if (rollingPeriod[index] == "5 Year") {
-                                          controller.rollingPeriods.value = "5 Year";
-                                          DateTime oneMonthBeforeDate = DateTime(
-                                              todayDate.year - 5,
-                                              todayDate.month,
-                                              todayDate.day - 7);
-                                          controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
-                                        } else if (rollingPeriod[index] == "7 Year") {
-                                          controller.rollingPeriods.value = "7 Year";
-                                          DateTime oneMonthBeforeDate = DateTime(
-                                              todayDate.year - 7,
-                                              todayDate.month,
-                                              todayDate.day - 7);
-                                          controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
+                                          controller.rollingPeriods.value =
+                                              "1 Month";
+                                          DateTime oneMonthBeforeDate =
+                                              DateTime(
+                                                  todayDate.year,
+                                                  todayDate.month - 1,
+                                                  todayDate.day - 7);
+                                          controller.startDate.value =
+                                              convertDtToStr(
+                                                  oneMonthBeforeDate);
+                                        } else if (rollingPeriod[index] ==
+                                            "1 Year") {
+                                          controller.rollingPeriods.value =
+                                              "1 Year";
+                                          DateTime oneMonthBeforeDate =
+                                              DateTime(
+                                                  todayDate.year - 1,
+                                                  todayDate.month,
+                                                  todayDate.day - 7);
+                                          controller.startDate.value =
+                                              convertDtToStr(
+                                                  oneMonthBeforeDate);
+                                        } else if (rollingPeriod[index] ==
+                                            "2 Year") {
+                                          controller.rollingPeriods.value =
+                                              "2 Year";
+                                          DateTime oneMonthBeforeDate =
+                                              DateTime(
+                                                  todayDate.year - 2,
+                                                  todayDate.month,
+                                                  todayDate.day - 7);
+                                          controller.startDate.value =
+                                              convertDtToStr(
+                                                  oneMonthBeforeDate);
+                                        } else if (rollingPeriod[index] ==
+                                            "3 Year") {
+                                          controller.rollingPeriods.value =
+                                              "3 Year";
+                                          DateTime oneMonthBeforeDate =
+                                              DateTime(
+                                                  todayDate.year - 3,
+                                                  todayDate.month,
+                                                  todayDate.day - 7);
+                                          controller.startDate.value =
+                                              convertDtToStr(
+                                                  oneMonthBeforeDate);
+                                        } else if (rollingPeriod[index] ==
+                                            "5 Year") {
+                                          controller.rollingPeriods.value =
+                                              "5 Year";
+                                          DateTime oneMonthBeforeDate =
+                                              DateTime(
+                                                  todayDate.year - 5,
+                                                  todayDate.month,
+                                                  todayDate.day - 8);
+                                          controller.startDate.value =
+                                              convertDtToStr(
+                                                  oneMonthBeforeDate);
+                                        } else if (rollingPeriod[index] ==
+                                            "7 Year") {
+                                          controller.rollingPeriods.value =
+                                              "7 Year";
+                                          DateTime oneMonthBeforeDate =
+                                              DateTime(
+                                                  todayDate.year - 7,
+                                                  todayDate.month,
+                                                  todayDate.day - 7);
+                                          controller.startDate.value =
+                                              convertDtToStr(
+                                                  oneMonthBeforeDate);
                                         } else if (rollingPeriod[index] ==
                                             "10 Year") {
-                                          controller.rollingPeriods.value = "10 Year";
-                                          DateTime oneMonthBeforeDate = DateTime(
-                                              todayDate.year - 10,
-                                              todayDate.month,
-                                              todayDate.day - 7);
-                                          controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
+                                          controller.rollingPeriods.value =
+                                              "10 Year";
+                                          DateTime oneMonthBeforeDate =
+                                              DateTime(
+                                                  todayDate.year - 10,
+                                                  todayDate.month,
+                                                  todayDate.day - 10);
+                                          controller.startDate.value =
+                                              convertDtToStr(
+                                                  oneMonthBeforeDate);
                                         } else if (rollingPeriod[index] ==
                                             "15 Year") {
-                                          controller.rollingPeriods.value = "15 Year";
-                                          DateTime oneMonthBeforeDate = DateTime(
-                                              todayDate.year - 15,
-                                              todayDate.month,
-                                              todayDate.day - 7);
-                                          controller.startDate.value =  convertDtToStr(oneMonthBeforeDate);
+                                          controller.rollingPeriods.value =
+                                              "15 Year";
+                                          DateTime oneMonthBeforeDate =
+                                              DateTime(
+                                                  todayDate.year - 15,
+                                                  todayDate.month,
+                                                  todayDate.day - 7);
+                                          controller.startDate.value =
+                                              convertDtToStr(
+                                                  oneMonthBeforeDate);
                                         } else {
                                           controller.selectedRollingPeriod
                                               .value = rollingPeriod[index];
@@ -1481,16 +1470,14 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                           controller.schemes.value = '';
                           bottomState(() {});
                           EasyLoading.show();
-                          controller.selectedFund.value =
-                          "1 Fund Selected";
+                          controller.selectedFund.value = "1 Fund Selected";
                           await autoSuggestAllMfSchemesShortNames();
-                          controller.selectedValues.value = '';
                           if (categoriesList.isNotEmpty) {
                             setState(() {
                               controller.schemes.value =
-                              categoriesList[0]['scheme_amfi'];
+                                  categoriesList[0]['scheme_amfi'];
                               controller.selectedValues.value =
-                              categoriesList[0]['scheme_amfi'];
+                                  categoriesList[0]['scheme_amfi'];
                             });
                           }
                           bottomState(() {});
@@ -1513,16 +1500,15 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                   categoriesList = [];
                                   controller.schemes.value = '';
                                   controller.selectedFund.value =
-                                  "1 Fund Selected";
+                                      "1 Fund Selected";
                                   bottomState(() {});
                                   await autoSuggestAllMfSchemesShortNames();
-                                  controller.selectedValues.value = '';
                                   if (categoriesList.isNotEmpty) {
                                     setState(() {
                                       controller.schemes.value =
-                                      categoriesList[0]['scheme_amfi'];
+                                          categoriesList[0]['scheme_amfi'];
                                       controller.selectedValues.value =
-                                      categoriesList[0]['scheme_amfi'];
+                                          categoriesList[0]['scheme_amfi'];
                                     });
                                   }
                                   Get.back();
@@ -1555,7 +1541,6 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
   showSchemeBottomSheet() {
     List<bool> isSelectedList = List.filled(categoriesList.length, false);
     List<String> selectedSchemes = List.filled(categoriesList.length, '');
-
 
     TextEditingController searchController = TextEditingController();
     if (controller.selectedValues.value.isNotEmpty) {
@@ -1608,17 +1593,19 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                       onPressed: () async {
                         EasyLoading.show();
                         List<String> selectedItems = [];
+
                         for (int i = 0; i < isSelectedList.length; i++) {
                           if (isSelectedList[i]) {
                             selectedItems.add(selectedSchemes[i]);
                           }
                         }
+
                         controller.selectedValues.value =
                             selectedItems.join(',');
                         controller.schemes.value =
                             controller.selectedValues.value;
                         controller.selectedFund.value =
-                        "${selectedItems.length} Funds Selected";
+                            "${selectedItems.length} Funds Selected";
 
                         Get.back();
                         EasyLoading.dismiss();
@@ -1638,7 +1625,6 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                   ],
                 ),
                 Divider(),
-
                 if (selectedFundDetails.isNotEmpty) ...[
                   Column(
                     children: [
@@ -1649,10 +1635,13 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                           itemCount: selectedFundDetails.length,
                           itemBuilder: (context, index) {
                             return Container(
-                              margin: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 4, vertical: 8),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 4),
                               decoration: BoxDecoration(
-                                color: Config.appTheme.themeColor.withOpacity(0.1),
+                                color:
+                                    Config.appTheme.themeColor.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
                                   color: Config.appTheme.themeColor,
@@ -1674,7 +1663,8 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                   InkWell(
                                     onTap: () {
                                       bottomState(() {
-                                        int originalIndex = selectedFundDetails[index]['index'];
+                                        int originalIndex =
+                                            selectedFundDetails[index]['index'];
                                         isSelectedList[originalIndex] = false;
                                         selectedSchemes[originalIndex] = '';
                                       });
@@ -1735,18 +1725,19 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                       }
                       return CheckboxListTile(
                         controlAffinity: ListTileControlAffinity.leading,
-                        title: Text(categoriesList[index]['scheme_amfi_short_name']),
+                        title: Text(
+                            categoriesList[index]['scheme_amfi_short_name']),
                         value: isSelectedList[index],
                         onChanged: (bool? value) {
                           bottomState(() {
                             if (value == true) {
                               if (isSelectedList
-                                  .where((element) => element == true)
-                                  .length <=
+                                      .where((element) => element == true)
+                                      .length <=
                                   4) {
                                 isSelectedList[index] = value!;
                                 selectedSchemes[index] =
-                                fundList[index]['scheme_amfi'];
+                                    categoriesList[index]['scheme_amfi'];
                               } else {
                                 isSelectedList[index] = false;
                                 Utils.showError(
@@ -1852,9 +1843,51 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                   Image.network(data["logo"] ?? "", height: 30),
                   SizedBox(width: 5),
                   Expanded(
-                      child: Text(data["scheme_name"],
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          data["scheme_name"],
                           style: AppFonts.f50014Black
-                              .copyWith(color: Config.appTheme.themeColor))),
+                              .copyWith(color: Config.appTheme.themeColor),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis, // Prevents overflow
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Launch Date : ",
+                              style: AppFonts.f40013.copyWith(fontSize: 12),
+                              softWrap: true,
+                            ),
+                            Flexible(
+                              child: Text(
+                                data["scheme_inception_date"] ?? '',
+                                style: AppFonts.f50014Grey.copyWith(
+                                    color: Colors.black, fontSize: 12),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Expanded(
+                  //     child: Text(data["scheme_name"],
+                  //         style: AppFonts.f50014Black
+                  //             .copyWith(color: Config.appTheme.themeColor))),
+                  // Row(
+                  //   children: [
+                  //     Text('Launch Date: ',
+                  //         style: AppFonts.f50014Black
+                  //             .copyWith(color: Config.appTheme.themeColor)),
+                  //     Text(data["scheme_name"],
+                  //         style: AppFonts.f50014Black
+                  //             .copyWith(color: Config.appTheme.themeColor)),
+                  //   ],
+                  // ),
                   /*Spacer(),
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
@@ -2058,34 +2091,134 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
       );
   }
 
-  void showDatePickerDialog(BuildContext context) async {
-    String period = controller.rollingPeriods.value;
-
+  DateTime getStartDatePastLimit() {
     DateTime now = DateTime.now();
-    DateTime lastDate = now;
+    DateTime pastDate = DateTime.now();
+    dev.log(controller.selectedRollingPeriod.value);
+    switch (controller.selectedRollingPeriod.value) {
+      case '1 Month':
+        pastDate = DateTime(
+          now.year,
+          now.month - 1,
+          now.day - 7,
+          now.hour,
+          now.minute,
+          now.second,
+        );
+      case '1 Year':
+        pastDate = DateTime(
+          now.year - 1,
+          now.month,
+          now.day - 7,
+          now.hour,
+          now.minute,
+          now.second,
+        );
+      case '2 Year':
+        pastDate = DateTime(
+          now.year - 2,
+          now.month,
+          now.day - 7,
+          now.hour,
+          now.minute,
+          now.second,
+        );
+      case '3 Year':
+        pastDate = DateTime(
+          now.year - 3,
+          now.month,
+          now.day - 7,
+          now.hour,
+          now.minute,
+          now.second,
+        );
 
-    if (period.contains("Year")) {
-      int years = int.parse(period.split(" ")[0]);
-      lastDate = DateTime(now.year - years, now.month, now.day).subtract(Duration(days: 7));
-    } else if (period.contains("Month")) {
-      int months = int.parse(period.split(" ")[0]);
-      int targetMonth = now.month - months;
-      int targetYear = now.year;
+      case '5 Year':
+        pastDate = DateTime(
+          now.year - 5,
+          now.month,
+          now.day - 8,
+          now.hour,
+          now.minute,
+          now.second,
+        );
 
-      while (targetMonth <= 0) {
-        targetMonth += 12;
-        targetYear -= 1;
-      }
+      case '7 Year':
+        pastDate = DateTime(
+          now.year - 7,
+          now.month,
+          now.day - 7,
+          now.hour,
+          now.minute,
+          now.second,
+        );
 
-      lastDate = DateTime(targetYear, targetMonth, now.day).subtract(Duration(days: 7));
+      case '10 Year':
+        pastDate = DateTime(
+          now.year - 10,
+          now.month,
+          now.day - 10,
+          now.hour,
+          now.minute,
+          now.second,
+        );
+
+      case '15 Year':
+        pastDate = DateTime(
+          now.year - 15,
+          now.month,
+          now.day - 7,
+          now.hour,
+          now.minute,
+          now.second,
+        );
     }
+    return pastDate;
+  }
 
+  updateStartDate() {
+    final pastDate = getStartDatePastLimit();
+    try {
+      if (convertStrToDt(controller.startDate.value).isAfter(pastDate)) {
+        controller.startDate.value = convertDtToStr(pastDate.copyWith(
+          day: pastDate.day - 7,
+        ));
+        print(controller.startDate.value);
+      } else {
+        controller.startDate.value = convertDtToStr(pastDate);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void showDatePickerDialog(BuildContext context) async {
+    // String period = controller.rollingPeriods.value;
+    final pastDate = getStartDatePastLimit();
+    // DateTime now = DateTime.now();
+    // DateTime lastDate = now;
+    //
+    // if (period.contains("Year")) {
+    //   int years = int.parse(period.split(" ")[0]);
+    //   lastDate = DateTime(now.year - years, now.month, now.day).subtract(Duration(days: 7));
+    // } else if (period.contains("Month")) {
+    //   int months = int.parse(period.split(" ")[0]);
+    //   int targetMonth = now.month - months;
+    //   int targetYear = now.year;
+    //
+    //   while (targetMonth <= 0) {
+    //     targetMonth += 12;
+    //     targetYear -= 1;
+    //   }
+    //
+    //   lastDate = DateTime(targetYear, targetMonth, now.day).subtract(Duration(days: 7));
+    // }
 
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: convertStrToDt(controller.startDate.value),
       firstDate: DateTime(1947),
-      lastDate: lastDate,
+      lastDate: pastDate,
     );
 
     if (pickedDate != null) {
@@ -2094,20 +2227,15 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
 
       startDateController.text = formattedDate;
       controller.startDate.value = formattedDate;
-      rollingReturnCategoryList = [];
-      // await getRollingReturnsVsCategory();
-      // setState(() {});
+      // rollingReturnCategoryList = [];
       EasyLoading.dismiss();
     }
   }
-
 }
 
 class RollingReturnsController extends GetxController {
   var startDate = "26-04-2020".obs;
   final selectedRadioIndex = RxInt(-1);
-
-
 
   // var selectedFund = "ICICI Pru BlueChip Gr".obs;
   // var scheme = "ICICI Pru BlueChip Gr".obs;
@@ -2122,9 +2250,9 @@ class RollingReturnsController extends GetxController {
   // var selectedRollingPeriod = "3 Year";
   var rollingPeriods = "3 Year".obs;
   var schemes =
-      "Aditya Birla Sun Life Flexi Cap Fund - Growth - Regular Plan".obs;
+      "HDFC Flexi Cap Fund - Growth Plan".obs;
   var selectedValues =
-      "Aditya Birla Sun Life Flexi Cap Fund - Growth - Regular Plan".obs;
+      "HDFC Flexi Cap Fund - Growth Plan".obs;
 
   final _debouncer = Debouncer(milliseconds: 300);
   var isProcessingSelection = false.obs;
@@ -2146,7 +2274,6 @@ class RollingReturnsController extends GetxController {
     if (isProcessingSelection.value) return;
 
     _debouncer.run(() {
-
       isProcessingSelection.value = true;
       selectedRadioIndex.value = index;
       selectedFund.value = schemeName;

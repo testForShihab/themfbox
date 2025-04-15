@@ -4,12 +4,12 @@ import 'package:mymfbox2_0/utils/AppThemes.dart';
 
 void main() {
   mainCommon(FlavorConfig()
-    ..appTitle = "Nidhi Capital - Mutual Funds"
-    ..appClientName = "nidhicapital"
-    ..appArn = "116800"
-    ..appLogo = "https://api.mymfbox.com/images/logo/nidhic_apital.png"
-    ..apiKey = "cb79bf4e-0010-47b3-8a3e-1600f2b968bc"
-    ..appTheme = LightBlueTheme()
+    ..appTitle = "THARA"
+    ..appClientName = "gururamfinancial"
+    ..appArn = "265132"
+    ..appLogo = "assets/thara_logo.png"
+    ..apiKey = "2670245e-c4ba-4449-bbf2-b2565f11585b"
+    ..appTheme = RedTheme()
     ..supportEmail = ""
     ..supportMobile = ""
     ..privacyPolicy = ""

@@ -13,6 +13,8 @@ import 'package:mymfbox2_0/utils/Utils.dart';
 //import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:pinput/pinput.dart';
 
+import '../utils/Constants.dart';
+
 class LoginWithOtp extends StatefulWidget {
   const LoginWithOtp({
     super.key,
@@ -133,15 +135,37 @@ class _LoginWithOtpState extends State<LoginWithOtp> {
           child: Column(
             children: [
               SizedBox(height: devHeight * 0.1),
-              Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.all(2),
-                  child:
-                      Image.network(Config.appLogo, height: setImageSize(60))),
+              clientName == "ajfunds"
+                  ? Container(
+                height: setImageSize(80),
+                width: setImageSize(80),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                ),
+                child: ClipOval(
+                  child: (Config.appLogo.contains("http"))
+                      ? Image.network(
+                    Config.appLogo,
+                    fit: BoxFit.cover,
+                  )
+                      : Image.asset(
+                    Config.appLogo,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              )
+                  : Container(
+                color: logobgcolor,
+                padding: EdgeInsets.all(4),
+                child: (Config.appLogo.contains("http"))
+                    ? Image.network(Config.appLogo, height: setImageSize(100))
+                    : (Config.app_client_name == "themfbox") ?Image.asset(Config.appLogo)
+                    : Image.asset(Config.appLogo, width: setImageSize(350)),
+              ),
               SizedBox(height: devHeight * 0.06),
               Text("Mobile OTP Verification",
                   style: TextStyle(
-                      color: (Config.app_client_name == "themfbox") ? Config.appTheme.themeColor : Colors.white,
+                      color: (Config.app_client_name == "themfbox") ? Colors.white : Config.appTheme.themeColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 20)),
               SizedBox(height: devHeight * 0.01),

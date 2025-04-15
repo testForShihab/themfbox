@@ -8,7 +8,7 @@ void main() {
     ..appTitle = "Droplet Wealth"
     ..appClientName = "dropletwealth"
     ..appArn = "133803"
-    ..appLogo = "assets/droplet_logo.png"
+    ..appLogo = "assets/letdrop.png"
     ..apiKey = "6ae6ea29-203a-4d2e-8567-f6734d10d9b5"
     ..theme = ThemeData.dark()
     ..appTheme = DarkBlueTheme()

@@ -207,7 +207,7 @@ class _TopLumpsumFundsState extends State<TopLumpsumFunds> {
                           Icon(Icons.arrow_back),
                           SizedBox(width: 5),
                           Text(
-                            "Top Lumpsum Funds",
+                            "Lumpsum Returns",
                             style: AppFonts.f50014Black
                                 .copyWith(fontSize: 20, color: Colors.white),
                           ),

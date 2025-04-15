@@ -521,17 +521,260 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
     );
   }
 
+  // Widget rpChart({required List<List<ChartData>> funChartData}) {
+  //   // Calculate min and max values for Y axis
+  //   double minY = double.infinity;
+  //   double maxY = double.negativeInfinity;
+  //
+  //   // if (minY == double.infinity || maxY == double.negativeInfinity) {
+  //   //   minY = 0;
+  //   //   maxY = double.negativeInfinity;
+  //   // }
+  //
+  //   for (var series in funChartData) {
+  //     for (var data in series) {
+  //       final value = data.scheme_rolling_returns?.toDouble() ?? 0;
+  //       minY = min(minY, value);
+  //       maxY = max(maxY, value);
+  //     }
+  //   }
+  //
+  //   // Add some padding to min/max values
+  //   final yPadding = (maxY - minY) * 0.1;
+  //   minY -= yPadding;
+  //   maxY += yPadding;
+  //
+  //   return Container(
+  //     height: 300,
+  //     padding: EdgeInsets.all(16),
+  //     child: LineChart(
+  //       LineChartData(
+  //         minY: minY,
+  //         maxY: maxY,
+  //         clipData: FlClipData.all(),
+  //         gridData: FlGridData(
+  //           show: true,
+  //           drawVerticalLine: false,
+  //           horizontalInterval: 5,
+  //           getDrawingHorizontalLine: (value) {
+  //             return FlLine(
+  //               color: Colors.grey.withOpacity(0.2),
+  //               strokeWidth: 1,
+  //             );
+  //           },
+  //         ),
+  //         titlesData: FlTitlesData(
+  //           rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+  //           topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+  //           leftTitles: AxisTitles(
+  //             sideTitles: SideTitles(
+  //               showTitles: true,
+  //               reservedSize: 40,
+  //               interval: ((maxY - minY) / 4).roundToDouble(),
+  //               getTitlesWidget: (value, meta) {
+  //                 return Text(
+  //                   '${value.toInt()}%',
+  //                   style: TextStyle(fontSize: 10),
+  //                 );
+  //               },
+  //             ),
+  //           ),
+  //           bottomTitles: AxisTitles(
+  //             sideTitles: SideTitles(
+  //               showTitles: true,
+  //               interval: max((funChartData[0].length / 10).floor().toDouble(), 1),
+  //               getTitlesWidget: (value, meta) {
+  //                 if (value.toInt() >= funChartData[0].length)
+  //                   return const SizedBox.shrink();
+  //
+  //                 final dataPoint = funChartData[0][value.toInt()];
+  //                 final navDate = dataPoint.nav_date?.split('\n')[0] ?? '';
+  //                 final schemeForwardDateRaw =
+  //                     dataPoint.scheme_forward_date ?? '';
+  //                 String formattedNavDate = navDate.replaceAll('-', '');
+  //                 String formattedSchemeDate = '';
+  //                 try {
+  //                   DateTime parsedSchemeDate =
+  //                       DateTime.parse(schemeForwardDateRaw);
+  //                   formattedSchemeDate =
+  //                       DateFormat('MMM yyyy').format(parsedSchemeDate);
+  //                 } catch (e) {
+  //                   print("Date parsing error: $e");
+  //                   formattedSchemeDate = schemeForwardDateRaw;
+  //                 }
+  //                 return Padding(
+  //                   padding: const EdgeInsets.only(top: 4.0),
+  //                   child: SizedBox(
+  //                     width: 40,
+  //                     child: Transform.rotate(
+  //                       angle: -1.55,
+  //                       child: FittedBox(
+  //                         fit: BoxFit.scaleDown,
+  //                         child: Column(
+  //                           mainAxisSize: MainAxisSize.min,
+  //                           children: [
+  //                             Text(formattedNavDate,
+  //                                 style: const TextStyle(
+  //                                     fontSize: 16,
+  //                                     fontWeight: FontWeight.bold)),
+  //                             Text(
+  //                               formattedSchemeDate,
+  //                               style: const TextStyle(
+  //                                   fontSize: 16, fontWeight: FontWeight.bold),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 );
+  //               },
+  //             ),
+  //           ),
+  //         ),
+  //         borderData: FlBorderData(show: false),
+  //         lineBarsData: [
+  //           LineChartBarData(
+  //             spots: funChartData[0].asMap().entries.map((entry) {
+  //               return FlSpot(entry.key.toDouble(),
+  //                   entry.value.scheme_rolling_returns?.toDouble() ?? 0);
+  //             }).toList(),
+  //             isCurved: true,
+  //             color: Config.appTheme.defaultProfit,
+  //             barWidth: 1.5,
+  //             isStrokeCapRound: true,
+  //             dotData: FlDotData(show: false),
+  //             belowBarData: BarAreaData(
+  //               show: true,
+  //               gradient: LinearGradient(
+  //                 colors: [
+  //                   Config.appTheme.defaultProfit.withOpacity(0.3),
+  //                   Config.appTheme.defaultProfit.withOpacity(0.0),
+  //                 ],
+  //                 begin: Alignment.topCenter,
+  //                 end: Alignment.bottomCenter,
+  //               ),
+  //             ),
+  //           ),
+  //           if (funChartData.length > 1)
+  //             LineChartBarData(
+  //               spots: funChartData[1].asMap().entries.map((entry) {
+  //                 return FlSpot(entry.key.toDouble(),
+  //                     entry.value.scheme_rolling_returns?.toDouble() ?? 0);
+  //               }).toList(),
+  //               isCurved: true,
+  //               color: Config.appTheme.themeColor,
+  //               barWidth: 1.5,
+  //               isStrokeCapRound: true,
+  //               dotData: FlDotData(show: false),
+  //               belowBarData: BarAreaData(
+  //                 show: true,
+  //                 gradient: LinearGradient(
+  //                   colors: [
+  //                     Config.appTheme.themeColor.withOpacity(0.3),
+  //                     Config.appTheme.themeColor.withOpacity(0.0),
+  //                   ],
+  //                   begin: Alignment.topCenter,
+  //                   end: Alignment.bottomCenter,
+  //                 ),
+  //               ),
+  //             ),
+  //         ],
+  //         lineTouchData: LineTouchData(
+  //           touchCallback:
+  //               (FlTouchEvent event, LineTouchResponse? touchResponse) {
+  //             if (event is FlTapUpEvent || event is FlPanUpdateEvent) {
+  //               if (touchResponse != null &&
+  //                   touchResponse.lineBarSpots != null) {
+  //                 for (var touchedSpot in touchResponse.lineBarSpots!) {
+  //                   final int barIndex = touchedSpot.barIndex;
+  //                   final int dataIndex = touchedSpot.x.toInt();
+  //                   if (barIndex < funChartData.length &&
+  //                       dataIndex < funChartData[barIndex].length) {
+  //                     final data = funChartData[barIndex][dataIndex];
+  //                     tooltipDateNotifier.value = data.dateFormatNav ?? '';
+  //                     if (barIndex == 0) {
+  //                       tooltipFundNotifier.value =
+  //                           touchedSpot.y.toStringAsFixed(2);
+  //                     } else if (barIndex == 1) {
+  //                       tooltipValueBenchMarkNotifier.value =
+  //                           touchedSpot.y.toStringAsFixed(2);
+  //                     }
+  //                   }
+  //                 }
+  //               }
+  //             }
+  //           },
+  //           handleBuiltInTouches: true,
+  //           getTouchLineStart: (barData, index) => double.infinity,
+  //           getTouchLineEnd: (barData, index) => 0,
+  //           touchTooltipData: LineTouchTooltipData(
+  //             tooltipBgColor: Colors.white,
+  //             tooltipBorder: BorderSide(color: Colors.grey.withOpacity(0.2)),
+  //             tooltipRoundedRadius: 8,
+  //             getTooltipItems: (List<LineBarSpot> touchedSpots) {
+  //               return touchedSpots.map((spot) {
+  //                 final data = funChartData[spot.barIndex][spot.x.toInt()];
+  //                 final isFund = spot.barIndex == 0;
+  //
+  //                 // Define names and colors for Fund & Benchmark
+  //                 final String label = isFund ? 'Fund' : 'Benchmark';
+  //                 final Color labelColor = isFund
+  //                     ? Config.appTheme.defaultProfit
+  //                     : Config.appTheme.themeColor;
+  //                 final Color valueColor =
+  //                     labelColor; // Use same color for value
+  //
+  //                 return LineTooltipItem(
+  //                   '${data.dateFormatNav ?? ''}\n', // Display Date
+  //                   const TextStyle(
+  //                       color: Colors.black,
+  //                       fontSize: 12,
+  //                       fontWeight: FontWeight.bold),
+  //                   children: [
+  //                     TextSpan(
+  //                       text: '$label: ',
+  //                       style: TextStyle(
+  //                         color: labelColor,
+  //                         fontSize: 12,
+  //                         fontWeight: FontWeight.bold,
+  //                       ),
+  //                     ),
+  //                     TextSpan(
+  //                       text: '${spot.y.toStringAsFixed(2)}%',
+  //                       style: TextStyle(
+  //                         color: valueColor, // Color-coded value
+  //                         fontSize: 14,
+  //                         fontWeight: FontWeight.bold,
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 );
+  //               }).toList();
+  //             },
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
   Widget rpChart({required List<List<ChartData>> funChartData}) {
-    // Calculate min and max values for Y axis
+    // Handle empty data case
+    if (funChartData.isEmpty) {
+      return Container(
+        height: 300,
+        padding: EdgeInsets.all(16),
+        child: Center(child: Text("No chart data available")),
+      );
+    }
+
+    // Calculate min and max values for Y axis across ALL series
     double minY = double.infinity;
     double maxY = double.negativeInfinity;
 
-    // if (minY == double.infinity || maxY == double.negativeInfinity) {
-    //   minY = 0;
-    //   maxY = double.negativeInfinity;
-    // }
-
     for (var series in funChartData) {
+      if (series.isEmpty) continue; // Skip empty series
+
       for (var data in series) {
         final value = data.scheme_rolling_returns?.toDouble() ?? 0;
         minY = min(minY, value);
@@ -539,10 +782,27 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
       }
     }
 
-    // Add some padding to min/max values
-    final yPadding = (maxY - minY) * 0.1;
+    // Handle case where all values are zero or no valid data
+    if (minY == double.infinity || maxY == double.negativeInfinity) {
+      minY = 0;
+      maxY = 1;
+    }
+
+    // Ensure we have some visible range
+    if (minY == maxY) {
+      minY -= 1;
+      maxY += 1;
+    }
+
+    // Add padding that works for both series
+    final yRange = maxY - minY;
+    final yPadding = yRange > 0 ? yRange * 0.1 : 1; // At least 1 unit padding if all values same
     minY -= yPadding;
     maxY += yPadding;
+
+    // Calculate bottom titles interval - ensure it's never zero
+    final dataLength = funChartData[0].length;
+    final bottomInterval = max((dataLength / 10).floorToDouble(), 1);
 
     return Container(
       height: 300,
@@ -551,11 +811,11 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
         LineChartData(
           minY: minY,
           maxY: maxY,
-          clipData: FlClipData.all(),
+          clipData: FlClipData.none(), // Changed from .all() to prevent clipping
           gridData: FlGridData(
             show: true,
             drawVerticalLine: false,
-            horizontalInterval: 5,
+            horizontalInterval: max((maxY - minY) / 5, 0.1),
             getDrawingHorizontalLine: (value) {
               return FlLine(
                 color: Colors.grey.withOpacity(0.2),
@@ -570,10 +830,10 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
               sideTitles: SideTitles(
                 showTitles: true,
                 reservedSize: 40,
-                interval: ((maxY - minY) / 4).roundToDouble(),
+                interval: max((maxY - minY) / 4, 0.1),
                 getTitlesWidget: (value, meta) {
                   return Text(
-                    '${value.toInt()}%',
+                    '${value.toStringAsFixed(1)}%', // More precise display
                     style: TextStyle(fontSize: 10),
                   );
                 },
@@ -582,49 +842,21 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
-                interval: (funChartData[0].length / 10).floor().toDouble(),
+                interval: max((dataLength / 10).floorToDouble(), 1),
                 getTitlesWidget: (value, meta) {
-                  if (value.toInt() >= funChartData[0].length)
+                  if (value.toInt() >= funChartData[0].length) {
                     return const SizedBox.shrink();
+                  }
 
                   final dataPoint = funChartData[0][value.toInt()];
                   final navDate = dataPoint.nav_date?.split('\n')[0] ?? '';
-                  final schemeForwardDateRaw =
-                      dataPoint.scheme_forward_date ?? '';
-                  String formattedNavDate = navDate.replaceAll('-', '');
-                  String formattedSchemeDate = '';
-                  try {
-                    DateTime parsedSchemeDate =
-                        DateTime.parse(schemeForwardDateRaw);
-                    formattedSchemeDate =
-                        DateFormat('MMM yyyy').format(parsedSchemeDate);
-                  } catch (e) {
-                    print("Date parsing error: $e");
-                    formattedSchemeDate = schemeForwardDateRaw;
-                  }
                   return Padding(
                     padding: const EdgeInsets.only(top: 4.0),
-                    child: SizedBox(
-                      width: 40,
-                      child: Transform.rotate(
-                        angle: -1.55,
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(formattedNavDate,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold)),
-                              Text(
-                                formattedSchemeDate,
-                                style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
+                    child: Transform.rotate(
+                      angle: -1.55,
+                      child: Text(
+                        navDate,
+                        style: TextStyle(fontSize: 10),
                       ),
                     ),
                   );
@@ -633,122 +865,55 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
             ),
           ),
           borderData: FlBorderData(show: false),
-          lineBarsData: [
-            LineChartBarData(
-              spots: funChartData[0].asMap().entries.map((entry) {
-                return FlSpot(entry.key.toDouble(),
-                    entry.value.scheme_rolling_returns?.toDouble() ?? 0);
+          lineBarsData: funChartData.asMap().entries.map((entry) {
+            final index = entry.key;
+            final series = entry.value;
+
+            return LineChartBarData(
+              spots: series.asMap().entries.map((spotEntry) {
+                return FlSpot(
+                  spotEntry.key.toDouble(),
+                  spotEntry.value.scheme_rolling_returns?.toDouble() ?? 0,
+                );
               }).toList(),
               isCurved: true,
-              color: Config.appTheme.defaultProfit,
-              barWidth: 1.5,
+              color: index == 0
+                  ? Config.appTheme.defaultProfit
+                  : Config.appTheme.themeColor,
+              barWidth: 2,
               isStrokeCapRound: true,
               dotData: FlDotData(show: false),
               belowBarData: BarAreaData(
-                show: true,
+                show: index == 0, // Only show area for first series if desired
                 gradient: LinearGradient(
                   colors: [
-                    Config.appTheme.defaultProfit.withOpacity(0.3),
-                    Config.appTheme.defaultProfit.withOpacity(0.0),
+                    (index == 0
+                        ? Config.appTheme.defaultProfit
+                        : Config.appTheme.themeColor).withOpacity(0.3),
+                    Colors.transparent,
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
               ),
-            ),
-            if (funChartData.length > 1)
-              LineChartBarData(
-                spots: funChartData[1].asMap().entries.map((entry) {
-                  return FlSpot(entry.key.toDouble(),
-                      entry.value.scheme_rolling_returns?.toDouble() ?? 0);
-                }).toList(),
-                isCurved: true,
-                color: Config.appTheme.themeColor,
-                barWidth: 1.5,
-                isStrokeCapRound: true,
-                dotData: FlDotData(show: false),
-                belowBarData: BarAreaData(
-                  show: true,
-                  gradient: LinearGradient(
-                    colors: [
-                      Config.appTheme.themeColor.withOpacity(0.3),
-                      Config.appTheme.themeColor.withOpacity(0.0),
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                ),
-              ),
-          ],
+            );
+          }).toList(),
           lineTouchData: LineTouchData(
-            touchCallback:
-                (FlTouchEvent event, LineTouchResponse? touchResponse) {
-              if (event is FlTapUpEvent || event is FlPanUpdateEvent) {
-                if (touchResponse != null &&
-                    touchResponse.lineBarSpots != null) {
-                  for (var touchedSpot in touchResponse.lineBarSpots!) {
-                    final int barIndex = touchedSpot.barIndex;
-                    final int dataIndex = touchedSpot.x.toInt();
-                    if (barIndex < funChartData.length &&
-                        dataIndex < funChartData[barIndex].length) {
-                      final data = funChartData[barIndex][dataIndex];
-                      tooltipDateNotifier.value = data.dateFormatNav ?? '';
-                      if (barIndex == 0) {
-                        tooltipFundNotifier.value =
-                            touchedSpot.y.toStringAsFixed(2);
-                      } else if (barIndex == 1) {
-                        tooltipValueBenchMarkNotifier.value =
-                            touchedSpot.y.toStringAsFixed(2);
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            handleBuiltInTouches: true,
-            getTouchLineStart: (barData, index) => double.infinity,
-            getTouchLineEnd: (barData, index) => 0,
+            enabled: true,
             touchTooltipData: LineTouchTooltipData(
               tooltipBgColor: Colors.white,
-              tooltipBorder: BorderSide(color: Colors.grey.withOpacity(0.2)),
-              tooltipRoundedRadius: 8,
+              tooltipBorder: BorderSide(color: Colors.grey),
               getTooltipItems: (List<LineBarSpot> touchedSpots) {
                 return touchedSpots.map((spot) {
-                  final data = funChartData[spot.barIndex][spot.x.toInt()];
                   final isFund = spot.barIndex == 0;
-
-                  // Define names and colors for Fund & Benchmark
-                  final String label = isFund ? 'Fund' : 'Benchmark';
-                  final Color labelColor = isFund
-                      ? Config.appTheme.defaultProfit
-                      : Config.appTheme.themeColor;
-                  final Color valueColor =
-                      labelColor; // Use same color for value
-
                   return LineTooltipItem(
-                    '${data.dateFormatNav ?? ''}\n', // Display Date
-                    const TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold),
-                    children: [
-                      TextSpan(
-                        text: '$label: ',
-                        style: TextStyle(
-                          color: labelColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      TextSpan(
-                        text: '${spot.y.toStringAsFixed(2)}%',
-                        style: TextStyle(
-                          color: valueColor, // Color-coded value
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                    '${isFund ? 'Fund' : 'Benchmark'}: ${spot.y.toStringAsFixed(2)}%\n',
+                    TextStyle(
+                      color: isFund
+                          ? Config.appTheme.defaultProfit
+                          : Config.appTheme.themeColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                   );
                 }).toList();
               },
@@ -1795,7 +1960,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
         pastDate = DateTime(
           now.year - 5,
           now.month,
-          now.day - 7,
+          now.day - 8,
           now.hour,
           now.minute,
           now.second,
@@ -1815,7 +1980,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
         pastDate = DateTime(
           now.year - 10,
           now.month,
-          now.day - 7,
+          now.day - 10,
           now.hour,
           now.minute,
           now.second,
@@ -1851,11 +2016,10 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
   }
 
   void showDatePickerDialog(BuildContext context) async {
-    DateFormat dateFormat = DateFormat("dd-MM-yyyy");
     final pastDate = getStartDatePastLimit();
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: dateFormat.parse(controller.startDate.value),
+      initialDate: convertStrToDt(controller.startDate.value),
       firstDate: DateTime(1947),
       lastDate: pastDate,
     );

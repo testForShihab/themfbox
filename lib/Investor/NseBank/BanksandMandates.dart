@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:mymfbox2_0/Investor/Transact/cart/rpExports.dart';
 import 'package:mymfbox2_0/api/TransactionApi.dart';
 import 'package:mymfbox2_0/rp_widgets/SideBar.dart';
@@ -115,17 +116,22 @@ class _BanksandMandatesState extends State<BanksandMandates> {
     
     paymentMode = "NACH"; // Default payment mode
     paymentModecode = "01"; // Default payment mode code
+
+
     
-    fromDate = "${startDate.day}-${startDate.month}-${startDate.year}"; // Default start date
+    //fromDate = "${startDate.day}-${startDate.month}-${startDate.year}";
+
+    fromDate =convertDtToStr(startDate);// Default start date
+
     
     // Set initial end dates
     DateTime now = DateTime.now();
     endDate = DateTime(now.year + 40, now.month, now.day -1); // Default end date for NSE/MFU
     bseendDate = DateTime(now.year + 40, now.month, now.day -1); // Default end date for BSE
-    toDate = "${bseendDate.day}-${bseendDate.month}-${bseendDate.year}"; // Default BSE end date string
-    
-    mandateEndDate = "Until Cancelled"; // Default end date option
-    sipEndType = "Until Cancelled"; // Default SIP end type
+    //toDate = "${bseendDate.day}-${bseendDate.month}-${bseendDate.year}"; // Default BSE end date string
+    toDate =convertDtToStr(bseendDate);
+    mandateEndDate = "Until Cancelled";
+    sipEndType = "Until Cancelled";
     
     // Set initial ARN if available
     if (client_code_map['broker_code'] != null) {
@@ -293,8 +299,8 @@ class _BanksandMandatesState extends State<BanksandMandates> {
     return 0;
   }
 
-  Future deleteBankMandate(number, umrn) async {
-    String formateMandateType = mandateType.replaceAll('-', '');
+  Future deleteBankMandate(number, umrn,delete_mandate_type) async {
+    String formateMandateType = delete_mandate_type.replaceAll('-', '');
 
     print("mandateType-- $mandateType");
     Map data = await TransactionApi.deleteBankMandate(
@@ -448,9 +454,11 @@ class _BanksandMandatesState extends State<BanksandMandates> {
   int mandateCode = 0;
   String mandateMessage = "";
   String bsePayment_link = "";
+  String transaction_number = "";
 
   Future generateBankMandate(String ifscCode, number, bankaccName, holdername,
-      branch, bankCode) async {
+      branch, bankCode,mandateTypecode) async {
+
     Map data = await TransactionApi.generateBankMandate(
         user_id: user_id,
         client_name: client_name,
@@ -496,6 +504,7 @@ class _BanksandMandatesState extends State<BanksandMandates> {
     if(client_code_map['bse_nse_mfu_flag'] == "BSE"){
       Map result = data['result'];
       bsePayment_link = result['payment_link'];
+      transaction_number = result['transaction_number'];
     }
 
     EasyLoading.dismiss();
@@ -1656,6 +1665,7 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                                               mandateTypecode = code;
                                             });
                                             mandateTypeController.collapse();
+                                            print('mandatetype--$mandateTypecode');
                                           },
                                           child: Row(
                                             children: [
@@ -1670,6 +1680,7 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                                                     mandateTypecode = code;
                                                   });
                                                   mandateTypeController.collapse();
+                                                  print('mandatetype--$mandateTypecode');
                                                 },
                                               ),
                                               Text(desc, style: AppFonts.f50014Grey),
@@ -1811,17 +1822,19 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                           ),
                           onPressed: () async {
                             List list = [startDate, mandateamount];
+                            mandateType = currentState['mandateType'];
+                            mandateTypecode = currentState['mandateTypecode'];
+                            print("mandatetype-- $mandateType");
+                            print("mandateTypecode-- $mandateTypecode");
 
-                            if (selectedOption ==
-                                "Delete the Existing Mandate Details") {
+                            if (selectedOption == "Delete the Existing Mandate Details") {
                               deleteAlert(number, umrn, mandate, mandateamount,
                                   bankaccName, ifscCode);
                               return;
                             }
 
                             if (list.contains("")) {
-                              Utils.showError(
-                                  context, "All Fields are Mandatory");
+                              Utils.showError(context, "All Fields are Mandatory");
                               return;
                             }
                             if (mandateamount == 0) {
@@ -1835,13 +1848,16 @@ class _BanksandMandatesState extends State<BanksandMandates> {
 
                             if (selectedOption != "Delete the Existing Mandate Details") {
                               if ((client_code_map['bse_nse_mfu_flag'] == "BSE" && status != "Pending") || (client_code_map['bse_nse_mfu_flag'] != "BSE")) {
+                                EasyLoading.show();
                                 int res = await generateBankMandate(
                                     ifscCode,
                                     number,
                                     bankaccName,
                                     holderNames,
                                     branch,
-                                    bankCode);
+                                    bankCode,
+                                    currentState['mandateTypecode']);
+                                EasyLoading.dismiss();
                                 if (res == -1) return;
 
                                 Navigator.pop(context);
@@ -1855,85 +1871,10 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                                         bankaccName: bankaccName,
                                         number: number!,
                                         ifscCode: ifscCode,
+                                        mandate_id : transaction_number,
+                                        investor_code: client_code_map['investor_code'],
+                                        mandatetype: currentState['mandateTypecode'],
                                       ));
-                                  print("${MandateSuccess(
-                                    deleteMessage: mandateMessage,
-                                    pagename: "Mandate Generated",
-                                    mandateAmount: mandateamount,
-                                    bankaccName: bankaccName,
-                                    number: number!,
-                                    ifscCode: ifscCode,
-                                  )}");
-                                  /* List list = [startDate, mandateamount];
-
-                            if (selectedOption == "Delete the Existing Mandate Details") {
-                              deleteAlert(mandate['bank_account_number'], mandate['mandate_id'], mandate, mandateamount, mandate['bank_name'], mandate['bank_ifsc_code']);
-                              return;
-                            }
-
-                            if (list.contains("")) {
-                              Utils.showError(
-                                  context, "All Fields are Mandatory");
-                              return;
-                            }
-                            if (mandateamount == 0) {
-                              Utils.showError(
-                                  context, "Please enter a mandate amount");
-                              return;
-                            }
-                            await validateIfsc(mandate['bank_name'], mandate['bank_ifsc_code']);
-                            print("came here ${mandate['bank_ifsc_code']}");
-
-
-
-                            if (selectedOption !=
-                                "Delete the Existing Mandate Details") {
-                              int res = await generateBankMandate(
-                                  mandate['bank_ifsc_code'],
-                                  mandate['bank_account_number'],
-                                  mandate['bank_name'],
-                                  mandate['bank_account_holder_name'],
-                                  mandate['bank_branch'],
-                                  mandate['bank_code']);
-                              if (res == -1) return;
-
-                              Navigator.pop(context);
-                              if (mandateCode == 200) {
-                                Get.to(() => MandateSuccess(
-                                  paymentLink: bsePayment_link ??"",
-                                      deleteMessage: mandateMessage,
-                                      pagename: "Mandate Generated",
-                                      mandateAmount: mandateamount,
-                                      bankaccName: mandate['bank_name'],
-                                      number: mandate['bank_account_number'],
-                                      ifscCode: mandate['bank_ifsc_code'],
-                                    ));
-                                print("${MandateSuccess(
-                                  deleteMessage: mandateMessage,
-                                  pagename: "Mandate Generated",
-                                  mandateAmount: mandateamount,
-                                  bankaccName: mandate['bank_name'],
-                                  number: mandate['bank_account_number'],
-                                  ifscCode: mandate['bank_ifsc_code'],
-                                )}");*/
-                                  /*showCupertinoDialog(
-                                      barrierDismissible: true,
-                                      context: context,
-                                      builder: (_) =>
-                                          AlertDialog(
-                                            title: Text('E-Mandate'),
-                                            content: Text(mandateMessage),
-                                            actions: [
-                                              TextButton(
-                                                child: Text(
-                                                  "Ok",
-                                                ),
-                                                onPressed: () async {
-                                                  Get.back();
-                                                },
-                                              )
-                                            ],
-                                          ));*/
                                   return;
                                 }
                               }
@@ -1941,29 +1882,8 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                                 Utils.showError(context, "Please delete your existing mandate details and try again");
                                 return;
                               }
-
-                              /* if (addCode == 200) {
-                              showCupertinoDialog(
-                                  barrierDismissible: true,
-                                  context: context,
-                                  builder: (_) => AlertDialog(
-                                        title: Text('E-Mandate Registered'),
-                                        content: Text(mandateMessage),
-                                        actions: [
-                                          TextButton(
-                                            child: Text(
-                                              "Ok",
-                                            ),
-                                            onPressed: () async {
-                                              Get.back();
-                                            },
-                                          )
-                                        ],
-                                      ));
-                              Navigator.pop(context);
-                              return;
-                            }*/
-                            } },
+                            }
+                            },
                           child: Text("SUBMIT"),
                         ),
                       ),
@@ -1982,72 +1902,7 @@ class _BanksandMandatesState extends State<BanksandMandates> {
     });*/
   }
 
-  Widget mandateTypeTile(BuildContext context, StateSetter bottomSheet, {
-    required String currentMandateType,
-    required String currentMandateTypeCode,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(10)),
-      child: Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          controller: mandateTypeController,
-          title: Text("Mandate Type", style: AppFonts.f50014Black),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(currentMandateType.isEmpty ? 'Select Type' : currentMandateType,
-                  style: AppFonts.f50012),
-            ],
-          ),
-          children: [
-            DottedLine(),
-            ListView.builder(
-              padding: EdgeInsets.all(0),
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: mandateTypeList.length,
-              itemBuilder: (context, index) {
-                String desc = mandateTypeList[index]['desc'];
-                String code = mandateTypeList[index]['code'];
 
-                return InkWell(
-                  onTap: () {
-                    bottomSheet(() {
-                      mandateType = desc;
-                      mandateTypecode = code;
-                      currentMandateType = desc;
-                      currentMandateTypeCode = code;
-                    });
-                    mandateTypeController.collapse();
-                  },
-                  child: Row(
-                    children: [
-                      Radio(
-                        value: desc,
-                        groupValue: currentMandateType,
-                        onChanged: (value) {
-                          bottomSheet(() {
-                            mandateType = desc;
-                            mandateTypecode = code;
-                            currentMandateType = desc;
-                            currentMandateTypeCode = code;
-                          });
-                          mandateTypeController.collapse();
-                        },
-                      ),
-                      Text(desc, style: AppFonts.f50014Grey),
-                    ],
-                  ),
-                );
-              },
-            )
-          ],
-        ),
-      ),
-    );
-  }
 
   String paymentMode = 'NACH';
   String paymentModecode = '01';
@@ -2120,6 +1975,7 @@ class _BanksandMandatesState extends State<BanksandMandates> {
   }
 
   deleteAlert(number, umrn, Map mandate, mandateamount, bankaccName, ifscCode) {
+    String delete_mandate_type = mandate['mandate_type'];
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -2158,7 +2014,7 @@ class _BanksandMandatesState extends State<BanksandMandates> {
             ),
             onPressed: () async {
               EasyLoading.show();
-              int res = await deleteBankMandate(number, umrn);
+              int res = await deleteBankMandate(number, umrn,delete_mandate_type);
               EasyLoading.dismiss();
               if (res == -1) return;
 

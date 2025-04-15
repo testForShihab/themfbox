@@ -175,7 +175,10 @@ const List RemoveWhitebg = [
   'dropletwealth',
   'anubandh',
   'bharatfinancialservices',
-  'dishaawreeenterprisellp'
+  'dishaawreeenterprisellp',
+  'keenvestor',
+  'eureka',
+  'amigowealth'
 ];
 
 Color logobgcolor = RemoveWhitebg.contains(client_name) ? Colors.transparent : Colors.white;

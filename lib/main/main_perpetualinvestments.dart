@@ -14,8 +14,8 @@ void main() {
     ..apiKey = "536dd2f1-565b-4e6b-84ec-4480baf92d0e"
     ..theme = ThemeData.dark()
     ..appTheme = DarkOrangeTheme()
-    ..supportEmail = "investperpetual@gmail.com"
-    ..supportMobile = "+91 9447328096"
+    ..supportEmail = ""
+    ..supportMobile = ""
     ..privacyPolicy = ""
     ..pdfURL = "https://api.themfbox.com");
 }

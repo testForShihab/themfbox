@@ -233,10 +233,11 @@ class AdminApi {
     required String subbroker_name,
     required String rm_name,
   }) async {
+    String encodedSchemes = Uri.encodeComponent(scheme_name);
     String url =
         "${ApiConfig.apiUrl}/advisor/getSchemesWiseInvestors?key=${ApiConfig.apiKey}&"
         "user_id=$user_id&client_name=$client_name&"
-        "scheme_name=$scheme_name&branch_name=$branch_name&broker_code=$broker_code&subbroker_name=$subbroker_name&rm_name=$rm_name";
+        "scheme_name=$encodedSchemes&branch_name=$branch_name&broker_code=$broker_code&subbroker_name=$subbroker_name&rm_name=$rm_name";
 
     print("getSchemesWiseInvestors url = $url");
     http.Response response = await http.post(Uri.parse(url));
