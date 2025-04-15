@@ -32,11 +32,13 @@ class SipAmountInput extends StatefulWidget {
     required this.amc,
     this.trnx_type,
   });
+
   final String? trnx_type;
   final String shortName, logo;
   final String schemeAmfi, folio;
   final String amc;
   final bool isNfo;
+
   @override
   State<SipAmountInput> createState() => _SipAmountInputState();
 }
@@ -51,7 +53,6 @@ class _SipAmountInputState extends State<SipAmountInput> {
   List folioList = [];
   late String folio;
   List<int> disableWeekdays = [];
-
 
   Future getFolioList() async {
     if (folioList.isNotEmpty) return 0;
@@ -81,11 +82,43 @@ class _SipAmountInputState extends State<SipAmountInput> {
   String sipEndType = "Until Cancelled";
 
   String fornightlyFirstStartDate = "";
-  List fornightlyFirstStartDateList = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"];
+  List fornightlyFirstStartDateList = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15"
+  ];
 
   String fornightlySecondStartDate = "";
-  List fornightlySecondStartDateList = ["16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"];
-
+  List fornightlySecondStartDateList = [
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "30",
+    "31"
+  ];
 
   // Rx<DateTime> sipStartDate = DateTime.now().add(Duration(days: 7)).obs;
   DateTime sipEndDate = DateTime.now();
@@ -104,7 +137,7 @@ class _SipAmountInputState extends State<SipAmountInput> {
   num minAmount = 0;
 
   Future getMinAmount() async {
-   // if(minAmount != 0) return 0;
+    // if(minAmount != 0) return 0;
     Map data = await TransactionApi.getSipMinAmount(
       scheme_name: widget.schemeAmfi.trim(),
       purchase_type: (folio.contains("New")) ? "FP" : "AP",
@@ -124,20 +157,21 @@ class _SipAmountInputState extends State<SipAmountInput> {
     return 0;
   }
 
-  Future getSipDividendSchemeoptions() async{
+  Future getSipDividendSchemeoptions() async {
     Map data = await TransactionApi.getSipDividendSchemeoptions(
         scheme_name: widget.schemeAmfi,
         bse_nse_mfu_flag: client_code_map['bse_nse_mfu_flag'],
         client_name: client_name,
         user_id: user_id);
 
-    if(data['status'] != 200){
+    if (data['status'] != 200) {
       if (!widget.isNfo) Utils.showError(context, data['msg']);
       return -1;
     }
 
     payoutList = data['result'];
-    dividend_code = dividend_code.isEmpty ? payoutList[0]['dividend_code'] : dividend_code;
+    dividend_code =
+        dividend_code.isEmpty ? payoutList[0]['dividend_code'] : dividend_code;
     print("dividend_code $dividend_code");
 
     //await getMinAmount();
@@ -145,24 +179,28 @@ class _SipAmountInputState extends State<SipAmountInput> {
   }
 
   List sipdayList = [];
-  Future getSipDays()async{
-    print("sipdayList => ${transactController.startDate.value.toString().split(" ").first}");
-    String sipStartDate = transactController.startDate.value.toString().split(" ").first;
-    if(client_code_map['bse_nse_mfu_flag'] == "MFU"){
-      sipStartDate = transactControllermfu.startDate.value.toString().split(" ").first;
+
+  Future getSipDays() async {
+    print(
+        "sipdayList => ${transactController.startDate.value.toString().split(" ").first}");
+    String sipStartDate =
+        transactController.startDate.value.toString().split(" ").first;
+    if (client_code_map['bse_nse_mfu_flag'] == "MFU") {
+      sipStartDate =
+          transactControllermfu.startDate.value.toString().split(" ").first;
     }
 
-    EasyLoading.isShow ;
-    if(sipdayList.isNotEmpty) return 0;
+    EasyLoading.isShow;
+    if (sipdayList.isNotEmpty) return 0;
     Map data = await TransactionApi.getSipDays(
-        user_id: user_id,
-        client_name: client_name,
-        bse_nse_mfu_flag: client_code_map['bse_nse_mfu_flag'],
+      user_id: user_id,
+      client_name: client_name,
+      bse_nse_mfu_flag: client_code_map['bse_nse_mfu_flag'],
       start_date: sipStartDate,
       frequency: frequency,
     );
 
-    if(data['status'] != SUCCESS){
+    if (data['status'] != SUCCESS) {
       Utils.showError(context, data['msg']);
       return -1;
     }
@@ -177,6 +215,7 @@ class _SipAmountInputState extends State<SipAmountInput> {
   }
 
   List dateAndFreq = [];
+
   Future getSipDatesAndFrequency() async {
     if (dateAndFreq.isNotEmpty) return 0;
     EasyLoading.show();
@@ -199,12 +238,13 @@ class _SipAmountInputState extends State<SipAmountInput> {
     dateList = temp['sip_dates'].split(",");
 
     // Only adjust date for NSE and weekly frequency
-    if (client_code_map['bse_nse_mfu_flag'].toUpperCase() == "NSE" && 
+    if (client_code_map['bse_nse_mfu_flag'].toUpperCase() == "NSE" &&
         frequency.toLowerCase() == "weekly") {
       DateTime currentDate = transactController.startDate.value;
       if ([DateTime.saturday, DateTime.sunday].contains(currentDate.weekday)) {
         DateTime adjustedDate = currentDate;
-        while ([DateTime.saturday, DateTime.sunday].contains(adjustedDate.weekday)) {
+        while ([DateTime.saturday, DateTime.sunday]
+            .contains(adjustedDate.weekday)) {
           adjustedDate = adjustedDate.add(Duration(days: 1));
         }
         await transactController.setStartDateWithCallback(adjustedDate, () {
@@ -224,14 +264,15 @@ class _SipAmountInputState extends State<SipAmountInput> {
     await getSipDatesAndFrequency();
     await getSipDividendSchemeoptions();
     await getMinAmount();
-    if((client_code_map['bse_nse_mfu_flag'].toUpperCase() == "NSE") && (frequency.toLowerCase() == "weekly"))
-    {
+    if ((client_code_map['bse_nse_mfu_flag'].toUpperCase() == "NSE") &&
+        (frequency.toLowerCase() == "weekly")) {
       await getSipDays();
     }
 
     EasyLoading.dismiss();
     return 0;
   }
+
   late ExpansionTileController folioController;
   late ExpansionTileController frequencyController;
   late ExpansionTileController sipDateController;
@@ -240,6 +281,7 @@ class _SipAmountInputState extends State<SipAmountInput> {
   late ExpansionTileController sipFornightlySecondController;
   late ExpansionTileController sipDaysController;
   late ExpansionTileController payoutController;
+
   @override
   void initState() {
     super.initState();
@@ -265,17 +307,19 @@ class _SipAmountInputState extends State<SipAmountInput> {
   }
 
   void adjustInitialDate() {
-    if (frequency.toLowerCase() == "weekly" && client_code_map['bse_nse_mfu_flag'].toUpperCase() == "NSE") {
+    if (frequency.toLowerCase() == "weekly" &&
+        client_code_map['bse_nse_mfu_flag'].toUpperCase() == "NSE") {
       DateTime currentDate = transactController.startDate.value;
       if ([DateTime.saturday, DateTime.sunday].contains(currentDate.weekday)) {
         DateTime adjustedDate = currentDate;
-        while ([DateTime.saturday, DateTime.sunday].contains(adjustedDate.weekday)) {
+        while ([DateTime.saturday, DateTime.sunday]
+            .contains(adjustedDate.weekday)) {
           adjustedDate = adjustedDate.add(Duration(days: 1));
         }
         transactController.setStartDateWithCallback(adjustedDate, () {
           setState(() {});
         });
-       /* if (client_code_map['bse_nse_mfu_flag'] == "MFU") {
+        /* if (client_code_map['bse_nse_mfu_flag'] == "MFU") {
           transactControllermfu.setStartDateWithCallback(adjustedDate, () {
             setState(() {});
           });
@@ -285,7 +329,8 @@ class _SipAmountInputState extends State<SipAmountInput> {
   }
 
   TransactController transactController = Get.put(TransactController());
-  TransactControllerMfu transactControllermfu = Get.put(TransactControllerMfu());
+  TransactControllerMfu transactControllermfu =
+      Get.put(TransactControllerMfu());
 
   @override
   Widget build(BuildContext context) {
@@ -327,89 +372,113 @@ class _SipAmountInputState extends State<SipAmountInput> {
                           payoutExpansionTile(),
                           frequencyExpansionTile(context),
 
-                          SizedBox(height: 16,),
-
-                          if(client_code_map['bse_nse_mfu_flag'].toUpperCase() == "NSE")
-                          InkWell(
-                            onTap: () async {
-                              print("bse_nse_mfu_flag-- ${client_code_map['bse_nse_mfu_flag']}");
-
-                              // Update disableWeekdays based on frequency only for NSE
-                              if (frequency.toLowerCase() == "weekly") {
-                                disableWeekdays = [DateTime.sunday, DateTime.saturday];
-                              } else {
-                                disableWeekdays = [];
-                              }
-
-                              DateTime initialDate = transactController.startDate.value;
-
-                              // Adjust initial date if it falls on a weekend (only for NSE weekly)
-                              if (frequency.toLowerCase() == "weekly" && 
-                                  [DateTime.saturday, DateTime.sunday].contains(initialDate.weekday)) {
-                                do {
-                                  initialDate = initialDate.add(Duration(days: 1));
-                                } while ([DateTime.saturday, DateTime.sunday].contains(initialDate.weekday));
-                                
-                                await transactController.setStartDateWithCallback(initialDate, () {
-                                  setState(() {});
-                                });
-                              }
-
-                              // Show DatePicker
-                              DateTime? temp = await showDatePicker(
-                                selectableDayPredicate: (DateTime dateTime) => 
-                                  !disableWeekdays.contains(dateTime.weekday),
-                                context: Get.context!,
-                                firstDate: DateTime.now().add(Duration(days: 7)),
-                                initialDate: initialDate,
-                                lastDate: DateTime(2030),
-                              );
-
-                              if (temp == null) return;
-
-                              await transactController.setStartDateWithCallback(temp, () {
-                                if (frequency.toLowerCase() == "weekly") sipdayList = [];
-                                setState(() {});
-                              });
-                            },
-                            child: transactController.rpDatePicker("SIP Start Date"),
+                          SizedBox(
+                            height: 16,
                           ),
 
-                          if(client_code_map['bse_nse_mfu_flag'].toUpperCase() == "MFU")
-                          InkWell(
+                          if (client_code_map['bse_nse_mfu_flag']
+                                  .toUpperCase() ==
+                              "NSE")
+                            InkWell(
                               onTap: () async {
-                                print("bse_nse_mfu_flag-- ${client_code_map['bse_nse_mfu_flag']}");
-                                
-                                // No weekend restrictions for MFU
-                                disableWeekdays = [];
+                                print(
+                                    "bse_nse_mfu_flag-- ${client_code_map['bse_nse_mfu_flag']}");
 
+                                // Update disableWeekdays based on frequency only for NSE
+                                if (frequency.toLowerCase() == "weekly") {
+                                  disableWeekdays = [
+                                    DateTime.sunday,
+                                    DateTime.saturday
+                                  ];
+                                } else {
+                                  disableWeekdays = [];
+                                }
+
+                                DateTime initialDate =
+                                    transactController.startDate.value;
+
+                                // Adjust initial date if it falls on a weekend (only for NSE weekly)
+                                if (frequency.toLowerCase() == "weekly" &&
+                                    [DateTime.saturday, DateTime.sunday]
+                                        .contains(initialDate.weekday)) {
+                                  do {
+                                    initialDate =
+                                        initialDate.add(Duration(days: 1));
+                                  } while ([DateTime.saturday, DateTime.sunday]
+                                      .contains(initialDate.weekday));
+
+                                  await transactController
+                                      .setStartDateWithCallback(initialDate,
+                                          () {
+                                    setState(() {});
+                                  });
+                                }
+
+                                // Show DatePicker
                                 DateTime? temp = await showDatePicker(
+                                  selectableDayPredicate: (DateTime dateTime) =>
+                                      !disableWeekdays
+                                          .contains(dateTime.weekday),
                                   context: Get.context!,
-                                  firstDate: DateTime.now().add(Duration(days: 1)),
-                                  initialDate: transactControllermfu.startDate.value,
-                                  lastDate: DateTime(2030)
+                                  firstDate:
+                                      DateTime.now().add(Duration(days: 7)),
+                                  initialDate: initialDate,
+                                  lastDate: DateTime(2030),
                                 );
+
                                 if (temp == null) return;
-                                
-                                transactControllermfu.setStartDateWithCallback(temp, () async {
-                                  //if(frequency.toLowerCase() == "weekly") sipdayList = [];
+
+                                await transactController
+                                    .setStartDateWithCallback(temp, () {
+                                  if (frequency.toLowerCase() == "weekly")
+                                    sipdayList = [];
                                   setState(() {});
                                 });
                               },
-                              child: transactControllermfu.rpDatePicker("SIP Start Date")
-                          ),
+                              child: transactController
+                                  .rpDatePicker("SIP Start Date"),
+                            ),
+
+                          if (client_code_map['bse_nse_mfu_flag']
+                                  .toUpperCase() ==
+                              "MFU")
+                            InkWell(
+                                onTap: () async {
+                                  print(
+                                      "bse_nse_mfu_flag-- ${client_code_map['bse_nse_mfu_flag']}");
+
+                                  // No weekend restrictions for MFU
+                                  disableWeekdays = [];
+
+                                  DateTime? temp = await showDatePicker(
+                                      context: Get.context!,
+                                      firstDate:
+                                          DateTime.now().add(Duration(days: 1)),
+                                      initialDate:
+                                          transactControllermfu.startDate.value,
+                                      lastDate: DateTime(2030));
+                                  if (temp == null) return;
+
+                                  transactControllermfu
+                                      .setStartDateWithCallback(temp, () async {
+                                    //if(frequency.toLowerCase() == "weekly") sipdayList = [];
+                                    setState(() {});
+                                  });
+                                },
+                                child: transactControllermfu
+                                    .rpDatePicker("SIP Start Date")),
 
                           Visibility(
                             visible: frequency.toLowerCase() == "weekly",
                             child: Column(
                               children: [
-                               /* SizedBox(height: 16),
+                                /* SizedBox(height: 16),
                                 sipDaysExpansionTile(context),*/
                               ],
                             ),
                           ),
 
-                         /* Visibility(
+                          /* Visibility(
                               visible: (client_code_map['bse_nse_mfu_flag'] == "NSE" && frequency.toLowerCase() == "fortnightly"),
                               child: Column(
                                 children: [
@@ -433,7 +502,7 @@ class _SipAmountInputState extends State<SipAmountInput> {
               text: "CONTINUE",
               onPress: () async {
                 DateTime sipStartDate = transactController.startDate.value;
-                if(client_code_map['bse_nse_mfu_flag'] == "MFU"){
+                if (client_code_map['bse_nse_mfu_flag'] == "MFU") {
                   sipStartDate = transactControllermfu.startDate.value;
                 }
                 if (amount == 0) {
@@ -443,6 +512,12 @@ class _SipAmountInputState extends State<SipAmountInput> {
 
                 if (amount < minAmount) {
                   Utils.showError(context, "Min Amount is $rupee $minAmount");
+                  return;
+                }
+
+                if (!availableDates.contains(sipStartDate.day.toString())) {
+                  Utils.showError(context,
+                      "Please select the sip start date with in the following - ${availableDates.join(',')} dates");
                   return;
                 }
 
@@ -515,9 +590,11 @@ class _SipAmountInputState extends State<SipAmountInput> {
 
   Widget payoutExpansionTile() {
     //if (widget.isNfo) return SizedBox();
-    if(payoutList.isEmpty) return SizedBox();
+    if (payoutList.isEmpty) return SizedBox();
     payout = payout.isEmpty ? payoutList[0]["dividend_name"] : payout;
-    if(payout == "Growth") {return SizedBox();}
+    if (payout == "Growth") {
+      return SizedBox();
+    }
 
     return Container(
       margin: EdgeInsets.only(bottom: 16),
@@ -542,10 +619,10 @@ class _SipAmountInputState extends State<SipAmountInput> {
               itemBuilder: (context, index) {
                 Map divTemp = payoutList[index];
                 String temp = divTemp['dividend_name'];
-                String dividend_temp = divTemp ['dividend_code'];
+                String dividend_temp = divTemp['dividend_code'];
 
                 return InkWell(
-                  onTap: ()  async {
+                  onTap: () async {
                     payout = temp;
                     dividend_code = dividend_temp;
                     payoutController.collapse();
@@ -577,10 +654,9 @@ class _SipAmountInputState extends State<SipAmountInput> {
 
   Future saveCartByUserId() async {
     DateTime sipStartDate = transactController.startDate.value;
-    if(client_code_map['bse_nse_mfu_flag'] == "MFU"){
+    if (client_code_map['bse_nse_mfu_flag'] == "MFU") {
       sipStartDate = transactControllermfu.startDate.value;
     }
-
 
     Map data = await TransactionApi.saveCartByUserId(
       user_id: user_id,
@@ -604,8 +680,14 @@ class _SipAmountInputState extends State<SipAmountInput> {
       total_units: "",
       nfo_flag: (widget.isNfo) ? "Y" : "N",
       context: context,
-      sip_first_date: ((client_code_map['bse_nse_mfu_flag'] == "NSE") && (frequency.toLowerCase() == "fortnightly")) ? fornightlyFirstStartDate : "",
-      sip_second_date: ((client_code_map['bse_nse_mfu_flag'] == "NSE") && (frequency.toLowerCase() == "fortnightly")) ? fornightlySecondStartDate : "",
+      sip_first_date: ((client_code_map['bse_nse_mfu_flag'] == "NSE") &&
+              (frequency.toLowerCase() == "fortnightly"))
+          ? fornightlyFirstStartDate
+          : "",
+      sip_second_date: ((client_code_map['bse_nse_mfu_flag'] == "NSE") &&
+              (frequency.toLowerCase() == "fortnightly"))
+          ? fornightlySecondStartDate
+          : "",
     );
 
     if (data['status'] != 200) {
@@ -689,187 +771,231 @@ class _SipAmountInputState extends State<SipAmountInput> {
           color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          controller: folioController,
-          title: Text("Folio Number", style: AppFonts.f50014Black),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(folio,
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 13,
-                      color: Config.appTheme.themeColor)),
-            ],
-          ),
+        child: Column(
           children: [
-            ListView.builder(
-              shrinkWrap: true,
-              // physics: NeverScrollableScrollPhysics(),
-              itemCount: folioList.length,
-              itemBuilder: (context, index) {
-                Map map = folioList[index];
-                String tempFolio = map['folio_no'];
+            ExpansionTile(
+              controller: folioController,
+              title: Text("Folio Number", style: AppFonts.f50014Black),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(folio,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13,
+                          color: Config.appTheme.themeColor)),
+                ],
+              ),
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  // physics: NeverScrollableScrollPhysics(),
+                  itemCount: folioList.length,
+                  itemBuilder: (context, index) {
+                    Map map = folioList[index];
+                    String tempFolio = map['folio_no'];
 
-                return InkWell(
-                  onTap: () async {
-                    folio = tempFolio;
-                    folioController.collapse();
-                    await getMinAmount();
-                    setState(() {});
-                  },
-                  child: Row(
-                    children: [
-                      Radio(
-                        value: tempFolio,
-                        groupValue: folio,
-                        onChanged: (value) async {
-                          folio = tempFolio;
-                          folioController.collapse();
-                          await getMinAmount();
-                          setState(() {});
-                        },
+                    return InkWell(
+                      onTap: () async {
+                        folio = tempFolio;
+                        folioController.collapse();
+                        await getMinAmount();
+                        setState(() {});
+                      },
+                      child: Row(
+                        children: [
+                          Radio(
+                            value: tempFolio,
+                            groupValue: folio,
+                            onChanged: (value) async {
+                              folio = tempFolio;
+                              folioController.collapse();
+                              await getMinAmount();
+                              setState(() {});
+                            },
+                          ),
+                          Text(tempFolio),
+                        ],
                       ),
-                      Text(tempFolio),
-                    ],
-                  ),
-                );
-              },
-            )
+                    );
+                  },
+                )
+              ],
+            ),
           ],
         ),
       ),
     );
   }
+
+  var availableDates = <String>[];
 
   Widget frequencyExpansionTile(BuildContext context) {
     String title = frequency;
 
+    final tempSipList = dateAndFreq.map((e) => SIPDetails.fromJson(e)).toList();
+    final selectedDate = tempSipList
+        .firstWhereOrNull((e) => e.sipFrequencyCode == frequencyCode)
+        ?.sipDates;
+    availableDates =
+        (selectedDate ?? '').split(',').toList().map((e) => e).toList();
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white, 
-        borderRadius: BorderRadius.circular(10)
-      ),
+          color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          controller: frequencyController,
-          title: Text("SIP Frequency", style: AppFonts.f50014Black),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title, style: AppFonts.f50012),
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: dateAndFreq.length,
-              itemBuilder: (context, index) {
-                Map data = dateAndFreq[index];
-                String tempCode = data['sip_frequency_code'];
-                String temp = data['sip_frequency'];
+            ExpansionTile(
+              controller: frequencyController,
+              title: Text("SIP Frequency", style: AppFonts.f50014Black),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: AppFonts.f50012),
+                ],
+              ),
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: dateAndFreq.length,
+                  itemBuilder: (context, index) {
+                    Map data = dateAndFreq[index];
+                    String tempCode = data['sip_frequency_code'];
+                    String temp = data['sip_frequency'];
 
-                return InkWell(
-                  onTap: () async {
-                    frequency = temp;
-                    frequencyCode = tempCode;
+                    return InkWell(
+                      onTap: () async {
+                        frequency = temp;
+                        frequencyCode = tempCode;
 
-                    // Handle weekly frequency date adjustment
-                    if (temp.toLowerCase() == "weekly") {
-                      disableWeekdays = [DateTime.sunday, DateTime.saturday];
+                        // Handle weekly frequency date adjustment
+                        if (temp.toLowerCase() == "weekly") {
+                          disableWeekdays = [
+                            DateTime.sunday,
+                            DateTime.saturday
+                          ];
 
-                      // Get current start date
-                      DateTime currentDate = client_code_map?['bse_nse_mfu_flag'] == "MFU"
-                          ? transactControllermfu.startDate.value
-                          : transactController.startDate.value;
+                          // Get current start date
+                          DateTime currentDate =
+                              client_code_map?['bse_nse_mfu_flag'] == "MFU"
+                                  ? transactControllermfu.startDate.value
+                                  : transactController.startDate.value;
 
-                      // Check if it's a weekend
-                      if ([DateTime.saturday, DateTime.sunday].contains(currentDate.weekday)) {
-                        // Find next valid weekday
-                        DateTime adjustedDate = currentDate;
-                        while ([DateTime.saturday, DateTime.sunday].contains(adjustedDate.weekday)) {
-                          adjustedDate = adjustedDate.add(Duration(days: 1));
-                        }
+                          // Check if it's a weekend
+                          if ([DateTime.saturday, DateTime.sunday]
+                              .contains(currentDate.weekday)) {
+                            // Find next valid weekday
+                            DateTime adjustedDate = currentDate;
+                            while ([DateTime.saturday, DateTime.sunday]
+                                .contains(adjustedDate.weekday)) {
+                              adjustedDate =
+                                  adjustedDate.add(Duration(days: 1));
+                            }
 
-                        // Update the date in the appropriate controller
-                        if (client_code_map?['bse_nse_mfu_flag'] == "NSE") {
-                          await transactController.setStartDateWithCallback(adjustedDate, () {
-                            if (mounted) setState(() {});
-                          });
-                        }
-                       /* else {
-                          await transactController.setStartDateWithCallback(adjustedDate, () {
-                            if (mounted) setState(() {});
-                          });
-                        }*/
-                      }
-                    } else {
-                      disableWeekdays = [];
-                    }
-
-                    frequencyController.collapse();
-                    setState(() {});
-                  },
-                  child: Row(
-                    children: [
-                      Radio(
-                        value: tempCode,
-                        groupValue: frequencyCode,
-                        onChanged: (value) async {
-                          frequency = temp;
-                          frequencyCode = tempCode;
-
-                          // Same weekly frequency date adjustment logic for radio button
-                          if (temp.toLowerCase() == "weekly" && client_code_map['bse_nse_mfu_flag'] == "NSE") {
-                            disableWeekdays = [DateTime.sunday, DateTime.saturday];
-                            
-                            DateTime currentDate = /*client_code_map['bse_nse_mfu_flag'] == "MFU"
-                                ? transactControllermfu.startDate.value 
-                                : */transactController.startDate.value;
-
-
-
-                           /* if (client_code_map['bse_nse_mfu_flag'] == "MFU") {
-                              await transactControllermfu.setStartDateWithCallback(adjustedDate, () {
+                            // Update the date in the appropriate controller
+                            if (client_code_map?['bse_nse_mfu_flag'] == "NSE") {
+                              await transactController
+                                  .setStartDateWithCallback(adjustedDate, () {
+                                if (mounted) setState(() {});
+                              });
+                            }
+                            /* else {
+                              await transactController.setStartDateWithCallback(adjustedDate, () {
                                 if (mounted) setState(() {});
                               });
                             }*/
-
-                            if ([DateTime.saturday, DateTime.sunday].contains(currentDate.weekday)) {
-                              DateTime adjustedDate = currentDate;
-                              while ([DateTime.saturday, DateTime.sunday].contains(adjustedDate.weekday)) {
-                                adjustedDate = adjustedDate.add(Duration(days: 1));
-                              }
-
-                              if (client_code_map['bse_nse_mfu_flag'] == "NSE") {
-                                await transactController.setStartDateWithCallback(adjustedDate, () {
-                                  if (mounted) setState(() {});
-                                });
-                              }
-                            }
-                          } else {
-                            disableWeekdays = [];
                           }
+                        } else {
+                          disableWeekdays = [];
+                        }
 
-                          frequencyController.collapse();
-                          setState(() {});
-                        },
+                        frequencyController.collapse();
+                        setState(() {});
+                      },
+                      child: Row(
+                        children: [
+                          Radio(
+                            value: tempCode,
+                            groupValue: frequencyCode,
+                            onChanged: (value) async {
+                              frequency = temp;
+                              frequencyCode = tempCode;
+
+                              // Same weekly frequency date adjustment logic for radio button
+                              if (temp.toLowerCase() == "weekly" &&
+                                  client_code_map['bse_nse_mfu_flag'] ==
+                                      "NSE") {
+                                disableWeekdays = [
+                                  DateTime.sunday,
+                                  DateTime.saturday
+                                ];
+
+                                DateTime
+                                    currentDate = /*client_code_map['bse_nse_mfu_flag'] == "MFU"
+                                    ? transactControllermfu.startDate.value
+                                    : */
+                                    transactController.startDate.value;
+
+                                /* if (client_code_map['bse_nse_mfu_flag'] == "MFU") {
+                                  await transactControllermfu.setStartDateWithCallback(adjustedDate, () {
+                                    if (mounted) setState(() {});
+                                  });
+                                }*/
+
+                                if ([DateTime.saturday, DateTime.sunday]
+                                    .contains(currentDate.weekday)) {
+                                  DateTime adjustedDate = currentDate;
+                                  while ([DateTime.saturday, DateTime.sunday]
+                                      .contains(adjustedDate.weekday)) {
+                                    adjustedDate =
+                                        adjustedDate.add(Duration(days: 1));
+                                  }
+
+                                  if (client_code_map['bse_nse_mfu_flag'] ==
+                                      "NSE") {
+                                    await transactController
+                                        .setStartDateWithCallback(adjustedDate,
+                                            () {
+                                      if (mounted) setState(() {});
+                                    });
+                                  }
+                                }
+                              } else {
+                                disableWeekdays = [];
+                              }
+
+                              frequencyController.collapse();
+                              setState(() {});
+                            },
+                          ),
+                          Text(temp),
+                        ],
                       ),
-                      Text(temp),
-                    ],
-                  ),
-                );
-              },
-            )
+                    );
+                  },
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20)
+                  .copyWith(bottom: 8),
+              child: Text(
+                'This scheme allows only these SIP dates: ${selectedDate ?? ''}',
+                style: TextStyle(fontSize: 12),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
- /* Widget sipFornightlyFirstExpansionTile(BuildContext context){
+  /* Widget sipFornightlyFirstExpansionTile(BuildContext context){
 
     return Container(
       decoration: BoxDecoration(
@@ -926,7 +1052,7 @@ class _SipAmountInputState extends State<SipAmountInput> {
     );
   }*/
 
-  Widget sipFornightlySecondExpansionTile(BuildContext context){
+  Widget sipFornightlySecondExpansionTile(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(10)),
@@ -979,10 +1105,8 @@ class _SipAmountInputState extends State<SipAmountInput> {
   }
 
   Widget sipDaysExpansionTile(BuildContext context) {
-
     /*if(frequency != "Weekly") return SizedBox();*/
     String title = sipDay;
-
 
     return Container(
       decoration: BoxDecoration(
@@ -1108,8 +1232,8 @@ class _SipAmountInputState extends State<SipAmountInput> {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(sipEndType,style:  AppFonts.f50012),
-             // Text((sipEndType.contains("Until")) ? Utils.getFormattedDate(date: sipEndDate) : sipEndType, style: AppFonts.f50012),
+              Text(sipEndType, style: AppFonts.f50012),
+              // Text((sipEndType.contains("Until")) ? Utils.getFormattedDate(date: sipEndDate) : sipEndType, style: AppFonts.f50012),
             ],
           ),
           expandedCrossAxisAlignment: CrossAxisAlignment.start,
@@ -1133,7 +1257,8 @@ class _SipAmountInputState extends State<SipAmountInput> {
                           sipEndType = temp;
                           if (sipEndType.contains("Until")) {
                             DateTime now = DateTime.now();
-                            sipEndDate = DateTime(now.year + 40, now.month, now.day);
+                            sipEndDate =
+                                DateTime(now.year + 40, now.month, now.day);
                             sipEndDateController.collapse();
                           }
                           setState(() {});
@@ -1155,7 +1280,7 @@ class _SipAmountInputState extends State<SipAmountInput> {
                     maximumDate: DateTime(2100),
                     onDateTimeChanged: (val) {
                       sipEndDate = val;
-                     // sipEndType = "${val.day}-${val.month}-${val.year}";
+                      // sipEndType = "${val.day}-${val.month}-${val.year}";
                       sipEndType = DateFormat('yyyy-MM-dd').format(val);
                       setState(() {});
                     }),
@@ -1166,4 +1291,28 @@ class _SipAmountInputState extends State<SipAmountInput> {
       ),
     );
   }
+}
+
+class SIPDetails {
+  String? sipFrequency;
+  String? sipFrequencyCode;
+  String? sipDates;
+
+  SIPDetails({
+    this.sipFrequency,
+    this.sipFrequencyCode,
+    this.sipDates,
+  });
+
+  factory SIPDetails.fromJson(Map<String, dynamic> json) => SIPDetails(
+        sipFrequency: json["sip_frequency"],
+        sipFrequencyCode: json["sip_frequency_code"],
+        sipDates: json["sip_dates"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "sip_frequency": sipFrequency,
+        "sip_frequency_code": sipFrequencyCode,
+        "sip_dates": sipDates,
+      };
 }

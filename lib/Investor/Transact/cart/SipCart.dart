@@ -55,9 +55,11 @@ class _SipCartState extends State<SipCart> {
   String getSipDay = '';
 
   Future<int> getSipDays(SchemeList item) async {
-    String formattedDate = DateFormat('yyyy-MM-dd').format(transactController.startDate.value);
-    if(item.vendor == "MFU"){
-      formattedDate = transactControllermfu.startDate.value.toString().split(" ").first;
+    String formattedDate =
+        DateFormat('yyyy-MM-dd').format(transactController.startDate.value);
+    if (item.vendor == "MFU") {
+      formattedDate =
+          transactControllermfu.startDate.value.toString().split(" ").first;
     }
 
     Map data = await TransactionApi.getSipDays(
@@ -73,22 +75,17 @@ class _SipCartState extends State<SipCart> {
       return -1;
     }
 
-
     sipdayList = data['list'];
-    if(sipdayList.isNotEmpty){
+    if (sipdayList.isNotEmpty) {
       Map temp = sipdayList.first;
       sipDay = temp['desc'];
       sipDayCode = temp['code'];
-    }
-    else{
+    } else {
       sipDay = '';
       sipDayCode = '';
     }
     return 0;
   }
-
-
-
 
   Future getFolioList(SchemeList item) async {
     EasyLoading.show();
@@ -138,6 +135,7 @@ class _SipCartState extends State<SipCart> {
   }
 
   List dateAndFreq = [];
+
   Future getSipDatesAndFrequency(SchemeList item) async {
     if (dateAndFreq.isNotEmpty) return 0;
     nfoFlag = item.nfoFlag;
@@ -164,6 +162,7 @@ class _SipCartState extends State<SipCart> {
   }
 
   GetCartByUserIdPojo cart = GetCartByUserIdPojo();
+
   Future getCartByUserId() async {
     if (cartItems.isNotEmpty) return 0;
 
@@ -190,7 +189,8 @@ class _SipCartState extends State<SipCart> {
   }
 
   TransactController transactController = Get.put(TransactController());
-  TransactControllerMfu transactControllermfu = Get.put(TransactControllerMfu());
+  TransactControllerMfu transactControllermfu =
+      Get.put(TransactControllerMfu());
 
   @override
   Widget build(BuildContext context) {
@@ -233,7 +233,7 @@ class _SipCartState extends State<SipCart> {
       itemBuilder: (context, index) {
         Result result = overallList[index];
         List<SchemeList> schemeList = result.schemeList ?? [];
-        String? bsensemfu = result.bseNseMfuFlag ;
+        String? bsensemfu = result.bseNseMfuFlag;
         return Container(
           color: Colors.white,
           child: Column(
@@ -404,8 +404,8 @@ class _SipCartState extends State<SipCart> {
     Map client_code_map = result.toJson();
     client_code_map.remove('scheme_list');
 
-     // this is only for show the name of frequency
-    if(item.vendor == 'NSE'){
+    // this is only for show the name of frequency
+    if (item.vendor == 'NSE') {
       frequencyMap = {
         "Monthly": "OM",
         "Quarterly": "Q",
@@ -419,7 +419,7 @@ class _SipCartState extends State<SipCart> {
         "Once in a week": "OW"
       };
     }
-    if(item.vendor == 'MFU'){
+    if (item.vendor == 'MFU') {
       frequencyMap = {
         "Monthly": "M",
         "Quarterly": "Q",
@@ -437,11 +437,13 @@ class _SipCartState extends State<SipCart> {
     await getFolioList(item);
     await getMinAmount(item);
     await getSipDatesAndFrequency(item);
-    if(client_code_map['bse_nse_mfu_flag'].toUpperCase() == "NSE") await getSipDays(item);
+    if (client_code_map['bse_nse_mfu_flag'].toUpperCase() == "NSE")
+      await getSipDays(item);
     // sipDate = "${item.sipDate}";
     transactController.startDate.value = convertStrToDt("${item.startDate}");
-    if(item.vendor == 'MFU'){
-      transactControllermfu.startDate.value = convertStrToDt("${item.startDate}");
+    if (item.vendor == 'MFU') {
+      transactControllermfu.startDate.value =
+          convertStrToDt("${item.startDate}");
     }
 
     frequencyCode = "${item.frequency}";
@@ -449,17 +451,21 @@ class _SipCartState extends State<SipCart> {
     // frequency = Utils.getKeyByValue(frequencyMap, frequencyCode) ?? "";
     print("sipEndDate---- $sipEndDate");
     sipEndDate = convertStrToDt("${item.endDate}");
-    sipEndType = (item.untilCancel!) ? "Until Cancelled" : DateFormat("yyyy-MM-dd").format(sipEndDate);
+    sipEndType = (item.untilCancel!)
+        ? "Until Cancelled"
+        : DateFormat("yyyy-MM-dd").format(sipEndDate);
     sipDay = "${item.sipDate}";
     frequency = "${item.frequency}";
     print("sipEndDate ${DateFormat("yyyy-MM-dd").format(sipEndDate)}");
     print("frequency  $frequency");
     String getfrequency = "${item.frequency}";
 
-   /* frequency = frequencyMap.keys.firstWhere(
+    /* frequency = frequencyMap.keys.firstWhere(
           (key) => frequencyMap[key]?.startsWith(getfrequency[0]) == true,);*/
 
-    frequency = frequencyMap.keys.firstWhere((key) => frequencyMap[key] == getfrequency,);
+    frequency = frequencyMap.keys.firstWhere(
+      (key) => frequencyMap[key] == getfrequency,
+    );
 
     showModalBottomSheet(
       context: context,
@@ -493,28 +499,38 @@ class _SipCartState extends State<SipCart> {
                         SizedBox(height: 16),
                         frequencyExpansionTile(bottomState, item),
                         SizedBox(height: 16),
-                        if(client_code_map['bse_nse_mfu_flag'].toUpperCase() == "NSE")
+                        if (client_code_map['bse_nse_mfu_flag'].toUpperCase() ==
+                            "NSE")
                           InkWell(
                             onTap: () async {
-                              print("bse_nse_mfu_flag-- ${client_code_map['bse_nse_mfu_flag']}");
+                              print(
+                                  "bse_nse_mfu_flag-- ${client_code_map['bse_nse_mfu_flag']}");
 
                               // Update disableWeekdays based on frequency only for NSE
                               if (frequency.toLowerCase() == "weekly") {
-                                disableWeekdays = [DateTime.sunday, DateTime.saturday];
+                                disableWeekdays = [
+                                  DateTime.sunday,
+                                  DateTime.saturday
+                                ];
                               } else {
                                 disableWeekdays = [];
                               }
 
-                              DateTime initialDate = transactController.startDate.value;
+                              DateTime initialDate =
+                                  transactController.startDate.value;
 
                               // Adjust initial date if it falls on a weekend (only for NSE weekly)
                               if (frequency.toLowerCase() == "weekly" &&
-                                  [DateTime.saturday, DateTime.sunday].contains(initialDate.weekday)) {
+                                  [DateTime.saturday, DateTime.sunday]
+                                      .contains(initialDate.weekday)) {
                                 do {
-                                  initialDate = initialDate.add(Duration(days: 1));
-                                } while ([DateTime.saturday, DateTime.sunday].contains(initialDate.weekday));
+                                  initialDate =
+                                      initialDate.add(Duration(days: 1));
+                                } while ([DateTime.saturday, DateTime.sunday]
+                                    .contains(initialDate.weekday));
 
-                                await transactController.setStartDateWithCallback(initialDate, () {
+                                await transactController
+                                    .setStartDateWithCallback(initialDate, () {
                                   setState(() {});
                                 });
                               }
@@ -522,52 +538,58 @@ class _SipCartState extends State<SipCart> {
                               // Show DatePicker
                               DateTime? temp = await showDatePicker(
                                 selectableDayPredicate: (DateTime dateTime) =>
-                                !disableWeekdays.contains(dateTime.weekday),
+                                    !disableWeekdays.contains(dateTime.weekday),
                                 context: Get.context!,
-                                firstDate: DateTime.now().add(Duration(days: 7)),
+                                firstDate:
+                                    DateTime.now().add(Duration(days: 7)),
                                 initialDate: initialDate,
                                 lastDate: DateTime(2030),
                               );
 
                               if (temp == null) return;
 
-                              await transactController.setStartDateWithCallback(temp, () {
-                                if (frequency.toLowerCase() == "weekly") sipdayList = [];
+                              await transactController
+                                  .setStartDateWithCallback(temp, () {
+                                if (frequency.toLowerCase() == "weekly")
+                                  sipdayList = [];
                                 setState(() {});
                               });
                             },
-                            child: transactController.rpDatePicker("SIP Start Date"),
+                            child: transactController
+                                .rpDatePicker("SIP Start Date"),
                           ),
-
-                        if(client_code_map['bse_nse_mfu_flag'].toUpperCase() == "MFU")
+                        if (client_code_map['bse_nse_mfu_flag'].toUpperCase() ==
+                            "MFU")
                           InkWell(
                               onTap: () async {
-                                print("bse_nse_mfu_flag-- ${client_code_map['bse_nse_mfu_flag']}");
+                                print(
+                                    "bse_nse_mfu_flag-- ${client_code_map['bse_nse_mfu_flag']}");
 
                                 // No weekend restrictions for MFU
                                 disableWeekdays = [];
 
                                 DateTime? temp = await showDatePicker(
                                     context: Get.context!,
-                                    firstDate: DateTime.now().add(Duration(days: 1)),
-                                    initialDate: transactControllermfu.startDate.value,
-                                    lastDate: DateTime(2030)
-                                );
+                                    firstDate:
+                                        DateTime.now().add(Duration(days: 1)),
+                                    initialDate:
+                                        transactControllermfu.startDate.value,
+                                    lastDate: DateTime(2030));
                                 if (temp == null) return;
 
-                                transactControllermfu.setStartDateWithCallback(temp, () async {
+                                transactControllermfu
+                                    .setStartDateWithCallback(temp, () async {
                                   //if(frequency.toLowerCase() == "weekly") sipdayList = [];
                                   setState(() {});
                                 });
                               },
-                              child: transactControllermfu.rpDatePicker("SIP Start Date")
-                          ),
-
+                              child: transactControllermfu
+                                  .rpDatePicker("SIP Start Date")),
                         Visibility(
                           visible: frequency.toLowerCase() == "weekly",
                           child: Column(
                             children: [
-                             /* SizedBox(height: 16),
+                              /* SizedBox(height: 16),
                               sipDaysExpansionTile(bottomState),*/
                             ],
                           ),
@@ -580,12 +602,20 @@ class _SipCartState extends State<SipCart> {
                   ),
                   CalculateButton(
                       onPress: () async {
-                        DateTime sipStartDate = transactController.startDate.value;
-                        if(client_code_map['bse_nse_mfu_flag'] == "MFU"){
+                        DateTime sipStartDate =
+                            transactController.startDate.value;
+                        if (client_code_map['bse_nse_mfu_flag'] == "MFU") {
                           sipStartDate = transactControllermfu.startDate.value;
                         }
 
                         String staryDay = sipStartDate.day.toString();
+
+                        if (!availableDates
+                            .contains(sipStartDate.day.toString())) {
+                          Utils.showError(context,
+                              "Please select the sip start date with in the following - ${availableDates.join(',')} dates");
+                          return;
+                        }
 
                         if (!dateList.contains(staryDay)) {
                           Utils.showError(context,
@@ -776,6 +806,7 @@ class _SipCartState extends State<SipCart> {
   }
 
   ExpansionTileController folioController = ExpansionTileController();
+
   Widget folioExpansionTile(bottomState, SchemeList item) {
     final trnxType = "${item.trnxType}";
     return Container(
@@ -785,7 +816,7 @@ class _SipCartState extends State<SipCart> {
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
           controller: folioController,
-          enabled: trnxType !="AP",
+          enabled: trnxType != "AP",
           title: Text("Folio Number", style: AppFonts.f50014Black),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -837,147 +868,174 @@ class _SipCartState extends State<SipCart> {
     );
   }
 
+  var availableDates = <String>[];
 
   Widget frequencyExpansionTile(bottomState, SchemeList item) {
-    if(frequency.toLowerCase() == "weekly"){
-        disableWeekdays = [
-            DateTime.sunday,
-            DateTime.saturday
-        ];
+    if (frequency.toLowerCase() == "weekly") {
+      disableWeekdays = [DateTime.sunday, DateTime.saturday];
     } else {
-        disableWeekdays = [];
+      disableWeekdays = [];
     }
 
+    final tempSipList = dateAndFreq.map((e) => SIPDetails.fromJson(e)).toList();
+    final selectedDate = tempSipList
+        .firstWhereOrNull((e) => e.sipFrequencyCode == frequencyCode)
+        ?.sipDates;
+    availableDates =
+        (selectedDate ?? '').split(',').toList().map((e) => e).toList();
+
     return Container(
-        decoration: BoxDecoration(
-            color: Colors.white, 
-            borderRadius: BorderRadius.circular(10)
-        ),
-        child: Theme(
-            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-            child: ExpansionTile(
-                controller: frequencyController,
-                title: Text("SIP Frequency", style: AppFonts.f50014Black),
-                subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                        Text(frequency, style: AppFonts.f50012),
-                    ],
-                ),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(10)),
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ExpansionTile(
+              controller: frequencyController,
+              title: Text("SIP Frequency", style: AppFonts.f50014Black),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                    ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: dateAndFreq.length,
-                        itemBuilder: (context, index) {
-                            Map data = dateAndFreq[index];
-                            String tempCode = data['sip_frequency_code'];
-                            String temp = data['sip_frequency'];
-
-                            return InkWell(
-                                onTap: () async {
-                                    frequency = temp;
-                                    frequencyCode = tempCode;
-                                    frequencyController.collapse();
-                                    
-                                    // Reset SIP day
-                                    sipDay = '';
-                                    sipDayCode = '';
-                                    
-                                    // Reset and update start date
-                                   /* DateTime newStartDate = DateTime.now().add(Duration(days: 7));
-                                    while (disableWeekdays.contains(newStartDate.weekday)) {
-                                        newStartDate = newStartDate.add(Duration(days: 1));
-                                    }
-                                    transactController.startDate.value = newStartDate;
-                                    
-                                    // Clear and refresh SIP days list if weekly frequency
-                                    if((client_code_map?['bse_nse_mfu_flag'].toUpperCase() == "NSE") && frequency.toLowerCase() == "weekly") {
-                                        sipdayList = [];
-                                        await getSipDays(item); // Make sure to pass the correct SchemeList item
-                                    }*/
-
-                                    if (temp.toLowerCase() == "weekly") {
-                                      disableWeekdays = [DateTime.sunday, DateTime.saturday];
-
-                                      // Get current start date
-                                      DateTime currentDate = client_code_map?['bse_nse_mfu_flag'] == "MFU"
-                                          ? transactControllermfu.startDate.value
-                                          : transactController.startDate.value;
-
-                                      // Check if it's a weekend
-                                      if ([DateTime.saturday, DateTime.sunday].contains(currentDate.weekday)) {
-                                        // Find next valid weekday
-                                        DateTime adjustedDate = currentDate;
-                                        while ([DateTime.saturday, DateTime.sunday].contains(adjustedDate.weekday)) {
-                                          adjustedDate = adjustedDate.add(Duration(days: 1));
-                                        }
-
-                                        // Update the date in the appropriate controller
-                                        if (client_code_map?['bse_nse_mfu_flag'] == "NSE") {
-                                            sipdayList = [];
-                                            await getSipDays(item);
-                                          await transactController.setStartDateWithCallback(adjustedDate, () {
-                                            if (mounted) setState(() {});
-                                          });
-                                        }
-                                        /* else {
-                                           await transactController.setStartDateWithCallback(adjustedDate, () {
-                                           if (mounted) setState(() {});
-                                           });
-                                         }*/
-                                      }
-                                    } else {
-                                      disableWeekdays = [];
-                                    }
-                                    
-                                    bottomState(() {});
-                                },
-
-
-                                child: Row(
-                                    children: [
-                                        Radio(
-                                            value: tempCode,
-                                            groupValue: frequencyCode,
-                                            onChanged: (value) async {
-                                                frequency = temp;
-                                                frequencyCode = tempCode;
-                                                frequencyController.collapse();
-                                                
-                                                // Reset SIP day
-                                                sipDay = '';
-                                                sipDayCode = '';
-                                                
-                                                // Reset and update start date
-                                                DateTime newStartDate = DateTime.now().add(Duration(days: 7));
-                                                while (disableWeekdays.contains(newStartDate.weekday)) {
-                                                    newStartDate = newStartDate.add(Duration(days: 1));
-                                                }
-                                                transactController.startDate.value = newStartDate;
-                                                
-                                                // Clear and refresh SIP days list if weekly frequency
-                                                if((client_code_map?['bse_nse_mfu_flag'].toUpperCase() == "NSE") && frequency.toLowerCase() == "weekly") {
-                                                    sipdayList = [];
-                                                    await getSipDays(item); // Make sure to pass the correct SchemeList item
-                                                }
-                                                
-                                                bottomState(() {});
-                                            },
-                                        ),
-                                        Text(temp),
-                                    ],
-                                ),
-                            );
-                        },
-                    )
+                  Text(frequency, style: AppFonts.f50012),
                 ],
+              ),
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: dateAndFreq.length,
+                  itemBuilder: (context, index) {
+                    Map data = dateAndFreq[index];
+                    String tempCode = data['sip_frequency_code'];
+                    String temp = data['sip_frequency'];
+
+                    return InkWell(
+                      onTap: () async {
+                        frequency = temp;
+                        frequencyCode = tempCode;
+                        frequencyController.collapse();
+
+                        // Reset SIP day
+                        sipDay = '';
+                        sipDayCode = '';
+
+                        // Reset and update start date
+                        /* DateTime newStartDate = DateTime.now().add(Duration(days: 7));
+                                        while (disableWeekdays.contains(newStartDate.weekday)) {
+                                            newStartDate = newStartDate.add(Duration(days: 1));
+                                        }
+                                        transactController.startDate.value = newStartDate;
+
+                                        // Clear and refresh SIP days list if weekly frequency
+                                        if((client_code_map?['bse_nse_mfu_flag'].toUpperCase() == "NSE") && frequency.toLowerCase() == "weekly") {
+                                            sipdayList = [];
+                                            await getSipDays(item); // Make sure to pass the correct SchemeList item
+                                        }*/
+
+                        if (temp.toLowerCase() == "weekly") {
+                          disableWeekdays = [
+                            DateTime.sunday,
+                            DateTime.saturday
+                          ];
+
+                          // Get current start date
+                          DateTime currentDate =
+                              client_code_map?['bse_nse_mfu_flag'] == "MFU"
+                                  ? transactControllermfu.startDate.value
+                                  : transactController.startDate.value;
+
+                          // Check if it's a weekend
+                          if ([DateTime.saturday, DateTime.sunday]
+                              .contains(currentDate.weekday)) {
+                            // Find next valid weekday
+                            DateTime adjustedDate = currentDate;
+                            while ([DateTime.saturday, DateTime.sunday]
+                                .contains(adjustedDate.weekday)) {
+                              adjustedDate =
+                                  adjustedDate.add(Duration(days: 1));
+                            }
+
+                            // Update the date in the appropriate controller
+                            if (client_code_map?['bse_nse_mfu_flag'] == "NSE") {
+                              sipdayList = [];
+                              await getSipDays(item);
+                              await transactController
+                                  .setStartDateWithCallback(adjustedDate, () {
+                                if (mounted) setState(() {});
+                              });
+                            }
+                            /* else {
+                                               await transactController.setStartDateWithCallback(adjustedDate, () {
+                                               if (mounted) setState(() {});
+                                               });
+                                             }*/
+                          }
+                        } else {
+                          disableWeekdays = [];
+                        }
+
+                        bottomState(() {});
+                      },
+                      child: Row(
+                        children: [
+                          Radio(
+                            value: tempCode,
+                            groupValue: frequencyCode,
+                            onChanged: (value) async {
+                              frequency = temp;
+                              frequencyCode = tempCode;
+                              frequencyController.collapse();
+
+                              // Reset SIP day
+                              sipDay = '';
+                              sipDayCode = '';
+
+                              // Reset and update start date
+                              DateTime newStartDate =
+                                  DateTime.now().add(Duration(days: 7));
+                              while (disableWeekdays
+                                  .contains(newStartDate.weekday)) {
+                                newStartDate =
+                                    newStartDate.add(Duration(days: 1));
+                              }
+                              transactController.startDate.value = newStartDate;
+
+                              // Clear and refresh SIP days list if weekly frequency
+                              if ((client_code_map?['bse_nse_mfu_flag']
+                                          .toUpperCase() ==
+                                      "NSE") &&
+                                  frequency.toLowerCase() == "weekly") {
+                                sipdayList = [];
+                                await getSipDays(
+                                    item); // Make sure to pass the correct SchemeList item
+                              }
+
+                              bottomState(() {});
+                            },
+                          ),
+                          Text(temp),
+                        ],
+                      ),
+                    );
+                  },
+                )
+              ],
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20)
+                  .copyWith(bottom: 8),
+              child: Text(
+                'This scheme allows only these SIP dates: ${selectedDate ?? ''}',
+                style: TextStyle(fontSize: 12),
+              ),
+            ),
+          ],
         ),
+      ),
     );
   }
-
-
 
   ExpansionTileController sipEndDateController = ExpansionTileController();
   List sipEndTypeList = ["Until Cancelled", "Specific Date"];
@@ -1020,7 +1078,8 @@ class _SipCartState extends State<SipCart> {
                           sipEndType = temp;
                           if (sipEndType.contains("Until")) {
                             DateTime now = DateTime.now();
-                            sipEndDate = DateTime(now.year + 40, now.month, now.day);
+                            sipEndDate =
+                                DateTime(now.year + 40, now.month, now.day);
                             sipEndDateController.collapse();
                           }
                           bottomState(() {});
@@ -1055,8 +1114,8 @@ class _SipCartState extends State<SipCart> {
   }
 
   ExpansionTileController sipDaysController = ExpansionTileController();
-  Widget sipDaysExpansionTile(bottomState) {
 
+  Widget sipDaysExpansionTile(bottomState) {
     String title = sipDay;
 
     return Container(
@@ -1089,7 +1148,7 @@ class _SipCartState extends State<SipCart> {
                     sipDay = temp;
                     sipDayCode = tempCode;
                     sipDaysController.collapse();
-                    bottomState((){});
+                    bottomState(() {});
                   },
                   child: Row(
                     children: [
@@ -1100,7 +1159,7 @@ class _SipCartState extends State<SipCart> {
                           sipDay = temp;
                           sipDayCode = tempCode;
                           sipDaysController.collapse();
-                          bottomState((){});
+                          bottomState(() {});
                         },
                       ),
                       Text(temp),
@@ -1114,6 +1173,28 @@ class _SipCartState extends State<SipCart> {
       ),
     );
   }
+}
 
+class SIPDetails {
+  String? sipFrequency;
+  String? sipFrequencyCode;
+  String? sipDates;
 
+  SIPDetails({
+    this.sipFrequency,
+    this.sipFrequencyCode,
+    this.sipDates,
+  });
+
+  factory SIPDetails.fromJson(Map<String, dynamic> json) => SIPDetails(
+        sipFrequency: json["sip_frequency"],
+        sipFrequencyCode: json["sip_frequency_code"],
+        sipDates: json["sip_dates"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "sip_frequency": sipFrequency,
+        "sip_frequency_code": sipFrequencyCode,
+        "sip_dates": sipDates,
+      };
 }
