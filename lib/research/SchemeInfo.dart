@@ -2161,6 +2161,14 @@ class SchemeInfoController extends GetxController {
 
     if (schemeInceptionDate.value.isNotEmpty) {
       DateTime dateTime = DateTime.parse(schemeInceptionDate.value);
+      dateTime = DateTime(
+        dateTime.year,
+        dateTime.month,
+        dateTime.day + 1,
+        dateTime.hour,
+        dateTime.minute,
+        dateTime.second,
+      );
       formattedschemeInceptionDate.value =
           DateFormat("MMM dd yyyy").format(dateTime);
 

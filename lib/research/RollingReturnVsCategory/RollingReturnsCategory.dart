@@ -532,7 +532,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
           ),
           btnNo == "1"
               ? (isLoading
-                  ? Utils.shimmerWidget(devHeight * 0.2,
+                  ? Utils.shimmerWidget(devHeight,
                       margin: EdgeInsets.all(20))
                   : (originalRollingReturnCategoryList.isEmpty)
                       ? NoData()
@@ -557,7 +557,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                           ],
                         ))
               : (isLoading
-                  ? Utils.shimmerWidget(devHeight * 0.2,
+                  ? Utils.shimmerWidget(devHeight,
                       margin: EdgeInsets.all(20))
                   : (rollingReturnCategoryList.isEmpty)
                       ? NoData()
@@ -1515,14 +1515,14 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                   EasyLoading.dismiss();
                                   setState(() {});
                                 }),
-                            Container(
-                                height: 30,
-                                width: 30,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffF8DFD5),
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Icon(Icons.bar_chart,
-                                    color: Colors.red, size: 20)),
+                            // Container(
+                            //     height: 30,
+                            //     width: 30,
+                            //     decoration: BoxDecoration(
+                            //         color: Color(0xffF8DFD5),
+                            //         borderRadius: BorderRadius.circular(5)),
+                            //     child: Icon(Icons.bar_chart,
+                            //         color: Colors.red, size: 20)),
                             Expanded(child: Text(" $temp")),
                           ],
                         ),

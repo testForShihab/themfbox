@@ -421,7 +421,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
               future: getDatas(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Utils.shimmerWidget(devHeight ,
+                  return Utils.shimmerWidget(devHeight,
                       margin: EdgeInsets.all(20));
                 }
                 return displayPage();
@@ -1023,54 +1023,53 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
           ),
           btnNo == "1"
               ? (originalRollingReturnBenchmarkList.isEmpty ||
-                          rollingReturnsTable.isEmpty ||
-                          isInvalidDate)
-                      ? NoData()
-                      : Column(
-                          children: [
-                            ListView.builder(
-                              itemCount: rollingReturnBenchmarkList.length,
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                Map data = rollingReturnBenchmarkList[index];
+                      rollingReturnsTable.isEmpty ||
+                      isInvalidDate)
+                  ? NoData()
+                  : Column(
+                      children: [
+                        ListView.builder(
+                          itemCount: rollingReturnBenchmarkList.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            Map data = rollingReturnBenchmarkList[index];
 
-                                return returnsStaticsCard(data);
-                              },
-                            ),
-                            SizedBox(height: devHeight * 0.01),
-                            //blackBoxStatistics(chartRollingReturnBenchmarkList),
-                          ],
-                        )
-              :  (rollingReturnBenchmarkList.isEmpty ||
-                          rollingReturnsTable.isEmpty ||
-                          isInvalidDate)
-                      ? NoData()
-                      : Column(
-                          children: [
-                            ListView.builder(
-                              itemCount: rollingReturnBenchmarkList.length,
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                Map data = rollingReturnBenchmarkList[index];
-                                if (data['scheme_name'] !=
-                                    selectedSubCategory) {
-                                  return returnsDistributionCard(data);
-                                }
-                              },
-                            ),
-                            SizedBox(height: devHeight * 0.01),
-                            // blackBoxDistribution(),
-                          ],
+                            return returnsStaticsCard(data);
+                          },
                         ),
+                        SizedBox(height: devHeight * 0.01),
+                        //blackBoxStatistics(chartRollingReturnBenchmarkList),
+                      ],
+                    )
+              : (rollingReturnBenchmarkList.isEmpty ||
+                      rollingReturnsTable.isEmpty ||
+                      isInvalidDate)
+                  ? NoData()
+                  : Column(
+                      children: [
+                        ListView.builder(
+                          itemCount: rollingReturnBenchmarkList.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            Map data = rollingReturnBenchmarkList[index];
+                            if (data['scheme_name'] != selectedSubCategory) {
+                              return returnsDistributionCard(data);
+                            }
+                          },
+                        ),
+                        SizedBox(height: devHeight * 0.01),
+                        // blackBoxDistribution(),
+                      ],
+                    ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
                 child: Text(
-                  "Rolling Return Timeline",
+                  "Rolling Return vs Benchmark",
                   style: AppFonts.f50014Grey,
                 ),
               ),
@@ -1574,7 +1573,21 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
               padding: const EdgeInsets.fromLTRB(14, 14, 0, 14),
               child: Row(
                 children: [
-                  Image.network(data["logo"] ?? "", height: 30),
+                  data["logo"] == "https://api.mymfbox.com/images/amc/empty.png"
+                      ? Container(
+                          margin: EdgeInsets.only(right:2),
+                          padding: EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white),
+                              color: Colors.white),
+                          child: Icon(
+                            Icons.bar_chart,
+                            size: 18,
+                            color: Config.appTheme.themeColor,
+                          ),
+                        )
+                      : Image.network(data["logo"], height: 30),
                   SizedBox(width: 5),
                   SizedBox(
                       width: 200,
@@ -1652,7 +1665,21 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
               padding: const EdgeInsets.fromLTRB(14, 14, 0, 14),
               child: Row(
                 children: [
-                  Image.network(data["logo"] ?? "", height: 30),
+                  data["logo"] == "https://api.mymfbox.com/images/amc/empty.png"
+                      ? Container(
+                          margin: EdgeInsets.only(right: 2),
+                          padding: EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white),
+                              color: Colors.white),
+                          child: Icon(
+                            Icons.bar_chart,
+                            size: 18,
+                            color: Config.appTheme.themeColor,
+                          ),
+                        )
+                      : Image.network(data["logo"], height: 30),
                   SizedBox(width: 10),
                   Expanded(
                       child: Text(data["scheme_name"],
