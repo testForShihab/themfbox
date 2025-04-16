@@ -82,16 +82,20 @@ class _LumpsumCalculatorInputState extends State<LumpsumCalculatorInput> {
                       AmountInputCard(
                         title: "How much lumpsum amount you want to invest ?",
                         inputFormatters: [
-                          MaxValueFormatter(1000000000, isDecimal: false),
+                          MaxValueFormatter(
+                            1000000000,
+                            isReadableInput: true,
+                          ),
                           NoLeadingZeroInputFormatter(),
                           FilteringTextInputFormatter.digitsOnly,
+                          ReadableNumberFormatter(),
                         ],
-                        initialValue: "5000000",
+                        initialValue: Utils.formatNumber(5000000),
                         suffixText: Utils.formatNumber(investLumpsumAmt,
                             isAmount: true),
-                        maxLength: 10,
                         onChange: (val) {
-                          investLumpsumAmt = num.tryParse(val) ?? 0;
+                          final tempText = val.split(',').join();
+                          investLumpsumAmt = num.tryParse(tempText) ?? 0;
                           setState(() {});
                         },
                       ),
@@ -151,7 +155,8 @@ class _LumpsumCalculatorInputState extends State<LumpsumCalculatorInput> {
                           },
                           sliderOnChange: (val) {
                             // expectRateReturn = val.round();
-                            expectRateReturn = double.tryParse(val.toStringAsFixed(2)) ?? 0;
+                            expectRateReturn =
+                                double.tryParse(val.toStringAsFixed(2)) ?? 0;
                             expectRateReturnController.text =
                                 "$expectRateReturn";
                             setState(() {});
@@ -197,20 +202,23 @@ class _LumpsumCalculatorInputState extends State<LumpsumCalculatorInput> {
   // }
 
   validator() {
-     if (investLumpsumAmt == 0) {
-      EasyLoading.showError("Investment Lumpsum Amount is required and cannot be Empty or zero!");
+    if (investLumpsumAmt == 0) {
+      EasyLoading.showError(
+          "Investment Lumpsum Amount is required and cannot be Empty or zero!");
       return false;
     }
-     if (yearsNeedAmt == 0) {
+    if (yearsNeedAmt == 0) {
       EasyLoading.showError("Years is required and cannot be Empty or zero!");
       return false;
     }
 
     if (expectRateReturnController.text.trim().isEmpty) {
-      EasyLoading.showError("Expected Rate of Return is required and cannot be Empty or zero!");
+      EasyLoading.showError(
+          "Expected Rate of Return is required and cannot be Empty or zero!");
       return false;
     } else if (expectRateReturn == 0) {
-      EasyLoading.showError("Expected Rate of Return is required and cannot be Empty or zero!");
+      EasyLoading.showError(
+          "Expected Rate of Return is required and cannot be Empty or zero!");
       return false;
     }
 

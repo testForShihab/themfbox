@@ -158,30 +158,42 @@ class _RetirementPlannerInputState extends State<RetirementPlannerInput> {
                   SizedBox(height: 16),
                   AmountInputCard(
                     inputFormatters: [
-                      MaxValueFormatter(100000000, isDecimal: false),
+                      MaxValueFormatter(
+                        100000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     title: "Current Monthly Expense",
-                    initialValue: "100000",
+                    initialValue: Utils.formatNumber(100000),
                     suffixText:
                         Utils.formatNumber(monthlyExpense, isAmount: true),
                     onChange: (val) {
-                      monthlyExpense = num.tryParse(val) ?? 0;
+                      final tempVal = val.split(',').join();
+                      monthlyExpense = num.tryParse(tempVal) ?? 0;
                       setState(() {});
                     },
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
                       title: "Balance Required at Age $endAge",
-                      initialValue: "5000000",
+                      initialValue: Utils.formatNumber(5000000),
                       inputFormatters: [
-                        MaxValueFormatter(1000000000, isDecimal: false),
+                        MaxValueFormatter(
+                          1000000000,
+                          isDecimal: false,
+                          isReadableInput: true,
+                        ),
                         FilteringTextInputFormatter.digitsOnly,
+                        ReadableNumberFormatter(),
                       ],
                       suffixText: Utils.formatNumber(balance, isAmount: true),
                       onChange: (val) {
-                        balance = num.tryParse(val) ?? 0;
+                        final tempVal = val.split(',').join();
+                        balance = num.tryParse(tempVal) ?? 0;
                         setState(() {});
                       }),
                   SizedBox(height: 16),
@@ -245,14 +257,20 @@ class _RetirementPlannerInputState extends State<RetirementPlannerInput> {
                   SizedBox(height: 16),
                   AmountInputCard(
                     title: "Current Savings",
-                    initialValue: "1500000",
+                    initialValue: Utils.formatNumber(1500000),
                     inputFormatters: [
-                      MaxValueFormatter(100000000, isDecimal: false),
+                      MaxValueFormatter(
+                        100000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       SingleLeadingZeroFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     onChange: (val) {
-                      currentSavings = num.tryParse(val) ?? 0;
+                      final tempVal = val.split(',').join();
+                      currentSavings = num.tryParse(tempVal) ?? 0;
                       setState(() {});
                     },
                     suffixText:
@@ -261,14 +279,17 @@ class _RetirementPlannerInputState extends State<RetirementPlannerInput> {
                   SizedBox(height: 16),
                   AmountInputCard(
                     title: "Emergency Corpus",
-                    initialValue: "300000",
+                    initialValue: Utils.formatNumber(300000),
                     inputFormatters: [
-                      MaxValueFormatter(100000000, isDecimal: false),
+                      MaxValueFormatter(100000000,
+                          isDecimal: false, isReadableInput: true),
                       SingleLeadingZeroFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     onChange: (val) {
-                      energyCorpus = num.tryParse(val) ?? 0;
+                      final tempVal = val.split(',').join();
+                      energyCorpus = num.tryParse(tempVal) ?? 0;
                       setState(() {});
                     },
                     suffixText:

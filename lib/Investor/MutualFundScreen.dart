@@ -1272,23 +1272,23 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
                   rpRow(
                       lhead: "XIRR (%)",
                       lSubHead: Utils.formatNumber(scheme.xirr),
-                      rhead: (userData.oneDayChange == 1 ||
-                              ((keys.contains("adminAsInvestor")) ||
-                                  (keys.contains("adminAsFamily")) != false))
-                          ? "1 Day Change"
-                          : "",
-                      rSubHead: (userData.oneDayChange == 1 ||
-                              ((keys.contains("adminAsInvestor")) ||
-                                  (keys.contains("adminAsFamily")) != false))
-                          ? "$rupee ${Utils.formatNumber(dayChange)}"
-                          : " ",
+                      // rhead: (userData.oneDayChange == 1 ||
+                      //         ((keys.contains("adminAsInvestor")) ||
+                      //             (keys.contains("adminAsFamily")) != false))
+                      //     ? "1 Day Change"
+                      //     : "",
+                      // rSubHead: (userData.oneDayChange == 1 ||
+                      //         ((keys.contains("adminAsInvestor")) ||
+                      //             (keys.contains("adminAsFamily")) != false))
+                      //     ? "$rupee ${Utils.formatNumber(dayChange)}"
+                      //     : " ",
                       titleStyle: AppFonts.f40014,
                       valueStyle: AppFonts.f50016Grey.copyWith(
                           color: (dayChange < 0)
                               ? Config.appTheme.defaultLoss
                               : Config.appTheme.defaultProfit),
                       chead: "",
-                      cSubHead: "")
+                      cSubHead: "", rhead: '', rSubHead: '')
                 ],
               ),
             ),

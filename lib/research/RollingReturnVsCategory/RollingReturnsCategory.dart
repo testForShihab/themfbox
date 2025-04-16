@@ -48,12 +48,12 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
   List<String> rollingPeriod = [
     "1 Month",
     "1 Year",
-    "2 Year",
-    "3 Year",
-    "5 Year",
-    "7 Year",
-    "10 Year",
-    "15 Year"
+    "2 Years",
+    "3 Years",
+    "5 Years",
+    "7 Years",
+    "10 Years",
+    "15 Years"
   ];
 
   List subCategoryList = [];
@@ -1065,7 +1065,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ColumnText(
-                title: "Negative",
+                title: "Less than 0%",
                 value: lessThan0.toStringAsFixed(2),
                 titleStyle: AppFonts.f40013.copyWith(
                     color: Config.appTheme.placeHolderInputTitleAndArrow),
@@ -1210,7 +1210,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                         todayDate.day - 7);
                                     controller.startDate.value =
                                         convertDtToStr(oneMonthBeforeDate);
-                                  } else if (rollingPeriod[index] == "2 Year") {
+                                  } else if (rollingPeriod[index] == "2 Years") {
                                     controller.rollingPeriods.value = "2 Year";
                                     DateTime oneMonthBeforeDate = DateTime(
                                         todayDate.year - 2,
@@ -1218,7 +1218,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                         todayDate.day - 7);
                                     controller.startDate.value =
                                         convertDtToStr(oneMonthBeforeDate);
-                                  } else if (rollingPeriod[index] == "3 Year") {
+                                  } else if (rollingPeriod[index] == "3 Years") {
                                     controller.rollingPeriods.value = "3 Year";
                                     DateTime oneMonthBeforeDate = DateTime(
                                         todayDate.year - 3,
@@ -1226,7 +1226,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                         todayDate.day - 7);
                                     controller.startDate.value =
                                         convertDtToStr(oneMonthBeforeDate);
-                                  } else if (rollingPeriod[index] == "5 Year") {
+                                  } else if (rollingPeriod[index] == "5 Years") {
                                     controller.rollingPeriods.value = "5 Year";
                                     DateTime oneMonthBeforeDate = DateTime(
                                         todayDate.year - 5,
@@ -1234,7 +1234,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                         todayDate.day - 8);
                                     controller.startDate.value =
                                         convertDtToStr(oneMonthBeforeDate);
-                                  } else if (rollingPeriod[index] == "7 Year") {
+                                  } else if (rollingPeriod[index] == "7 Years") {
                                     controller.rollingPeriods.value = "7 Year";
                                     DateTime oneMonthBeforeDate = DateTime(
                                         todayDate.year - 7,
@@ -1244,7 +1244,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                         convertDtToStr(oneMonthBeforeDate);
                                   } else if (rollingPeriod[index] ==
                                       "10 Year") {
-                                    controller.rollingPeriods.value = "10 Year";
+                                    controller.rollingPeriods.value = "10 Years";
                                     DateTime oneMonthBeforeDate = DateTime(
                                         todayDate.year - 10,
                                         todayDate.month,
@@ -1253,7 +1253,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                         convertDtToStr(oneMonthBeforeDate);
                                   } else if (rollingPeriod[index] ==
                                       "15 Year") {
-                                    controller.rollingPeriods.value = "15 Year";
+                                    controller.rollingPeriods.value = "15 Years";
                                     DateTime oneMonthBeforeDate = DateTime(
                                         todayDate.year - 15,
                                         todayDate.month,
@@ -1304,7 +1304,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                               convertDtToStr(
                                                   oneMonthBeforeDate);
                                         } else if (rollingPeriod[index] ==
-                                            "2 Year") {
+                                            "2 Years") {
                                           controller.rollingPeriods.value =
                                               "2 Year";
                                           DateTime oneMonthBeforeDate =
@@ -1316,7 +1316,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                               convertDtToStr(
                                                   oneMonthBeforeDate);
                                         } else if (rollingPeriod[index] ==
-                                            "3 Year") {
+                                            "3 Years") {
                                           controller.rollingPeriods.value =
                                               "3 Year";
                                           DateTime oneMonthBeforeDate =
@@ -1328,7 +1328,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                               convertDtToStr(
                                                   oneMonthBeforeDate);
                                         } else if (rollingPeriod[index] ==
-                                            "5 Year") {
+                                            "5 Years") {
                                           controller.rollingPeriods.value =
                                               "5 Year";
                                           DateTime oneMonthBeforeDate =
@@ -1340,7 +1340,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                               convertDtToStr(
                                                   oneMonthBeforeDate);
                                         } else if (rollingPeriod[index] ==
-                                            "7 Year") {
+                                            "7 Years") {
                                           controller.rollingPeriods.value =
                                               "7 Year";
                                           DateTime oneMonthBeforeDate =
@@ -1352,7 +1352,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                               convertDtToStr(
                                                   oneMonthBeforeDate);
                                         } else if (rollingPeriod[index] ==
-                                            "10 Year") {
+                                            "10 Years") {
                                           controller.rollingPeriods.value =
                                               "10 Year";
                                           DateTime oneMonthBeforeDate =
@@ -1364,7 +1364,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                                               convertDtToStr(
                                                   oneMonthBeforeDate);
                                         } else if (rollingPeriod[index] ==
-                                            "15 Year") {
+                                            "15 Years") {
                                           controller.rollingPeriods.value =
                                               "15 Year";
                                           DateTime oneMonthBeforeDate =
@@ -1993,7 +1993,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ColumnText(
-                        title: "Negative",
+                        title: "Less than 0%",
                         value: data['less_than_0'] != null
                             ? "${data['less_than_0'].toStringAsFixed(2)}"
                             : "0.00",
@@ -2193,26 +2193,8 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
   }
 
   void showDatePickerDialog(BuildContext context) async {
-    // String period = controller.rollingPeriods.value;
     final pastDate = getStartDatePastLimit();
-    // DateTime now = DateTime.now();
-    // DateTime lastDate = now;
-    //
-    // if (period.contains("Year")) {
-    //   int years = int.parse(period.split(" ")[0]);
-    //   lastDate = DateTime(now.year - years, now.month, now.day).subtract(Duration(days: 7));
-    // } else if (period.contains("Month")) {
-    //   int months = int.parse(period.split(" ")[0]);
-    //   int targetMonth = now.month - months;
-    //   int targetYear = now.year;
-    //
-    //   while (targetMonth <= 0) {
-    //     targetMonth += 12;
-    //     targetYear -= 1;
-    //   }
-    //
-    //   lastDate = DateTime(targetYear, targetMonth, now.day).subtract(Duration(days: 7));
-    // }
+
 
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -2233,15 +2215,19 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
   }
 }
 
+
+
 class RollingReturnsController extends GetxController {
-  var startDate = "26-04-2020".obs;
+
+
+  var startDate = "".obs;
   final selectedRadioIndex = RxInt(-1);
 
   // var selectedFund = "ICICI Pru BlueChip Gr".obs;
   // var scheme = "ICICI Pru BlueChip Gr".obs;
   var shouldRefresh = false.obs;
 
-  var selectedRollingPeriod = "3 Year".obs;
+  var selectedRollingPeriod = "3 Years".obs;
 
   var selectedCategory = "Equity Schemes".obs;
   var selectedSubCategory = "Equity: Flexi Cap".obs;
@@ -2260,6 +2246,15 @@ class RollingReturnsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    final today = DateTime.now();
+    final calculatedDate = DateTime(
+      today.year - 4,
+      today.month - 11,
+      today.day - 1,
+    );
+
+    final formattedDate = DateFormat("dd-MM-yyyy").format(calculatedDate);
+    startDate.value = formattedDate;
     shouldRefresh.value = true;
   }
 

@@ -214,6 +214,7 @@ class _CategoryReturnsState extends State<CategoryReturns> {
                     indicatorSize: TabBarIndicatorSize.tab,
                     onTap: (val) {
                       categoryReturns = [];
+                      selectedSort = "Returns";
                       // selectedCategory = "All Categories";
                       print("tab tap = $val");
                       setState(() {

@@ -269,6 +269,7 @@ class _TrailingReturnsState extends State<TrailingReturns> {
                     dividerColor: Config.appTheme.themeColor,
                     indicatorSize: TabBarIndicatorSize.tab,
                     onTap: (val) {
+                      selectedSort = "Returns";
                       print("tab tap = $val");
                       performanceList = [];
                       period = periodMap[val] ?? '';

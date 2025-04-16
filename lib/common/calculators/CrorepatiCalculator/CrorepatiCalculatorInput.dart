@@ -71,18 +71,24 @@ class _CrorepatiCalculatorInputState extends State<CrorepatiCalculatorInput> {
                   SizedBox(height: 16),
                   AmountInputCard(
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(
+                        1000000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     title:
                         "How much amount (at current value) you would need to consider yourself wealthy (Rs)",
-                    initialValue: "50000000",
+                    initialValue: Utils.formatNumber(50000000),
                     suffixText:
                         Utils.formatNumber(amountRetire, isAmount: true),
-                    maxLength: 10,
+                    // maxLength: 10,
                     onChange: (val) {
-                      amountRetire = num.tryParse(val) ?? 0;
+                      final tempText = val.split(',').join();
+                      amountRetire = num.tryParse(tempText) ?? 0;
                       setState(() {});
                     },
                   ),
@@ -90,7 +96,6 @@ class _CrorepatiCalculatorInputState extends State<CrorepatiCalculatorInput> {
                   SliderInputCard(
                     title: "Your current age",
                     controller: ageTodayController,
-
                     sliderValue: ageToday.toDouble(),
                     inputFormatters: [
                       MaxValueFormatter(100, isDecimal: false),
@@ -103,7 +108,7 @@ class _CrorepatiCalculatorInputState extends State<CrorepatiCalculatorInput> {
 
                       bool isValid = isValidSlider(temp);
 
-                      if(ageTodayController.text.isEmpty){
+                      if (ageTodayController.text.isEmpty) {
                         Utils.showError(context, "Please enter your age");
                         return;
                       }
@@ -166,7 +171,7 @@ class _CrorepatiCalculatorInputState extends State<CrorepatiCalculatorInput> {
                       num temp = num.parse(val) ?? 0;
                       bool isValid = isinflationValidSlider(temp);
 
-                    /*  if (!isValid) {
+                      /*  if (!isValid) {
                         Utils.showError(context,
                             "Expected Annual Inflation Rate should be in-between 0-15");
                         return;
@@ -175,16 +180,18 @@ class _CrorepatiCalculatorInputState extends State<CrorepatiCalculatorInput> {
                       setState(() {});
                     },
                     sliderOnChange: (val) {
-
-                      annualInflationRate = double.tryParse(val.toStringAsFixed(2)) ?? 0;
-                      annualInflationRateController.text = "$annualInflationRate";
+                      annualInflationRate =
+                          double.tryParse(val.toStringAsFixed(2)) ?? 0;
+                      annualInflationRateController.text =
+                          "$annualInflationRate";
 
                       setState(() {});
                     },
                   ),
                   SizedBox(height: 16),
                   SliderInputCard(
-                    title: "What rate of return would you expect your SIP investment to generate",
+                    title:
+                        "What rate of return would you expect your SIP investment to generate",
                     sliderValue: annualRateReturn.toDouble(),
                     inputFormatters: [
                       MaxValueFormatter(50),
@@ -207,8 +214,9 @@ class _CrorepatiCalculatorInputState extends State<CrorepatiCalculatorInput> {
                       setState(() {});
                     },
                     sliderOnChange: (val) {
-                      annualRateReturn = double.tryParse(val.toStringAsFixed(2)) ?? 0;
-                     // annualRateReturn = val.round();
+                      annualRateReturn =
+                          double.tryParse(val.toStringAsFixed(2)) ?? 0;
+                      // annualRateReturn = val.round();
                       annualRateReturnController.text = "$annualRateReturn";
 
                       setState(() {});
@@ -291,8 +299,9 @@ class _CrorepatiCalculatorInputState extends State<CrorepatiCalculatorInput> {
       return false;
     }*/
 
-    if(amountRetire <= 0){
-      EasyLoading.showError("Please enter the amount you consider yourself wealthy");
+    if (amountRetire <= 0) {
+      EasyLoading.showError(
+          "Please enter the amount you consider yourself wealthy");
       return false;
     }
 
@@ -301,13 +310,15 @@ class _CrorepatiCalculatorInputState extends State<CrorepatiCalculatorInput> {
       return false;
     }
 
-    if(ageBecomeController.text.isEmpty || ageBecomeController.text == "0"){
-      EasyLoading.showError("Please enter the age when you want to become a Crorepati");
+    if (ageBecomeController.text.isEmpty || ageBecomeController.text == "0") {
+      EasyLoading.showError(
+          "Please enter the age when you want to become a Crorepati");
       return false;
     }
 
-    if(annualRateReturn > 50 || annualRateReturn <= 0.0){
-      EasyLoading.showError("Please enter valid expected annual rate of return. It Should be in-between 1-50");
+    if (annualRateReturn > 50 || annualRateReturn <= 0.0) {
+      EasyLoading.showError(
+          "Please enter valid expected annual rate of return. It Should be in-between 1-50");
       return false;
     }
     if (ageToday >= ageBecome) {
@@ -335,14 +346,12 @@ class _CrorepatiCalculatorInputState extends State<CrorepatiCalculatorInput> {
       return true;
   }
 
-
   bool isinflationValidSlider(num temp) {
     if (temp < 0 || temp > 15)
       return false;
     else
       return true;
   }
-
 
   bool isreturnValidSlider(num temp) {
     if (temp < 0 || temp > 50)

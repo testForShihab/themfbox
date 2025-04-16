@@ -30,7 +30,18 @@ class _CategoryMonitorState extends State<CategoryMonitor> {
   String selectedCategory = "All Categories";
   String catName = "All";
 
-  Map periodMap = {0: "1W", 1: "1M", 2: "3M", 3: "6M", 4: "YTD", 5: "1Y", 6: "3Y", 7: "5Y", 8: "10Y", 9: "Launch"};
+  Map periodMap = {
+    0: "1W",
+    1: "1M",
+    2: "3M",
+    3: "6M",
+    4: "YTD",
+    5: "1Y",
+    6: "3Y",
+    7: "5Y",
+    8: "10Y",
+    9: "Launch"
+  };
   String period = "1W";
 
   String selectedSort = "Returns";
@@ -51,17 +62,18 @@ class _CategoryMonitorState extends State<CategoryMonitor> {
 
   Future getData() async {
     isLoading = true;
-    getBroadCategoryList();
-    getCategoryMonitors();
+    await getCategoryMonitors();
+    await getBroadCategoryList();
     isLoading = false;
     return 0;
   }
 
   Future<void> getBroadCategoryList() async {
     if (allCategories.isNotEmpty) return;
-    categoryList.clear();
+    // categoryList.clear();
 
-    Map<String, dynamic> data = await Api.getBroadCategoryList(client_name: client_name);
+    Map<String, dynamic> data =
+        await Api.getBroadCategoryList(client_name: client_name);
     if (data['status'] != SUCCESS) {
       Utils.showError(context, data['msg']);
       return;
@@ -74,10 +86,9 @@ class _CategoryMonitorState extends State<CategoryMonitor> {
       String categoryName = category['name'];
       categoryList.add(categoryName);
     }
-
     print("categoryList $categoryList");
+    return;
   }
-
 
   String searchKey = "";
   Timer? searchOnStop;
@@ -204,6 +215,7 @@ class _CategoryMonitorState extends State<CategoryMonitor> {
                   indicatorSize: TabBarIndicatorSize.tab,
                   onTap: (val) {
                     categoryMonitor = [];
+                    selectedSort = "Returns";
                     // selectedCategory = "All Categories";
                     setState(() {
                       period = periodMap[val];
@@ -223,8 +235,8 @@ class _CategoryMonitorState extends State<CategoryMonitor> {
                     Tab(text: "Launch"),
                   ]),
             ),
-            body: TabBarView( physics: NeverScrollableScrollPhysics(),
-                children: [
+            body:
+                TabBarView(physics: NeverScrollableScrollPhysics(), children: [
               displayPage(),
               displayPage(),
               displayPage(),
@@ -265,11 +277,11 @@ class _CategoryMonitorState extends State<CategoryMonitor> {
             Text("${categoryMonitor.length} Categories"),
             SizedBox(height: 16),
             (isLoading)
-                ? Utils.shimmerWidget(devHeight * 0.2,
-                    margin: EdgeInsets.all(20))
-                : /*((!isLoading) && categoryMonitor.isEmpty)
+                ? Utils.shimmerWidget(devHeight * 0.8,
+                    margin: EdgeInsets.all(0))
+                : (searchKey.isNotEmpty && categoryMonitor.isEmpty)
                     ? NoData()
-                    :*/ ListView.builder(
+                    : ListView.builder(
                         itemCount: categoryMonitor.length,
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
@@ -284,6 +296,7 @@ class _CategoryMonitorState extends State<CategoryMonitor> {
                           }
                         },
                       ),
+            SizedBox(height: devHeight * 0.05),
           ],
         ),
       ),
@@ -294,10 +307,10 @@ class _CategoryMonitorState extends State<CategoryMonitor> {
     num returnAbs = data['returns_abs'];
 
     return GestureDetector(
-      onTap:() {
-              Get.to(TrailingReturns(
-                defaultSubCategory: "${data['scheme_broad_category']}"));
-            },
+      onTap: () {
+        Get.to(TrailingReturns(
+            defaultSubCategory: "${data['scheme_broad_category']}"));
+      },
       child: Container(
         padding: EdgeInsets.all(16),
         margin: EdgeInsets.only(bottom: 16),
@@ -488,7 +501,7 @@ class _CategoryMonitorState extends State<CategoryMonitor> {
                             itemCount: categoryList.length,
                             scrollDirection: Axis.vertical,
                             itemBuilder: (context, index) {
-                            String list = categoryList[index];
+                              String list = categoryList[index];
                               return GestureDetector(
                                 onTap: () async {
                                   selectedCategory = categoryList[index];
@@ -503,7 +516,8 @@ class _CategoryMonitorState extends State<CategoryMonitor> {
                                   });
 
                                   setState(() {
-                                    print("category monitor length ${categoryMonitor.length}");
+                                    print(
+                                        "category monitor length ${categoryMonitor.length}");
                                   });
                                   categoryMonitor = [];
                                   await getCategoryMonitors();
@@ -535,7 +549,6 @@ class _CategoryMonitorState extends State<CategoryMonitor> {
                                         Get.back();
                                       },
                                     ),
-
                                   ],
                                 ),
                               );

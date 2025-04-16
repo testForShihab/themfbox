@@ -73,16 +73,22 @@ class _RetirementCalculatorInputState extends State<RetirementCalculatorInput> {
                   SizedBox(height: 16),
                   AmountInputCard(
                     title: "Amount you want to retire with",
-                    initialValue: "20000000",
+                    initialValue: Utils.formatNumber(20000000),
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(
+                        1000000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     suffixText:
                         Utils.formatNumber(amountRetire, isAmount: true),
                     onChange: (val) {
-                      amountRetire = num.tryParse(val) ?? 0;
+                      final tempText = val.split(',').join();
+                      amountRetire = num.tryParse(tempText) ?? 0;
                       setState(() {});
                     },
                   ),
@@ -211,14 +217,20 @@ class _RetirementCalculatorInputState extends State<RetirementCalculatorInput> {
                   SizedBox(height: 16),
                   AmountInputCard(
                     title: "Your Current Savings",
-                    initialValue: "100000",
+                    initialValue: Utils.formatNumber(100000),
                     inputFormatters: [
-                      MaxValueFormatter(100000000, isDecimal: false),
+                      MaxValueFormatter(
+                        100000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       // NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     onChange: (val) {
-                      currentSavings = num.tryParse(val) ?? 0;
+                      final tempText = val.split(',').join();
+                      currentSavings = num.tryParse(tempText) ?? 0;
                       setState(() {});
                     },
                     suffixText:

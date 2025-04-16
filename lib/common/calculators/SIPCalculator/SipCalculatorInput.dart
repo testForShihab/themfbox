@@ -50,6 +50,9 @@ class _SipCalculatorInputState extends State<SipCalculatorInput> {
   num annualTop = 10;
 
   TextEditingController annualRateReturnController = TextEditingController();
+  TextEditingController sipAmountController = TextEditingController(
+    text: Utils.formatNumber(25000),
+  );
   int annualRateReturn = 0;
 
   num investMonthlySip = 25000;
@@ -68,6 +71,7 @@ class _SipCalculatorInputState extends State<SipCalculatorInput> {
   Widget build(BuildContext context) {
     devHeight = MediaQuery.sizeOf(context).height;
     devWidth = MediaQuery.sizeOf(context).width;
+    print(investMonthlySip);
 
     return Scaffold(
       backgroundColor: Config.appTheme.mainBgColor,
@@ -124,17 +128,22 @@ class _SipCalculatorInputState extends State<SipCalculatorInput> {
                     SizedBox(height: 16),
                     AmountInputCard(
                       title: "How much can you invest through monthly SIP?",
-                      initialValue: "25000",
+                      controller: sipAmountController,
                       inputFormatters: [
-                        MaxValueFormatter(1000000000),
+                        MaxValueFormatter(
+                          1000000000,
+                          isReadableInput: true,
+                        ),
                         NoLeadingZeroInputFormatter(),
                         FilteringTextInputFormatter.digitsOnly,
+                        ReadableNumberFormatter(),
                       ],
                       suffixText:
                           Utils.formatNumber(investMonthlySip, isAmount: true),
                       onChange: (val) {
                         log(val);
-                        investMonthlySip = num.tryParse(val) ?? 0;
+                        final tempText = val.split(',').join();
+                        investMonthlySip = num.tryParse(tempText) ?? 0;
                         setState(() {});
                       },
                     ),

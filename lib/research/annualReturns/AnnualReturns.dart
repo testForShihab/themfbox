@@ -244,6 +244,7 @@ class _AnnualReturnsState extends State<AnnualReturns> {
                     dividerColor: Config.appTheme.themeColor,
                     indicatorSize: TabBarIndicatorSize.tab,
                     onTap: (val) async {
+                      selectedSort = "Returns";
                       print("tab tap = $val");
                       period = periodMap[val];
                       print("Period $period");

@@ -193,6 +193,7 @@ class _BenchMarkMonitorsState extends State<BenchMarkMonitors> {
                     indicatorSize: TabBarIndicatorSize.tab,
                     onTap: (val) {
                       benchMarkMonitorsData = [];
+                      selectedSort = "Returns";
                       // selectedBenchMarkType = "All Categories";
                       print("tab tap = $val");
                       setState(() {

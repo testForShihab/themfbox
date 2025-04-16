@@ -101,16 +101,22 @@ class _GoalBasedSipCalculatorInputState
                   SizedBox(height: 16),
                   AmountInputCard(
                     title: "Target Amount",
-                    initialValue: "2500000",
+                    initialValue: Utils.formatNumber(2500000),
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(
+                        1000000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     suffixText:
                         Utils.formatNumber(targetAmount, isAmount: true),
                     onChange: (val) {
-                      targetAmount = num.tryParse(val) ?? 0;
+                      final tempText = val.split(',').join();
+                      targetAmount = num.tryParse(tempText) ?? 0;
                       setState(() {});
                     },
                   ),
@@ -201,7 +207,8 @@ class _GoalBasedSipCalculatorInputState
                     },
                     sliderOnChange: (val) {
                       //annualRateReturn = val.round();
-                      annualRateReturn = double.tryParse(val.toStringAsFixed(2)) ?? 0;
+                      annualRateReturn =
+                          double.tryParse(val.toStringAsFixed(2)) ?? 0;
                       annualRateReturnController.text = "$annualRateReturn";
                       setState(() {});
                     },
@@ -305,7 +312,7 @@ class _GoalBasedSipCalculatorInputState
   }
 
   validator() {
-  /*  List l = [targetAmount, investmentPeriod, annualInflationRate, annualRateReturn,];
+    /*  List l = [targetAmount, investmentPeriod, annualInflationRate, annualRateReturn,];
     if (isAnnual) {
       l.add(annualTopUp);
     }
@@ -344,12 +351,14 @@ class _GoalBasedSipCalculatorInputState
     else
       return true;
   }
+
   static bool isInflactionValidSlider(num temp) {
     if (temp < 0 || temp > 15)
       return false;
     else
       return true;
   }
+
   static bool isValidSliderExpected(num temp) {
     if (temp < 0 || temp > 50)
       return false;

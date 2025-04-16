@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class NoLeadingZeroInputFormatter extends TextInputFormatter {
   @override
@@ -14,8 +15,10 @@ class NoLeadingZeroInputFormatter extends TextInputFormatter {
 class MaxValueFormatter extends TextInputFormatter {
   final double maxValue;
   final bool isDecimal;
+  final bool isReadableInput;
 
-  MaxValueFormatter(this.maxValue, {this.isDecimal = true});
+  MaxValueFormatter(this.maxValue,
+      {this.isDecimal = true, this.isReadableInput = false});
 
   @override
   TextEditingValue formatEditUpdate(
@@ -26,7 +29,9 @@ class MaxValueFormatter extends TextInputFormatter {
       return oldValue;
     }
 
-    double? value = double.tryParse(newValue.text);
+    double? value = isReadableInput
+        ? double.tryParse(newValue.text.split(',').join())
+        : double.tryParse(newValue.text);
 
     if (value == null) {
       return oldValue;
@@ -104,5 +109,39 @@ class SingleLeadingZeroFormatter extends TextInputFormatter {
     }
 
     return newValue;
+  }
+}
+
+class ReadableNumberFormatter extends TextInputFormatter {
+  final NumberFormat _formatter = NumberFormat.decimalPattern('en_IN');
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    String newText = newValue.text.replaceAll(',', '');
+
+    if (newText.isEmpty) {
+      return newValue;
+    }
+
+    final number = num.tryParse(newText);
+    if (number == null) {
+      return oldValue;
+    }
+
+    final formatted = _formatter.format(number);
+
+    int newCursorPosition =
+        formatted.length - (newText.length - newValue.selection.baseOffset);
+
+    if (newCursorPosition < 0) newCursorPosition = 0;
+    if (newCursorPosition > formatted.length) {
+      newCursorPosition = formatted.length;
+    }
+
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: newCursorPosition),
+    );
   }
 }

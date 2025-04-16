@@ -557,15 +557,8 @@ class _TopSipFundsState extends State<TopSipFunds> {
                 ),
                 SizedBox(height: 10),
                 Expanded(
-                  child: ListView.separated(
+                  child: ListView.builder(
                     itemCount: subCategoryList.length,
-                    separatorBuilder: (context, index) {
-                      return SizedBox(
-                        child: DottedLine(
-                          verticalPadding: 2,
-                        ),
-                      );
-                    },
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       String temp =
@@ -597,14 +590,14 @@ class _TopSipFundsState extends State<TopSipFunds> {
                                         "selectedSubCategory = $selectedSubCategory");
                                   });
                                 }),
-                            Container(
-                                height: 30,
-                                width: 30,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffF8DFD5),
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Icon(Icons.bar_chart,
-                                    color: Colors.red, size: 20)),
+                            // Container(
+                            //     height: 30,
+                            //     width: 30,
+                            //     decoration: BoxDecoration(
+                            //         color: Color(0xffF8DFD5),
+                            //         borderRadius: BorderRadius.circular(5)),
+                            //     child: Icon(Icons.bar_chart,
+                            //         color: Colors.red, size: 20)),
                             Text(" $temp",
                                 style: AppFonts.f50014Grey
                                     .copyWith(color: Color(0XFF646464))),

@@ -67,16 +67,22 @@ class _GoalBasedLumpsumCalculatorState
                   SizedBox(height: 16),
                   AmountInputCard(
                     title: "Target Amount",
-                    initialValue: "5000000",
+                    initialValue: Utils.formatNumber(5000000),
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(
+                        1000000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     suffixText:
                         Utils.formatNumber(targetAmount, isAmount: true),
                     onChange: (val) {
-                      targetAmount = num.tryParse(val) ?? 0;
+                      final tempText = val.split(',').join();
+                      targetAmount = num.tryParse(tempText) ?? 0;
                       setState(() {});
                     },
                   ),
@@ -134,7 +140,8 @@ class _GoalBasedLumpsumCalculatorState
                     },
                     sliderOnChange: (val) {
                       // annualRateReturn = val.round();
-                      annualRateReturn = double.tryParse(val.toStringAsFixed(2)) ?? 0;
+                      annualRateReturn =
+                          double.tryParse(val.toStringAsFixed(2)) ?? 0;
                       annualRateReturnController.text = "$annualRateReturn";
                       setState(() {});
                     },
@@ -196,18 +203,22 @@ class _GoalBasedLumpsumCalculatorState
   // }
   validator() {
     if (targetAmount == 0) {
-      EasyLoading.showError("Target Amount is required and cannot be Empty or zero!");
+      EasyLoading.showError(
+          "Target Amount is required and cannot be Empty or zero!");
       return false;
     }
     if (investmentPeriod == 0) {
-      EasyLoading.showError("Investment Period is required and cannot be Empty or zero!");
+      EasyLoading.showError(
+          "Investment Period is required and cannot be Empty or zero!");
       return false;
     }
     if (annualRateReturn == null) {
-      EasyLoading.showError("Expected Annual Rate of Return is required and cannot be Empty or zero!");
+      EasyLoading.showError(
+          "Expected Annual Rate of Return is required and cannot be Empty or zero!");
       return false;
     } else if (annualRateReturn == 0) {
-      EasyLoading.showError("Expected Annual Rate of Return is required and cannot be Empty or zero!");
+      EasyLoading.showError(
+          "Expected Annual Rate of Return is required and cannot be Empty or zero!");
       return false;
     }
 
@@ -242,4 +253,3 @@ class SingleDecimalFormatter extends TextInputFormatter {
     return newValue;
   }
 }
-
