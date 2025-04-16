@@ -113,31 +113,30 @@ class _BanksandMandatesState extends State<BanksandMandates> {
     // Set initial values for all expansion tiles
     mandateType = "E-Mandate"; // Default mandate type
     mandateTypecode = "E"; // Default mandate type code
-    
+
     paymentMode = "NACH"; // Default payment mode
     paymentModecode = "01"; // Default payment mode code
 
-
-    
     //fromDate = "${startDate.day}-${startDate.month}-${startDate.year}";
 
-    fromDate =convertDtToStr(startDate);// Default start date
+    fromDate = convertDtToStr(startDate); // Default start date
 
-    
     // Set initial end dates
     DateTime now = DateTime.now();
-    endDate = DateTime(now.year + 40, now.month, now.day -1); // Default end date for NSE/MFU
-    bseendDate = DateTime(now.year + 40, now.month, now.day -1); // Default end date for BSE
+    endDate = DateTime(
+        now.year + 40, now.month, now.day - 1); // Default end date for NSE/MFU
+    bseendDate = DateTime(
+        now.year + 40, now.month, now.day - 1); // Default end date for BSE
     //toDate = "${bseendDate.day}-${bseendDate.month}-${bseendDate.year}"; // Default BSE end date string
-    toDate =convertDtToStr(bseendDate);
+    toDate = convertDtToStr(bseendDate);
     mandateEndDate = "Until Cancelled";
     sipEndType = "Until Cancelled";
-    
+
     // Set initial ARN if available
     if (client_code_map['broker_code'] != null) {
       arn = client_code_map['broker_code'];
     }
-    
+
     // Set initial EUIN in getDatas()
     getDatas().then((_) {
       if (euinList.isNotEmpty) {
@@ -183,15 +182,16 @@ class _BanksandMandatesState extends State<BanksandMandates> {
   }
 
   Future getMandateinfo() async {
-    if (mandateList.isNotEmpty) return 0;
+    // if (mandateList.isNotEmpty) return 0;
 
+    final isBankOnlySelected = isBankSelected && !isMandateSelected;
     Map data = await TransactionApi.getMandateInfo(
       user_id: user_id,
       client_name: client_name,
       bse_nse_mfu_flag: client_code_map['bse_nse_mfu_flag'],
       investor_code: client_code_map['investor_code'],
       account_number: '',
-      mandate_flag: "Y",
+      mandate_flag: isBankOnlySelected ? 'N' : "Y",
     );
     if (data['status'] != 200) {
       Utils.showError(context, data['msg']);
@@ -299,7 +299,7 @@ class _BanksandMandatesState extends State<BanksandMandates> {
     return 0;
   }
 
-  Future deleteBankMandate(number, umrn,delete_mandate_type) async {
+  Future deleteBankMandate(number, umrn, delete_mandate_type) async {
     String formateMandateType = delete_mandate_type.replaceAll('-', '');
 
     print("mandateType-- $mandateType");
@@ -457,8 +457,7 @@ class _BanksandMandatesState extends State<BanksandMandates> {
   String transaction_number = "";
 
   Future generateBankMandate(String ifscCode, number, bankaccName, holdername,
-      branch, bankCode,mandateTypecode) async {
-
+      branch, bankCode, mandateTypecode) async {
     Map data = await TransactionApi.generateBankMandate(
         user_id: user_id,
         client_name: client_name,
@@ -501,7 +500,7 @@ class _BanksandMandatesState extends State<BanksandMandates> {
     mandateCode = data['status'];
     mandateMessage = data['msg'];
 
-    if(client_code_map['bse_nse_mfu_flag'] == "BSE"){
+    if (client_code_map['bse_nse_mfu_flag'] == "BSE") {
       Map result = data['result'];
       bsePayment_link = result['payment_link'];
       transaction_number = result['transaction_number'];
@@ -522,29 +521,31 @@ class _BanksandMandatesState extends State<BanksandMandates> {
       await getBankMandateOptions();
       await getEuinList();
       await getAccountType();
-      
+
       // Set initial values after data is loaded
       if (mandateTypeList.isNotEmpty) {
         mandateType = mandateTypeList.first['desc'];
         mandateTypecode = mandateTypeList.first['code'];
       }
-      
+
       if (paymentModeList.isNotEmpty) {
         paymentMode = paymentModeList.first['desc'];
         paymentModecode = paymentModeList.first['code'];
       }
-      
+
       if (accountTypeList.isNotEmpty) {
         accountType = accountTypeList.first['desc'];
         accountTypeCode = accountTypeList.first['code'];
       }
-      
     } catch (e) {
       print("getDatas Exception = $e");
     }
     isLoading = false;
     return 0;
   }
+
+  bool isBankSelected = true;
+  bool isMandateSelected = true;
 
   @override
   Widget build(BuildContext context) {
@@ -606,7 +607,72 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                         ),
                       ),
                     ),
-                  SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    child: Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            isBankSelected = !isBankSelected;
+                            getDatas();
+                            setState(() {});
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 5),
+                              child: Row(
+                                children: [
+                                  if (isBankSelected) ...[
+                                    Icon(
+                                      Icons.done,
+                                      size: 16,
+                                    ),
+                                    SizedBox(width: 5),
+                                  ],
+                                  Text('Banks'),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        InkWell(
+                          onTap: () {
+                            isMandateSelected = !isMandateSelected;
+                            setState(() {});
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 5),
+                              child: Row(
+                                children: [
+                                  if (isMandateSelected) ...[
+                                    Icon(
+                                      Icons.done,
+                                      size: 16,
+                                    ),
+                                    SizedBox(width: 5),
+                                  ],
+                                  Text('Mandates'),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
                   Expanded(
                     child: (isLoading)
                         ? Utils.shimmerWidget(devHeight,
@@ -1207,12 +1273,7 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                     SizedBox(height: 16),
                     CalculateButton(
                       onPress: () async {
-                        List list = [
-                          bankName,
-                          accNumber,
-                          name,
-                          accountType
-                        ];
+                        List list = [bankName, accNumber, name, accountType];
                         if (list.contains("")) {
                           print("accountType $accountType");
                           print("accHolderName $name");
@@ -1477,9 +1538,9 @@ class _BanksandMandatesState extends State<BanksandMandates> {
   ];
 
   DateTime endDate = DateTime(
-      DateTime.now().year + 40, DateTime.now().month, DateTime.now().day -1);
+      DateTime.now().year + 40, DateTime.now().month, DateTime.now().day - 1);
   DateTime bseendDate = DateTime(
-      DateTime.now().year + 40, DateTime.now().month, DateTime.now().day -1);
+      DateTime.now().year + 40, DateTime.now().month, DateTime.now().day - 1);
 
   showMandateBottomSheet(context, Map mandate, String status) {
     selectedOption = "Create New Mandate in the same bank";
@@ -1562,7 +1623,8 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                                     Text(mandate['bank_name'] ?? '',
                                         style: AppFonts.f50014Grey
                                             .copyWith(color: Colors.black)),
-                                    Text("****${mandate['bank_account_number']?.substring(mandate['bank_account_number'].length - 4) ?? ''} | ${mandate['bank_ifsc_code']}"),
+                                    Text(
+                                        "****${mandate['bank_account_number']?.substring(mandate['bank_account_number'].length - 4) ?? ''} | ${mandate['bank_ifsc_code']}"),
                                   ],
                                 ),
                               ],
@@ -1631,18 +1693,21 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                             ),
                             Container(
                               decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10)
-                              ),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10)),
                               child: Theme(
-                                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                                data: Theme.of(context)
+                                    .copyWith(dividerColor: Colors.transparent),
                                 child: ExpansionTile(
                                   controller: mandateTypeController,
-                                  title: Text("Mandate Type", style: AppFonts.f50014Black),
+                                  title: Text("Mandate Type",
+                                      style: AppFonts.f50014Black),
                                   subtitle: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text(currentState['mandateType'], style: AppFonts.f50012),
+                                      Text(currentState['mandateType'],
+                                          style: AppFonts.f50012),
                                     ],
                                   ),
                                   children: [
@@ -1653,37 +1718,49 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                                       physics: NeverScrollableScrollPhysics(),
                                       itemCount: mandateTypeList.length,
                                       itemBuilder: (context, index) {
-                                        String desc = mandateTypeList[index]['desc'];
-                                        String code = mandateTypeList[index]['code'];
+                                        String desc =
+                                            mandateTypeList[index]['desc'];
+                                        String code =
+                                            mandateTypeList[index]['code'];
 
                                         return InkWell(
                                           onTap: () {
                                             bottomSheet(() {
-                                              currentState['mandateType'] = desc;
-                                              currentState['mandateTypecode'] = code;
+                                              currentState['mandateType'] =
+                                                  desc;
+                                              currentState['mandateTypecode'] =
+                                                  code;
                                               mandateType = desc;
                                               mandateTypecode = code;
                                             });
                                             mandateTypeController.collapse();
-                                            print('mandatetype--$mandateTypecode');
+                                            print(
+                                                'mandatetype--$mandateTypecode');
                                           },
                                           child: Row(
                                             children: [
                                               Radio(
                                                 value: desc,
-                                                groupValue: currentState['mandateType'],
+                                                groupValue:
+                                                    currentState['mandateType'],
                                                 onChanged: (value) {
                                                   bottomSheet(() {
-                                                    currentState['mandateType'] = desc;
-                                                    currentState['mandateTypecode'] = code;
+                                                    currentState[
+                                                        'mandateType'] = desc;
+                                                    currentState[
+                                                            'mandateTypecode'] =
+                                                        code;
                                                     mandateType = desc;
                                                     mandateTypecode = code;
                                                   });
-                                                  mandateTypeController.collapse();
-                                                  print('mandatetype--$mandateTypecode');
+                                                  mandateTypeController
+                                                      .collapse();
+                                                  print(
+                                                      'mandatetype--$mandateTypecode');
                                                 },
                                               ),
-                                              Text(desc, style: AppFonts.f50014Grey),
+                                              Text(desc,
+                                                  style: AppFonts.f50014Grey),
                                             ],
                                           ),
                                         );
@@ -1704,66 +1781,78 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Container(
-                                    alignment: Alignment.topLeft,
-                                    child: Text("Mandate Amount",
-                                        style: AppFonts.f50014Black,
-                                        textAlign: TextAlign.start)
-                                  ),
+                                      alignment: Alignment.topLeft,
+                                      child: Text("Mandate Amount",
+                                          style: AppFonts.f50014Black,
+                                          textAlign: TextAlign.start)),
                                   SizedBox(height: 16),
                                   Row(
                                     children: [
                                       Container(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 16,
-                                          vertical: 12
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Config.appTheme.mainBgColor,
-                                          border: Border(
-                                            left: BorderSide(width: 1, color: Config.appTheme.lineColor),
-                                            top: BorderSide(width: 1, color: Config.appTheme.lineColor),
-                                            bottom: BorderSide(width: 1, color: Config.appTheme.lineColor),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 12),
+                                          decoration: BoxDecoration(
+                                            color: Config.appTheme.mainBgColor,
+                                            border: Border(
+                                              left: BorderSide(
+                                                  width: 1,
+                                                  color: Config
+                                                      .appTheme.lineColor),
+                                              top: BorderSide(
+                                                  width: 1,
+                                                  color: Config
+                                                      .appTheme.lineColor),
+                                              bottom: BorderSide(
+                                                  width: 1,
+                                                  color: Config
+                                                      .appTheme.lineColor),
+                                            ),
+                                            borderRadius: BorderRadius.only(
+                                                bottomLeft: Radius.circular(25),
+                                                topLeft: Radius.circular(25)),
                                           ),
-                                          borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(25),
-                                            topLeft: Radius.circular(25)
-                                          ),
-                                        ),
-                                        child: Text(rupee, style: AppFonts.f50014Grey)
-                                      ),
+                                          child: Text(rupee,
+                                              style: AppFonts.f50014Grey)),
                                       Expanded(
                                         child: TextFormField(
                                           maxLength: 9,
-                                          keyboardType: TextInputType.numberWithOptions(),
+                                          keyboardType:
+                                              TextInputType.numberWithOptions(),
                                           onChanged: (val) {
-                                            currentState['amount'] = num.tryParse(val) ?? 0;
-                                            mandateamount = currentState['amount'];
+                                            currentState['amount'] =
+                                                num.tryParse(val) ?? 0;
+                                            mandateamount =
+                                                currentState['amount'];
                                           },
                                           decoration: InputDecoration(
-                                            counterText: "",
-                                            contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Config.appTheme.lineColor,
-                                                width: 1
+                                              counterText: "",
+                                              contentPadding:
+                                                  EdgeInsets.fromLTRB(
+                                                      16, 8, 16, 8),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Config
+                                                        .appTheme.lineColor,
+                                                    width: 1),
+                                                borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(25),
+                                                  bottomRight:
+                                                      Radius.circular(25),
+                                                ),
                                               ),
-                                              borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(25),
-                                                bottomRight: Radius.circular(25),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color:
+                                                      Config.appTheme.lineColor,
+                                                  width: 2,
+                                                ),
+                                                borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(25),
+                                                  bottomRight:
+                                                      Radius.circular(25),
+                                                ),
                                               ),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Config.appTheme.lineColor,
-                                                width: 2,
-                                              ),
-                                              borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(25),
-                                                bottomRight: Radius.circular(25),
-                                              ),
-                                            ),
-                                            hintText: 'Enter Mandate Amount'
-                                          ),
+                                              hintText: 'Enter Mandate Amount'),
                                         ),
                                       ),
                                     ],
@@ -1827,14 +1916,16 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                             print("mandatetype-- $mandateType");
                             print("mandateTypecode-- $mandateTypecode");
 
-                            if (selectedOption == "Delete the Existing Mandate Details") {
+                            if (selectedOption ==
+                                "Delete the Existing Mandate Details") {
                               deleteAlert(number, umrn, mandate, mandateamount,
                                   bankaccName, ifscCode);
                               return;
                             }
 
                             if (list.contains("")) {
-                              Utils.showError(context, "All Fields are Mandatory");
+                              Utils.showError(
+                                  context, "All Fields are Mandatory");
                               return;
                             }
                             if (mandateamount == 0) {
@@ -1845,9 +1936,13 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                             await validateIfsc(bankaccName!, ifscCode);
                             print("came here $ifscCode");
 
-
-                            if (selectedOption != "Delete the Existing Mandate Details") {
-                              if ((client_code_map['bse_nse_mfu_flag'] == "BSE" && status != "Pending") || (client_code_map['bse_nse_mfu_flag'] != "BSE")) {
+                            if (selectedOption !=
+                                "Delete the Existing Mandate Details") {
+                              if ((client_code_map['bse_nse_mfu_flag'] ==
+                                          "BSE" &&
+                                      status != "Pending") ||
+                                  (client_code_map['bse_nse_mfu_flag'] !=
+                                      "BSE")) {
                                 EasyLoading.show();
                                 int res = await generateBankMandate(
                                     ifscCode,
@@ -1862,8 +1957,7 @@ class _BanksandMandatesState extends State<BanksandMandates> {
 
                                 Navigator.pop(context);
                                 if (mandateCode == 200) {
-                                  Get.to(() =>
-                                      MandateSuccess(
+                                  Get.to(() => MandateSuccess(
                                         paymentLink: bsePayment_link ?? "",
                                         deleteMessage: mandateMessage,
                                         pagename: "Mandate Generated",
@@ -1871,19 +1965,23 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                                         bankaccName: bankaccName,
                                         number: number!,
                                         ifscCode: ifscCode,
-                                        mandate_id : transaction_number,
-                                        investor_code: client_code_map['investor_code'],
-                                        mandatetype: currentState['mandateTypecode'],
+                                        mandate_id: transaction_number,
+                                        investor_code:
+                                            client_code_map['investor_code'],
+                                        mandatetype:
+                                            currentState['mandateTypecode'],
                                       ));
                                   return;
                                 }
-                              }
-                              else if (client_code_map['bse_nse_mfu_flag'] == "BSE" && status == "Pending"){
-                                Utils.showError(context, "Please delete your existing mandate details and try again");
+                              } else if (client_code_map['bse_nse_mfu_flag'] ==
+                                      "BSE" &&
+                                  status == "Pending") {
+                                Utils.showError(context,
+                                    "Please delete your existing mandate details and try again");
                                 return;
                               }
                             }
-                            },
+                          },
                           child: Text("SUBMIT"),
                         ),
                       ),
@@ -1901,8 +1999,6 @@ class _BanksandMandatesState extends State<BanksandMandates> {
           })
     });*/
   }
-
-
 
   String paymentMode = 'NACH';
   String paymentModecode = '01';
@@ -2014,7 +2110,8 @@ class _BanksandMandatesState extends State<BanksandMandates> {
             ),
             onPressed: () async {
               EasyLoading.show();
-              int res = await deleteBankMandate(number, umrn,delete_mandate_type);
+              int res =
+                  await deleteBankMandate(number, umrn, delete_mandate_type);
               EasyLoading.dismiss();
               if (res == -1) return;
 
@@ -2191,10 +2288,12 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                         onChanged: (value) {
                           bottomState(() {
                             sipEndType = temp;
-                            mandateEndDate = temp; // Add this line to sync the values
+                            mandateEndDate =
+                                temp; // Add this line to sync the values
                             if (sipEndType.contains("Until")) {
                               DateTime now = DateTime.now();
-                              endDate = DateTime(now.year + 40, now.month, now.day -1);
+                              endDate = DateTime(
+                                  now.year + 40, now.month, now.day - 1);
                               sipEndDateController.collapse();
                             }
                           });
@@ -2218,7 +2317,8 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                       bottomState(() {
                         endDate = val;
                         sipEndType = "${val.day}-${val.month}-${val.year}";
-                        mandateEndDate = sipEndType; // Add this line to sync the values
+                        mandateEndDate =
+                            sipEndType; // Add this line to sync the values
                       });
                     }),
               ),
@@ -2317,81 +2417,79 @@ class _BanksandMandatesState extends State<BanksandMandates> {
   }
 
   Widget mandateAmountTile() {
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return Container(
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                  alignment: Alignment.topLeft,
-                  child: Text("Mandate Amount",
-                      style: AppFonts.f50014Black, textAlign: TextAlign.start)),
-              SizedBox(height: 16),
-              Row(
-                children: [
-                  Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: Config.appTheme.mainBgColor,
-                        border: Border(
-                          left: BorderSide(
-                              width: 1, color: Config.appTheme.lineColor),
-                          top: BorderSide(
-                              width: 1, color: Config.appTheme.lineColor),
-                          bottom: BorderSide(
-                              width: 1, color: Config.appTheme.lineColor),
-                        ),
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(25),
-                            topLeft: Radius.circular(25)),
+    return StatefulBuilder(builder: (context, setState) {
+      return Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+                alignment: Alignment.topLeft,
+                child: Text("Mandate Amount",
+                    style: AppFonts.f50014Black, textAlign: TextAlign.start)),
+            SizedBox(height: 16),
+            Row(
+              children: [
+                Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: Config.appTheme.mainBgColor,
+                      border: Border(
+                        left: BorderSide(
+                            width: 1, color: Config.appTheme.lineColor),
+                        top: BorderSide(
+                            width: 1, color: Config.appTheme.lineColor),
+                        bottom: BorderSide(
+                            width: 1, color: Config.appTheme.lineColor),
                       ),
-                      child: Text(rupee, style: AppFonts.f50014Grey)),
-                  Expanded(
-                    child: TextFormField(
-                      maxLength: 9,
-                      keyboardType: TextInputType.numberWithOptions(),
-                      onChanged: (val) {
-                        // Update only the amount without triggering a full state rebuild
-                        mandateamount = num.tryParse(val) ?? 0;
-                      },
-                      decoration: InputDecoration(
-                          counterText: "",
-                          contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Config.appTheme.lineColor, width: 1),
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(25),
-                              bottomRight: Radius.circular(25),
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Config.appTheme.lineColor,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(25),
-                              bottomRight: Radius.circular(25),
-                            ),
-                          ),
-                          hintText: 'Enter Mandate Amount'),
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(25),
+                          topLeft: Radius.circular(25)),
                     ),
+                    child: Text(rupee, style: AppFonts.f50014Grey)),
+                Expanded(
+                  child: TextFormField(
+                    maxLength: 9,
+                    keyboardType: TextInputType.numberWithOptions(),
+                    onChanged: (val) {
+                      // Update only the amount without triggering a full state rebuild
+                      mandateamount = num.tryParse(val) ?? 0;
+                    },
+                    decoration: InputDecoration(
+                        counterText: "",
+                        contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Config.appTheme.lineColor, width: 1),
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(25),
+                            bottomRight: Radius.circular(25),
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Config.appTheme.lineColor,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(25),
+                            bottomRight: Radius.circular(25),
+                          ),
+                        ),
+                        hintText: 'Enter Mandate Amount'),
                   ),
-                ],
-              ),
-              SizedBox(height: 10),
-            ],
-          ),
-        );
-      }
-    );
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+          ],
+        ),
+      );
+    });
   }
 
   showAboutSheet() {
@@ -2644,5 +2742,3 @@ class _BanksandMandatesState extends State<BanksandMandates> {
     );
   }
 }
-
-
