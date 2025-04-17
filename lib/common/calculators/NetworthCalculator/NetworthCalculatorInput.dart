@@ -71,16 +71,22 @@ class _NetworthCalculatorInputState extends State<NetworthCalculatorInput> {
                   SizedBox(height: 16),
                   AmountInputCard(
                     title: "Shares & Equity Mutual Funds",
-                    initialValue: "500000",
+                    initialValue: Utils.formatNumber(500000),
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(
+                        1000000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     suffixText:
                         Utils.formatNumber(financialAssets, isAmount: true),
                     onChange: (val) {
-                      financialAssets = num.tryParse(val) ?? 0;
+                      final tempVal = val.split(',').join();
+                      financialAssets = num.tryParse(tempVal) ?? 0;
                       setState(() {});
                     },
                   ),
@@ -88,16 +94,22 @@ class _NetworthCalculatorInputState extends State<NetworthCalculatorInput> {
                   AmountInputCard(
                     title:
                         "Fixed Income Assets (Fixed Deposits, Bonds, Debt Funds, PPF etc.)",
-                    initialValue: "200000",
+                    initialValue: Utils.formatNumber(200000),
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(
+                        1000000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     suffixText:
                         Utils.formatNumber(fixedIncomeAssets, isAmount: true),
                     onChange: (val) {
-                      fixedIncomeAssets = num.tryParse(val) ?? 0;
+                      final tempVal = val.split(',').join();
+                      fixedIncomeAssets = num.tryParse(tempVal) ?? 0;
                       setState(() {});
                     },
                   ),
@@ -105,62 +117,86 @@ class _NetworthCalculatorInputState extends State<NetworthCalculatorInput> {
                   AmountInputCard(
                     title:
                         "Cash & Bank Accounts (Savings Accounts, Cash In Hand, Liquid Funds, etc.)",
-                    initialValue: "300000",
+                    initialValue: Utils.formatNumber(300000),
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(
+                        1000000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     suffixText:
                         Utils.formatNumber(cashBankAccount, isAmount: true),
                     onChange: (val) {
-                      cashBankAccount = num.tryParse(val) ?? 0;
+                      final tempVal = val.split(',').join();
+                      cashBankAccount = num.tryParse(tempVal) ?? 0;
                       setState(() {});
                     },
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
                     title: "Property",
-                    initialValue: "200000",
+                    initialValue: Utils.formatNumber(200000),
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(
+                        1000000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     suffixText: Utils.formatNumber(property, isAmount: true),
                     onChange: (val) {
-                      property = num.tryParse(val) ?? 0;
+                      final tempVal = val.split(',').join();
+                      property = num.tryParse(tempVal) ?? 0;
                       setState(() {});
                     },
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
                     title: "Gold & Jewelleries",
-                    initialValue: "200000",
+                    initialValue: Utils.formatNumber(200000),
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(
+                        1000000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     suffixText:
                         Utils.formatNumber(goldJwelleries, isAmount: true),
                     onChange: (val) {
-                      goldJwelleries = num.tryParse(val) ?? 0;
+                      final tempVal = val.split(',').join();
+                      goldJwelleries = num.tryParse(tempVal) ?? 0;
                       setState(() {});
                     },
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
                     title: "Others (If any)",
-                    initialValue: "200000",
+                    initialValue: Utils.formatNumber(200000),
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(
+                        1000000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     suffixText: Utils.formatNumber(othersAny, isAmount: true),
                     onChange: (val) {
-                      othersAny = num.tryParse(val) ?? 0;
+                      final tempVal = val.split(',').join();
+                      othersAny = num.tryParse(tempVal) ?? 0;
                       setState(() {});
                     },
                   ),
@@ -170,95 +206,131 @@ class _NetworthCalculatorInputState extends State<NetworthCalculatorInput> {
                   SizedBox(height: 16),
                   AmountInputCard(
                     title: "Home Loan",
-                    initialValue: "50000",
+                    initialValue: Utils.formatNumber(50000),
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(
+                        1000000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     suffixText: Utils.formatNumber(homeLoan, isAmount: true),
                     onChange: (val) {
-                      homeLoan = num.tryParse(val) ?? 0;
+                      final tempVal = val.split(',').join();
+                      homeLoan = num.tryParse(tempVal) ?? 0;
                       setState(() {});
                     },
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
                     title: "Personal & Other Loans",
-                    initialValue: "250000",
+                    initialValue: Utils.formatNumber(250000),
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(
+                        1000000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     suffixText:
                         Utils.formatNumber(personalOtherLoans, isAmount: true),
                     onChange: (val) {
-                      personalOtherLoans = num.tryParse(val) ?? 0;
+                      final tempVal = val.split(',').join();
+                      personalOtherLoans = num.tryParse(tempVal) ?? 0;
                       setState(() {});
                     },
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
                     title: "Income Tax Owed",
-                    initialValue: "200000",
+                    initialValue: Utils.formatNumber(200000),
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(
+                        1000000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     suffixText:
                         Utils.formatNumber(incomeTaxOwed, isAmount: true),
                     onChange: (val) {
-                      incomeTaxOwed = num.tryParse(val) ?? 0;
+                      final tempVal = val.split(',').join();
+                      incomeTaxOwed = num.tryParse(tempVal) ?? 0;
                       setState(() {});
                     },
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
                     title: "Outstanding Bills / Payments",
-                    initialValue: "500000",
+                    initialValue: Utils.formatNumber(500000),
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(
+                        1000000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     suffixText:
                         Utils.formatNumber(outstandingBills, isAmount: true),
                     onChange: (val) {
-                      outstandingBills = num.tryParse(val) ?? 0;
+                      final tempVal = val.split(',').join();
+                      outstandingBills = num.tryParse(tempVal) ?? 0;
                       setState(() {});
                     },
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
                     title: "Credit Card Dues",
-                    initialValue: "200000",
+                    initialValue: Utils.formatNumber(200000),
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(
+                        1000000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     suffixText:
                         Utils.formatNumber(creditCardDues, isAmount: true),
                     onChange: (val) {
-                      creditCardDues = num.tryParse(val) ?? 0;
+                      final tempVal = val.split(',').join();
+                      creditCardDues = num.tryParse(tempVal) ?? 0;
                       setState(() {});
                     },
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
                     title: "Other Liabilities (If any)",
-                    initialValue: "20000",
+                    initialValue: Utils.formatNumber(20000),
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(
+                        1000000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     suffixText:
                         Utils.formatNumber(othersLiabilities, isAmount: true),
                     onChange: (val) {
-                      othersLiabilities = num.tryParse(val) ?? 0;
+                      final tempVal = val.split(',').join();
+                      othersLiabilities = num.tryParse(tempVal) ?? 0;
                       setState(() {});
                     },
                   ),
@@ -359,23 +431,22 @@ class _NetworthCalculatorInputState extends State<NetworthCalculatorInput> {
       return false;
     }*/
 
-    if(financialAssets == 0 &&
+    if (financialAssets == 0 &&
         fixedIncomeAssets == 0 &&
         cashBankAccount == 0 &&
         property == 0 &&
         goldJwelleries == 0 &&
-        othersAny == 0
-       ) {
+        othersAny == 0) {
       EasyLoading.showError("Please enter the value for financial assets");
       return false;
     }
 
-    if( homeLoan == 0 &&
+    if (homeLoan == 0 &&
         personalOtherLoans == 0 &&
         incomeTaxOwed == 0 &&
         outstandingBills == 0 &&
         creditCardDues == 0 &&
-        othersLiabilities == 0){
+        othersLiabilities == 0) {
       EasyLoading.showError("Please enter the value for liabilities");
       return false;
     }

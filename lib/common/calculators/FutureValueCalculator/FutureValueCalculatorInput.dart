@@ -72,16 +72,18 @@ class _FutureValueCalculatorInputState
                     SizedBox(height: 16),
                     AmountInputCard(
                       title: "Current Cost",
-                      initialValue: "2500000",
+                      initialValue: Utils.formatNumber(2500000),
                       inputFormatters: [
-                        MaxValueFormatter(1000000000),
+                        MaxValueFormatter(1000000000, isReadableInput: true),
                         NoLeadingZeroInputFormatter(),
                         FilteringTextInputFormatter.digitsOnly,
+                        ReadableNumberFormatter(),
                       ],
                       suffixText:
                           Utils.formatNumber(currentCost, isAmount: true),
                       onChange: (val) {
-                        currentCost = num.tryParse(val) ?? 0;
+                        final tempVal = val.split(',').join();
+                        currentCost = num.tryParse(tempVal) ?? 0;
                         setState(() {});
                       },
                     ),
@@ -122,7 +124,7 @@ class _FutureValueCalculatorInputState
                         suffixText: "%",
                         sliderMaxValue: 15,
                         inputFormatters: [
-                          MaxValueFormatter(50,isDecimal: true),
+                          MaxValueFormatter(50, isDecimal: true),
                           DoubleDecimalFormatter(),
                         ],
                         tfOnChange: (val) {
@@ -130,15 +132,18 @@ class _FutureValueCalculatorInputState
 
                           bool isValid = isinflatioinValidSlider(temp);
                           if (!isValid) {
-                            Utils.showError(context, "Expected Annual Inflation Rate should be in-between 0-100");
+                            Utils.showError(context,
+                                "Expected Annual Inflation Rate should be in-between 0-100");
                             return;
                           }
                           annualInflationRate = temp;
                           setState(() {});
                         },
                         sliderOnChange: (val) {
-                          annualInflationRate = double.tryParse(val.toStringAsFixed(2)) ?? 0;
-                          annualInflationRateController.text = "$annualInflationRate";
+                          annualInflationRate =
+                              double.tryParse(val.toStringAsFixed(2)) ?? 0;
+                          annualInflationRateController.text =
+                              "$annualInflationRate";
                           setState(() {});
                         }),
                   ],
@@ -161,7 +166,7 @@ class _FutureValueCalculatorInputState
               current_cost: '$currentCost',
               inflation_rate: '$annualInflationRate',
               years: '$numberOfYears',
-          client_name: client_name);
+              client_name: client_name);
 
           Get.to(() =>
               FutureValueCalculatorOutput(futureValueResult: data['result']));
@@ -220,8 +225,9 @@ class _FutureValueCalculatorInputState
       return false;
     }
 
-    if(annualInflationRate == 0) {
-      EasyLoading.showError("Please select annual inflation rate. Zero Not Allowed");
+    if (annualInflationRate == 0) {
+      EasyLoading.showError(
+          "Please select annual inflation rate. Zero Not Allowed");
       return false;
     }
     return true;

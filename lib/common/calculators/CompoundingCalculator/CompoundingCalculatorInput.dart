@@ -72,16 +72,22 @@ class _CompoundingCalculatorInputState
                   SizedBox(height: 16),
                   AmountInputCard(
                     title: "Principal Amount",
-                    initialValue: "2500000",
+                    initialValue: Utils.formatNumber(2500000),
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(
+                        1000000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
                     suffixText:
                         Utils.formatNumber(principalAmount, isAmount: true),
                     onChange: (val) {
-                      principalAmount = num.tryParse(val) ?? 0;
+                      final tempVal = val.split(',').join();
+                      principalAmount = num.tryParse(tempVal) ?? 0;
                       setState(() {});
                     },
                   ),
@@ -108,8 +114,10 @@ class _CompoundingCalculatorInputState
                         setState(() {});
                       },
                       sliderOnChange: (val) {
-                        annualInterestRate = double.tryParse(val.toStringAsFixed(2)) ?? 0;
-                        annualInterestRateController.text = "$annualInterestRate";
+                        annualInterestRate =
+                            double.tryParse(val.toStringAsFixed(2)) ?? 0;
+                        annualInterestRateController.text =
+                            "$annualInterestRate";
                         setState(() {});
                       }),
                   SizedBox(height: 16),
@@ -282,7 +290,7 @@ class _CompoundingCalculatorInputState
                             interest_rate: '$annualInterestRate',
                             period: '$noOfYears',
                             compound_interval: cmpInterval,
-                        client_name: client_name);
+                            client_name: client_name);
 
                         Get.to(() => CompoundingCalculatorOutput(
                             compoundingCalculatorResult: data['result']));
@@ -303,7 +311,7 @@ class _CompoundingCalculatorInputState
   }
 
   validator() {
-   /* List l = [principalAmount, annualInterestRate, noOfYears];
+    /* List l = [principalAmount, annualInterestRate, noOfYears];
     if (l.contains(null)) {
       EasyLoading.showError("All Fields are mandatory!");
       return false;
@@ -313,7 +321,7 @@ class _CompoundingCalculatorInputState
       return false;
     }*/
 
-    if(principalAmount <= 0) {
+    if (principalAmount <= 0) {
       EasyLoading.showError("Principal Amount should be greater than 0");
       return false;
     }

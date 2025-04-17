@@ -66,16 +66,22 @@ class _LoanEmiCalculatorInputState extends State<LoanEmiCalculatorInput> {
                   SizedBox(height: 16),
                   AmountInputCard(
                     title: "Loan Amount",
-                    initialValue: "2500000",
+                    initialValue: Utils.formatNumber(2500000),
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(
+                        1000000000,
+                        isDecimal: false,
+                        isReadableInput: true,
+                      ),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
+                      ReadableNumberFormatter(),
                     ],
-                    maxLength: 10,
+                    // maxLength: 10,
                     suffixText: Utils.formatNumber(loanAmount, isAmount: true),
                     onChange: (val) {
-                      loanAmount = num.tryParse(val) ?? 0;
+                      final tempVal = val.split(',').join();
+                      loanAmount = num.tryParse(tempVal) ?? 0;
                       setState(() {});
                     },
                   ),
@@ -103,7 +109,8 @@ class _LoanEmiCalculatorInputState extends State<LoanEmiCalculatorInput> {
                         setState(() {});
                       },
                       sliderOnChange: (val) {
-                        annualInterestRate = double.tryParse(val.toStringAsFixed(2)) ?? 0;
+                        annualInterestRate =
+                            double.tryParse(val.toStringAsFixed(2)) ?? 0;
                         annualInterestRateController.text =
                             "$annualInterestRate";
                         setState(() {});
@@ -154,7 +161,7 @@ class _LoanEmiCalculatorInputState extends State<LoanEmiCalculatorInput> {
               interest_rate: '$annualInterestRate',
               loan_tenure_type: 'year',
               loan_tenure: '$loanTenure',
-          client_name: client_name);
+              client_name: client_name);
           Get.to(() =>
               LoanEmiCalculatorOutput(loanEmiCalculatorResult: data['result']));
 
@@ -175,18 +182,21 @@ class _LoanEmiCalculatorInputState extends State<LoanEmiCalculatorInput> {
       return false;
     }*/
 
-    if(loanAmount > 1000000000 || loanAmount <= 0.0){
-      EasyLoading.showError("Please enter valid Loan Amount. It should be in-between 1-1000000000");
+    if (loanAmount > 1000000000 || loanAmount <= 0.0) {
+      EasyLoading.showError(
+          "Please enter valid Loan Amount. It should be in-between 1-1000000000");
       return false;
     }
 
-    if(loanTenure > 100 || loanTenure <= 0.0){
-      EasyLoading.showError("Please enter valid Loan Tenure. It should be in-between 1-100");
+    if (loanTenure > 100 || loanTenure <= 0.0) {
+      EasyLoading.showError(
+          "Please enter valid Loan Tenure. It should be in-between 1-100");
       return false;
     }
 
-    if(annualInterestRate > 50 || annualInterestRate <= 0.0){
-      EasyLoading.showError("Please enter valid expected annual rate of return. It should be in-between 1-50");
+    if (annualInterestRate > 50 || annualInterestRate <= 0.0) {
+      EasyLoading.showError(
+          "Please enter valid expected annual rate of return. It should be in-between 1-50");
       return false;
     }
 
