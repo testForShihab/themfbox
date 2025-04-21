@@ -607,7 +607,7 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                         ),
                       ),
                     ),
-                  Padding(
+                 /* Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 18),
                     child: Row(
                       children: [
@@ -671,7 +671,7 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                   SizedBox(height: 10),
                   Expanded(
                     child: (isLoading)
@@ -1572,421 +1572,427 @@ class _BanksandMandatesState extends State<BanksandMandates> {
         ),
         builder: (context) {
           return StatefulBuilder(builder: (context, bottomSheet) {
-            return Container(
-              height: devHeight * 0.8,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(15),
-                            topRight: Radius.circular(15)),
+            return GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: Container(
+                height: devHeight * 0.8,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15)),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Bank Mandate Registration",
+                              style: AppFonts.f40016
+                                  .copyWith(fontWeight: FontWeight.w500),
+                            ),
+                            InkWell(
+                                onTap: () {
+                                  Get.back();
+                                  selectedOption = " ";
+                                  showAdditionalFields = false;
+                                },
+                                child: Icon(Icons.close)),
+                          ],
+                        ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Bank Mandate Registration",
-                            style: AppFonts.f40016
-                                .copyWith(fontWeight: FontWeight.w500),
-                          ),
-                          InkWell(
-                              onTap: () {
-                                Get.back();
-                                selectedOption = " ";
-                                showAdditionalFields = false;
-                              },
-                              child: Icon(Icons.close)),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: devWidth,
-                            padding: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(mandate['bank_name'] ?? '',
-                                        style: AppFonts.f50014Grey
-                                            .copyWith(color: Colors.black)),
-                                    Text(
-                                        "****${mandate['bank_account_number']?.substring(mandate['bank_account_number'].length - 4) ?? ''} | ${mandate['bank_ifsc_code']}"),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(8, 8, 0, 0),
-                                  child: Text("Select Option",
-                                      style: AppFonts.f50014Black),
-                                ),
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: (status == "Generate")
-                                      ? 1
-                                      : selectedOptionList.length,
-                                  itemBuilder: (context, index) {
-                                    String temp = selectedOptionList[index];
-                                    return InkWell(
-                                      onTap: () {
-                                        bottomSheet(() {
-                                          selectedOption = temp;
-                                          showAdditionalFields = selectedOption ==
-                                              "Create New Mandate in the same bank";
-                                        });
-                                      },
-                                      child: Row(
-                                        children: [
-                                          Radio(
-                                            value: temp,
-                                            groupValue: selectedOption,
-                                            onChanged: (value) {
-                                              bottomSheet(() {
-                                                selectedOption = temp;
-                                                showAdditionalFields =
-                                                    selectedOption ==
-                                                        "Create New Mandate in the same bank";
-                                              });
-                                            },
-                                          ),
-                                          Text(temp,
-                                              style: AppFonts.f50014Grey),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          if (showAdditionalFields) ...[
-                            SizedBox(
-                              height: 10,
-                            ),
+                      SizedBox(height: 16),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Column(
+                          children: [
                             Container(
+                              width: devWidth,
+                              padding: EdgeInsets.all(16),
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(10)),
-                              child: Theme(
-                                data: Theme.of(context)
-                                    .copyWith(dividerColor: Colors.transparent),
-                                child: ExpansionTile(
-                                  controller: mandateTypeController,
-                                  title: Text("Mandate Type",
-                                      style: AppFonts.f50014Black),
-                                  subtitle: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(currentState['mandateType'],
-                                          style: AppFonts.f50012),
-                                    ],
-                                  ),
-                                  children: [
-                                    DottedLine(),
-                                    ListView.builder(
-                                      padding: EdgeInsets.all(0),
-                                      shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      itemCount: mandateTypeList.length,
-                                      itemBuilder: (context, index) {
-                                        String desc =
-                                            mandateTypeList[index]['desc'];
-                                        String code =
-                                            mandateTypeList[index]['code'];
-
-                                        return InkWell(
-                                          onTap: () {
-                                            bottomSheet(() {
-                                              currentState['mandateType'] =
-                                                  desc;
-                                              currentState['mandateTypecode'] =
-                                                  code;
-                                              mandateType = desc;
-                                              mandateTypecode = code;
-                                            });
-                                            mandateTypeController.collapse();
-                                            print(
-                                                'mandatetype--$mandateTypecode');
-                                          },
-                                          child: Row(
-                                            children: [
-                                              Radio(
-                                                value: desc,
-                                                groupValue:
-                                                    currentState['mandateType'],
-                                                onChanged: (value) {
-                                                  bottomSheet(() {
-                                                    currentState[
-                                                        'mandateType'] = desc;
-                                                    currentState[
-                                                            'mandateTypecode'] =
-                                                        code;
-                                                    mandateType = desc;
-                                                    mandateTypecode = code;
-                                                  });
-                                                  mandateTypeController
-                                                      .collapse();
-                                                  print(
-                                                      'mandatetype--$mandateTypecode');
-                                                },
-                                              ),
-                                              Text(desc,
-                                                  style: AppFonts.f50014Grey),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Container(
-                              padding: EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Column(
+                              child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Container(
-                                      alignment: Alignment.topLeft,
-                                      child: Text("Mandate Amount",
-                                          style: AppFonts.f50014Black,
-                                          textAlign: TextAlign.start)),
-                                  SizedBox(height: 16),
-                                  Row(
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 16, vertical: 12),
-                                          decoration: BoxDecoration(
-                                            color: Config.appTheme.mainBgColor,
-                                            border: Border(
-                                              left: BorderSide(
-                                                  width: 1,
-                                                  color: Config
-                                                      .appTheme.lineColor),
-                                              top: BorderSide(
-                                                  width: 1,
-                                                  color: Config
-                                                      .appTheme.lineColor),
-                                              bottom: BorderSide(
-                                                  width: 1,
-                                                  color: Config
-                                                      .appTheme.lineColor),
-                                            ),
-                                            borderRadius: BorderRadius.only(
-                                                bottomLeft: Radius.circular(25),
-                                                topLeft: Radius.circular(25)),
-                                          ),
-                                          child: Text(rupee,
-                                              style: AppFonts.f50014Grey)),
-                                      Expanded(
-                                        child: TextFormField(
-                                          maxLength: 9,
-                                          keyboardType:
-                                              TextInputType.numberWithOptions(),
-                                          onChanged: (val) {
-                                            currentState['amount'] =
-                                                num.tryParse(val) ?? 0;
-                                            mandateamount =
-                                                currentState['amount'];
-                                          },
-                                          decoration: InputDecoration(
-                                              counterText: "",
-                                              contentPadding:
-                                                  EdgeInsets.fromLTRB(
-                                                      16, 8, 16, 8),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Config
-                                                        .appTheme.lineColor,
-                                                    width: 1),
-                                                borderRadius: BorderRadius.only(
-                                                  topRight: Radius.circular(25),
-                                                  bottomRight:
-                                                      Radius.circular(25),
-                                                ),
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color:
-                                                      Config.appTheme.lineColor,
-                                                  width: 2,
-                                                ),
-                                                borderRadius: BorderRadius.only(
-                                                  topRight: Radius.circular(25),
-                                                  bottomRight:
-                                                      Radius.circular(25),
-                                                ),
-                                              ),
-                                              hintText: 'Enter Mandate Amount'),
-                                        ),
-                                      ),
+                                      Text(mandate['bank_name'] ?? '',
+                                          style: AppFonts.f50014Grey
+                                              .copyWith(color: Colors.black)),
+                                      Text(
+                                          "****${mandate['bank_account_number']?.substring(mandate['bank_account_number'].length - 4) ?? ''} | ${mandate['bank_ifsc_code']}"),
                                     ],
                                   ),
                                 ],
                               ),
                             ),
-                            SizedBox(height: 10),
-                            if ((client_code_map['bse_nse_mfu_flag'] == "NSE" &&
-                                    mandateType == "E-Mandate") ||
-                                client_code_map['bse_nse_mfu_flag'] == "MFU")
-                              mandateOptionTile(context, bottomSheet),
-                            mandateFromDateTile(bottomSheet),
                             SizedBox(
                               height: 10,
                             ),
-                            if (client_code_map['bse_nse_mfu_flag'] != "BSE")
-                              sipEndDateExpansionTile(bottomSheet),
-                            if (client_code_map['bse_nse_mfu_flag'] == "BSE")
-                              bseEndDateTile(bottomSheet),
-                            SizedBox(
-                              height: 10,
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 8, 0, 0),
+                                    child: Text("Select Option",
+                                        style: AppFonts.f50014Black),
+                                  ),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: (status == "Generate")
+                                        ? 1
+                                        : selectedOptionList.length,
+                                    itemBuilder: (context, index) {
+                                      String temp = selectedOptionList[index];
+                                      return InkWell(
+                                        onTap: () {
+                                          bottomSheet(() {
+                                            selectedOption = temp;
+                                            showAdditionalFields = selectedOption ==
+                                                "Create New Mandate in the same bank";
+                                          });
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Radio(
+                                              value: temp,
+                                              groupValue: selectedOption,
+                                              onChanged: (value) {
+                                                bottomSheet(() {
+                                                  selectedOption = temp;
+                                                  showAdditionalFields =
+                                                      selectedOption ==
+                                                          "Create New Mandate in the same bank";
+                                                });
+                                              },
+                                            ),
+                                            Text(temp,
+                                                style: AppFonts.f50014Grey),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
-                            arnExpansionTile(),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            euinExpansionTile(bottomSheet),
-                            SizedBox(
-                              height: 10,
-                            ),
+                            if (showAdditionalFields) ...[
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Theme(
+                                  data: Theme.of(context)
+                                      .copyWith(dividerColor: Colors.transparent),
+                                  child: ExpansionTile(
+                                    controller: mandateTypeController,
+                                    title: Text("Mandate Type",
+                                        style: AppFonts.f50014Black),
+                                    subtitle: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(currentState['mandateType'],
+                                            style: AppFonts.f50012),
+                                      ],
+                                    ),
+                                    children: [
+                                      DottedLine(),
+                                      ListView.builder(
+                                        padding: EdgeInsets.all(0),
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemCount: mandateTypeList.length,
+                                        itemBuilder: (context, index) {
+                                          String desc =
+                                              mandateTypeList[index]['desc'];
+                                          String code =
+                                              mandateTypeList[index]['code'];
+
+                                          return InkWell(
+                                            onTap: () {
+                                              bottomSheet(() {
+                                                currentState['mandateType'] =
+                                                    desc;
+                                                currentState['mandateTypecode'] =
+                                                    code;
+                                                mandateType = desc;
+                                                mandateTypecode = code;
+                                              });
+                                              mandateTypeController.collapse();
+                                              print(
+                                                  'mandatetype--$mandateTypecode');
+                                            },
+                                            child: Row(
+                                              children: [
+                                                Radio(
+                                                  value: desc,
+                                                  groupValue:
+                                                      currentState['mandateType'],
+                                                  onChanged: (value) {
+                                                    bottomSheet(() {
+                                                      currentState[
+                                                          'mandateType'] = desc;
+                                                      currentState[
+                                                              'mandateTypecode'] =
+                                                          code;
+                                                      mandateType = desc;
+                                                      mandateTypecode = code;
+                                                    });
+                                                    mandateTypeController
+                                                        .collapse();
+                                                    print(
+                                                        'mandatetype--$mandateTypecode');
+                                                  },
+                                                ),
+                                                Text(desc,
+                                                    style: AppFonts.f50014Grey),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Container(
+                                padding: EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                        alignment: Alignment.topLeft,
+                                        child: Text("Mandate Amount",
+                                            style: AppFonts.f50014Black,
+                                            textAlign: TextAlign.start)),
+                                    SizedBox(height: 16),
+                                    Row(
+                                      children: [
+                                        Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 16, vertical: 12),
+                                            decoration: BoxDecoration(
+                                              color: Config.appTheme.mainBgColor,
+                                              border: Border(
+                                                left: BorderSide(
+                                                    width: 1,
+                                                    color: Config
+                                                        .appTheme.lineColor),
+                                                top: BorderSide(
+                                                    width: 1,
+                                                    color: Config
+                                                        .appTheme.lineColor),
+                                                bottom: BorderSide(
+                                                    width: 1,
+                                                    color: Config
+                                                        .appTheme.lineColor),
+                                              ),
+                                              borderRadius: BorderRadius.only(
+                                                  bottomLeft: Radius.circular(25),
+                                                  topLeft: Radius.circular(25)),
+                                            ),
+                                            child: Text(rupee,
+                                                style: AppFonts.f50014Grey)),
+                                        Expanded(
+                                          child: TextFormField(
+                                            maxLength: 9,
+                                            keyboardType:
+                                                TextInputType.numberWithOptions(),
+                                            onChanged: (val) {
+                                              currentState['amount'] =
+                                                  num.tryParse(val) ?? 0;
+                                              mandateamount =
+                                                  currentState['amount'];
+                                            },
+
+                                            decoration: InputDecoration(
+                                                counterText: "",
+                                                contentPadding:
+                                                    EdgeInsets.fromLTRB(
+                                                        16, 8, 16, 8),
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Config
+                                                          .appTheme.lineColor,
+                                                      width: 1),
+                                                  borderRadius: BorderRadius.only(
+                                                    topRight: Radius.circular(25),
+                                                    bottomRight:
+                                                        Radius.circular(25),
+                                                  ),
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color:
+                                                        Config.appTheme.lineColor,
+                                                    width: 2,
+                                                  ),
+                                                  borderRadius: BorderRadius.only(
+                                                    topRight: Radius.circular(25),
+                                                    bottomRight:
+                                                        Radius.circular(25),
+                                                  ),
+                                                ),
+                                                hintText: 'Enter Mandate Amount'),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              if ((client_code_map['bse_nse_mfu_flag'] == "NSE" &&
+                                      mandateType == "E-Mandate") ||
+                                  client_code_map['bse_nse_mfu_flag'] == "MFU")
+                                mandateOptionTile(context, bottomSheet),
+                              mandateFromDateTile(bottomSheet),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              if (client_code_map['bse_nse_mfu_flag'] != "BSE")
+                                sipEndDateExpansionTile(bottomSheet),
+                              if (client_code_map['bse_nse_mfu_flag'] == "BSE")
+                                bseEndDateTile(bottomSheet),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              arnExpansionTile(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              euinExpansionTile(bottomSheet),
+                              SizedBox(
+                                height: 10,
+                              ),
+                            ],
                           ],
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      width: devWidth,
-                      padding: EdgeInsets.all(16),
-                      color: Colors.white,
-                      child: SizedBox(
-                        width: devWidth * 0.76,
-                        height: 42,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Config.appTheme.themeColor,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            textStyle: AppFonts.f50014Black.copyWith(
-                              color: Colors.white,
-                            ),
-                          ),
-                          onPressed: () async {
-                            List list = [startDate, mandateamount];
-                            mandateType = currentState['mandateType'];
-                            mandateTypecode = currentState['mandateTypecode'];
-                            print("mandatetype-- $mandateType");
-                            print("mandateTypecode-- $mandateTypecode");
-
-                            if (selectedOption ==
-                                "Delete the Existing Mandate Details") {
-                              deleteAlert(number, umrn, mandate, mandateamount,
-                                  bankaccName, ifscCode);
-                              return;
-                            }
-
-                            if (list.contains("")) {
-                              Utils.showError(
-                                  context, "All Fields are Mandatory");
-                              return;
-                            }
-                            if (mandateamount == 0) {
-                              Utils.showError(
-                                  context, "Please enter a mandate amount");
-                              return;
-                            }
-                            await validateIfsc(bankaccName!, ifscCode);
-                            print("came here $ifscCode");
-
-                            if (selectedOption !=
-                                "Delete the Existing Mandate Details") {
-                              if ((client_code_map['bse_nse_mfu_flag'] ==
-                                          "BSE" &&
-                                      status != "Pending") ||
-                                  (client_code_map['bse_nse_mfu_flag'] !=
-                                      "BSE")) {
-                                EasyLoading.show();
-                                int res = await generateBankMandate(
-                                    ifscCode,
-                                    number,
-                                    bankaccName,
-                                    holderNames,
-                                    branch,
-                                    bankCode,
-                                    currentState['mandateTypecode']);
-                                EasyLoading.dismiss();
-                                if (res == -1) return;
-
-                                Navigator.pop(context);
-                                if (mandateCode == 200) {
-                                  Get.to(() => MandateSuccess(
-                                        paymentLink: bsePayment_link ?? "",
-                                        deleteMessage: mandateMessage,
-                                        pagename: "Mandate Generated",
-                                        mandateAmount: mandateamount,
-                                        bankaccName: bankaccName,
-                                        number: number!,
-                                        ifscCode: ifscCode,
-                                        mandate_id: transaction_number,
-                                        investor_code:
-                                            client_code_map['investor_code'],
-                                        mandatetype:
-                                            currentState['mandateTypecode'],
-                                      ));
-                                  return;
-                                }
-                              } else if (client_code_map['bse_nse_mfu_flag'] ==
-                                      "BSE" &&
-                                  status == "Pending") {
-                                Utils.showError(context,
-                                    "Please delete your existing mandate details and try again");
-                                return;
-                              }
-                            }
-                          },
-                          child: Text("SUBMIT"),
                         ),
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: devWidth,
+                        padding: EdgeInsets.all(16),
+                        color: Colors.white,
+                        child: SizedBox(
+                          width: devWidth * 0.76,
+                          height: 42,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Config.appTheme.themeColor,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              textStyle: AppFonts.f50014Black.copyWith(
+                                color: Colors.white,
+                              ),
+                            ),
+                            onPressed: () async {
+                              List list = [startDate, mandateamount];
+                              mandateType = currentState['mandateType'];
+                              mandateTypecode = currentState['mandateTypecode'];
+                              print("mandatetype-- $mandateType");
+                              print("mandateTypecode-- $mandateTypecode");
+
+                              if (selectedOption ==
+                                  "Delete the Existing Mandate Details") {
+                                deleteAlert(number, umrn, mandate, mandateamount,
+                                    bankaccName, ifscCode);
+                                return;
+                              }
+
+                              if (list.contains("")) {
+                                Utils.showError(
+                                    context, "All Fields are Mandatory");
+                                return;
+                              }
+                              if (mandateamount == 0) {
+                                Utils.showError(
+                                    context, "Please enter a mandate amount");
+                                return;
+                              }
+                              await validateIfsc(bankaccName!, ifscCode);
+                              print("came here $ifscCode");
+
+                              if (selectedOption !=
+                                  "Delete the Existing Mandate Details") {
+                                if ((client_code_map['bse_nse_mfu_flag'] ==
+                                            "BSE" &&
+                                        status != "Pending") ||
+                                    (client_code_map['bse_nse_mfu_flag'] !=
+                                        "BSE")) {
+                                  EasyLoading.show();
+                                  int res = await generateBankMandate(
+                                      ifscCode,
+                                      number,
+                                      bankaccName,
+                                      holderNames,
+                                      branch,
+                                      bankCode,
+                                      currentState['mandateTypecode']);
+                                  EasyLoading.dismiss();
+                                  if (res == -1) return;
+
+                                  Navigator.pop(context);
+                                  if (mandateCode == 200) {
+                                    Get.to(() => MandateSuccess(
+                                          paymentLink: bsePayment_link ?? "",
+                                          deleteMessage: mandateMessage,
+                                          pagename: "Mandate Generated",
+                                          mandateAmount: mandateamount,
+                                          bankaccName: bankaccName,
+                                          number: number!,
+                                          ifscCode: ifscCode,
+                                          mandate_id: transaction_number,
+                                          investor_code:
+                                              client_code_map['investor_code'],
+                                          mandatetype:
+                                              currentState['mandateTypecode'],
+                                        ));
+                                    return;
+                                  }
+                                } else if (client_code_map['bse_nse_mfu_flag'] ==
+                                        "BSE" &&
+                                    status == "Pending") {
+                                  Utils.showError(context,
+                                      "Please delete your existing mandate details and try again");
+                                  return;
+                                }
+                              }
+                            },
+                            child: Text("SUBMIT"),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );

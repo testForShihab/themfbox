@@ -919,8 +919,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                         final data = funChartData[barIndex][dataIndex];
                         tooltipDateNotifier.value = data.nav_date ?? '';
                         if (barIndex == 0) {
-                          tooltipFundNotifier.value =
-                              touchedSpot.y.toStringAsFixed(2);
+                          tooltipFundNotifier.value = touchedSpot.y.toStringAsFixed(2);
                         } else if (barIndex == 1) {
                           tooltipValueBenchMarkNotifier.value =
                               touchedSpot.y.toStringAsFixed(2);
@@ -950,8 +949,9 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                     final Color valueColor =
                         labelColor; // Use same color for value
 
+
                     return LineTooltipItem(
-                      '${data.dateFormatNav ?? ''}\n', // Display Date
+                        spot.barIndex == 0 ? '${data.dateFormatNav ?? ''}\n' : '', // Display Date
                       const TextStyle(
                           color: Colors.black,
                           fontSize: 10.5,
@@ -1063,7 +1063,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                         // blackBoxDistribution(),
                       ],
                     ),
-          Column(
+         /* Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
@@ -1084,7 +1084,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                       ? NoData()
                       : chartArea(schemeData, benchMarkData)
             ],
-          ),
+          ),*/
         ],
       ),
     );
@@ -1140,14 +1140,14 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
             children: [
               ColumnText(
                 title: "Min",
-                value: "${minimum.toStringAsFixed(2)}%",
+                value: "${minimum.toStringAsFixed(2)}",
                 titleStyle: AppFonts.f40013.copyWith(
                     color: Config.appTheme.placeHolderInputTitleAndArrow),
                 valueStyle: AppFonts.f50014Black.copyWith(color: Colors.white),
               ),
               ColumnText(
                   title: "Max",
-                  value: "${maximum.toStringAsFixed(2)}%",
+                  value: "${maximum.toStringAsFixed(2)}",
                   titleStyle: AppFonts.f40013.copyWith(
                       color: Config.appTheme.placeHolderInputTitleAndArrow),
                   valueStyle:
@@ -1155,7 +1155,7 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                   alignment: CrossAxisAlignment.center),
               ColumnText(
                   title: "Average",
-                  value: "${average.toStringAsFixed(2)}%",
+                  value: "${average.toStringAsFixed(2)}",
                   titleStyle: AppFonts.f40013.copyWith(
                       color: Config.appTheme.placeHolderInputTitleAndArrow),
                   valueStyle: AppFonts.f50014Black.copyWith(
@@ -1621,25 +1621,27 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ColumnText(
-                          title: "Average (%)",
+                          title: "Average",
                           value: data['average'] != null
                               ? "${data['average'].toStringAsFixed(2)}"
-                              : "0.00%",
+                              : "0.00",
                           alignment: CrossAxisAlignment.start),
                       ColumnText(
-                          title: "Median (%)",
-                          value: data['median'].toStringAsFixed(2)),
+                          title: "Median",
+                          value: data['median'] != null
+                              ? "${data['median'].toStringAsFixed(2)}"
+                              : "0.00"),
                       ColumnText(
-                          title: "Max (%)",
+                          title: "Max",
                           value: data['maximum'] != null
                               ? "${data['maximum'].toStringAsFixed(2)}"
-                              : "0.00%",
+                              : "0.00",
                           alignment: CrossAxisAlignment.center),
                       ColumnText(
-                        title: "Min (%)",
+                        title: "Min",
                         value: data['minimum'] != null
                             ? "${data['minimum'].toStringAsFixed(2)}"
-                            : "0.00%",
+                            : "0.00",
                       ),
                     ],
                   ),
@@ -1748,21 +1750,21 @@ class _RollingReturnsBenchMarkState extends State<RollingReturnsBenchMark> {
                               AppFonts.f50012.copyWith(color: Colors.black),
                           alignment: CrossAxisAlignment.center),
                       ColumnText(
-                          title: "8-10%",
+                          title: "8-12%",
                           value: data['less_than_10'] != null
                               ? "${data['less_than_10'].toStringAsFixed(2)}"
                               : "0.00",
                           valueStyle:
                               AppFonts.f50012.copyWith(color: Colors.black),
                           alignment: CrossAxisAlignment.center),
-                      ColumnText(
+                      /*ColumnText(
                           title: "10-12%",
                           value: data['between_10_12'] != null
                               ? "${data['between_10_12'].toStringAsFixed(2)}"
                               : "0.00",
                           valueStyle:
                               AppFonts.f50012.copyWith(color: Colors.black),
-                          alignment: CrossAxisAlignment.center),
+                          alignment: CrossAxisAlignment.center),*/
                       ColumnText(
                           title: "12-15%",
                           value: data['less_than_15'] != null

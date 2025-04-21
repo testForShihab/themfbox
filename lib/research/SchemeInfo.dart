@@ -1179,10 +1179,11 @@ class _SchemeInfoState extends State<SchemeInfo> {
       child: Column(
         children: [
           rcGreenArea(),
-          Obx(() => schemeInfoController.isLoadingReturns.value
+          SizedBox(height: 16),
+        /*  Obx(() => schemeInfoController.isLoadingReturns.value
               ? Utils.shimmerWidget(100)
               : rcMidGreyArea()),
-          SizedBox(height: 16),
+          SizedBox(height: 16),*/
           Obx(() => schemeInfoController.isLoadingReturns.value
               ? Utils.shimmerWidget(200)
               : rcBottomArea()),
@@ -1369,7 +1370,7 @@ class _SchemeInfoState extends State<SchemeInfo> {
                       ),
                     ),
                     Text(
-                      "$rupee ${Utils.formatNumber(amount)}",
+                      "$rupee ${Utils.formatNumber(amount.round())}",
                       style: AppFonts.f40013,
                     ),
                   ],
@@ -1984,8 +1985,7 @@ class _SchemeInfoState extends State<SchemeInfo> {
 
   String formatTimestamp(String timestamp) {
     int millisecondsSinceEpoch = int.parse(timestamp);
-    DateTime dateTime =
-        DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
     return DateFormat('EEEE, MMM d, y').format(dateTime);
   }
 

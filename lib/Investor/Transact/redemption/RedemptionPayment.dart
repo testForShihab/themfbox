@@ -223,12 +223,11 @@ class _RedemptionPaymentState extends State<RedemptionPayment> {
                         ...[
                           //DottedLine(verticalPadding: 8),
                           bankExpansionTile(context),
+                        ],
                           SizedBox(height: 16),
                           arnExpansionTile(),
                           SizedBox(height: 16),
                           euinExpansionTile(),
-
-                        ]
                       ],
                     ),
                   ),

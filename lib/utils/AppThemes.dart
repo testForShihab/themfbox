@@ -426,7 +426,7 @@ class LightBlueTheme extends AppTheme {
             placeHolderInputTitleAndArrow: Color(0xffB4B4B4),
             lineColor: Color(0XFFDFDFDF),
             Bg2Color: Color(0xffF1F1F1),
-            overlay85: Color(0xffDDDFE1),
+            overlay85: Color(0xffcceeff),
             mainBgColor: Color(0xffECECF2),
             whiteOverlay: Color(0xffFFFFFF),
             defaultProfit: Color(0xff3CB66D),

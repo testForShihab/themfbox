@@ -36,6 +36,7 @@ class _LumpsumPaymentState extends State<LumpsumPayment> {
   String client_name = GetStorage().read('client_name');
   Map client_code_map = GetStorage().read('client_code_map');
 
+  late Future _dataFuture;
   ExpansionTileController bankController = ExpansionTileController();
 
   late double devHeight, devWidth;
@@ -254,16 +255,17 @@ class _LumpsumPaymentState extends State<LumpsumPayment> {
   void initState() {
     super.initState();
     arn = client_code_map['broker_code'];
+    _dataFuture = getDatas();
   }
 
   Future getDatas() async {
     if (client_code_map['bse_nse_mfu_flag'].toUpperCase() != "BSE")
-      await getPaymentModes();
+    await getPaymentModes();
     await getCartByUserId();
     await getBankList();
     await getArnList();
     await getEuinList();
-    await getMandateList();
+   if(paymentMode.contains('Debit')) await getMandateList();
     return 0;
   }
 
@@ -273,7 +275,7 @@ class _LumpsumPaymentState extends State<LumpsumPayment> {
     devWidth = MediaQuery.sizeOf(context).width;
 
     return FutureBuilder(
-        future: getDatas(),
+        future: _dataFuture,
         builder: (context, snapshot) {
           return Scaffold(
             backgroundColor: Config.appTheme.mainBgColor,
@@ -306,10 +308,9 @@ class _LumpsumPaymentState extends State<LumpsumPayment> {
                           extraTile(),
                         SizedBox(height: 16),
                         // DottedLine(verticalPadding: 8),
-                        if (client_code_map['bse_nse_mfu_flag'].toUpperCase() != "NSE")
-                       ...[ arnExpansionTile(),
+                        arnExpansionTile(),
                         SizedBox(height: 16),
-                        euinExpansionTile(),]
+                        euinExpansionTile(),
                       ],
                     ),
                   ),

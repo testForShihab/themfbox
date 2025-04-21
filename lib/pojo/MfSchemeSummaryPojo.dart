@@ -21,6 +21,7 @@ class MfSchemeSummaryPojo {
   double? dayChangeValue;
   double? dayChangePercentage;
   bool? isManualEntry;
+  String? manualEntryVal;
 
   MfSchemeSummaryPojo({
     this.schemeAmfi,
@@ -44,6 +45,7 @@ class MfSchemeSummaryPojo {
     this.dayChangeValue,
     this.dayChangePercentage,
     this.isManualEntry,
+    this.manualEntryVal,
   });
 
   MfSchemeSummaryPojo.fromJson(Map<String, dynamic> json) {
@@ -68,6 +70,7 @@ class MfSchemeSummaryPojo {
     dayChangeValue = json['day_change_value'];
     dayChangePercentage = json['day_change_percentage'];
     isManualEntry = json['isManualEntry'];
+    manualEntryVal = json['manualEntryVal'];
   }
 
   Map<String, dynamic> toJson() {
@@ -93,6 +96,7 @@ class MfSchemeSummaryPojo {
     data['day_change_value'] = this.dayChangeValue;
     data['day_change_percentage'] = this.dayChangePercentage;
     data['isManualEntry'] = this.isManualEntry;
+    data['manualEntryVal'] = this.manualEntryVal;
     return data;
   }
 }

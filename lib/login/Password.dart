@@ -108,10 +108,10 @@ class _PasswordState extends State<Password> {
                       padding: EdgeInsets.all(2),
                       child: (Config.appLogo.contains("http"))
                           ? Image.network(Config.appLogo,
-                              height: setImageSize(60))
+                              height: setImageSize(100))
                           : (Config.app_client_name == "themfbox")
                               ? Image.asset(Config.appLogo) : Image.asset(Config.appLogo,
-                                  width: setImageSize(400)),
+                                  width: setImageSize(350)),
                     ),
               SizedBox(height: devHeight * 0.06),
               Text("Login",

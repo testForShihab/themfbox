@@ -149,30 +149,7 @@ class _CreateClientState extends State<CreateClient> {
   String? loginStatus = "Enable";
   Timer? searchOnStop;
 
-  Future getAllRM() async {
-    try {
-      rmList = [];
-      if (rmList.isNotEmpty) return 0;
-      // if (type_id != 5) return 0;
-      Map data = await Api.getAllRM(
-          mobile: adminMobile, client_name: clientName, branch: "");
 
-      if (data['status'] != 200) {
-        Utils.showError(context, data['msg']);
-        return -1;
-      }
-
-      rmList = List<String>.from(data['list']);
-      //rmList.insert(0, "All");
-      if (rmList.isNotEmpty) {
-        selectedRmName = rmList[0];
-        setState(() {});
-      }
-      return 0;
-    } catch (e) {
-      print(e);
-    }
-  }
 
   Future createClient() async {
     print("selected id = $selected_id");
@@ -225,9 +202,35 @@ class _CreateClientState extends State<CreateClient> {
       return 2;
   }
 
+
+  Future getAllRM() async {
+    try {
+      rmList = [];
+      if (rmList.isNotEmpty) return 0;
+      // if (type_id != 5) return 0;
+      Map data = await Api.getAllRM(
+          mobile: adminMobile, client_name: clientName, branch: "");
+
+      if (data['status'] != 200) {
+        Utils.showError(context, data['msg']);
+        return -1;
+      }
+
+      rmList = List<String>.from(data['list']);
+      //rmList.insert(0, "All");
+      if (rmList.isNotEmpty) {
+        selectedRmName = rmList[0];
+        setState(() {});
+      }
+      return 0;
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future getAllSubBroker() async {
     if (subBrokerList.isNotEmpty) return 0;
-    if (!(type_id == 5 || type_id == 2)) return 0;
+    //if (!(type_id == 5 || type_id == 2)) return 0;
     Map data = await Api.getAllSubbroker(
         mobile: adminMobile,
         client_name: clientName,
@@ -241,6 +244,7 @@ class _CreateClientState extends State<CreateClient> {
     // subBrokerList.insert(0, "All");
     if (subBrokerList.isNotEmpty) {
       selectedSubBroker = subBrokerList[0];
+      setState(() {});
     }
     return 0;
   }
@@ -451,6 +455,9 @@ class _CreateClientState extends State<CreateClient> {
     //  implement initState
     super.initState();
     type_id = GetStorage().read("type_id") ?? 0;
+    /*subBrokerController = ExpansionTileController();
+    customerTypeController = ExpansionTileController();
+*/
   }
 
   @override
@@ -706,10 +713,11 @@ class _CreateClientState extends State<CreateClient> {
                                   rmExpansionTile(context),
                                   SizedBox(height: 16),
                                 ],
-                                if (subBrokerList.isNotEmpty) ...[
+                                //if (subBrokerList.isNotEmpty) ...[
                                   subBrokerExpansionTile(context),
                                   SizedBox(height: 16),
-                                ],
+                              //  ],
+
                                 customerTypeTile(context),
                                 SizedBox(height: 16),
                                 clientStatusCard(context),
@@ -1653,6 +1661,7 @@ class _CreateClientState extends State<CreateClient> {
   ExpansionTileController subBrokerController = ExpansionTileController();
 
   Widget subBrokerExpansionTile(BuildContext context) {
+    if(subBrokerList.isEmpty) return SizedBox() ;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -1706,7 +1715,9 @@ class _CreateClientState extends State<CreateClient> {
                                 onChanged: (temp) {
                                   selectedSubBroker = title;
                                   print("selectedSubBroker $selectedSubBroker");
-                                  subBrokerController.collapse();
+                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                    subBrokerController.collapse();
+                                  });
                                   setState(() {});
                                 },
                               ),
@@ -1737,18 +1748,18 @@ class _CreateClientState extends State<CreateClient> {
       subBrokerList = [name];
       //await getUser(mfd_id);
       setState(() {});
-      rmList = [selectedRmName];
+     // rmList = [selectedRmName];
     }
   }
 
   ExpansionTileController rmController = ExpansionTileController();
 
   Widget rmExpansionTile(BuildContext context) {
-    if (type_id == 4) {
+   /* if (type_id == 4) {
       selectedRmName = userDataPojo.rmName ?? '';
       rmList = [selectedRmName];
       print("selectedRmName--- $selectedRmName");
-    }
+    }*/
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,

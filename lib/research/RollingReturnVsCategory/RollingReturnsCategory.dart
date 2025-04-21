@@ -69,6 +69,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
   String scheme = "";
   num minimum = 0;
   num maximum = 0;
+  num median = 0;
   num average = 0;
 
   num lessThan0 = 0;
@@ -204,6 +205,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
           minimum = item['minimum'] ?? 0;
           maximum = item['maximum'] ?? 0;
           average = item['average'] ?? 0;
+          median = item['median'] ?? 0;
 
           lessThan0 = item['less_than_0'] ?? 0;
           lessThan5 = item['less_than_5'] ?? 0;
@@ -999,30 +1001,37 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ColumnText(
-                title: "Min",
-                value: "${minimum.toStringAsFixed(2)}%",
+                  title: "Average",
+                  value: average.toStringAsFixed(2),
+                  titleStyle: AppFonts.f40013.copyWith(
+                      color: Config.appTheme.placeHolderInputTitleAndArrow),
+                  valueStyle: AppFonts.f50014Black.copyWith(
+                      color: Colors.white),
+                  alignment: CrossAxisAlignment.start),
+              ColumnText(
+                title: "Median",
+                value: median.toStringAsFixed(2),
                 titleStyle: AppFonts.f40013.copyWith(
                     color: Config.appTheme.placeHolderInputTitleAndArrow),
                 valueStyle: AppFonts.f50014Black.copyWith(color: Colors.white),
               ),
               ColumnText(
                   title: "Max",
-                  value: "${maximum.toStringAsFixed(2)}%",
+                  value: maximum.toStringAsFixed(2),
                   titleStyle: AppFonts.f40013.copyWith(
                       color: Config.appTheme.placeHolderInputTitleAndArrow),
                   valueStyle:
-                      AppFonts.f50014Black.copyWith(color: Colors.white),
+                  AppFonts.f50014Black.copyWith(color: Colors.white),
                   alignment: CrossAxisAlignment.center),
               ColumnText(
-                  title: "Average",
-                  value: "${average.toStringAsFixed(2)}%",
-                  titleStyle: AppFonts.f40013.copyWith(
-                      color: Config.appTheme.placeHolderInputTitleAndArrow),
-                  valueStyle: AppFonts.f50014Black.copyWith(
-                      color: (average > 0)
-                          ? Config.appTheme.defaultProfit
-                          : Config.appTheme.defaultLoss),
-                  alignment: CrossAxisAlignment.end),
+                title: "Min",
+                value: minimum.toStringAsFixed(2),
+                titleStyle: AppFonts.f40013.copyWith(
+                    color: Config.appTheme.placeHolderInputTitleAndArrow),
+                valueStyle: AppFonts.f50014Black.copyWith(color: Colors.white),
+              ),
+
+
             ],
           ),
         ],
@@ -1863,7 +1872,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                             ),
                             Flexible(
                               child: Text(
-                                data["scheme_inception_date"] ?? '',
+                                data["inception_date"] ?? '',
                                 style: AppFonts.f50014Grey.copyWith(
                                     color: Colors.black, fontSize: 12),
                                 overflow: TextOverflow.ellipsis,
@@ -1915,27 +1924,36 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ColumnText(
-                        title: "Min",
-                        value: data['minimum'] != null
-                            ? "${data['minimum'].toStringAsFixed(2)}%"
-                            : "0.00%",
+                          title: "Average",
+                          value: data['average'] != null
+                              ? "${data['average'].toStringAsFixed(2)}"
+                              : "0.00",
+                          /*valueStyle: AppFonts.f50014Black.copyWith(
+                              color: (average > 0)
+                                  ? Config.appTheme.defaultProfit
+                                  : Config.appTheme.defaultLoss),*/
+                          alignment: CrossAxisAlignment.start),
+                      ColumnText(
+                        title: "Median",
+                        value: data['median'] != null
+                            ? "${data['median'].toStringAsFixed(2)}"
+                            : "0.00",
                       ),
                       ColumnText(
                           title: "Max",
                           value: data['maximum'] != null
-                              ? "${data['maximum'].toStringAsFixed(2)}%"
-                              : "0.00%",
+                              ? "${data['maximum'].toStringAsFixed(2)}"
+                              : "0.00",
                           alignment: CrossAxisAlignment.center),
                       ColumnText(
-                          title: "Average",
-                          value: data['average'] != null
-                              ? "${data['average'].toStringAsFixed(2)}%"
-                              : "0.00%",
-                          valueStyle: AppFonts.f50014Black.copyWith(
-                              color: (average > 0)
-                                  ? Config.appTheme.defaultProfit
-                                  : Config.appTheme.defaultLoss),
-                          alignment: CrossAxisAlignment.end),
+                        title: "Min",
+                        value: data['minimum'] != null
+                            ? "${data['minimum'].toStringAsFixed(2)}"
+                            : "0.00",
+                          alignment: CrossAxisAlignment.end
+                      ),
+
+
                     ],
                   ),
                 ],
@@ -1993,7 +2011,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ColumnText(
-                        title: "Less than 0%",
+                        title: "Negative",
                         value: data['less_than_0'] != null
                             ? "${data['less_than_0'].toStringAsFixed(2)}"
                             : "0.00",
@@ -2030,8 +2048,8 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
                           alignment: CrossAxisAlignment.center),
                       ColumnText(
                           title: "8-10%",
-                          value: data['less_than_10'] != null
-                              ? "${data['less_than_10'].toStringAsFixed(2)}"
+                          value: data['between_8_10'] != null
+                              ? "${data['between_8_10'].toStringAsFixed(2)}"
                               : "0.00",
                           valueStyle:
                               AppFonts.f50012.copyWith(color: Colors.black),
@@ -2320,3 +2338,40 @@ class ChartData {
     return data;
   }
 }
+
+/*
+getTooltipItems: (touchedSpots) {
+  return List.generate(touchedSpots.length, (index) {
+    final spot = touchedSpots[index];
+    final data = spot.bar?.rodStackItem?[0]; // or however you're getting `data`
+    final label = "YourLabel"; // set label accordingly
+
+    return LineTooltipItem(
+      index == 0 ? '${data.dateFormatNav ?? ''}\n' : '', // Show date only once
+      const TextStyle(
+        color: Colors.black,
+        fontSize: 10.5,
+        fontWeight: FontWeight.bold,
+      ),
+      children: [
+        TextSpan(
+          text: '$label: ',
+          style: TextStyle(
+            color: labelColor,
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        TextSpan(
+          text: '${spot.y.toStringAsFixed(2)}%',
+          style: TextStyle(
+            color: valueColor,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  });
+}
+*/

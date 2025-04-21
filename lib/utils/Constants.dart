@@ -5,7 +5,8 @@ import 'package:mymfbox2_0/utils/Config.dart';
 const String researchTitle =
     "Mutual fund research typically involves analyzing various aspects of mutual funds to make informed investment decisions. Here are some ways in which MF research can be helpful:";
 
-const String calcDescription = "These calculators can swiftly calculate complex equations and provide accurate results with just a few inputs. These help you save time and ensure accuracy, reducing the possibility of calculation errors while calculating various outputs.";
+const String calcDescription =
+    "These calculators can swiftly calculate complex equations and provide accurate results with just a few inputs. These help you save time and ensure accuracy, reducing the possibility of calculation errors while calculating various outputs.";
 
 const rupee = "\u20b9";
 const percentage = "\u0025";
@@ -157,9 +158,9 @@ class ReportType {
   static String EXCEL = "Excel";
 }
 
-
 const List RemoveWhitebg = [
-  'themfbox'
+  'mrSmart',
+  'themfbox',
   'finatrium',
   'giarinvestments',
   'perpetualinvestments',
@@ -178,11 +179,9 @@ const List RemoveWhitebg = [
   'dishaawreeenterprisellp',
   'keenvestor',
   'eureka',
-  'amigowealth'
+  'amigowealth',
+  'finsshipfinancialservices',
 ];
 
-Color logobgcolor = RemoveWhitebg.contains(client_name) ? Colors.transparent : Colors.white;
-
-
-
-
+Color logobgcolor =
+    RemoveWhitebg.contains(client_name) ? Colors.transparent : Colors.white;

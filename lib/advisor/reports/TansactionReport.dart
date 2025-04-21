@@ -587,7 +587,7 @@ class _TransactionReportState extends State<TransactionReport> {
 
                   String url =
                       "${ApiConfig.apiUrl}/admin/download/downloadTransactionReportExcel?key=${ApiConfig.apiKey}&purchase_type=$selectedType&start_date=$startDate&end_date=$endDate&branch=&rm_name="
-                      "&subbroker=&client_name=$clientName&registrar=&user_id=$userId&amc_name=";
+                      "&subbroker=&client_name=$clientName&registrar=&user_id=$userId&investor_id=$investorId&amc_name=";
                   http.Response response = await http.post(Uri.parse(url));
                   msgUrl = response.body;
                   Map data = jsonDecode(msgUrl);

@@ -209,7 +209,7 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
     }
     if (selectedSort == "Gain/Loss") {
       schemeList.sort(
-        (a, b) => b.realisedGainLoss!.compareTo(a.realisedGainLoss!),
+        (a, b) => b.unrealisedProfitLoss!.compareTo(a.unrealisedProfitLoss!),
       );
     }
   }
@@ -1224,7 +1224,7 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
                     Text("Folio : ${scheme.folio}",
                         style: f40012.copyWith(color: Colors.black)),
                    SizedBox(width: 8,),
-                   if(scheme.isManualEntry == true) Text("(Manual)",
+                   if(scheme.isManualEntry == true) Text("(${scheme.manualEntryVal})",
                         style: f40012.copyWith(color: Colors.blue)),
                   ],
                 ),
