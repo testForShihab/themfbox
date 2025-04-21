@@ -1074,7 +1074,7 @@ class _RollingReturnsCategoryState extends State<RollingReturnsCategory> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ColumnText(
-                title: "Less than 0%",
+                title: "Negative",
                 value: lessThan0.toStringAsFixed(2),
                 titleStyle: AppFonts.f40013.copyWith(
                     color: Config.appTheme.placeHolderInputTitleAndArrow),

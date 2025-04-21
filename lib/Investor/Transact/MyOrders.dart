@@ -148,7 +148,7 @@ class _MyOrdersState extends State<MyOrders> {
     }
 
     DateTime dateTime = DateTime.parse(transactionDate);
-    String formattedDate = DateFormat('dd MMM yyyy').format(dateTime);
+    String formattedDate = DateFormat('dd MMM yyyy hh:mm:ss a').format(dateTime);
 
     return Container(
       margin: EdgeInsets.fromLTRB(16, 16, 16, 0),

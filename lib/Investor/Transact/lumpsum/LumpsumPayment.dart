@@ -311,6 +311,7 @@ class _LumpsumPaymentState extends State<LumpsumPayment> {
                         arnExpansionTile(),
                         SizedBox(height: 16),
                         euinExpansionTile(),
+                        SizedBox(height: 16),
                       ],
                     ),
                   ),
@@ -1036,7 +1037,7 @@ class _LumpsumPaymentState extends State<LumpsumPayment> {
           children: [
             ListView.builder(
               shrinkWrap: true,
-              // physics: NeverScrollableScrollPhysics(),
+               physics: NeverScrollableScrollPhysics(),
               itemCount: euinList.length,
               itemBuilder: (context, index) {
                 String temp = euinList[index];

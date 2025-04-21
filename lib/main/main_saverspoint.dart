@@ -4,7 +4,7 @@ import 'package:mymfbox2_0/utils/AppThemes.dart';
 
 void main() {
   mainCommon(FlavorConfig()
-    ..appTitle = "FinsShip"
+    ..appTitle = "Savers Point"
     ..appClientName = "saverspoint"
     ..appArn = "292842"
     ..appLogo = "https://themfbox.com/resources/bootstrap/images/saverspoint_logo.png"

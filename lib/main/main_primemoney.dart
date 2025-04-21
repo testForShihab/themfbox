@@ -4,12 +4,12 @@ import 'package:mymfbox2_0/utils/AppThemes.dart';
 
 void main() {
   mainCommon(FlavorConfig()
-    ..appTitle = "Prime Money"
+    ..appTitle = "Prime Money Mf Online"
     ..appClientName = "primemoney"
     ..appArn = "172227"
-    ..appLogo = "https://themfbox.com/resources/bootstrap/images/prime-money-logo.png"
-    ..apiKey = ""
-    ..appTheme = PurpleTheme()
+    ..appLogo = "https://api.mymfbox.com/images/logo/primemoney.png"
+    ..apiKey = "787245b3-34d1-49d5-856f-caadf8705218"
+    ..appTheme = DropletTheme()
     ..supportEmail = ""
     ..supportMobile = ""
     ..privacyPolicy = ""
