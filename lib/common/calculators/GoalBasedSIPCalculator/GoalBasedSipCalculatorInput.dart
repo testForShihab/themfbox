@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -99,30 +101,58 @@ class _GoalBasedSipCalculatorInputState
               child: Column(
                 children: [
                   SizedBox(height: 16),
-                  AmountInputCard(
-                    title: "Target Amount",
-                    initialValue: Utils.formatNumber(2500000),
-                    inputFormatters: [
-                      MaxValueFormatter(
-                        1000000000,
-                        isDecimal: false,
-                        isReadableInput: true,
-                      ),
-                      NoLeadingZeroInputFormatter(),
-                      FilteringTextInputFormatter.digitsOnly,
-                      ReadableNumberFormatter(),
-                    ],
-                    suffixText:
-                        Utils.formatNumber(targetAmount, isAmount: true),
-                    onChange: (val) {
-                      final tempText = val.split(',').join();
-                      targetAmount = num.tryParse(tempText) ?? 0;
-                      setState(() {});
-                    },
+                  Visibility(
+                    visible: isAnnual == false,
+                    child: AmountInputCard(
+                      title: "Target Amount (Rs)",
+                      initialValue: Utils.formatNumber(2500000),
+                      inputFormatters: [
+                        MaxValueFormatter(
+                          100000000,
+                          isDecimal: false,
+                          isReadableInput: true,
+                        ),
+                        NoLeadingZeroInputFormatter(),
+                        FilteringTextInputFormatter.digitsOnly,
+                        ReadableNumberFormatter(),
+                      ],
+                      suffixText:
+                          Utils.formatNumber(targetAmount, isAmount: true),
+                      onChange: (val) {
+                        final tempText = val.split(',').join();
+                        targetAmount = num.tryParse(tempText) ?? 0;
+                        setState(() {});
+                      },
+                    ),
+                  ),
+
+                  Visibility(
+                    visible: isAnnual,
+                    child: AmountInputCard(
+                      title: "Your Financial Goal (Rs)",
+                      initialValue: Utils.formatNumber(2500000),
+                      inputFormatters: [
+                        MaxValueFormatter(
+                          100000000,
+                          isDecimal: false,
+                          isReadableInput: true,
+                        ),
+                        NoLeadingZeroInputFormatter(),
+                        FilteringTextInputFormatter.digitsOnly,
+                        ReadableNumberFormatter(),
+                      ],
+                      suffixText:
+                      Utils.formatNumber(targetAmount, isAmount: true),
+                      onChange: (val) {
+                        final tempText = val.split(',').join();
+                        targetAmount = num.tryParse(tempText) ?? 0;
+                        setState(() {});
+                      },
+                    ),
                   ),
                   SizedBox(height: 16),
                   SliderInputCard(
-                    title: "Investment Period",
+                    title: "Investment Period (in years)",
                     controller: investmentPeriodController,
                     sliderValue: investmentPeriod.toDouble(),
                     inputFormatters: [
@@ -151,7 +181,7 @@ class _GoalBasedSipCalculatorInputState
                   ),
                   SizedBox(height: 16),
                   SliderInputCard(
-                      title: "Expected Annual Inflation Rate",
+                      title: "The expected rate of inflation over the years (% per annum)",
                       controller: annualInflationRateController,
                       inputFormatters: [
                         MaxValueFormatter(15),
@@ -179,14 +209,14 @@ class _GoalBasedSipCalculatorInputState
                       }),
                   SizedBox(height: 16),
                   SliderInputCard(
-                    title: "Expected Annual Rate of Return",
+                    title: (isAnnual=true)?"Expected Rate of Return (% per annum)" : "What rate of return would you expect your SIP investment to generate (% per annum)",
                     sliderValue: annualRateReturn.toDouble(),
                     controller: annualRateReturnController,
                     inputFormatters: [
                       MaxValueFormatter(2000),
                       DoubleDecimalFormatter(),
                     ],
-                    sliderMaxValue: 50,
+                    sliderMaxValue: 25,
                     suffixText: "%",
                     tfOnChange: (val) {
                       num temp = num.tryParse(val) ?? 0;
@@ -196,8 +226,8 @@ class _GoalBasedSipCalculatorInputState
                       if (!isValid) {
                         Utils.showError(context,
                             "Expected Annual Rate of Return should be in-between 0-100");
-                        annualRateReturnController.text = "50";
-                        annualRateReturn = 50;
+                        annualRateReturnController.text = "25";
+                        annualRateReturn = 25;
                         setState(() {});
                         return;
                       }
@@ -218,7 +248,7 @@ class _GoalBasedSipCalculatorInputState
                   Visibility(
                     visible: isAnnual,
                     child: SliderInputCard(
-                        title: "Annual Top Up",
+                        title: "SIP Top-Up (% per annum)",
                         controller: annualTopUpController,
                         sliderValue: annualTopUp.toDouble(),
                         inputFormatters: [
@@ -299,7 +329,7 @@ class _GoalBasedSipCalculatorInputState
                         EasyLoading.dismiss();
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Config.appTheme.themeColor,
+                          backgroundColor: Config.appTheme.buttonColor,
                           foregroundColor:
                               Colors.white // Set the background color here
                           ),
@@ -360,7 +390,7 @@ class _GoalBasedSipCalculatorInputState
   }
 
   static bool isValidSliderExpected(num temp) {
-    if (temp < 0 || temp > 50)
+    if (temp < 0 || temp > 25)
       return false;
     else
       return true;

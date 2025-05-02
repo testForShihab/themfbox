@@ -344,13 +344,13 @@ class _SchemeWiseAumState extends State<SchemeWiseAum> {
                                 "$rupee ${Utils.formatNumber(amount, isAmount: true)}",
                                 style: cardHeadingSmall,
                               ),
-                              Text(
+                             /* Text(
                                 "($percentage%)",
                                 style: TextStyle(
                                   color: Config
                                       .appTheme.placeHolderInputTitleAndArrow,
                                 ),
-                              ),
+                              ),*/
                             ],
                           ),
                           SizedBox(width: 5),
@@ -482,6 +482,7 @@ class _SchemeWiseAumState extends State<SchemeWiseAum> {
                             child: PlainButton(
                           padding: EdgeInsets.symmetric(horizontal: 8),
                           text: "Clear All",
+                              color: Config.appTheme.buttonColor ,
                           onPressed: () {
                             selectedAMC = [];
                             selectedBroadCategoryList = [];
@@ -497,6 +498,7 @@ class _SchemeWiseAumState extends State<SchemeWiseAum> {
                         Expanded(
                             child: RpFilledButton(
                           text: "Apply",
+                              color: Config.appTheme.buttonColor ,
                           onPressed: () async {
                             print("selectedAMC $selectedAMC");
 

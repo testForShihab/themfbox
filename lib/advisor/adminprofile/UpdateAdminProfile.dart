@@ -245,6 +245,7 @@ class _UpdateAdminProfileState extends State<UpdateAdminProfile> {
                     padding: EdgeInsets.all(16),
                     child: RpFilledButton(
                       text: 'Update Details',
+                      color: Config.appTheme.buttonColor,
                       onPressed: () async {
                         int res = await updateProfile();
                         if (res == -1) return;

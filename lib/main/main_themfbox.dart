@@ -7,7 +7,10 @@ void main() {
     ..appTitle = "theMFbox"
     ..appClientName = "themfbox"
     ..appArn = ""
-    ..appLogo = "https://api.mymfbox.com/images/logo/app_logo_new.png"
+    //..appLogo = "https://api.mymfbox.com/images/logo/app_logo_new.png"
+    //..appLogo = "assets/app_logo_new.png"
+    //..appLogo = "assets/mymfbox_logo.png"
+    ..appLogo = "https://api.mymfbox.com/images/logo/mymfbox.png"
     ..apiKey = "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32"
     ..appTheme = GreenTheme()
     ..supportEmail = ""

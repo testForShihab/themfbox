@@ -397,7 +397,7 @@ class _RmWiseSipState extends State<RmWiseSip> {
                       text: "View All Associate",
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Config.appTheme.themeColor,
+                        color: Config.appTheme.buttonColor,
                       ),
                       onTap: () {
                         Get.back();

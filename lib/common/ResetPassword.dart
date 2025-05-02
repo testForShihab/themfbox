@@ -7,6 +7,7 @@ import 'package:mymfbox2_0/rp_widgets/RpTextField.dart';
 import 'package:mymfbox2_0/utils/Config.dart';
 import 'package:mymfbox2_0/utils/Utils.dart';
 
+import '../api/ApiConfig.dart';
 import '../utils/Constants.dart';
 
 class ResetPassword extends StatefulWidget {
@@ -73,7 +74,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
                     Config.appTheme.themeColor, BlendMode.color))
-                :(Config.app_client_name == "themfbox") ? DecorationImage(
+                :(Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? DecorationImage(
                     image: AssetImage("assets/green-bg.png"),
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
@@ -110,17 +111,17 @@ class _ResetPasswordState extends State<ResetPassword> {
                       child: (Config.appLogo.contains("http"))
                           ? Image.network(Config.appLogo,
                               height: setImageSize(60))
-                          : (Config.app_client_name == "themfbox") ? Image.asset(Config.appLogo)
+                          : (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? Image.asset(Config.appLogo)
                           :  Image.asset(Config.appLogo,width:setImageSize(400))),
               SizedBox(height: devHeight * 0.06),
               Text("Change Password",
                   style: TextStyle(
-                      color: (Config.app_client_name == "themfbox") ? Colors.white : Config.appTheme.themeColor,
+                      color: (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? Colors.white : Config.appTheme.themeColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 20)),
               SizedBox(height: devHeight * 0.01),
               Text("Please Change Your Password",
-                  style: TextStyle(color: (Config.app_client_name == "themfbox") ? Colors.white : Config.appTheme.themeColor,)),
+                  style: TextStyle(color: (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? Colors.white : Config.appTheme.themeColor,)),
               SizedBox(height: devHeight * 0.05),
               Expanded(
                 child: Container(

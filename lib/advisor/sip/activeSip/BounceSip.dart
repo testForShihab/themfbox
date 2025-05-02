@@ -580,6 +580,7 @@ class _BounceSipState extends State<BounceSip> {
                             child: PlainButton(
                           text: "CLEAR ALL",
                           padding: EdgeInsets.symmetric(vertical: 8),
+                              color: Config.appTheme.buttonColor,
                           onPressed: () async {
                             Get.back();
                             selectedBranch = [];
@@ -603,6 +604,7 @@ class _BounceSipState extends State<BounceSip> {
                           child: RpFilledButton(
                             text: "APPLY",
                             padding: EdgeInsets.symmetric(vertical: 8),
+                            color: Config.appTheme.buttonColor,
                             onPressed: () async {
                               Get.back();
                               if (selectedLeft == 'Date') {

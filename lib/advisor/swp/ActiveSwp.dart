@@ -452,14 +452,14 @@ class _ActiveSwpState extends State<ActiveSwp> {
                                   titleStyle: AppFonts.f50014Black,
                                   valueStyle: AppFonts.f40013,
                                 ),
-                                ColumnText(
+                             /*   ColumnText(
                                   title:
                                   "Frequency",
                                   value: "${swp.frequency}",
                                   alignment: CrossAxisAlignment.end,
                                   titleStyle: AppFonts.f50014Black,
                                   valueStyle: AppFonts.f40013,
-                                ),
+                                ),*/
                               ],
                             ),
                             DottedLine(verticalPadding: 8),
@@ -550,6 +550,7 @@ class _ActiveSwpState extends State<ActiveSwp> {
                         Expanded(
                             child: PlainButton(
                           text: "CLEAR ALL",
+                              color: Config.appTheme.buttonColor,
                           padding: EdgeInsets.symmetric(vertical: 8),
                           onPressed: () async {
                             Get.back();
@@ -567,6 +568,7 @@ class _ActiveSwpState extends State<ActiveSwp> {
                         Expanded(
                           child: RpFilledButton(
                             text: "APPLY",
+                            color: Config.appTheme.buttonColor,
                             padding: EdgeInsets.symmetric(vertical: 8),
                             onPressed: () async {
                               Get.back();

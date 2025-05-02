@@ -4,12 +4,12 @@ import 'package:mymfbox2_0/utils/AppThemes.dart';
 
 void main() {
   mainCommon(FlavorConfig()
-    ..appTitle = "upgrowmf"
+    ..appTitle = "UPGROW"
     ..appClientName = "upgrowmf"
-    ..appArn = "254273"
-    ..appLogo = "https://themfbox.com/resources/bootstrap/images/finsshipfinancialservices_logo.png"
-    ..apiKey = ""
-    ..appTheme = PurpleTheme()
+    ..appArn = "105029"
+    ..appLogo = "https://themfbox.com/resources/bootstrap/images/upgrowmf_logo.png"
+    ..apiKey = "ccc246fe-f896-4f91-a5c0-3bacf3e3af49"
+    ..appTheme = PloutiaTheme()
     ..supportEmail = ""
     ..supportMobile = ""
     ..privacyPolicy = ""

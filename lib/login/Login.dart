@@ -15,6 +15,7 @@ import 'package:mymfbox2_0/utils/Utils.dart';
 import 'package:mymfbox2_0/rp_widgets/RpTextField.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../api/ApiConfig.dart';
 import '../utils/AppFonts.dart';
 import '../utils/Constants.dart';
 
@@ -82,7 +83,7 @@ class _LoginState extends State<Login> {
                     colorFilter: ColorFilter.mode(
                         Config.appTheme.themeColor, BlendMode.color))
 
-                    : (Config.app_client_name == "themfbox") ? DecorationImage(
+                    : (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? DecorationImage(
                         image: AssetImage("assets/green-bg.png"),
                         fit: BoxFit.cover,
                         colorFilter: ColorFilter.mode(
@@ -120,20 +121,20 @@ class _LoginState extends State<Login> {
                       padding: EdgeInsets.all(4),
                       child: (Config.appLogo.contains("http"))
                           ? Image.network(Config.appLogo, height: setImageSize(100))
-                          : (Config.app_client_name == "themfbox") ?Image.asset(Config.appLogo)
+                          : (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ?Image.asset(Config.appLogo)
                           : Image.asset(Config.appLogo, width: setImageSize(350)),
                     ),
               SizedBox(height: devHeight * 0.02),
               Text("Login",
                   style: TextStyle(
                       color:
-                      (Config.app_client_name == "themfbox") ? Colors.white : Config.appTheme.themeColor,
+                      (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? Colors.white : Config.appTheme.themeColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 24)),
               SizedBox(height: devHeight * 0.01),
               Text("Welcome Back",
                   style: TextStyle(
-                      color: (Config.app_client_name == "themfbox") ? Colors.white  : Config.appTheme.themeColor,
+                      color: (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? Colors.white  : Config.appTheme.themeColor,
                       fontWeight: FontWeight.w500,
                       fontSize: 18)),
               SizedBox(height: devHeight * 0.04),
@@ -163,7 +164,9 @@ class _LoginState extends State<Login> {
                         visible: isError,
                         child: Row(
                           children: [
-                            Text(" Please Enter a valid PAN / Mobile",
+                            Text((clientName != 'trianglewealth')
+                                ? "Please Enter a valid PAN / Mobile"
+                                : "Please Enter a valid PAN",
                                 style: TextStyle(color: Colors.red)),
                           ],
                         ),
@@ -194,7 +197,7 @@ class _LoginState extends State<Login> {
                           text: "Login With OTP",
                           hasCallIcon: true),
                       SizedBox(height: devHeight * 0.02),
-                      Row(
+                    if(clientName != "giarinvestments")  Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text("Don't have an account? "),
@@ -248,7 +251,7 @@ class _LoginState extends State<Login> {
       child: Row(
         children: [
           Expanded(child: Divider()),
-          Text("OR"),
+          Text(" OR "),
           Expanded(child: Divider()),
         ],
       ),
@@ -269,7 +272,7 @@ class _LoginState extends State<Login> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8), // <-- Radius
               ),
-              backgroundColor: Colors.black,
+              backgroundColor: Config.appTheme.universalTitle,
               foregroundColor: Colors.white),
           child: (isLoading.value && text != "Login With OTP")
               ? SpinKitThreeBounce(color: Colors.white, size: 22)

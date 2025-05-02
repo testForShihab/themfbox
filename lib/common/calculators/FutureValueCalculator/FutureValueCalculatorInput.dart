@@ -71,10 +71,13 @@ class _FutureValueCalculatorInputState
                   children: [
                     SizedBox(height: 16),
                     AmountInputCard(
-                      title: "Current Cost",
+                      title: "Current Cost (Rs)",
                       initialValue: Utils.formatNumber(2500000),
                       inputFormatters: [
-                        MaxValueFormatter(1000000000, isReadableInput: true),
+                        MaxValueFormatter(
+                            100000000,
+                            isDecimal: false,
+                            isReadableInput: true),
                         NoLeadingZeroInputFormatter(),
                         FilteringTextInputFormatter.digitsOnly,
                         ReadableNumberFormatter(),
@@ -94,7 +97,7 @@ class _FutureValueCalculatorInputState
                       sliderValue: numberOfYears.toDouble(),
                       suffixText: 'Years',
                       inputFormatters: [
-                        MaxValueFormatter(100, isDecimal: false),
+                        MaxValueFormatter(30, isDecimal: false),
                         NoLeadingZeroInputFormatter(),
                         FilteringTextInputFormatter.digitsOnly,
                       ],
@@ -103,7 +106,7 @@ class _FutureValueCalculatorInputState
                         bool isValid = isValidSlider(temp);
                         if (!isValid) {
                           Utils.showError(context,
-                              "Number of Years should be in-between 0-100");
+                              "Number of Years should be in-between 0-30");
                           return;
                         }
 
@@ -118,13 +121,13 @@ class _FutureValueCalculatorInputState
                     ),
                     SizedBox(height: 16),
                     SliderInputCard(
-                        title: "The expected rate of inflation over the years",
+                        title: "Inflation (% per annum)",
                         controller: annualInflationRateController,
                         sliderValue: annualInflationRate.toDouble(),
                         suffixText: "%",
-                        sliderMaxValue: 15,
+                        sliderMaxValue: 20,
                         inputFormatters: [
-                          MaxValueFormatter(50, isDecimal: true),
+                          MaxValueFormatter(20, isDecimal: true),
                           DoubleDecimalFormatter(),
                         ],
                         tfOnChange: (val) {
@@ -133,7 +136,7 @@ class _FutureValueCalculatorInputState
                           bool isValid = isinflatioinValidSlider(temp);
                           if (!isValid) {
                             Utils.showError(context,
-                                "Expected Annual Inflation Rate should be in-between 0-100");
+                                "Expected Annual Inflation Rate should be in-between 0-20");
                             return;
                           }
                           annualInflationRate = temp;
@@ -234,14 +237,14 @@ class _FutureValueCalculatorInputState
   }
 
   bool isValidSlider(num temp) {
-    if (temp < 0 || temp > 100)
+    if (temp < 0 || temp > 30)
       return false;
     else
       return true;
   }
 
   bool isinflatioinValidSlider(num temp) {
-    if (temp < 0 || temp > 15)
+    if (temp < 0 || temp > 20)
       return false;
     else
       return true;

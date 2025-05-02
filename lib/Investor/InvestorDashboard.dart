@@ -630,7 +630,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                             bool isWhite = (index % 2 == 0) ? true : false;
                             Color color = (index % 2 == 0)
                                 ? Config.appTheme.themeColor
-                                : Colors.black;
+                                : Config.appTheme.universalTitle;
                             Widget goTo = data['goTo'];
                             String extraText = data['extraText'] ?? "";
 
@@ -1510,7 +1510,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
               : Container(
                   margin: EdgeInsets.fromLTRB(16, 10, 16, 16),
                   decoration: BoxDecoration(
-                    color: Config.appTheme.overlay85,
+                    color: Config.appTheme.whiteOverlay,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(

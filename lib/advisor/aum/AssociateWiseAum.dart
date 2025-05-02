@@ -357,7 +357,7 @@ class _AssociateWiseAumState extends State<AssociateWiseAum> {
                       text: "View All Investors",
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Config.appTheme.themeColor,
+                        color: Config.appTheme.buttonColor,
                       ),
                       onTap: () {
                         Get.to(() => AllInvestor(

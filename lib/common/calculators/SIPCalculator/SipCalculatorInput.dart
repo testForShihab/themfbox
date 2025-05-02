@@ -127,11 +127,12 @@ class _SipCalculatorInputState extends State<SipCalculatorInput> {
                   children: [
                     SizedBox(height: 16),
                     AmountInputCard(
-                      title: "How much can you invest through monthly SIP?",
+                      title: "How much can you invest through monthly SIP? (Rs)",
                       controller: sipAmountController,
                       inputFormatters: [
                         MaxValueFormatter(
-                          1000000000,
+                          10000000,
+                          isDecimal: false,
                           isReadableInput: true,
                         ),
                         NoLeadingZeroInputFormatter(),
@@ -155,11 +156,11 @@ class _SipCalculatorInputState extends State<SipCalculatorInput> {
                         controller: monthContinueSipController,
                         sliderValue: monthContinueSip.toDouble(),
                         inputFormatters: [
-                          MaxValueFormatter(1200, isDecimal: false),
+                          MaxValueFormatter(999, isDecimal: false),
                           NoLeadingZeroInputFormatter(),
                           FilteringTextInputFormatter.digitsOnly,
                         ],
-                        sliderMaxValue: 1200,
+                        sliderMaxValue: 999,
                         suffixText: "Months",
                         tfOnChange: (val) {
                           num temp = num.tryParse(val) ?? 0;
@@ -181,12 +182,12 @@ class _SipCalculatorInputState extends State<SipCalculatorInput> {
                         controller: monthContinueSipController,
                         sliderValue: monthContinueSip.toDouble(),
                         inputFormatters: [
-                          MaxValueFormatter(90, isDecimal: false),
+                          MaxValueFormatter(100, isDecimal: false),
                           NoLeadingZeroInputFormatter(),
                           FilteringTextInputFormatter.digitsOnly,
                         ],
-                        sliderMaxValue: 90,
-                        suffixText: "years",
+                        sliderMaxValue: 100,
+                        suffixText: "Years",
                         tfOnChange: (val) {
                           num temp = num.tryParse(val) ?? 0;
 
@@ -202,14 +203,14 @@ class _SipCalculatorInputState extends State<SipCalculatorInput> {
                     ),
                     SizedBox(height: 16),
                     SliderInputCard(
-                        title: "Expected Annual Rate of Return",
+                        title: "What rate of return do you expect? (% per annum)",
                         controller: expectAnnualRateController,
                         sliderValue: expectAnnualRate.toDouble(),
                         inputFormatters: [
                           MaxValueFormatter(2000),
                           DoubleDecimalFormatter(),
                         ],
-                        sliderMaxValue: 50,
+                        sliderMaxValue: 20,
                         suffixText: "%",
                         tfOnChange: (val) {
                           num temp = num.tryParse(val) ?? 0;
@@ -217,9 +218,9 @@ class _SipCalculatorInputState extends State<SipCalculatorInput> {
                           bool isValid = isValidSliderExpected(temp);
                           if (!isValid) {
                             Utils.showError(context,
-                                "Expected Annual Rate of Return should be in-between 0-50");
-                            expectAnnualRateController.text = "50";
-                            expectAnnualRate = 50;
+                                "Expected Annual Rate of Return should be in-between 0-20");
+                            expectAnnualRateController.text = "20";
+                            expectAnnualRate = 20;
                             setState(() {});
                             return;
                           }
@@ -239,24 +240,25 @@ class _SipCalculatorInputState extends State<SipCalculatorInput> {
                     Visibility(
                       visible: isAnnual,
                       child: SliderInputCard(
-                          title: "Annual Top Up",
+                          title: "How much percentage step up monthly SIP? (% per annum)",
                           controller: annualTopUpController,
                           sliderValue: annualTop.toDouble(),
                           inputFormatters: [
-                            MaxValueFormatter(100),
-                            DoubleDecimalFormatter(),
+                            MaxValueFormatter(60),
+                            NoLeadingZeroInputFormatter(),
+                            FilteringTextInputFormatter.digitsOnly,
                           ],
                           suffixText: "%",
-                          sliderMaxValue: 100,
+                          sliderMaxValue: 60,
                           tfOnChange: (val) {
                             num temp = num.tryParse(val) ?? 0;
 
                             bool isValid = isValidSliderTopUp(temp);
                             if (!isValid) {
                               Utils.showError(context,
-                                  "Annual Top Up should be in-between 0-100");
-                              annualTopUpController.text = "100";
-                              annualTop = 100;
+                                  "Annual Top Up should be in-between 0-60");
+                              annualTopUpController.text = "60";
+                              annualTop = 60;
                               setState(() {});
                               return;
                             }
@@ -322,7 +324,7 @@ class _SipCalculatorInputState extends State<SipCalculatorInput> {
                   EasyLoading.dismiss();
                 },
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Config.appTheme.themeColor,
+                    backgroundColor: Config.appTheme.buttonColor,
                     foregroundColor:
                         Colors.white // Set the background color here
                     ),
@@ -339,14 +341,14 @@ class _SipCalculatorInputState extends State<SipCalculatorInput> {
   }
 
   static bool isValidSliderExpected(num temp) {
-    if (temp < 0 || temp > 50)
+    if (temp < 0 || temp > 20)
       return false;
     else
       return true;
   }
 
   static bool isValidSliderTopUp(num temp) {
-    if (temp < 0 || temp > 100)
+    if (temp < 0 || temp > 60)
       return false;
     else
       return true;

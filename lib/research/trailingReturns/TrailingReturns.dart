@@ -321,13 +321,14 @@ class _TrailingReturnsState extends State<TrailingReturns> {
   }
 
   Widget displayPage() {
+    num fundcount = performanceList.length;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            child: Text("${performanceList.length} funds",
+            child: Text((fundcount<=1) ? "$fundcount Fund" : "$fundcount Funds",
                 style: TextStyle(
                     color: Color(0XFFB4B4B4), fontWeight: FontWeight.bold)),
           ),

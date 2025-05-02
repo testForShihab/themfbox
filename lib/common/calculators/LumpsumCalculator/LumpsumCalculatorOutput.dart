@@ -160,7 +160,7 @@ class _LumpsumCalculatorOutputState extends State<LumpsumCalculatorOutput> {
     List<SipData> chartData = [];
 
     chartData.add(SipData(
-      category: 'Lumpsum Amount',
+      category: 'Your Lumpsum Amount',
       percentage: lumpsumResult['lumpsum_amount'].toDouble(),
     ));
 

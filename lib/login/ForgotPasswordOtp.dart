@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +9,7 @@ import 'package:mymfbox2_0/utils/Config.dart';
 import 'package:mymfbox2_0/utils/Utils.dart';
 import 'package:pinput/pinput.dart';
 
+import '../api/ApiConfig.dart';
 import '../utils/Constants.dart';
 
 class ForgotPasswordOtp extends StatefulWidget {
@@ -32,6 +35,9 @@ class _ForgotPasswordOtpState extends State<ForgotPasswordOtp> {
   final otpFocusNode = FocusNode();
   late String mobileNumber;
   String broker_code = "";
+  RxBool isLoading = false.obs;
+  int secondsElapsed = 30;
+  Timer? timer;
 
   @override
   void initState() {
@@ -40,14 +46,34 @@ class _ForgotPasswordOtpState extends State<ForgotPasswordOtp> {
 
     mobileNumber = widget.mobile_number;
     broker_code = widget.broker_code;
+
+    setState(() {
+      isLoading.value = true;
+      secondsElapsed = 30;
+    });
+
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      setState(() {
+        if (secondsElapsed > 1) {
+          secondsElapsed--;
+        } else {
+          timer?.cancel();
+        }
+      });
+    });
+
+    Future.delayed(Duration(seconds: 30), () {
+      setState(() {
+        isLoading.value = false;
+      });
+      timer?.cancel();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     devHeight = MediaQuery.of(context).size.height;
     devWidth = MediaQuery.of(context).size.width;
-    print("clientName  $clientName");
-    print("arn  $appArn");
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -60,7 +86,7 @@ class _ForgotPasswordOtpState extends State<ForgotPasswordOtp> {
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
                         Config.appTheme.themeColor, BlendMode.color))
-                :(Config.app_client_name == "themfbox") ? DecorationImage(
+                :(Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? DecorationImage(
                     image: AssetImage("assets/green-bg.png"),
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
@@ -98,8 +124,9 @@ class _ForgotPasswordOtpState extends State<ForgotPasswordOtp> {
                       padding: EdgeInsets.all(2),
                       child: (Config.appLogo.contains("http"))
                           ? Image.network(Config.appLogo,
-                              height: setImageSize(60))
-                          : Image.asset(Config.appLogo)),
+                              height: setImageSize(100))
+                          : (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? Image.asset(Config.appLogo)
+                          : Image.asset(Config.appLogo,width:setImageSize(350))),
               SizedBox(height: devHeight * 0.06),
               Text("OTP Verification",
                   style: TextStyle(
@@ -107,7 +134,7 @@ class _ForgotPasswordOtpState extends State<ForgotPasswordOtp> {
                       fontWeight: FontWeight.bold,
                       fontSize: 20)),
               SizedBox(height: devHeight * 0.01),
-              Text("Please Enter Otp", style: TextStyle(color: Colors.white)),
+              Text("Please Enter OTP", style: TextStyle(color: Colors.white)),
               SizedBox(height: devHeight * 0.05),
               Expanded(
                 child: Container(
@@ -155,7 +182,7 @@ class _ForgotPasswordOtpState extends State<ForgotPasswordOtp> {
                         child: TextButton(
                           onPressed: () async {
                             if (otpNo.length != 4) {
-                              Utils.showError(context, "Invalid OTP");
+                              Utils.showError(context, "Please enter OTP");
                               return;
                             }
                             Map data = await Api.verifyPasswordChangeOTP(
@@ -181,7 +208,7 @@ class _ForgotPasswordOtpState extends State<ForgotPasswordOtp> {
                                 borderRadius:
                                     BorderRadius.circular(8), // <-- Radius
                               ),
-                              backgroundColor: Colors.black,
+                              backgroundColor: Config.appTheme.universalTitle,
                               foregroundColor: Colors.white),
                           child: Text("Verify OTP",
                               style: TextStyle(
@@ -189,7 +216,24 @@ class _ForgotPasswordOtpState extends State<ForgotPasswordOtp> {
                         ),
                       ),
                       SizedBox(height: devHeight * 0.05),
-                      resendOtp(),
+                      (isLoading == true)
+                          ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Didn't receive OTP? 00:${secondsElapsed}s",
+                          ),
+                          SizedBox(width: 15),
+                          SizedBox(
+                            width: 15,
+                            height: 15,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 5,
+                            ),
+                          )
+                        ],
+                      ) : resendOtp(),
                     ],
                   ),
                 ),
@@ -212,13 +256,31 @@ class _ForgotPasswordOtpState extends State<ForgotPasswordOtp> {
               user_id: "",
               mobile: mobileNumber,
               client_name: clientName,
-              broker_code: appArn,
+              broker_code: broker_code,
             );
             if (data['status'] != 200) {
               Utils.showError(context, "${data['msg']}");
-
               return;
             }
+
+          if(data['status'] == 200) showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Confirm'),
+                  content: Text('OTP sent successfully'),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text('ok'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+
           },
           child: Text(
             "Resend",

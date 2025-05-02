@@ -71,11 +71,11 @@ class _CompoundingCalculatorInputState
                 children: [
                   SizedBox(height: 16),
                   AmountInputCard(
-                    title: "Principal Amount",
+                    title: "Principal Amount (Rs)",
                     initialValue: Utils.formatNumber(2500000),
                     inputFormatters: [
                       MaxValueFormatter(
-                        1000000000,
+                        100000000,
                         isDecimal: false,
                         isReadableInput: true,
                       ),
@@ -93,13 +93,13 @@ class _CompoundingCalculatorInputState
                   ),
                   SizedBox(height: 16),
                   SliderInputCard(
-                      title: "Annual Interest Rate",
+                      title: "Interest Rate (% per annum)",
                       controller: annualInterestRateController,
                       sliderValue: annualInterestRate.toDouble(),
                       suffixText: "%",
-                      sliderMaxValue: 50,
+                      sliderMaxValue: 20,
                       inputFormatters: [
-                        MaxValueFormatter(50),
+                        MaxValueFormatter(20),
                         DoubleDecimalFormatter(),
                       ],
                       tfOnChange: (val) {
@@ -107,7 +107,7 @@ class _CompoundingCalculatorInputState
                         bool isValid = israteValidSlider(temp);
                         if (!isValid && temp <= 0) {
                           Utils.showError(context,
-                              "Annual Interest Rate should be in-between 0-50 %");
+                              "Annual Interest Rate should be in-between 0-20 %");
                           return;
                         }
                         annualInterestRate = temp;
@@ -122,12 +122,12 @@ class _CompoundingCalculatorInputState
                       }),
                   SizedBox(height: 16),
                   SliderInputCard(
-                    title: "Number of Years",
+                    title: "Period (in years)",
                     controller: noOfYearsController,
                     sliderValue: noOfYears.toDouble(),
                     suffixText: "Years",
                     inputFormatters: [
-                      MaxValueFormatter(100, isDecimal: false),
+                      MaxValueFormatter(30, isDecimal: false),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
                     ],
@@ -160,7 +160,7 @@ class _CompoundingCalculatorInputState
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Compound Interval", style: AppFonts.f50014Black),
+                        Text("Compound interval", style: AppFonts.f50014Black),
                         Row(
                           children: [
                             Radio(
@@ -298,7 +298,7 @@ class _CompoundingCalculatorInputState
                         EasyLoading.dismiss();
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Config.appTheme.themeColor,
+                          backgroundColor: Config.appTheme.buttonColor,
                           foregroundColor:
                               Colors.white // Set the background color here
                           ),
@@ -363,7 +363,7 @@ class _CompoundingCalculatorInputState
 }
 
 bool isValidSlider(num temp) {
-  if (temp < 0 || temp > 100)
+  if (temp < 0 || temp > 30)
     return false;
   else
     return true;

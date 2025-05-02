@@ -340,6 +340,7 @@ class _BseSipCartState extends State<BseSipCart> {
 
     if (type == ButtonType.plain) {
       return PlainButton(
+        color: Config.appTheme.buttonColor,
         text: text,
         padding: padding,
         onPressed: () {
@@ -348,6 +349,7 @@ class _BseSipCartState extends State<BseSipCart> {
       );
     } else {
       return RpFilledButton(
+        color: Config.appTheme.buttonColor,
         text: text,
         padding: padding,
         onPressed: () async {

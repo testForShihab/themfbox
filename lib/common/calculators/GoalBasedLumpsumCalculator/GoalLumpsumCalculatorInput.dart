@@ -66,7 +66,7 @@ class _GoalBasedLumpsumCalculatorState
                 children: [
                   SizedBox(height: 16),
                   AmountInputCard(
-                    title: "Target Amount",
+                    title: "How much amount you want to save (Rs)",
                     initialValue: Utils.formatNumber(5000000),
                     inputFormatters: [
                       MaxValueFormatter(
@@ -88,7 +88,7 @@ class _GoalBasedLumpsumCalculatorState
                   ),
                   SizedBox(height: 16),
                   SliderInputCard(
-                    title: "Investment Period",
+                    title: "How many years after you need this amount (Years)",
                     controller: investmentPeriodController,
                     sliderValue: investmentPeriod.toDouble(),
                     inputFormatters: [
@@ -120,10 +120,10 @@ class _GoalBasedLumpsumCalculatorState
                       MaxValueFormatter(50),
                       SingleDecimalFormatter(),
                     ],
-                    title: "Expected Annual Rate of Return",
+                    title: "Expected rate of return (% per annum)",
                     sliderValue: annualRateReturn.toDouble(),
                     controller: annualRateReturnController,
-                    sliderMaxValue: 50,
+                    sliderMaxValue: 25,
                     suffixText: "%",
                     tfOnChange: (val) {
                       num temp = num.tryParse(val) ?? 0;
@@ -131,7 +131,7 @@ class _GoalBasedLumpsumCalculatorState
 
                       if (!isValid) {
                         Utils.showError(context,
-                            "Expected Annual Rate of Return should be in-between 0-100");
+                            "Expected Annual Rate of Return should be in-between 0-25");
                         return;
                       }
 
@@ -180,7 +180,7 @@ class _GoalBasedLumpsumCalculatorState
                   EasyLoading.dismiss();
                 },
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Config.appTheme.themeColor,
+                    backgroundColor: Config.appTheme.buttonColor,
                     foregroundColor:
                         Colors.white // Set the background color here
                     ),

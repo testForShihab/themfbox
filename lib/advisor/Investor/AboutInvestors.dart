@@ -95,57 +95,54 @@ class _AboutInvestorsState extends State<AboutInvestors> {
                   children: [
                     (isLoading)
                         ? Utils.shimmerWidget(200, margin: EdgeInsets.zero)
-                        : InkWell(
-                            onTap: () {},
-                            child: BrokerageCard(
-                              hasTitle: false,
-                              hasArrow: false,
-                              title: "",
-                              lHead: Utils.formatNumber(totalInvestors),
-                              lSubHead: "Investors",
-                              lHeadonTap:() {
-                                Get.to(() => AllInvestor(totalInvestors: totalInvestors, branch: [], rm: [], associate: [],));
+                        : BrokerageCard(
+                          hasTitle: false,
+                          hasArrow: false,
+                          title: "",
+                          lHead: Utils.formatNumber(totalInvestors),
+                          lSubHead: "Investors",
+                          lHeadonTap:() {
+                            Get.to(() => AllInvestor(totalInvestors: totalInvestors, branch: [], rm: [], associate: [],));
+                          },
+                          rHead: "${summary['total_family_count']}",
+                          rSubHead: "Families",
+                          rHeadonTap:(){
+                            Get.to(() => AllFamilies(totalFamilies: totalFamilies),);
+                          } ,
+                          padding: EdgeInsets.zero,
+                          extraWidgets: [
+                            if (type_id == UserType.ADMIN ||
+                                type_id == UserType.RM ||
+                                type_id == UserType.ASSOCIATE)
+                            ...[SizedBox(height: 20),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() => CreateClient());
                               },
-                              rHead: "${summary['total_family_count']}",
-                              rSubHead: "Families",
-                              rHeadonTap:(){
-                                Get.to(() => AllFamilies(totalFamilies: totalFamilies),);
-                              } ,
-                              padding: EdgeInsets.zero,
-                              extraWidgets: [
-                                if (type_id == UserType.ADMIN ||
-                                    type_id == UserType.RM ||
-                                    type_id == UserType.ASSOCIATE)
-                                ...[SizedBox(height: 20),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => CreateClient());
-                                  },
-                                  child: extraButton(
-                                    image: "assets/add_contact.png",
-                                    text: "Sign up New Investor",
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Color(0Xff333333),
-                                      image: DecorationImage(
-                                          image:
-                                              AssetImage("assets/noise.png")),
-                                    ),
-                                  ),
+                              child: extraButton(
+                                image: "assets/add_contact.png",
+                                text: "Sign up New Investor",
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Config.appTheme.buttonColor,
+                                 /* image: DecorationImage(
+                                      image:
+                                          AssetImage("assets/noise.png")),*/
                                 ),
-                                SizedBox(height: 20),
-                                ]
-                                /*    extraButton(
-                                    image: "assets/contacts.png",
-                                    text: "Help 15 Investors in KYC",
-                                    isWhite: false,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                            color: Color(0xFFE1E1E1))))*/
-                              ],
+                              ),
                             ),
-                          ),
+                            SizedBox(height: 20),
+                            ]
+                            /*    extraButton(
+                                image: "assets/contacts.png",
+                                text: "Help 15 Investors in KYC",
+                                isWhite: false,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        color: Color(0xFFE1E1E1))))*/
+                          ],
+                        ),
                     SizedBox(height: 20),
                     (isLoading)
                         ? Utils.shimmerWidget(300, margin: EdgeInsets.zero)
@@ -206,10 +203,13 @@ class _AboutInvestorsState extends State<AboutInvestors> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16)),
+                      topRight: Radius.circular(16),
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16)
+                  ),
                   color: (title.contains('ELSS')
-                      ? Config.appTheme.themeColor
-                      : Colors.black)),
+                      ? Config.appTheme.universalTitle
+                      : Config.appTheme.themeColor)),
               child: Column(
                 children: [
                   Row(
@@ -255,7 +255,7 @@ class _AboutInvestorsState extends State<AboutInvestors> {
                 ],
               ),
             ),
-            Container(
+           /* Container(
               padding: EdgeInsets.fromLTRB(16, 10, 16, 16),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
@@ -267,7 +267,7 @@ class _AboutInvestorsState extends State<AboutInvestors> {
                 "",
                 style: AppFonts.f40013.copyWith(color: Colors.white),
               ),
-            )
+            )*/
           ],
         ),
       ),
@@ -289,10 +289,13 @@ class _AboutInvestorsState extends State<AboutInvestors> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16)),
+                      topRight: Radius.circular(16),
+                      bottomRight: Radius.circular(16),
+                      bottomLeft: Radius.circular(16)
+                  ),
                   color: (title.contains('ELSS')
-                      ? Config.appTheme.themeColor
-                      : Colors.black)),
+                      ? Config.appTheme.universalTitle
+                      : Config.appTheme.themeColor)),
               child: Column(
                 children: [
                   Row(
@@ -338,7 +341,7 @@ class _AboutInvestorsState extends State<AboutInvestors> {
                 ],
               ),
             ),
-            Container(
+           /* Container(
               padding: EdgeInsets.fromLTRB(16, 10, 16, 16),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
@@ -350,7 +353,7 @@ class _AboutInvestorsState extends State<AboutInvestors> {
                 "",
                 style: AppFonts.f40013.copyWith(color: Colors.white),
               ),
-            )
+            )*/
           ],
         ),
       ),

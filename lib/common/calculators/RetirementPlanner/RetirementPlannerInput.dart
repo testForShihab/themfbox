@@ -352,7 +352,7 @@ class _RetirementPlannerInputState extends State<RetirementPlannerInput> {
                             ));
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Config.appTheme.themeColor,
+                          backgroundColor: Config.appTheme.buttonColor,
                           foregroundColor:
                               Colors.white // Set the background color here
                           ),

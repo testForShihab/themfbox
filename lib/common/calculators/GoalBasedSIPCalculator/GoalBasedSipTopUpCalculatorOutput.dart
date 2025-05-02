@@ -109,11 +109,12 @@ class _GoalBasedSipTopUpCalculatorState
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Target Amount (Inflation Adjusted)",
+                          "Your Targeted Amount\n(Inflation adjusted)",
                           style: AppFonts.f40013,
                         ),
                       ],
                     ),
+                    SizedBox(height: 10,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -128,7 +129,7 @@ class _GoalBasedSipTopUpCalculatorState
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ColumnText(
-                            title: "Period",
+                            title: "Number of years to achieve your goal",
                             value:
                                 "${Utils.formatNumber(goalBasedSipTopUpResult['investment_period'])} Years"),
                         ColumnText(
@@ -169,10 +170,10 @@ class _GoalBasedSipTopUpCalculatorState
                         style: AppFonts.f50014Black, // Default text style
                         children: [
                           TextSpan(
-                            text: "Monthly SIP Required",
+                            text: "Monthly SIP Amount",
                           ),
                           TextSpan(
-                              text: "\n(For the First Year)",
+                              text: "\n(For the First Year in Rs.)",
                               style: AppFonts.f40013),
                         ],
                       ),
@@ -201,13 +202,34 @@ class _GoalBasedSipTopUpCalculatorState
             ),
             Container(
               width: devWidth,
+              margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
+              padding: EdgeInsets.all(16.0), // Add padding
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Final Amount", style: AppFonts.f50014Black.copyWith(fontWeight: FontWeight.bold),),
+                  Spacer(),
+                  Text(
+                    "$rupee ${Utils.formatNumber(goalBasedSipTopUpResult['maturity_amount'], isAmount: false)}",
+                    style: AppFonts.f70024
+                        .copyWith(fontSize: 18, color: Color(0xff3CB66D)),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              width: devWidth,
               margin: EdgeInsets.fromLTRB(16, 8, 16, 16),
               padding: EdgeInsets.all(4.0), //
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "SIP Calculator Top Up Amount Invested Summary",
+                    "Goal based Top Up SIP Amount Invested Summary",
                     style: AppFonts.f40013,
                   ),
                 ],
@@ -254,7 +276,7 @@ class _GoalBasedSipTopUpCalculatorState
                   style: AppFonts.f50014Black,
                   children: <TextSpan>[
                     TextSpan(
-                      text: '/ Month',
+                      text: ' SIP Amount / Month',
                       style: AppFonts.f40013,
                     ),
                   ],
@@ -271,7 +293,7 @@ class _GoalBasedSipTopUpCalculatorState
                 style: AppFonts.f40013,
               ),
               Text(
-                "Invested / Year",
+                "Invested Amount / Year",
                 style: AppFonts.f40013,
               ),
             ],
@@ -300,7 +322,7 @@ class _GoalBasedSipTopUpCalculatorState
     List<SipData> chartData = [];
 
     chartData.add(SipData(
-      category: 'Total Amount Invested',
+      category: 'Total Amount Invested in ${goalBasedSipTopUpResult['investment_period']} years',
       percentage: goalBasedSipTopUpResult['invested_amount'].toDouble(),
     ));
 
@@ -308,6 +330,11 @@ class _GoalBasedSipTopUpCalculatorState
       category: 'Total Growth Amount',
       percentage: goalBasedSipTopUpResult['growth_value'].toDouble(),
     ));
+
+    /*chartData.add(SipData(
+      category: 'Final Amount',
+      percentage: goalBasedSipTopUpResult['maturity_amount'].toDouble(),
+    ));*/
 
     print("chartData $chartData");
 
@@ -365,8 +392,8 @@ class _GoalBasedSipTopUpCalculatorState
                           if (index == 0)
                             TextSpan(
                                 text:
-                                    "\n(Through SIP In ${goalBasedSipTopUpResult['investment_period']} Years)",
-                                style: AppFonts.f40013),
+                                    "\n(Sum of all your monthly installments with annual Top-Up in Rs.)",
+                                style: AppFonts.f40013.copyWith(fontSize: 10)),
                         ],
                       ),
                     ),

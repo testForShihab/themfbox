@@ -40,9 +40,9 @@ class _SipDashboardState extends State<SipDashboard> {
   List<Color> colorPalate = [
     Color(0xFF2caffe),
     Color(0xFF544fc5),
-    Color(0xFF00e272),
+    Color(0xFF008744),
     Color(0xFF6b8abc),
-    Color(0xFFd568fb),
+    Color(0xFFaa53c8),
     Color(0xFF2ee0ca),
     Color(0xFFfeb56a),
     Color(0xFF91e8e1),
@@ -337,6 +337,7 @@ class _SipDashboardState extends State<SipDashboard> {
                               "$rupee ${Utils.formatNumber(stpData['total_stp_amount'], isShortAmount: false)}",
                           rSubHead: "STP Amount",
                           padding: EdgeInsets.zero,
+                          titleArrow: false,
                         ),
                       );
                     }),
@@ -362,6 +363,7 @@ class _SipDashboardState extends State<SipDashboard> {
                               "$rupee ${Utils.formatNumber(swpData['total_swp_amount'].round(), isShortAmount: false)}",
                           rSubHead: "SWP Amount",
                           padding: EdgeInsets.zero,
+                          titleArrow: false,
                         ),
                       );
                     }),
@@ -378,6 +380,7 @@ class _SipDashboardState extends State<SipDashboard> {
                         children: [
                           Expanded(
                               child: bottomCard(
+                                color: Config.appTheme.themeColor,
                             title: "Expiring\nSIPs",
                             value: "${sipData['sip_expiring_shortly']}",
                             goTo: ActiveSipHome(
@@ -387,7 +390,7 @@ class _SipDashboardState extends State<SipDashboard> {
                           SizedBox(width: 16),
                           Expanded(
                             child: bottomCard(
-                              color: Config.appTheme.themeColor,
+                              color: Config.appTheme.buttonColor,
                               value: "${sipData['sip_starting_shortly']}",
                               title: "SIPs Starting\nShortly",
                               goTo: ActiveSipHome(
@@ -1009,7 +1012,9 @@ class _SipDashboardState extends State<SipDashboard> {
   }
 
   Widget bottomCard({
-    Color color = const Color(0xff2e2e2e),
+    //Color color = const Color(0xff2e2e2e),
+    Color color = const Color(0xff18a899),
+    //Color color = const Color(Config.appTheme.universalTitle),
     required String title,
     required String value,
     required Widget goTo,

@@ -218,7 +218,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
                               onTap: () async {
                                 sendMail();
                               },
-                              child: PlainButton(text: "Email Login Credential")))
+                              child: PlainButton(color:Config.appTheme.buttonColor,text: "Email Login Credential")))
                     ],
                   ),
                 ),

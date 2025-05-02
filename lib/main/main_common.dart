@@ -41,8 +41,11 @@ void mainCommon(FlavorConfig config) async {
   Config.app_client_name = config.appClientName;
   Config.appLogo = config.appLogo;
 
+  Config.apiKey = config.apiKey;
+
   print("----------------");
   print(Config.app_client_name);
+  print(Config.apiKey);
   print("-----------------");
 
   Config.appArn = config.appArn;
@@ -64,6 +67,7 @@ void mainCommon(FlavorConfig config) async {
   Config.website = config.website;
 
   print("Config.app_title = ${Config.app_title}");
+  print("Config.apiKey = ${Config.apiKey}");
   print(Config.app_client_name);
   print(Config.appArn);
   print(Config.appLogo);

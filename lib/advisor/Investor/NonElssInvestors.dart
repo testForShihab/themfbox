@@ -459,7 +459,7 @@ class _NonElssInvestorsState extends State<NonElssInvestors> {
                             },
                             trailing:
                                 Icon(Icons.arrow_forward, color: Colors.white),
-                            bgColor: Config.appTheme.themeColor),
+                            bgColor: Config.appTheme.buttonColor),
                       ],
                     ),
                   ),

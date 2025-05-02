@@ -60,7 +60,7 @@ class _RetirementCalculatorInputState extends State<RetirementCalculatorInput> {
     return Scaffold(
       backgroundColor: Config.appTheme.mainBgColor,
       appBar: rpAppBar(
-          title: "Retirement Calculator",
+          title: "Retirement Planning Calculator",
           bgColor: Config.appTheme.themeColor,
           foregroundColor: Colors.white),
       body: SingleChildScrollView(
@@ -72,7 +72,7 @@ class _RetirementCalculatorInputState extends State<RetirementCalculatorInput> {
                 children: [
                   SizedBox(height: 16),
                   AmountInputCard(
-                    title: "Amount you want to retire with",
+                    title: "Amount you want to have for your retirement (Rs)",
                     initialValue: Utils.formatNumber(20000000),
                     inputFormatters: [
                       MaxValueFormatter(
@@ -94,7 +94,7 @@ class _RetirementCalculatorInputState extends State<RetirementCalculatorInput> {
                   ),
                   SizedBox(height: 16),
                   SliderInputCard(
-                    title: "Your age today",
+                    title: "Your age today (in years)",
                     controller: ageTodayController,
                     sliderValue: ageToday.toDouble(),
                     inputFormatters: [
@@ -123,7 +123,7 @@ class _RetirementCalculatorInputState extends State<RetirementCalculatorInput> {
                   ),
                   SizedBox(height: 16),
                   SliderInputCard(
-                      title: "Age Your Plan to retire at",
+                      title: "Age you plan to retire (in years)",
                       inputFormatters: [
                         MaxValueFormatter(100, isDecimal: false),
                         NoLeadingZeroInputFormatter(),
@@ -151,7 +151,7 @@ class _RetirementCalculatorInputState extends State<RetirementCalculatorInput> {
                       }),
                   SizedBox(height: 16),
                   SliderInputCard(
-                    title: "Expected Annual Inflation Rate",
+                    title: "The expected rate of inflation over the years (% per annum)",
                     sliderValue: annualInflationRate.toDouble(),
                     inputFormatters: [
                       MaxValueFormatter(15),
@@ -166,7 +166,7 @@ class _RetirementCalculatorInputState extends State<RetirementCalculatorInput> {
 
                       if (!isValid) {
                         Utils.showError(context,
-                            "Expected Annual Inflation Rate should be in-between 0-100");
+                            "Expected Annual Inflation Rate should be in-between 0-15");
                         return;
                       }
 
@@ -184,22 +184,22 @@ class _RetirementCalculatorInputState extends State<RetirementCalculatorInput> {
                   ),
                   SizedBox(height: 16),
                   SliderInputCard(
-                    title: "Expected Annual Rate of Return",
+                    title: "The expected rate of return on your investments (% per annum)",
                     sliderValue: annualRateReturn.toDouble(),
                     inputFormatters: [
-                      MaxValueFormatter(50),
+                      MaxValueFormatter(20),
                       SingleDecimalFormatter(),
                     ],
                     controller: annualRateReturnController,
                     suffixText: "%",
-                    sliderMaxValue: 50,
+                    sliderMaxValue: 20,
                     tfOnChange: (val) {
                       num temp = num.tryParse(val) ?? 0;
                       bool isValid = isValidSlider(temp);
 
                       if (!isValid) {
                         Utils.showError(context,
-                            "Expected Annual Rate of Return should be in-between 0-100");
+                            "Expected Annual Rate of Return should be in-between 0-20");
                         return;
                       }
 
@@ -216,7 +216,7 @@ class _RetirementCalculatorInputState extends State<RetirementCalculatorInput> {
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
-                    title: "Your Current Savings",
+                    title: "Your Current savings (Rs)",
                     initialValue: Utils.formatNumber(100000),
                     inputFormatters: [
                       MaxValueFormatter(
@@ -268,7 +268,7 @@ class _RetirementCalculatorInputState extends State<RetirementCalculatorInput> {
                             retirementCalculatorResult: data['result']));
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Config.appTheme.themeColor,
+                          backgroundColor: Config.appTheme.buttonColor,
                           foregroundColor:
                               Colors.white // Set the background color here
                           ),

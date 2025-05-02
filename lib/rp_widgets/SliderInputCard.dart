@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:mymfbox2_0/rp_widgets/CalculatorTf.dart';
 import 'package:mymfbox2_0/utils/AppFonts.dart';
 
+import '../utils/Config.dart';
+
 class SliderInputCard extends StatelessWidget {
   const SliderInputCard({
     super.key,
@@ -46,6 +48,7 @@ class SliderInputCard extends StatelessWidget {
             suffixText: suffixText,
           ),
           Slider(
+            activeColor: Config.appTheme.buttonColor,
             value: sliderValue,
             min: sliderMinValue,
             max: sliderMaxValue,

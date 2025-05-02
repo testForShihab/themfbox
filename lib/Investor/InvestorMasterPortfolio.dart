@@ -217,8 +217,8 @@ class _InvestorMasterPortfolioState extends State<InvestorMasterPortfolio> {
                       ),
                       summaryCard(
                         title: "PMS Holdings",
-                        value: pms.pmsCurrentValue,
-                        cost: pms.pmsCurrentCost,
+                        value: pms.pmsCurrentValue?.round(),
+                        cost: pms.pmsCurrentCost?.round(),
                         gainLoss: pms.pmsUnrealised?.toInt(),
                         xirr: pms.pmsDividend,
                         firstTitle: "Invested",
@@ -444,7 +444,7 @@ class _InvestorMasterPortfolioState extends State<InvestorMasterPortfolio> {
                     ),
                     SizedBox(height: devHeight * 0.02),
                     Text(
-                      "$rupee ${Utils.formatNumber(total)}",
+                      "$rupee ${Utils.formatNumber(total.round())}",
                       style: TextStyle(
                           color: Config.appTheme.themeColor,
                           fontWeight: FontWeight.w700,

@@ -70,11 +70,11 @@ class _NetworthCalculatorInputState extends State<NetworthCalculatorInput> {
                       style: AppFonts.f50012.copyWith(fontSize: 16)),
                   SizedBox(height: 16),
                   AmountInputCard(
-                    title: "Shares & Equity Mutual Funds",
+                    title: "Shares & Equity Mutual Funds (Rs.)",
                     initialValue: Utils.formatNumber(500000),
                     inputFormatters: [
                       MaxValueFormatter(
-                        1000000000,
+                        1000000,
                         isDecimal: false,
                         isReadableInput: true,
                       ),
@@ -93,11 +93,11 @@ class _NetworthCalculatorInputState extends State<NetworthCalculatorInput> {
                   SizedBox(height: 16),
                   AmountInputCard(
                     title:
-                        "Fixed Income Assets (Fixed Deposits, Bonds, Debt Funds, PPF etc.)",
+                        "Fixed Income Assets (Rs.) (Fixed deposits, Bonds, debt funds, PPF etc.)",
                     initialValue: Utils.formatNumber(200000),
                     inputFormatters: [
                       MaxValueFormatter(
-                        1000000000,
+                        1000000,
                         isDecimal: false,
                         isReadableInput: true,
                       ),
@@ -116,11 +116,11 @@ class _NetworthCalculatorInputState extends State<NetworthCalculatorInput> {
                   SizedBox(height: 16),
                   AmountInputCard(
                     title:
-                        "Cash & Bank Accounts (Savings Accounts, Cash In Hand, Liquid Funds, etc.)",
+                        "Cash and Bank Accounts (Rs.)(Savings accounts, Cash in hand, liquid funds, etc.)",
                     initialValue: Utils.formatNumber(300000),
                     inputFormatters: [
                       MaxValueFormatter(
-                        1000000000,
+                        1000000,
                         isDecimal: false,
                         isReadableInput: true,
                       ),
@@ -138,11 +138,11 @@ class _NetworthCalculatorInputState extends State<NetworthCalculatorInput> {
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
-                    title: "Property",
+                    title: "Property (Rs.)",
                     initialValue: Utils.formatNumber(200000),
                     inputFormatters: [
                       MaxValueFormatter(
-                        1000000000,
+                        1000000,
                         isDecimal: false,
                         isReadableInput: true,
                       ),
@@ -159,11 +159,11 @@ class _NetworthCalculatorInputState extends State<NetworthCalculatorInput> {
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
-                    title: "Gold & Jewelleries",
+                    title: "Gold and Jewelleries (Rs.)",
                     initialValue: Utils.formatNumber(200000),
                     inputFormatters: [
                       MaxValueFormatter(
-                        1000000000,
+                        1000000,
                         isDecimal: false,
                         isReadableInput: true,
                       ),
@@ -181,11 +181,11 @@ class _NetworthCalculatorInputState extends State<NetworthCalculatorInput> {
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
-                    title: "Others (If any)",
+                    title: "Others (if any) (Rs.)",
                     initialValue: Utils.formatNumber(200000),
                     inputFormatters: [
                       MaxValueFormatter(
-                        1000000000,
+                        1000000,
                         isDecimal: false,
                         isReadableInput: true,
                       ),
@@ -205,11 +205,11 @@ class _NetworthCalculatorInputState extends State<NetworthCalculatorInput> {
                       style: AppFonts.f50012.copyWith(fontSize: 16)),
                   SizedBox(height: 16),
                   AmountInputCard(
-                    title: "Home Loan",
+                    title: "Home Loan (Rs.)",
                     initialValue: Utils.formatNumber(50000),
                     inputFormatters: [
                       MaxValueFormatter(
-                        1000000000,
+                        1000000,
                         isDecimal: false,
                         isReadableInput: true,
                       ),
@@ -226,11 +226,11 @@ class _NetworthCalculatorInputState extends State<NetworthCalculatorInput> {
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
-                    title: "Personal & Other Loans",
+                    title: "Personal & other Loans (Rs.)",
                     initialValue: Utils.formatNumber(250000),
                     inputFormatters: [
                       MaxValueFormatter(
-                        1000000000,
+                        1000000,
                         isDecimal: false,
                         isReadableInput: true,
                       ),
@@ -248,11 +248,11 @@ class _NetworthCalculatorInputState extends State<NetworthCalculatorInput> {
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
-                    title: "Income Tax Owed",
+                    title: "Income Tax owed (Rs.)",
                     initialValue: Utils.formatNumber(200000),
                     inputFormatters: [
                       MaxValueFormatter(
-                        1000000000,
+                        1000000,
                         isDecimal: false,
                         isReadableInput: true,
                       ),
@@ -270,11 +270,11 @@ class _NetworthCalculatorInputState extends State<NetworthCalculatorInput> {
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
-                    title: "Outstanding Bills / Payments",
+                    title: "Outstanding bills / payments (Rs.)",
                     initialValue: Utils.formatNumber(500000),
                     inputFormatters: [
                       MaxValueFormatter(
-                        1000000000,
+                        1000000,
                         isDecimal: false,
                         isReadableInput: true,
                       ),
@@ -292,11 +292,11 @@ class _NetworthCalculatorInputState extends State<NetworthCalculatorInput> {
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
-                    title: "Credit Card Dues",
+                    title: "Credit Card dues (Rs.)",
                     initialValue: Utils.formatNumber(200000),
                     inputFormatters: [
                       MaxValueFormatter(
-                        1000000000,
+                        1000000,
                         isDecimal: false,
                         isReadableInput: true,
                       ),
@@ -314,11 +314,11 @@ class _NetworthCalculatorInputState extends State<NetworthCalculatorInput> {
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
-                    title: "Other Liabilities (If any)",
+                    title: "Other liabilities (if any) (Rs.)",
                     initialValue: Utils.formatNumber(20000),
                     inputFormatters: [
                       MaxValueFormatter(
-                        1000000000,
+                        1000000,
                         isDecimal: false,
                         isReadableInput: true,
                       ),
@@ -395,7 +395,7 @@ class _NetworthCalculatorInputState extends State<NetworthCalculatorInput> {
                         EasyLoading.dismiss();
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Config.appTheme.themeColor,
+                          backgroundColor: Config.appTheme.buttonColor,
                           foregroundColor:
                               Colors.white // Set the background color here
                           ),

@@ -360,7 +360,7 @@ class _WhatIfReportState extends State<WhatIfReport> {
 
     return Container(
       decoration: BoxDecoration(
-          color: Config.appTheme.Bg2Color, borderRadius: BorderRadius.circular(10)),
+          color: Colors.white, borderRadius: BorderRadius.circular(10)),
       margin: EdgeInsets.all(8),
       padding: EdgeInsets.all(16),
       child: Column(
@@ -465,27 +465,11 @@ class _WhatIfReportState extends State<WhatIfReport> {
         children: [
           Row(
             children: [
-              Checkbox(
-                value: isCheckedMap[scheme] ?? false,
-                onChanged: (newValue) {
-                  setState(() {
-                    isCheckedMap[scheme] = newValue ?? false;
-                    if (newValue == true) {
-                      checkedSchemes.add("$folioNo|$schemeCode");
-                      schemeFolioCode.add("$folioNo|$schemeCode");
-                      print("schemeNames $schemeFolioCode");
-                    } else {
-                      checkedSchemes.remove("$folioNo|$schemeCode");
-                      schemeFolioCode.remove("$folioNo|$schemeCode");
-                      print("checkedSchemes $checkedSchemes");
-                      print("schemeNames $checkedSchemes");
-                    }
-                  });
-                },
-              ),
+
               Expanded(
                 child: Container(
                   width: devWidth,
+                  margin: EdgeInsets.all(8),
                   padding: EdgeInsets.fromLTRB(16, 16, 8, 16),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -504,6 +488,24 @@ class _WhatIfReportState extends State<WhatIfReport> {
                               titleStyle: AppFonts.f50014Black,
                               valueStyle: AppFonts.f40013,
                             ),
+                          ),
+                          Checkbox(
+                            value: isCheckedMap[scheme] ?? false,
+                            onChanged: (newValue) {
+                              setState(() {
+                                isCheckedMap[scheme] = newValue ?? false;
+                                if (newValue == true) {
+                                  checkedSchemes.add("$folioNo|$schemeCode");
+                                  schemeFolioCode.add("$folioNo|$schemeCode");
+                                  print("schemeNames $schemeFolioCode");
+                                } else {
+                                  checkedSchemes.remove("$folioNo|$schemeCode");
+                                  schemeFolioCode.remove("$folioNo|$schemeCode");
+                                  print("checkedSchemes $checkedSchemes");
+                                  print("schemeNames $checkedSchemes");
+                                }
+                              });
+                            },
                           ),
                         ],
                       ),
@@ -776,7 +778,7 @@ class _WhatIfReportState extends State<WhatIfReport> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          margin: EdgeInsets.fromLTRB(8, 0, 8, 8),
                           padding: EdgeInsets.only(
                             bottom:
                                 MediaQuery.of(context).viewInsets.bottom + 8,
@@ -1146,6 +1148,7 @@ class _WhatIfReportState extends State<WhatIfReport> {
   Widget getCancelApplyButton(ButtonType type) {
     if (type == ButtonType.plain)
       return PlainButton(
+        color: Config.appTheme.buttonColor,
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
         text: "CANCEL ALL",
         onPressed: () {
@@ -1154,6 +1157,7 @@ class _WhatIfReportState extends State<WhatIfReport> {
       );
     else
       return RpFilledButton(
+        color: Config.appTheme.buttonColor,
         text: "APPLY",
         onPressed: () async {
           print("investorId = $investorId");
@@ -1171,12 +1175,13 @@ class _WhatIfReportState extends State<WhatIfReport> {
 
   int length = 0;
   Widget countArea() {
+    num schemeCount = whatIfReportList.length;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          Text(
-            "${whatIfReportList.length} items",
+          Text( (schemeCount < 0) ?
+            "$schemeCount Items" : "${schemeCount} Item",
             style: TextStyle(color: Colors.grey),
           ),
           Spacer(),

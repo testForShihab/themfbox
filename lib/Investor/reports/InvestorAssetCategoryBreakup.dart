@@ -525,6 +525,7 @@ class _InvestorAssetCategoryBreakupState
   Widget getCancelApplyButton(ButtonType type ,StateSetter bottomState) {
     if (type == ButtonType.plain)
       return PlainButton(
+        color: Config.appTheme.buttonColor,
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
         text: "CLEAR ALL",
         onPressed: () {
@@ -538,6 +539,7 @@ class _InvestorAssetCategoryBreakupState
       );
     else
       return RpFilledButton(
+        color: Config.appTheme.buttonColor,
         text: "APPLY",
         onPressed: () {
           invSummary.msg = null;

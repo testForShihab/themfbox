@@ -249,6 +249,7 @@ class _LumpsumCartState extends State<LumpsumCart> {
 
     if (type == ButtonType.plain) {
       return PlainButton(
+        color: Config.appTheme.buttonColor,
         text: text,
         padding: padding,
         onPressed: () {
@@ -257,6 +258,7 @@ class _LumpsumCartState extends State<LumpsumCart> {
       );
     } else {
       return RpFilledButton(
+        color: Config.appTheme.buttonColor,
         text: text,
         padding: padding,
         onPressed: () async {

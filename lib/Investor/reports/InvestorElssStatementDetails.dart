@@ -89,7 +89,7 @@ class _InvestorElssStatementDetailsState
                         onTap: () {
                           reportacton();
                         },
-                        child: Icon(Icons.more_vert)),
+                        child: Icon(Icons.pending_outlined)),
                   ],
                 ),
               ],

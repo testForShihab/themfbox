@@ -5,10 +5,13 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mymfbox2_0/api/Api.dart';
+import 'package:mymfbox2_0/login/Login.dart';
 import 'package:mymfbox2_0/rp_widgets/SideBar.dart';
 import 'package:mymfbox2_0/utils/Config.dart';
 import 'package:mymfbox2_0/utils/Utils.dart';
 import 'package:mymfbox2_0/rp_widgets/RpTextField.dart';
+
+import '../api/ApiConfig.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
@@ -94,7 +97,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         fit: BoxFit.cover,
                         colorFilter: ColorFilter.mode(Config.appTheme.themeColor, BlendMode.color))
 
-                  : (Config.app_client_name == "themfbox") ? DecorationImage(
+                  : (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? DecorationImage(
                         image: AssetImage("assets/green-bg.png"),
                         fit: BoxFit.cover,
                         colorFilter: ColorFilter.mode(Config.appTheme.themeColor , BlendMode.color))
@@ -113,7 +116,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         Get.back();
                       },
                       icon: Icon(Icons.arrow_back,
-                        color: (Config.app_client_name == "themfbox") ? Colors.white : Config.appTheme.themeColor ,)),
+                        color: (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? Colors.white : Config.appTheme.themeColor ,)),
                 ),
 
                 SizedBox(height: devHeight * 0.1),
@@ -121,13 +124,13 @@ class _ChangePasswordState extends State<ChangePassword> {
                 // SizedBox(height: devHeight * 0.06),
                 Text("Change Password",
                     style: TextStyle(
-                        color: (Config.app_client_name == "themfbox") ? Colors.white : Config.appTheme.themeColor ,
+                        color: (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? Colors.white : Config.appTheme.themeColor ,
                         fontWeight: FontWeight.bold,
                         fontSize: 20)),
                 SizedBox(height: devHeight * 0.01),
                 Text("Please enter new password details",
                     style: TextStyle(
-                      color: (Config.app_client_name == "themfbox") ? Colors.white : Config.appTheme.themeColor ,
+                      color: (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? Colors.white : Config.appTheme.themeColor ,
                     )),
                 SizedBox(height: devHeight * 0.05),
                 Expanded(
@@ -202,21 +205,29 @@ class _ChangePasswordState extends State<ChangePassword> {
                           width: devWidth,
                           child: TextButton(
                             onPressed: () async {
-                              if (oldPassword.isEmpty ||
-                                  newPassword.isEmpty ||
-                                  confirmPassword.isEmpty) {
-                                Utils.showError(
-                                    context, "All Fields are mandatory");
+
+                              if(oldPassword.isEmpty){
+                                Utils.showError(context, "Please enter the old password");
                                 return;
                               }
+
+                              if(newPassword.isEmpty){
+                                Utils.showError(context, "Please enter the new password");
+                                return;
+                              }
+
+                              if(confirmPassword.isEmpty){
+                                Utils.showError(context, "Please enter the confirm password");
+                                return;
+                              }
+
                               if (newPassword != confirmPassword) {
-                                Utils.showError(context, "Password Mismatch");
+                                Utils.showError(context, "New password and confirm password are not matched");
                                 return;
                               }
 
                               if (newPassword.length < 6) {
-                                Utils.showError(context,
-                                    "Password must be atleast 6 characters");
+                                Utils.showError(context, "Password must be atleast 6 characters");
                                 return;
                               }
 
@@ -230,9 +241,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                                 Utils.showError(context, "${data['msg']}");
                                 return;
                               } else {
-                                EasyLoading.showInfo("${data['msg']}",
-                                    duration: Duration(seconds: 3));
-                                Get.back();
+                                EasyLoading.showInfo("${data['msg']}", duration: Duration(seconds: 3));
+                                Get.to(Login());
                               }
 
                               EasyLoading.dismiss();
@@ -242,7 +252,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8), // <-- Radius
                                 ),
-                                backgroundColor: Colors.black,
+                                backgroundColor: Config.appTheme.universalTitle,
                                 foregroundColor: Colors.white
                             ),
                             child: Text("Continue",

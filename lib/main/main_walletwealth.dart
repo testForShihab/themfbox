@@ -12,8 +12,8 @@ void main() {
     ..apiKey = "ab3f35d4-93af-434c-9ab9-7aa33ce8f85f"
     ..theme = ThemeData.dark()
     ..appTheme = BlueTheme()
-    ..supportEmail = "sridharan@walletwealth.co.in"
-    ..supportMobile = "+91 9940116967"
+    ..supportEmail = ""
+    ..supportMobile = ""
     ..privacyPolicy = "https://www.walletwealth.co.in/privacy_policy"
     ..pdfURL = "https://api.themfbox.com");
 }

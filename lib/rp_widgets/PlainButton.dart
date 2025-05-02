@@ -3,11 +3,12 @@ import 'package:mymfbox2_0/utils/AppFonts.dart';
 import 'package:mymfbox2_0/utils/Config.dart';
 
 class PlainButton extends StatelessWidget {
-  const PlainButton(
-      {super.key, required this.text, this.onPressed, this.padding});
+   PlainButton(
+      {super.key, required this.text, this.onPressed, this.padding,this.color});
   final String text;
   final Function()? onPressed;
   final EdgeInsets? padding;
+  Color? color = Config.appTheme.buttonColor;
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +20,14 @@ class PlainButton extends StatelessWidget {
         padding: padding ??
             EdgeInsets.symmetric(horizontal: devWidth * 0.15, vertical: 2),
         decoration: BoxDecoration(
-            border: Border.all(color: Config.appTheme.themeColor),
+            border: Border.all(color: (color != Config.appTheme.buttonColor) ? Config.appTheme.themeColor:Config.appTheme.buttonColor),
             borderRadius: BorderRadius.circular(10)),
         child: Center(
           child: Text(
             text,
             textAlign: TextAlign.center,
             style: AppFonts.f50014Black
-                .copyWith(color: Config.appTheme.themeColor),
+                .copyWith(color: color),
           ),
         ),
       ),
@@ -35,12 +36,13 @@ class PlainButton extends StatelessWidget {
 }
 
 class RpFilledButton extends StatelessWidget {
-  const RpFilledButton(
-      {super.key, this.onPressed, required this.text, this.padding});
+   RpFilledButton(
+      {super.key, this.onPressed, required this.text, this.padding,this.color});
 
   final Function()? onPressed;
   final EdgeInsets? padding;
   final String text;
+  Color? color;
   @override
   Widget build(BuildContext context) {
     double devWidth = MediaQuery.sizeOf(context).width;
@@ -51,7 +53,7 @@ class RpFilledButton extends StatelessWidget {
           padding: padding ??
               EdgeInsets.symmetric(horizontal: devWidth * 0.15, vertical: 2),
           decoration: BoxDecoration(
-              color: Config.appTheme.themeColor,
+              color: (color == null) ? Config.appTheme.themeColor : color,
               borderRadius: BorderRadius.circular(10)),
           child: Center(
               child: Text(

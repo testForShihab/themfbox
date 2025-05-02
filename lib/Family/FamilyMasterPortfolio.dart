@@ -340,7 +340,7 @@ class _FamilyMasterPortfolioState extends State<FamilyMasterPortfolio> {
       child: Container(
         margin: EdgeInsets.fromLTRB(16, 10, 16, 16),
         decoration: BoxDecoration(
-          color: Config.appTheme.overlay85,
+          color: Config.appTheme.whiteOverlay,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(

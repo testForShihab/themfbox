@@ -556,7 +556,7 @@ class _TaxPackageState extends State<TaxPackage> {
                                   borderRadius: BorderRadius.circular(
                                       8), // Set the desired corner radius
                                 ),
-                                backgroundColor: Config.appTheme.themeColor,
+                                backgroundColor: Config.appTheme.buttonColor,
                                 foregroundColor: Colors.white,
                               ),
                               child: Text(
@@ -602,7 +602,7 @@ class _TaxPackageState extends State<TaxPackage> {
                                   borderRadius: BorderRadius.circular(
                                       8), // Set the desired corner radius
                                 ),
-                                backgroundColor: Config.appTheme.themeColor,
+                                backgroundColor: Config.appTheme.buttonColor,
                                 foregroundColor: Colors.white,
                               ),
                               child: Text(
@@ -1118,6 +1118,7 @@ class _TaxPackageState extends State<TaxPackage> {
   Widget getCancelApplyButton(ButtonType type) {
     if (type == ButtonType.plain)
       return PlainButton(
+        color: Config.appTheme.buttonColor,
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
         text: "CANCEL",
         onPressed: () {
@@ -1126,6 +1127,7 @@ class _TaxPackageState extends State<TaxPackage> {
       );
     else
       return RpFilledButton(
+        color: Config.appTheme.buttonColor,
         text: "APPLY",
         onPressed: () async {
           pageId = 1;

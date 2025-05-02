@@ -776,7 +776,7 @@ class _PortfolioAnalysisReportState extends State<PortfolioAnalysisReport> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            backgroundColor: Config.appTheme.themeColor,
+                            backgroundColor: Config.appTheme.buttonColor,
                             foregroundColor: Colors.white,
                           ),
                           child: Text("SUBMIT"),
@@ -1030,7 +1030,7 @@ class _PortfolioAnalysisReportState extends State<PortfolioAnalysisReport> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          backgroundColor: Config.appTheme.themeColor,
+                          backgroundColor: Config.appTheme.buttonColor,
                           foregroundColor: Colors.white,
                         ),
                         child: Text("SUBMIT"),
@@ -1482,7 +1482,7 @@ class _PortfolioAnalysisReportState extends State<PortfolioAnalysisReport> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            backgroundColor: Config.appTheme.themeColor,
+                            backgroundColor: Config.appTheme.buttonColor,
                             foregroundColor: Colors.white,
                           ),
                           child: Text("SUBMIT"),

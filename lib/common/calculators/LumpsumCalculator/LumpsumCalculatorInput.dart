@@ -80,10 +80,12 @@ class _LumpsumCalculatorInputState extends State<LumpsumCalculatorInput> {
                     children: [
                       SizedBox(height: 16),
                       AmountInputCard(
-                        title: "How much lumpsum amount you want to invest ?",
+                        title: "How much lumpsum amount you want to invest (Rs)",
                         inputFormatters: [
+
                           MaxValueFormatter(
                             1000000000,
+                            isDecimal: false,
                             isReadableInput: true,
                           ),
                           NoLeadingZeroInputFormatter(),
@@ -101,7 +103,7 @@ class _LumpsumCalculatorInputState extends State<LumpsumCalculatorInput> {
                       ),
                       SizedBox(height: 16),
                       SliderInputCard(
-                        title: "After how many years you need this amount?",
+                        title: "How many years after you need this amount (Years)",
                         controller: yearsNeedAmtController,
                         sliderValue: yearsNeedAmt!.toDouble(),
                         inputFormatters: [
@@ -132,12 +134,12 @@ class _LumpsumCalculatorInputState extends State<LumpsumCalculatorInput> {
                       ),
                       SizedBox(height: 16),
                       SliderInputCard(
-                          title: "Expected Rate of Return",
+                          title: "Expected rate of return (% per annum)",
                           controller: expectRateReturnController,
                           sliderValue: expectRateReturn.toDouble(),
-                          sliderMaxValue: 50,
+                          sliderMaxValue: 25,
                           inputFormatters: [
-                            MaxValueFormatter(50),
+                            MaxValueFormatter(25),
                             SingleDecimalFormatter(),
                           ],
                           suffixText: "%",
@@ -147,7 +149,7 @@ class _LumpsumCalculatorInputState extends State<LumpsumCalculatorInput> {
                             bool isValid = isValidSlider(temp);
                             if (!isValid) {
                               Utils.showError(context,
-                                  "Expected Rate of Return should be in-between 0-100");
+                                  "Expected Rate of Return should be in-between 0-25");
                               return;
                             }
                             expectRateReturn = temp;
@@ -226,7 +228,7 @@ class _LumpsumCalculatorInputState extends State<LumpsumCalculatorInput> {
   }
 
   bool isValidSlider(num temp) {
-    if (temp < 0 || temp > 100)
+    if (temp < 0 || temp > 25)
       return false;
     else
       return true;

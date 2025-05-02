@@ -11,8 +11,8 @@ void main() {
         "https://themfbox.com/resources/bootstrap/images/manchesterfinserv_logo.png"
     ..apiKey = "89ed784a-9dbb-480e-8236-711b9cc17cde"
     ..appTheme = PurpleTheme()
-    ..supportEmail = "antonyraj@manchesterfinserv.com"
-    ..supportMobile = "+91 9894919018"
+    ..supportEmail = ""
+    ..supportMobile = ""
     ..privacyPolicy = "https://www.manchesterfinserv.com/privacy.php"
     ..pdfURL = "https://api.themfbox.com");
 }

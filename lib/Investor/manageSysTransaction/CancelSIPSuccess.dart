@@ -80,6 +80,7 @@ class _CancelSIPSuccessState extends State<CancelSIPSuccess> {
                     SizedBox(height: 16),
                     SizedBox(height: 16),
                     RpFilledButton(
+                      color: Config.appTheme.buttonColor,
                       text: "DASHBOARD",
                       onPressed: () {
                         Get.back();

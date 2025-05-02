@@ -374,7 +374,7 @@ class _BranchWiseAumState extends State<BranchWiseAum> {
                       text: "View All Investors",
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Config.appTheme.themeColor,
+                        color: Config.appTheme.buttonColor,
                       ),
                       onTap: () {
                         Get.to(() => AllInvestor(
@@ -485,7 +485,7 @@ class _BranchWiseAumState extends State<BranchWiseAum> {
               initialLabelIndex: monthList.indexOf(selectedMonth),
               onToggle: onToggle,
               labels: monthList,
-              activeBgColor: [Colors.black],
+              activeBgColor: [Config.appTheme.universalTitle],
               inactiveBgColor: Colors.white,
               borderColor: [Colors.grey.shade300],
               borderWidth: 1,

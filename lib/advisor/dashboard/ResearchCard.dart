@@ -72,9 +72,13 @@ class ResearchCard extends StatelessWidget {
                                             0.9
                                           ],
                                         colors: [
-                                            Colors.black.withOpacity(.9),
+                                          Config.appTheme.buttonLiteColor
+                                              .withOpacity(.9),
+                                          Config.appTheme.themeColor
+                                              .withOpacity(.1)
+                                            /*Colors.black.withOpacity(.9),
                                             Config.appTheme.universalTitle
-                                                .withOpacity(.1)
+                                                .withOpacity(.1)*/
                                           ]),
                                 borderRadius: BorderRadius.only(
                                     bottomRight: Radius.circular(50),

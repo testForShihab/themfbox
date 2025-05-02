@@ -612,7 +612,7 @@ class _AumDetailsState extends State<AumDetails> {
                     await fetchChartData();
                   },
                   labels: monthList,
-                  activeBgColor: [Colors.black],
+                  activeBgColor: [Config.appTheme.buttonColor,],
                   inactiveBgColor: Colors.white,
                   borderColor: [Colors.grey.shade300],
                   borderWidth: 1,

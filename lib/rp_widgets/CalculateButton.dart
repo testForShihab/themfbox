@@ -25,7 +25,7 @@ class CalculateButton extends StatelessWidget {
           child: ElevatedButton(
               onPressed: onPress,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Config.appTheme.themeColor,
+                backgroundColor: Config.appTheme.buttonColor,
                 foregroundColor: Colors.white,
                 shape: shape,
               ),

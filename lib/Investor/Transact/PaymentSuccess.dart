@@ -133,6 +133,7 @@ class _PaymentSuccessState extends State<PaymentSuccess> {
                   ),
                   SizedBox(height: 16),
                   RpFilledButton(
+                    color: Config.appTheme.buttonColor,
                     text: "DASHBOARD",
                     padding: EdgeInsets.symmetric(vertical: 14),
                   ),

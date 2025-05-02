@@ -568,6 +568,7 @@ class _AllInvestorState extends State<AllInvestor> {
                         Expanded(
                             child: PlainButton(
                           text: "CLEAR ALL",
+                              color: Config.appTheme.buttonColor,
                           padding: EdgeInsets.symmetric(vertical: 8),
                           onPressed: () async {
                             Get.back();
@@ -584,6 +585,7 @@ class _AllInvestorState extends State<AllInvestor> {
                         Expanded(
                           child: RpFilledButton(
                             text: "APPLY",
+                            color: Config.appTheme.buttonColor,
                             padding: EdgeInsets.symmetric(vertical: 8),
                             onPressed: () async {
                               Get.back();
@@ -982,7 +984,7 @@ class _AllInvestorState extends State<AllInvestor> {
                           },
                           trailing:
                               Icon(Icons.arrow_forward, color: Colors.white),
-                          bgColor: Config.appTheme.themeColor),
+                          bgColor: Config.appTheme.buttonColor),
                       SizedBox(height: 15),
                       Row(
                         //mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -991,7 +993,7 @@ class _AllInvestorState extends State<AllInvestor> {
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 border: Border.all(
-                                    color: Config.appTheme.themeColor,
+                                    color: Config.appTheme.buttonColor,
                                     width: 1.5),
                                 borderRadius: BorderRadius.circular(10)),
                             width: devWidth * 0.29,
@@ -1011,7 +1013,7 @@ class _AllInvestorState extends State<AllInvestor> {
                                             "Are you sure to download the PDF?",
                                             style: AppFonts.f40016.copyWith(
                                                 color:
-                                                    Config.appTheme.themeColor,
+                                                    Config.appTheme.buttonColor,
                                                 fontSize: 16)),
                                         actions: [
                                           TextButton(
@@ -1039,7 +1041,7 @@ class _AllInvestorState extends State<AllInvestor> {
                                             child: Text("Download",
                                                 style: AppFonts.f40016.copyWith(
                                                     color: Config
-                                                        .appTheme.themeColor,
+                                                        .appTheme.buttonColor,
                                                     fontSize: 16)),
                                           ),
                                         ],
@@ -1066,13 +1068,13 @@ class _AllInvestorState extends State<AllInvestor> {
                                   SizedBox(width: 5),
                                   Icon(
                                     Icons.download_sharp,
-                                    color: Config.appTheme.themeColor,
+                                    color: Config.appTheme.buttonColor,
                                     size: 18,
                                   ),
                                   SizedBox(width: 5),
                                   Text("Portfolio",
                                       style: AppFonts.f40016.copyWith(
-                                          color: Config.appTheme.themeColor,
+                                          color: Config.appTheme.buttonColor,
                                           fontSize: 16)),
                                   SizedBox(width: 8),
                                 ],
@@ -1084,7 +1086,7 @@ class _AllInvestorState extends State<AllInvestor> {
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 border: Border.all(
-                                    color: Config.appTheme.themeColor,
+                                    color: Config.appTheme.buttonColor,
                                     width: 1.5),
                                 borderRadius: BorderRadius.circular(10)),
                             width: devWidth * 0.29,
@@ -1172,13 +1174,13 @@ class _AllInvestorState extends State<AllInvestor> {
                                   SizedBox(width: 5),
                                   Icon(
                                     Icons.email,
-                                    color: Config.appTheme.themeColor,
+                                    color: Config.appTheme.buttonColor,
                                     size: 18,
                                   ),
                                   SizedBox(width: 5),
                                   Text("Portfolio",
                                       style: AppFonts.f40016.copyWith(
-                                          color: Config.appTheme.themeColor,
+                                          color: Config.appTheme.buttonColor,
                                           fontSize: 16)),
                                   SizedBox(width: 8),
                                 ],
@@ -1190,7 +1192,7 @@ class _AllInvestorState extends State<AllInvestor> {
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 border: Border.all(
-                                    color: Config.appTheme.themeColor,
+                                    color: Config.appTheme.buttonColor,
                                     width: 1.5),
                                 borderRadius: BorderRadius.circular(10)),
                             width: devWidth * 0.29,
@@ -1220,12 +1222,12 @@ class _AllInvestorState extends State<AllInvestor> {
                                   WhatsappIcon(
                                     height: 18.0,
                                     width: 18.0,
-                                    color: Config.appTheme.themeColor,
+                                    color: Config.appTheme.buttonColor,
                                   ),
                                   SizedBox(width: 5),
                                   Text("Portfolio",
                                       style: AppFonts.f40016.copyWith(
-                                          color: Config.appTheme.themeColor,
+                                          color: Config.appTheme.buttonColor,
                                           fontSize: 16)),
                                   SizedBox(width: 8),
                                 ],
@@ -1257,7 +1259,6 @@ class _AllInvestorState extends State<AllInvestor> {
           content: TextFormField(
             maxLength: 10,
               controller: numberController,
-
               keyboardType: TextInputType.phone,
               decoration: InputDecoration(
                 counterText: "",
@@ -1334,6 +1335,7 @@ class _AllInvestorState extends State<AllInvestor> {
 
   Future<void> _sendMessage(String phoneNumber,  AllInvestorsPojo userData) async {
     print("whats app message $phoneNumber");
+    await getWhatsappShareLink(user_id: userData.id!);
 
     await getMutualFundPortfolio(userData.id!);
    // await getMutualFundPortfolio(userData.id!);

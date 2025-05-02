@@ -152,6 +152,7 @@ class _BseLumpsumPaymentSuccessState extends State<BseLumpsumPaymentSuccess> {
 
                     SizedBox(height: 16),
                     RpFilledButton(
+                      color: Config.appTheme.buttonColor,
                       text: "DASHBOARD",
                       onPressed: () {
                         Get.offAll(InvestorDashboard());

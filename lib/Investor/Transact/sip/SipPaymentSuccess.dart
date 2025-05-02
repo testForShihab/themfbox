@@ -198,6 +198,7 @@ class _SipPaymentSuccessState extends State<SipPaymentSuccess> {
                           ),
                           SizedBox(height: 16),
                           RpFilledButton(
+                            color: Config.appTheme.buttonColor,
                             text: "DASHBOARD",
                             onPressed: () {
                               Get.back();
@@ -354,7 +355,7 @@ class _SipPaymentSuccessState extends State<SipPaymentSuccess> {
         height: 45,
         child:ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Config.appTheme.themeColor,
+            backgroundColor: Config.appTheme.buttonColor,
             foregroundColor: Colors.white,
           ),
           onPressed: () async {

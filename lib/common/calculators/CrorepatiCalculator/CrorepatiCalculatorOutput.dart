@@ -102,7 +102,7 @@ class _CrorepatiCalculatorOutputState extends State<CrorepatiCalculatorOutput> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Target Amount (Inflation adjusted)",
+                          "Your targeted Wealth Amount (Inflation adjusted)",
                           style: AppFonts.f40013,
                         ),
                       ],
@@ -127,7 +127,7 @@ class _CrorepatiCalculatorOutputState extends State<CrorepatiCalculatorOutput> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ColumnText(
-                            title: "Period",
+                            title: "Number of years you need to save",
                             value:
                                 "${crorepatiCalculatorResult['years']} Years"),
                         ColumnText(
@@ -159,7 +159,7 @@ class _CrorepatiCalculatorOutputState extends State<CrorepatiCalculatorOutput> {
                     children: [
                       Expanded(
                         child: Text(
-                          "Growth of Current Savings",
+                          "Growth of your Savings Amount",
                           style: AppFonts.f50014Black,
                         ),
                       )
@@ -190,7 +190,7 @@ class _CrorepatiCalculatorOutputState extends State<CrorepatiCalculatorOutput> {
                     children: [
                       Expanded(
                         child: Text(
-                          "Final Target Amount",
+                          "Final Targeted Amount",
                           style: AppFonts.f50014Black,
                         ),
                       ),
@@ -201,7 +201,7 @@ class _CrorepatiCalculatorOutputState extends State<CrorepatiCalculatorOutput> {
                     children: [
                       Expanded(
                         child: Text(
-                          "(Minus growth of current savings)",
+                          "(Minus growth of your savings amount)",
                           style: AppFonts.f40013,
                         ),
                       ),
@@ -228,7 +228,7 @@ class _CrorepatiCalculatorOutputState extends State<CrorepatiCalculatorOutput> {
                 children: [
                   Expanded(
                     child: Text(
-                      "Monthly SIP Required",
+                      "Monthly SIP investment required \nto become Crorepati",
                       style: AppFonts.f50014Black,
                     ),
                   ),
@@ -262,7 +262,7 @@ class _CrorepatiCalculatorOutputState extends State<CrorepatiCalculatorOutput> {
     List<SipData> chartData = [];
 
     chartData.add(SipData(
-      category: 'Total Amount Invested',
+      category: 'Total Amount Invested through SIP in ${crorepatiCalculatorResult['years']} years',
       percentage: crorepatiCalculatorResult['invested_amount'].toDouble(),
     ));
 
@@ -323,11 +323,11 @@ class _CrorepatiCalculatorOutputState extends State<CrorepatiCalculatorOutput> {
                           TextSpan(
                             text: "${sipData.category}  ",
                           ),
-                          if (index == 0)
+                         /* if (index == 0)
                             TextSpan(
                                 text:
                                     "\n(Through SIP In ${crorepatiCalculatorResult['years']} Years)",
-                                style: AppFonts.f40013),
+                                style: AppFonts.f40013),*/
                         ],
                       ),
                     ),

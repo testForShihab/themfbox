@@ -437,7 +437,7 @@ class _BirthdayAnniversaryState extends State<BirthdayAnniversary> {
                           borderRadius: BorderRadius.circular(
                               8), // Set the desired corner radius
                         ),
-                        backgroundColor: Config.appTheme.themeColor,
+                        backgroundColor: Config.appTheme.buttonColor,
                         foregroundColor: Colors.white,
                       ),
                       child: Text("SEND EMAIL(${checkeduserIds.length})"),
@@ -676,10 +676,18 @@ class _BirthdayAnniversaryState extends State<BirthdayAnniversary> {
     );
   }
 
-Future<void> _sendBirthdayMessage(String userName, String userMobile,String companyName,String companyEmail) async {
+Future<void> _sendBirthdayMessage(String userName, String userMobile, String companyName, String companyEmail) async {
   if (userMobile.isEmpty) {
     throw 'User mobile is null or empty';
   }
+
+
+  String formattedMobile = userMobile;
+  if (!userMobile.startsWith('91')) {
+    formattedMobile = '91$userMobile';
+  }
+
+  print("formatted mobile number $formattedMobile");
 
   var message = '''Greetings for the Day!
 
@@ -694,7 +702,7 @@ Write to us at $companyEmail
 
 Happy Investing!
 Team $companyName''';
-  var whatsappUrl = "https://wa.me/$userMobile?text=${Uri.encodeComponent(message)}";
+  var whatsappUrl = "https://wa.me/$formattedMobile?text=${Uri.encodeComponent(message)}";
 
   await launch(whatsappUrl);
   print("whatsappUrl $whatsappUrl");
@@ -714,7 +722,7 @@ Team $companyName''';
         return StatefulBuilder(
           builder: (context, bottomState) {
             return SizedBox(
-              height: devHeight * 0.36,
+              height: devHeight * 0.37,
               child: Column(
                 children: [
                   Container(

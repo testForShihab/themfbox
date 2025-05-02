@@ -126,7 +126,7 @@ class _CalculatorsState extends State<Calculators> {
                                 topArcColors: topArcColors,
                               ),
                               FundCard(
-                                title: "Retirement\nCalculator",
+                                title: "Retirement\nPlanning\nCalculator",
                                 icon: Image.asset(
                                     'assets/retirement_planner.png',
                                     color: Config.appTheme.themeColor),

@@ -358,7 +358,7 @@ class _RmWiseAumState extends State<RmWiseAum> {
                       text: "View All Investors",
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Config.appTheme.themeColor,
+                        color: Config.appTheme.buttonColor,
                       ),
                       onTap: () {
                         Get.to(() => AllInvestor(

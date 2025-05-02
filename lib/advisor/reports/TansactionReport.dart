@@ -1006,7 +1006,7 @@ class _TransactionReportState extends State<TransactionReport> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            backgroundColor: Config.appTheme.themeColor,
+            backgroundColor: Config.appTheme.buttonColor,
             foregroundColor: Colors.white,
           ),
           child: Text("SUBMIT"),
@@ -1555,12 +1555,14 @@ class _TransactionReportState extends State<TransactionReport> {
   Widget getCancelApplyButton(ButtonType type) {
     if (type == ButtonType.plain)
       return PlainButton(
+        color: Config.appTheme.buttonColor,
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
         text: "CLEAR ALL",
         onPressed: () {},
       );
     else
       return RpFilledButton(
+        color: Config.appTheme.buttonColor,
         text: "APPLY",
         onPressed: () {
           Get.back();

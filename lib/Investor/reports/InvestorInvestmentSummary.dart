@@ -500,6 +500,7 @@ class _InvestorInvestmentSummaryState extends State<InvestorInvestmentSummary> {
   Widget getCancelApplyButton(ButtonType type) {
     if (type == ButtonType.plain)
       return PlainButton(
+        color: Config.appTheme.buttonColor,
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
         text: "CANCEL",
         onPressed: () {
@@ -508,6 +509,7 @@ class _InvestorInvestmentSummaryState extends State<InvestorInvestmentSummary> {
       );
     else
       return RpFilledButton(
+        color: Config.appTheme.buttonColor,
         text: "APPLY",
         onPressed: () {
           invSummary.msg = null;
@@ -1693,6 +1695,8 @@ class _InvestorInvestmentSummaryState extends State<InvestorInvestmentSummary> {
                       user_mobile: mobile,
                       type: type,
                       client_name: client_name,
+                      folio_type: '',
+                      selected_date: '',
                       report_type: '');
                   if (data['status'] != 200) {
                     Utils.showError(context, data['msg']);

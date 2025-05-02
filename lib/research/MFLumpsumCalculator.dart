@@ -90,10 +90,10 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
       };
       fundList.add(fundData);
       schemesLoaded = true;
-      print("selectedFund $selectedFund");
-      print("fund name ${fund['scheme_amfi']}");
+      //print("selectedFund $selectedFund");
+     // print("fund name ${fund['scheme_amfi']}");
     });
-    print("fundList.length ${fundList.length}");
+   // print("fundList.length ${fundList.length}");
     return 0;
   }
 
@@ -121,14 +121,14 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
       }
     }
 
-    print("Containing Schemes:");
+    //print("Containing Schemes:");
     containingSchemes.forEach((scheme) {
-      print(scheme['scheme']);
+     // print(scheme['scheme']);
     });
 
-    print("Not Containing Schemes:");
+    //print("Not Containing Schemes:");
     notContainingSchemes.forEach((scheme) {
-      print(scheme['scheme']);
+     // print(scheme['scheme']);
     });
     return 0;
   }
@@ -316,7 +316,7 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
                           padding:
                               EdgeInsets.symmetric(horizontal: 18, vertical: 7),
                           decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: Config.appTheme.universalTitle,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text("Submit",
@@ -668,7 +668,7 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
     List<Map<String, dynamic>> selectedFundDetails = [];
 
     TextEditingController searchController = TextEditingController();
-    print("fundList.length bottomsheet ${fundList.length}");
+   // print("fundList.length bottomsheet ${fundList.length}");
 
     // Populate selected schemes
     if (selectedValues.isNotEmpty) {
@@ -730,7 +730,7 @@ class _MFLumpsumCalculatorState extends State<MFLumpsumCalculator> {
                         EasyLoading.dismiss();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Config.appTheme.themeColor,
+                        backgroundColor: Config.appTheme.buttonColor,
                         foregroundColor: Colors.white,
                       ),
                       child: Text('Apply'),

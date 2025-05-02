@@ -299,7 +299,7 @@ class _SipPaymentState extends State<SipPayment> {
                         bankExpansionTile(context),
                         SizedBox(height: 16),
                         mandateExpansionTile(context),
-                        if (newMandate && client_code_map['bse_nse_mfu_flag'].toUpperCase() == "NSE") ...registerMandate(),
+                       // if (newMandate && client_code_map['bse_nse_mfu_flag'].toUpperCase() == "NSE") ...registerMandate(),
                        // DottedLine(verticalPadding: 16),
                         SizedBox(height: 16),
                         arnExpansionTile(),
@@ -906,9 +906,9 @@ class _SipPaymentState extends State<SipPayment> {
           ),
           childrenPadding: EdgeInsets.only(bottom: 16, right: 16),
           children: [
-            if (mandateList.isEmpty && (client_code_map['bse_nse_mfu_flag'] == "NSE"))
+           /* if (mandateList.isEmpty && (client_code_map['bse_nse_mfu_flag'] == "NSE"))
               newMandateTile()
-            else
+            else*/
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),

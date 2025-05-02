@@ -286,58 +286,58 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
                 ],
                 foregroundColor: Colors.white),
             body: SideBar(
-              child: Column(
-                children: [
-                  mfSummaryCard(mfSummary),
-                  Container(
-                    height: 125,
-                    color: Config.appTheme.themeColor,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        SizedBox(width: 16),
-                        sipSummaryCard(),
-                        stpSummaryCard(),
-                        swpSummaryCard(),
-                      ],
+                child: Column(
+                  children: [
+                    mfSummaryCard(mfSummary),
+                    Container(
+                      height: 125,
+                      color: Config.appTheme.themeColor,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          SizedBox(width: 16),
+                          sipSummaryCard(),
+                          stpSummaryCard(),
+                          swpSummaryCard(),
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
-                    child: Row(
-                      children: [
-                        Text("${schemeList.length} Items", style: f40012),
-                        Spacer(),
-                        SortButton(onTap: () {
-                          showSortFilter();
-                        }),
-                        /*SizedBox(width: 10),
-                        SortButton(
-                          onTap: () {
-                            currentIndex++;
-                            if (currentIndex > 2) currentIndex = 0;
-                            selectedView =
-                                viewOptions.keys.elementAt(currentIndex);
-                            setState(() {});
-                          },
-                          title: selectedView,
-                        ),*/
-                      ],
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                      child: Row(
+                        children: [
+                          Text("${schemeList.length} Items", style: f40012),
+                          Spacer(),
+                          SortButton(onTap: () {
+                            showSortFilter();
+                          }),
+                          /*SizedBox(width: 10),
+                          SortButton(
+                            onTap: () {
+                              currentIndex++;
+                              if (currentIndex > 2) currentIndex = 0;
+                              selectedView =
+                                  viewOptions.keys.elementAt(currentIndex);
+                              setState(() {});
+                            },
+                            title: selectedView,
+                          ),*/
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: schemeList.length,
-                      itemBuilder: (context, index) {
-                        return schemeCard(schemeList[index]);
-                      },
+                    Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: schemeList.length,
+                        itemBuilder: (context, index) {
+                          return schemeCard(schemeList[index]);
+                        },
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 16),
-                ],
+                    SizedBox(height: 16),
+                  ],
+                ),
               ),
-            ),
           );
         });
   }
@@ -836,6 +836,7 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
                               onTap: () => Get.back(),
                             ),
                             RpButton(
+
                               isFilled: true,
                               onTap: () {
                                 schemeList = [];
@@ -859,13 +860,13 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: devWidth * 0.15, vertical: 2),
       decoration: BoxDecoration(
-          border: Border.all(color: Config.appTheme.themeColor),
+          border: Border.all(color: Config.appTheme.buttonColor),
           borderRadius: BorderRadius.circular(10)),
       child: Center(
         child: Text(
           "Cancel",
           style:
-              AppFonts.f50014Black.copyWith(color: Config.appTheme.themeColor),
+              AppFonts.f50014Black.copyWith(color: Config.appTheme.buttonColor),
         ),
       ),
     );
@@ -882,7 +883,7 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
           padding:
               EdgeInsets.symmetric(horizontal: devWidth * 0.10, vertical: 25),
           decoration: BoxDecoration(
-              color: Config.appTheme.themeColor,
+              color: Config.appTheme.buttonColor,
               borderRadius: BorderRadius.circular(10)),
           child: Center(
               child: Text(
@@ -922,7 +923,7 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
       child: Container(
         margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
         decoration: BoxDecoration(
-            color: Config.appTheme.overlay85,
+            color: Config.appTheme.whiteOverlay,
             borderRadius: BorderRadius.circular(10)),
         child: (isLoading)
             ? Utils.shimmerWidget(220, margin: EdgeInsets.zero)
@@ -1020,7 +1021,7 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
         margin: EdgeInsets.fromLTRB(0, 0, 16, 16),
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
-            color: Config.appTheme.overlay85,
+            color: Config.appTheme.whiteOverlay,
             borderRadius: BorderRadius.circular(10)),
         child: (isLoading)
             ? Utils.shimmerWidget(100, margin: EdgeInsets.zero)
@@ -1077,7 +1078,7 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
         margin: EdgeInsets.fromLTRB(0, 0, 16, 16),
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
-            color: Config.appTheme.overlay85,
+            color: Config.appTheme.whiteOverlay,
             borderRadius: BorderRadius.circular(10)),
         child: (isLoading)
             ? Utils.shimmerWidget(100, margin: EdgeInsets.zero)
@@ -1134,7 +1135,7 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
         margin: EdgeInsets.fromLTRB(0, 0, 16, 16),
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
-            color: Config.appTheme.overlay85,
+            color: Config.appTheme.whiteOverlay,
             borderRadius: BorderRadius.circular(10)),
         child: (isLoading)
             ? Utils.shimmerWidget(100, margin: EdgeInsets.zero)
@@ -1272,23 +1273,25 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
                   rpRow(
                       lhead: "XIRR (%)",
                       lSubHead: Utils.formatNumber(scheme.xirr),
-                      // rhead: (userData.oneDayChange == 1 ||
-                      //         ((keys.contains("adminAsInvestor")) ||
-                      //             (keys.contains("adminAsFamily")) != false))
-                      //     ? "1 Day Change"
-                      //     : "",
-                      // rSubHead: (userData.oneDayChange == 1 ||
-                      //         ((keys.contains("adminAsInvestor")) ||
-                      //             (keys.contains("adminAsFamily")) != false))
-                      //     ? "$rupee ${Utils.formatNumber(dayChange)}"
-                      //     : " ",
+                      rhead: (userData.oneDayChange == 1 ||
+                              ((keys.contains("adminAsInvestor")) ||
+                                  (keys.contains("adminAsFamily")) != false))
+                          ? "1 Day Change"
+                          : "",
+                      rSubHead: (userData.oneDayChange == 1 ||
+                              ((keys.contains("adminAsInvestor")) ||
+                                  (keys.contains("adminAsFamily")) != false))
+                          ? "$rupee ${Utils.formatNumber(dayChange)}"
+                          : " ",
                       titleStyle: AppFonts.f40014,
                       valueStyle: AppFonts.f50016Grey.copyWith(
                           color: (dayChange < 0)
                               ? Config.appTheme.defaultLoss
                               : Config.appTheme.defaultProfit),
                       chead: "",
-                      cSubHead: "", rhead: '', rSubHead: '')
+                      cSubHead: "",
+                      // rhead: '', rSubHead: ''
+                  )
                 ],
               ),
             ),

@@ -399,7 +399,7 @@ class _BranchWiseSipState extends State<BranchWiseSip> {
                       text: "View All RM",
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Config.appTheme.themeColor,
+                        color: Config.appTheme.buttonColor,
                       ),
                       onTap: () {
                         Get.back();

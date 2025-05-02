@@ -651,7 +651,7 @@ class _InvestorGroupMailState extends State<InvestorGroupMail> {
                           borderRadius: BorderRadius.circular(
                               8), // Set the desired corner radius
                         ),
-                        backgroundColor: Config.appTheme.themeColor,
+                        backgroundColor: Config.appTheme.buttonColor,
                         foregroundColor: Colors.white,
                       ),
                       child: Text("SEND EMAIL (${checkedEmails.length})"),
@@ -1636,6 +1636,7 @@ class _InvestorGroupMailState extends State<InvestorGroupMail> {
   Widget getCancelApplyButton(ButtonType type) {
     if (type == ButtonType.plain)
       return PlainButton(
+        color: Config.appTheme.buttonColor,
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
         text: "CANCEL",
         onPressed: () {
@@ -1645,6 +1646,7 @@ class _InvestorGroupMailState extends State<InvestorGroupMail> {
     else
       return RpFilledButton(
         text: "APPLY",
+        color: Config.appTheme.buttonColor,
         onPressed: () async {
           searchKey = "";
           pageId = 1;

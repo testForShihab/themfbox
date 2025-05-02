@@ -192,6 +192,7 @@ class _RedemptionCartState extends State<RedemptionCart> {
 
     if (type == ButtonType.plain) {
       return PlainButton(
+        color: Config.appTheme.buttonColor,
         text: text,
         padding: padding,
         onPressed: () {
@@ -200,6 +201,7 @@ class _RedemptionCartState extends State<RedemptionCart> {
       );
     } else {
       return RpFilledButton(
+        color: Config.appTheme.buttonColor,
         text: text,
         padding: padding,
         onPressed: () async {

@@ -233,9 +233,10 @@ class _SchemeWiseInvestorState extends State<SchemeWiseInvestor> {
                           EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       l1: name,
 
-                      l2: branch,
+                      l2: "Folio : ${scheme['folio_no']}",
                       r1: "$rupee ${Utils.formatNumber(aum, isAmount: true)}",
-                      r2: "${returns.toStringAsFixed(2)} %",
+                      //r2: "${returns.toStringAsFixed(2)} %",
+                      r2: "",
                     ), /*Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 12, vertical: 16),
@@ -366,6 +367,7 @@ class _SchemeWiseInvestorState extends State<SchemeWiseInvestor> {
                               child: PlainButton(
                             padding: EdgeInsets.symmetric(horizontal: 8),
                             text: "Clear All",
+                             color: Config.appTheme.buttonColor,
                             onPressed: () {
                               selectedBranchList = [];
                               selectedRmList = [];
@@ -378,6 +380,7 @@ class _SchemeWiseInvestorState extends State<SchemeWiseInvestor> {
                           Expanded(
                             child: RpFilledButton(
                               text: "Apply",
+                              color: Config.appTheme.buttonColor,
                               onPressed: () {
                                 applySort();
                                 if (selectedBranchList.isNotEmpty)
@@ -781,7 +784,7 @@ class _SchemeWiseInvestorState extends State<SchemeWiseInvestor> {
                             },
                             trailing:
                                 Icon(Icons.arrow_forward, color: Colors.white),
-                            bgColor: Config.appTheme.themeColor),
+                            bgColor: Config.appTheme.buttonColor),
                        // SizedBox(height: 15),
                        /* Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -984,53 +987,7 @@ class _SchemeWiseInvestorState extends State<SchemeWiseInvestor> {
     );
   }
 
-  appBar() {
-    return PreferredSize(
-        preferredSize: Size(devWidth, 210),
-        child: Container(
-          color: Colors.white,
-          padding: EdgeInsets.fromLTRB(0, 36, 0, 0),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        Get.back();
-                      },
-                      icon: Icon(Icons.arrow_back)),
-                  Text("Scheme Wise Investor", style: AppFonts.appBarTitle)
-                ],
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(16, 10, 16, 16),
-                child: Row(
-                  children: [
-                    //Image.network(widget.logo, height: 32),
-                    Utils.getImage(widget.logo, 32),
-                    SizedBox(width: 10),
-                    SizedBox(
-                      width: devWidth * 0.6,
-                      child: Text(widget.schemeFullname,
-                          style: AppFonts.f50014Black),
-                    ),
-                    Spacer(),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text("$rupee $amount", style: AppFonts.f50014Black),
-                        Text("($percentage%)", style: AppFonts.f40013),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              sortLine(),
-            ],
-          ),
-        ));
-  }
+
 
   Future<void> rpDownloadFile(
       {required String url, required BuildContext context}) async {

@@ -881,7 +881,7 @@ class _BanksandMandatesState extends State<BanksandMandates> {
                   showMandateBottomSheet(context, mandate, status);
                 },
                 style: TextButton.styleFrom(
-                    backgroundColor: Config.appTheme.themeColor,
+                    backgroundColor: Config.appTheme.buttonColor,
                     foregroundColor: Colors.white,
                     elevation: 3),
                 child: Text(

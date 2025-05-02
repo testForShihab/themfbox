@@ -10,6 +10,7 @@ import 'package:mymfbox2_0/utils/Config.dart';
 import 'package:mymfbox2_0/utils/Utils.dart';
 import 'package:mymfbox2_0/rp_widgets/RpTextField.dart';
 
+import '../api/ApiConfig.dart';
 import '../utils/Constants.dart';
 //import 'package:onesignal_flutter/onesignal_flutter.dart';
 
@@ -69,7 +70,7 @@ class _PasswordState extends State<Password> {
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
                         Config.appTheme.themeColor, BlendMode.color))
-                : (Config.app_client_name == "themfbox")
+                : (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32")
                     ? DecorationImage(
                       image: AssetImage("assets/green-bg.png"),
                       fit: BoxFit.cover,
@@ -109,14 +110,14 @@ class _PasswordState extends State<Password> {
                       child: (Config.appLogo.contains("http"))
                           ? Image.network(Config.appLogo,
                               height: setImageSize(100))
-                          : (Config.app_client_name == "themfbox")
+                          : (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32")
                               ? Image.asset(Config.appLogo) : Image.asset(Config.appLogo,
                                   width: setImageSize(350)),
                     ),
               SizedBox(height: devHeight * 0.06),
               Text("Login",
                   style: TextStyle(
-                      color: (Config.app_client_name == "themfbox")
+                      color: (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32")
                           ? Colors.white
                           : Config.appTheme.themeColor,
                       fontWeight: FontWeight.bold,
@@ -124,7 +125,7 @@ class _PasswordState extends State<Password> {
               SizedBox(height: devHeight * 0.01),
               Text("Welcome Back",
                   style: TextStyle(
-                      color: (Config.app_client_name == "themfbox")
+                      color: (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32")
                           ? Colors.white
                           : Config.appTheme.themeColor,
                       fontWeight: FontWeight.w500,
@@ -176,7 +177,7 @@ class _PasswordState extends State<Password> {
                         children: [
                           InkWell(
                             onTap: () async {
-                              Get.to(() => ForgotPassword());
+                              Get.to(() => ForgotPassword(mobile: mobile_pan,));
                             },
                             child: Text(
                               "Forgot Password",
@@ -230,7 +231,7 @@ class _PasswordState extends State<Password> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8), // <-- Radius
               ),
-              backgroundColor: Colors.black,
+              backgroundColor: Config.appTheme.universalTitle,
               foregroundColor: Colors.white),
           child: (isLoading.value)
               ? SpinKitThreeBounce(color: Colors.white, size: 22)

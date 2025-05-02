@@ -245,7 +245,7 @@ class _BranchRmAssociateBrokerageState
                                 selectedFinancialYear = val!;
 
                                 Get.back();
-                                branchList = [];
+                                // branchList = [];
                                 setState(() {});
                                 await reloadPage();
                               },
@@ -253,7 +253,7 @@ class _BranchRmAssociateBrokerageState
                                 selectedMonth = val!;
                                 selectedFinancialYear = "";
                                 Get.back();
-                                branchList = [];
+                                 // branchList = [];
                                 setState(() {});
                                 await reloadPage();
                               },
@@ -453,7 +453,7 @@ class _BranchRmAssociateBrokerageState
 
   Widget rmArea() {
     if (isLoading.value)
-      return Utils.shimmerWidget(200, margin: EdgeInsets.zero);
+      return Utils.shimmerWidget(devHeight, margin: EdgeInsets.zero);
     if (rmList.isEmpty)
       return NoData(
         text: "No RM Available",
@@ -478,7 +478,7 @@ class _BranchRmAssociateBrokerageState
 
   Widget associateArea() {
     if (isLoading.value)
-      return Utils.shimmerWidget(200, margin: EdgeInsets.zero);
+      return Utils.shimmerWidget(devHeight, margin: EdgeInsets.zero);
     if (associateList.isEmpty)
       return NoData(
         text: "No Associate Available ",

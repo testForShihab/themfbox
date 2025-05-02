@@ -360,7 +360,7 @@ class _MyWidgetState extends State<InvestorLoginCredential> {
                           borderRadius: BorderRadius.circular(
                               8), // Set the desired corner radius
                         ),
-                        backgroundColor: Config.appTheme.themeColor,
+                        backgroundColor: Config.appTheme.buttonColor,
                         foregroundColor: Colors.white,
                       ),
                       child: Text("SEND EMAIL(${checkedEmails.length})"),

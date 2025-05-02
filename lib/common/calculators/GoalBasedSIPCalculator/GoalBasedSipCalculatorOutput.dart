@@ -93,7 +93,7 @@ class _GoalBasedSipCalculatorOutputState
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Target Amount (Inflation Adjusted)",
+                          "Your targeted Amount (Inflation adjusted)",
                           style: AppFonts.f40013,
                         ),
                       ],
@@ -118,7 +118,7 @@ class _GoalBasedSipCalculatorOutputState
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ColumnText(
-                            title: "Period",
+                            title: "Number of years you need to save",
                             value: "${goalBasedResult['period']} Years"),
                         ColumnText(
                           title: "Exp Return",
@@ -145,7 +145,7 @@ class _GoalBasedSipCalculatorOutputState
                 children: [
                   Expanded(
                     child: Text(
-                      "Monthly SIP Required",
+                      "Monthly SIP investment required",
                       style: AppFonts.f50014Black,
                     ),
                   ),
@@ -180,7 +180,7 @@ class _GoalBasedSipCalculatorOutputState
     List<SipData> chartData = [];
 
     chartData.add(SipData(
-      category: 'Total Amount Invested',
+      category: 'Total Amount Invested \nthrough SIP in ${goalBasedResult['period']} years',
       percentage: goalBasedResult['invested_amount'].toDouble(),
     ));
 
@@ -242,11 +242,11 @@ class _GoalBasedSipCalculatorOutputState
                         TextSpan(
                           text: "${sipData.category}  ",
                         ),
-                        if (index == 0)
+                        /*if (index == 0)
                           TextSpan(
                               text:
                                   "\n(Through SIP In ${goalBasedResult['period']} Years)",
-                              style: AppFonts.f40013),
+                              style: AppFonts.f40013),*/
                       ],
                     ),
                   ),

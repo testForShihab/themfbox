@@ -415,6 +415,7 @@ class _FamilyPortfolioAssetCategoryAllocationState
   Widget getCancelApplyButton(ButtonType type) {
     if (type == ButtonType.plain)
       return PlainButton(
+        color: Config.appTheme.buttonColor,
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
         text: "CLEAR ALL",
         onPressed: () {
@@ -425,6 +426,7 @@ class _FamilyPortfolioAssetCategoryAllocationState
       );
     else
       return RpFilledButton(
+        color: Config.appTheme.buttonColor,
         text: "APPLY",
         onPressed: () {
           famPortAssetCat.msg = null;

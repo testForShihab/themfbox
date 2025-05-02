@@ -7,11 +7,14 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mymfbox2_0/Investor/InvestorDashboard.dart';
 import 'package:mymfbox2_0/api/Api.dart';
+import 'package:mymfbox2_0/login/Login.dart';
 import 'package:mymfbox2_0/pojo/UserDataPojo.dart';
 import 'package:mymfbox2_0/utils/Config.dart';
 import 'package:mymfbox2_0/utils/Constants.dart';
 import 'package:mymfbox2_0/utils/Utils.dart';
 import 'package:pinput/pinput.dart';
+
+import '../api/ApiConfig.dart';
 
 class EmailOtp extends StatefulWidget {
   const EmailOtp({super.key, required this.signUpData});
@@ -84,7 +87,7 @@ class _EmailOtpState extends State<EmailOtp> {
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
                         Config.appTheme.themeColor, BlendMode.color))
-                : (Config.app_client_name == "themfbox") ? DecorationImage(
+                : (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? DecorationImage(
                 image: AssetImage("assets/green-bg.png"),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
@@ -122,26 +125,26 @@ class _EmailOtpState extends State<EmailOtp> {
                       padding: EdgeInsets.all(4),
                       child: (Config.appLogo.contains("http"))
                           ? Image.network(Config.appLogo, height: setImageSize(100))
-                          : (Config.app_client_name == "themfbox") ?Image.asset(Config.appLogo)
+                          : (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ?Image.asset(Config.appLogo)
                           : Image.asset(Config.appLogo, width: setImageSize(350)),
               ),
               SizedBox(height: devHeight * 0.06),
               Text("Verify Email ID",
                   style: TextStyle(
                       color:
-                      (Config.app_client_name == "themfbox") ? Colors.white : Config.appTheme.themeColor,
+                      (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? Colors.white : Config.appTheme.themeColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 20)),
               SizedBox(height: devHeight * 0.01),
               Text("Please enter the OTP sent to",
                   style: TextStyle(
                     color:
-                    (Config.app_client_name == "themfbox") ? Colors.white : Config.appTheme.themeColor,
+                    (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? Colors.white : Config.appTheme.themeColor,
                   )),
               Text("${signUpData['email']}",
                   style: TextStyle(
                     color:
-                    (Config.app_client_name == "themfbox") ? Colors.white : Config.appTheme.themeColor,
+                    (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? Colors.white : Config.appTheme.themeColor,
                   )),
               SizedBox(height: devHeight * 0.05),
               Expanded(
@@ -188,14 +191,36 @@ class _EmailOtpState extends State<EmailOtp> {
                                 return;
                               }
                               await writeDataLocally(user);
-                              EasyLoading.dismiss();
+
 
                               Get.to(InvestorDashboard());
+                            } else{
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('Alert'),
+                                    content: Text(registerUser['msg']),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text('ok'),
+                                        onPressed: () {
+                                          Get.to(Login());
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                             /* Utils.showError(context, registerUser['msg']);
+                              return;*/
                             }
                           } else {
                             otpController.clear();
                             Utils.showError(context, data['msg']);
+                            return;
                           }
+                          EasyLoading.dismiss();
                         },
                         pinAnimationType: PinAnimationType.slide,
                         focusNode: otpFocusNode,

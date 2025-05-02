@@ -68,7 +68,6 @@ class Goal2State extends State<Goal2> {
     "Moderate",
     "Moderately Aggressive",
     "Aggressive",
-    "Check Your Risk Profile"
   ];
 
   String goalName = "";

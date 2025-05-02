@@ -7,13 +7,11 @@ void main() {
     ..appTitle = "MF Online"
     ..appClientName = "mfonline"
     ..appArn = "160300"
-    ..appLogo = "https://themfbox.com/resources/bootstrap/images/mfonline-logo.jpg"
+    ..appLogo = "assets/mf-online-logo.png"
     ..apiKey = "b89418cb-c576-47f0-894c-45c8686e1e47"
-    ..appTheme = OrangeTheme()
-    ..supportEmail = "info@mfonline.co.in"
-    ..supportMobile = "9372968902"
+    ..appTheme = MfOnlineTheme()
+    ..supportEmail = ""
+    ..supportMobile = ""
     ..privacyPolicy = "https://www.mfonline.co.in/privacy-policies"
     ..pdfURL = "https://api.themfbox.com");
 }
-
-

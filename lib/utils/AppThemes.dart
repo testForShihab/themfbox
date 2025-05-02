@@ -16,6 +16,8 @@ class AppTheme {
   final Color defaultLoss;
   final Color themeProfit;
   final Color themeLoss;
+  final Color buttonColor;
+  Color buttonLiteColor ;
 
   AppTheme({
     required this.themeColor,
@@ -33,6 +35,8 @@ class AppTheme {
     required this.defaultLoss,
     required this.themeProfit,
     required this.themeLoss,
+    required this.buttonColor,
+    required this.buttonLiteColor,
   });
 }
 
@@ -53,7 +57,11 @@ class BlueTheme extends AppTheme {
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffFF0000),
       themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff0040B0),
+      buttonLiteColor: Color(0xff072460),
       themeLoss: Color(0xffF3857B));
+
+
 }
 
 class SolidBlueTheme extends AppTheme {
@@ -73,6 +81,8 @@ class SolidBlueTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffFF0000),
             themeProfit: Color(0xff3CB66D),
+            buttonColor:Color.fromARGB(255, 19, 20, 160),
+            buttonLiteColor: Color(0xff072460),
             themeLoss: Color(0xffF3857B));
 }
 class CoralTheme extends AppTheme {
@@ -92,6 +102,8 @@ class CoralTheme extends AppTheme {
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffFF0000),
       themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff01579B),
+      buttonLiteColor: Color(0xff014174),
       themeLoss: Color(0xffF3857B));
 }
 
@@ -112,6 +124,8 @@ class RedTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+            buttonColor: Color(0xff5A0404),
+            buttonLiteColor: Color(0xff7B0404),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -132,6 +146,8 @@ class RaspberryTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+            buttonColor: Color(0xff9B015D),
+      buttonLiteColor: Color(0xff730043),
             themeLoss: Color(0xffF3857B));
 }
 
@@ -152,6 +168,8 @@ class PurpleTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+            buttonColor: Color(0xff7800A4),
+      buttonLiteColor: Color(0xff560078),
             themeLoss: Color(0xffF3857B));
 }
 
@@ -172,6 +190,8 @@ class DarkOrangeTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xffC35500),
+      buttonLiteColor: Color(0xffE66604),
             themeLoss: Color(0xff7D0003));
 }
 
@@ -192,6 +212,8 @@ class PinkTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+            buttonColor: Color(0xffE91E63),
+      buttonLiteColor: Color(0xffBD0040),
             themeLoss: Color(0xff7D0003));
 }
 
@@ -212,6 +234,8 @@ class CyanTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+            buttonColor:  Color(0xff7DF9FF),
+      buttonLiteColor: Color(0xff06A0B7),
             themeLoss: Color(0xffAD0000));
 }
 
@@ -232,6 +256,8 @@ class OrangeTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+            buttonColor: Color(0xffFF9800),
+      buttonLiteColor: Color(0xffE88D06),
             themeLoss: Color(0xffAD0000));
 }
 
@@ -252,6 +278,8 @@ class DarkGreyTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+            buttonColor: Color(0xff1A2733),
+      buttonLiteColor: Color(0xff7B0404),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -272,6 +300,8 @@ class BeigeTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+            buttonColor: Color(0xffB7B734),
+      buttonLiteColor: Color(0xff93932A),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -292,6 +322,8 @@ class BlueirisTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+            buttonColor: Color(0xff332A99),
+      buttonLiteColor: Color(0xff272075),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -312,6 +344,8 @@ class BurntOrange extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+            buttonColor: Color(0xffC54119),
+      buttonLiteColor: Color(0xff9D3314),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -332,6 +366,8 @@ class RoseWaterTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+            buttonColor: Color(0xffD43D68),
+      buttonLiteColor: Color(0xff6F1931),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -352,27 +388,31 @@ class NavyblueTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+            buttonColor:Color(0xff191970),
+      buttonLiteColor: Color(0xff212196),
             themeLoss: Color(0xffFF6657));
 }
 
 class PloutiaTheme extends AppTheme {
   PloutiaTheme()
       : super(
-            themeColor: Color(0xff25966B),
-            themeColorDark: Color(0xff19694A),
-            themeColor25: Color(0xffD1E1DA),
-            universalTitle: Color(0xff242424),
-            readableGreyTitle: Color(0xff646c6c),
-            placeHolderInputTitleAndArrow: Color(0xffB4B4B4),
-            lineColor: Color(0XFFDFDFDF),
-            Bg2Color: Color(0xffF1F1F1),
-            overlay85: Color(0xffD1E1DA),
-            mainBgColor: Color(0xffECECF2),
-            whiteOverlay: Color(0xffFFFFFF),
-            defaultProfit: Color(0xff3CB66D),
-            defaultLoss: Color(0xffD10B0B),
-            themeProfit: Color(0xff3CB66D),
-            themeLoss: Color(0xffFF6657));
+      themeColor: Color(0xff25966B),
+      themeColorDark: Color(0xff19694A),
+      themeColor25: Color(0xffD1E1DA),
+      universalTitle: Color(0xff242424),
+      readableGreyTitle: Color(0xff646c6c),
+      placeHolderInputTitleAndArrow: Color(0xffB4B4B4),
+      lineColor: Color(0XFFDFDFDF),
+      Bg2Color: Color(0xffF1F1F1),
+      overlay85: Color(0xffD1E1DA),
+      mainBgColor: Color(0xffECECF2),
+      whiteOverlay: Color(0xffFFFFFF),
+      defaultProfit: Color(0xff3bcf96),
+      defaultLoss: Color(0xffD10B0B),
+      themeProfit: Color(0xff3bcf96),
+      buttonColor: Color(0xff25966B),
+      buttonLiteColor: Color(0xff19694A),
+      themeLoss: Color(0xffFF6657));
 }
 
 class InvestateaseTheme extends AppTheme {
@@ -392,6 +432,8 @@ class InvestateaseTheme extends AppTheme {
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
       themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff5fae19),
+      buttonLiteColor: Color(0xff29a329),
       themeLoss: Color(0xffFF6657));
 }
 //#2d5c68
@@ -412,6 +454,8 @@ class nextFreedomTheme extends AppTheme{
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
       themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff2d5c68),
+      buttonLiteColor: Color(0xff9ecad5),
       themeLoss: Color(0xffFF6657));
 }
 
@@ -432,6 +476,8 @@ class LightBlueTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+              buttonColor: Color(0xff336699),
+      buttonLiteColor: Color(0xff19334d),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -453,6 +499,8 @@ class GoldTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xFFD8AC31),
+      buttonLiteColor: Color(0xffb79129),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -473,6 +521,8 @@ class UparjanTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff916ad7),
+      buttonLiteColor: Color(0xff382953),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -493,6 +543,8 @@ class DarkBlueTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff000066),
+      buttonLiteColor: Color(0xff000033),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -513,6 +565,8 @@ class FinatriumTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff000000),
+      buttonLiteColor: Color(0xff7B0404),
             themeLoss: Color(0xffFF6657));
 }
 
@@ -533,6 +587,8 @@ class FortuneTheme extends AppTheme {
             defaultProfit: Color(0xff2A7F4C),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xFF77B934),
+      buttonLiteColor: Color(0xFF639b2b),
             themeLoss: Color(0xffF3857B));
 }
 
@@ -553,6 +609,8 @@ class AjTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0XFF496182),
+      buttonLiteColor: Color(0XFF2b394d),
             themeLoss: Color(0xffF3857B));
 }
 
@@ -573,6 +631,8 @@ class AjfundsproTheme extends AppTheme {
             defaultProfit: Color(0xff3CB66D),
             defaultLoss: Color(0xffD10B0B),
             themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0XFF496182),
+      buttonLiteColor: Color(0XFF2b394d),
             themeLoss: Color(0xffF3857B));
 }
 
@@ -593,6 +653,8 @@ class CountonTheme extends AppTheme {
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
       themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff2E3E4E),
+      buttonLiteColor: Color(0xff529100),
       themeLoss: Color(0xffF3857B));
 }
 
@@ -613,6 +675,8 @@ class AbhivirudhiTheme extends AppTheme {
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
       themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff602060),
+      buttonLiteColor: Color(0xff993399),
       themeLoss: Color(0xffF3857B));
 }
 
@@ -633,6 +697,8 @@ class FinvisionTheme extends AppTheme {
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
       themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff77b934),
+      buttonLiteColor: Color(0xff248f24),
       themeLoss: Color(0xffF3857B));
 }
 
@@ -653,6 +719,8 @@ class PerpetualTheme extends AppTheme {
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
       themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff7DF9FF),
+      buttonLiteColor: Color(0xff06A0B7),
       themeLoss: Color(0xffAD0000));
 }
 
@@ -673,6 +741,8 @@ class DropletTheme extends AppTheme {
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
       themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff475ab5),
+      buttonLiteColor: Color(0xff202952),
       themeLoss: Color(0xffAD0000));
 }
 
@@ -693,6 +763,8 @@ class BlackTheme extends AppTheme {
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
       themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff000000),
+      buttonLiteColor: Color(0xff7B0404),
       themeLoss: Color(0xffFF6657));
 }
 
@@ -713,6 +785,8 @@ class WhiteTheme extends AppTheme {
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
       themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff336699),
+      buttonLiteColor: Color(0xffBABABA),
       themeLoss: Color(0xffAD0000));
 }
 
@@ -733,26 +807,30 @@ class SwarajTheme extends AppTheme {
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
       themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff2898D4),
+      buttonLiteColor: Color(0xffda770a),
       themeLoss: Color(0xffAD0000));
 }
 
 class MkcapitalTheme extends AppTheme {
   MkcapitalTheme()
       : super(
-      themeColor: Color(0xff008000),
-      themeColorDark: Color(0xff004d00),
-      themeColor25: Color(0xffD1E1DA),
+      themeColor: Color(0xff003900),
+      themeColorDark: Color(0xff002600),
+      themeColor25: Color(0xffd6ffd6),
       universalTitle: Color(0xff242424),
       readableGreyTitle: Color(0xff646c6c),
       placeHolderInputTitleAndArrow: Color(0xffB4B4B4),
       lineColor: Color(0XFFDFDFDF),
       Bg2Color: Color(0xffF1F1F1),
-      overlay85: Color(0xffDDDFE1),
+      overlay85: Color(0xffd6ffd6),
       mainBgColor: Color(0xffECECF2),
       whiteOverlay: Color(0xffFFFFFF),
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
       themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff003900),
+      buttonLiteColor: Color(0xff002600),
       themeLoss: Color(0xffFF6657));
 }
 
@@ -773,27 +851,55 @@ class BohoTheme extends AppTheme {
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
       themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff427a32),
+      buttonLiteColor: Color(0xff2a6a19),
       themeLoss: Color(0xffFF6657));
 }
 
 class GreenTheme extends AppTheme {
   GreenTheme()
       : super(
-      themeColor: Color(0xff235f60),
-      themeColorDark: Color(0xff05494B),
+      /*themeColor: Color(0xff235f60),
+      themeColorDark: Color(0xff05494B),*/
+      themeColor: Color(0xff366bc3),
+      themeColorDark: Color(0xff6ca3fc), //e2ecfc - light blue //065ff3-dark blue //b4cef7 - light light blue //d3e3fd- photoshop //9dbff5- current
       themeColor25: Color(0xffc8d7d7),
-      universalTitle: Color(0xff242424),
+      universalTitle: Color(0xff18a899), // 89cfcb //18a899 - green //6D94C4-blue //c38836 - gold //3647c3 - blue
       readableGreyTitle: Color(0xff646c6c),
       placeHolderInputTitleAndArrow: Color(0xffB4B4B4),
       lineColor: Color(0XFFDFDFDF),
       Bg2Color: Color(0xffF1F1F1),
       overlay85: Color(0xffDEE6E6),
       mainBgColor: Color(0xffECF0F0),
-      whiteOverlay: Color(0xffFFFFFF),
+      whiteOverlay: Color(0xffFDFDFD),
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
       themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff18a899),
+      buttonLiteColor: Color(0xffb9e4e0),
       themeLoss: Color(0xffF3857B));
+}
+
+class MfOnlineTheme extends AppTheme {
+  MfOnlineTheme()
+      : super(
+      themeColor: Color(0xffFF9800),
+      themeColorDark: Color(0xffE88D06),
+      themeColor25: Color(0xfffde5bf),
+      universalTitle: Color(0xff242424),
+      readableGreyTitle: Color(0xff646c6c),
+      placeHolderInputTitleAndArrow: Color(0xffB4B4B4),
+      lineColor: Color(0XFFDFDFDF),
+      Bg2Color: Color(0xffF1F1F1),
+      overlay85: Color(0xffFFF0D9),
+      mainBgColor: Color(0xffFCF3EC),
+      whiteOverlay: Color(0xffFFFFFF),
+      defaultProfit: Colors.green.shade900,
+      defaultLoss: Color(0xffD10B0B),
+      themeProfit: Colors.green.shade900,
+      buttonColor: Color(0xffFF9800),
+      buttonLiteColor: Color(0xffE88D06),
+      themeLoss: Color(0xffAD0000));
 }
 
 class sugamNiveshTheme extends AppTheme {
@@ -813,6 +919,8 @@ class sugamNiveshTheme extends AppTheme {
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
       themeProfit: Color(0xff3CB66D),
+      buttonColor:Color(0xff0C746C),
+      buttonLiteColor: Color(0xff0e8179),
       themeLoss: Color(0xffFF6657));
 }
 
@@ -833,6 +941,8 @@ class MsindiaTheme extends AppTheme {
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
       themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff332A99),
+      buttonLiteColor: Color(0xff272075),
       themeLoss: Color(0xffFF6657));
 }
 
@@ -854,6 +964,8 @@ class TrustbayTheme extends AppTheme {
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
       themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff336699),
+      buttonLiteColor: Color(0xff19334d),
       themeLoss: Color(0xffFF6657));
 }
 
@@ -875,6 +987,8 @@ class AnubandhTheme extends AppTheme {
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
       themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xff427a32),
+      buttonLiteColor: Color(0xff2a6a19),
       themeLoss: Color(0xffFF6657));
 }
 
@@ -895,5 +1009,52 @@ class DarkRoseTheme extends AppTheme {
       defaultProfit: Color(0xff3CB66D),
       defaultLoss: Color(0xffD10B0B),
       themeProfit: Color(0xff50FF00),
+      buttonColor: Color(0xff9f0e54),
+      buttonLiteColor: Color(0xff8b0c49),
+      themeLoss: Color(0xffFF6657));
+}
+
+
+class SlightlyOrangeTheme extends AppTheme {
+  SlightlyOrangeTheme()
+      : super(
+      themeColor: Color(0xffc48f70),
+      themeColorDark: Color(0xffb87a55),
+      themeColor25: Color(0xffecdbd1),
+      universalTitle: Color(0xff242424),
+      readableGreyTitle: Color(0xff646c6c),
+      placeHolderInputTitleAndArrow: Color(0xffB4B4B4),
+      lineColor: Color(0XFFDFDFDF),
+      Bg2Color: Color(0xffF1F1F1),
+      overlay85: Color(0xffecdbd1),
+      mainBgColor: Color(0xffECECF2),
+      whiteOverlay: Color(0xffFFFFFF),
+      defaultProfit: Color(0xff3CB66D),
+      defaultLoss: Color(0xffD10B0B),
+      themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xffc48f70),
+      buttonLiteColor: Color(0xffb87a55),
+      themeLoss: Color(0xffFF6657));
+}
+
+class DarkOrange extends AppTheme {
+  DarkOrange()
+      : super(
+      themeColor: Color(0xffe15409),
+      themeColorDark: Color(0xffc94b08),
+      themeColor25: Color(0xfffcd0b8),
+      universalTitle: Color(0xff242424),
+      readableGreyTitle: Color(0xff646c6c),
+      placeHolderInputTitleAndArrow: Color(0xffB4B4B4),
+      lineColor: Color(0XFFDFDFDF),
+      Bg2Color: Color(0xffF1F1F1),
+      overlay85: Color(0xfffcd0b8),
+      mainBgColor: Color(0xffECECF2),
+      whiteOverlay: Color(0xffFFFFFF),
+      defaultProfit: Color(0xff3CB66D),
+      defaultLoss: Color(0xffD10B0B),
+      themeProfit: Color(0xff3CB66D),
+      buttonColor: Color(0xffe15409),
+      buttonLiteColor: Color(0xffc94b08),
       themeLoss: Color(0xffFF6657));
 }

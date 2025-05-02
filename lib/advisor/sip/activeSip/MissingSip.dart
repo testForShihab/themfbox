@@ -578,6 +578,7 @@ class _MissingSipState extends State<MissingSip> {
                             child: PlainButton(
                           text: "CLEAR ALL",
                           padding: EdgeInsets.symmetric(vertical: 8),
+                              color: Config.appTheme.buttonColor,
                           onPressed: () async {
                             Get.back();
                             selectedBranch = [];
@@ -601,6 +602,7 @@ class _MissingSipState extends State<MissingSip> {
                           child: RpFilledButton(
                             text: "APPLY",
                             padding: EdgeInsets.symmetric(vertical: 8),
+                            color: Config.appTheme.buttonColor,
                             onPressed: () async {
                               Get.back();
                               if (selectedLeft == 'Date') {

@@ -11,11 +11,11 @@ void main() {
     ..appLogo = "assets/bswealth.png"
     ..apiKey = "226c0c55-3bc9-4bb8-9a77-091cce2445bb"
     ..appTheme = DropletTheme()
-    ..supportEmail = "bksatpathy123@gmail.com"
-    ..supportMobile = "+91 9040155155"
-    ..companyName = "BSWealth"
-    ..address1 = "r3/i2 JM Colony Budharaja"
-    ..address2 = "Sambalpur, Odisha 768004"
+    ..supportEmail = ""
+    ..supportMobile = ""
+    ..companyName = ""
+    ..address1 = ""
+    ..address2 = ""
     ..privacyPolicy = ""
     ..pdfURL = "https://api.themfbox.com");
 }

@@ -502,6 +502,7 @@ class _AllFamiliesState extends State<AllFamilies> {
                         Expanded(
                             child: PlainButton(
                           text: "CLEAR ALL",
+                              color: Config.appTheme.buttonColor,
                           padding: EdgeInsets.symmetric(vertical: 8),
                           onPressed: () async {
                             Get.back();
@@ -518,6 +519,7 @@ class _AllFamiliesState extends State<AllFamilies> {
                         Expanded(
                           child: RpFilledButton(
                             text: "APPLY",
+                            color: Config.appTheme.buttonColor,
                             padding: EdgeInsets.symmetric(vertical: 8),
                             onPressed: () async {
                               Get.back();
@@ -1011,9 +1013,9 @@ class _AllFamiliesState extends State<AllFamilies> {
                                                 decoration:
                                                     TextDecoration.underline,
                                                 color:
-                                                    Config.appTheme.themeColor,
+                                                    Config.appTheme.buttonColor,
                                                 decorationColor:
-                                                    Config.appTheme.themeColor),
+                                                    Config.appTheme.buttonColor),
                                           )),
                                       GestureDetector(
                                           onTap: () async {
@@ -1068,9 +1070,9 @@ class _AllFamiliesState extends State<AllFamilies> {
                                                 decoration:
                                                     TextDecoration.underline,
                                                 color:
-                                                    Config.appTheme.themeColor,
+                                                    Config.appTheme.buttonColor,
                                                 decorationColor:
-                                                    Config.appTheme.themeColor),
+                                                    Config.appTheme.buttonColor),
                                           )),
                                     ],
                                   ),
@@ -1097,7 +1099,7 @@ class _AllFamiliesState extends State<AllFamilies> {
                             },
                             trailing:
                                 Icon(Icons.arrow_forward, color: Colors.white),
-                            bgColor: Config.appTheme.themeColor),
+                            bgColor: Config.appTheme.buttonColor),
                         SizedBox(height: 15),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1106,7 +1108,7 @@ class _AllFamiliesState extends State<AllFamilies> {
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   border: Border.all(
-                                      color: Config.appTheme.themeColor,
+                                      color: Config.appTheme.buttonColor,
                                       width: 1.5),
                                   borderRadius: BorderRadius.circular(10)),
                               width: devWidth * 0.29,
@@ -1136,9 +1138,7 @@ class _AllFamiliesState extends State<AllFamilies> {
                                                 child: Text("Cancel",
                                                     style: AppFonts.f40016
                                                         .copyWith(
-                                                            color: Config
-                                                                .appTheme
-                                                                .defaultLoss,
+                                                            color: Config.appTheme.defaultLoss,
                                                             fontSize: 16)),
                                               ),
                                               TextButton(
@@ -1181,11 +1181,7 @@ class _AllFamiliesState extends State<AllFamilies> {
                                                 },
                                                 child: Text("Download",
                                                     style: AppFonts.f40016
-                                                        .copyWith(
-                                                            color: Config
-                                                                .appTheme
-                                                                .themeColor,
-                                                            fontSize: 16)),
+                                                        .copyWith(color: Config.appTheme.buttonColor, fontSize: 16)),
                                               ),
                                             ],
                                           );
@@ -1211,13 +1207,13 @@ class _AllFamiliesState extends State<AllFamilies> {
                                       SizedBox(width: 5),
                                       Icon(
                                         Icons.download_sharp,
-                                        color: Config.appTheme.themeColor,
+                                        color: Config.appTheme.buttonColor,
                                         size: 18,
                                       ),
                                       SizedBox(width: 5),
                                       Text("Portfolio",
                                           style: AppFonts.f40016.copyWith(
-                                              color: Config.appTheme.themeColor,
+                                              color: Config.appTheme.buttonColor,
                                               fontSize: 16)),
                                       SizedBox(width: 8),
                                     ],
@@ -1227,7 +1223,7 @@ class _AllFamiliesState extends State<AllFamilies> {
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   border: Border.all(
-                                      color: Config.appTheme.themeColor,
+                                      color: Config.appTheme.buttonColor,
                                       width: 1.5),
                                   borderRadius: BorderRadius.circular(10)),
                               width: devWidth * 0.29,
@@ -1338,13 +1334,13 @@ class _AllFamiliesState extends State<AllFamilies> {
                                       SizedBox(width: 5),
                                       Icon(
                                         Icons.email,
-                                        color: Config.appTheme.themeColor,
+                                        color: Config.appTheme.buttonColor,
                                         size: 18,
                                       ),
                                       SizedBox(width: 5),
                                       Text("Portfolio",
                                           style: AppFonts.f40016.copyWith(
-                                              color: Config.appTheme.themeColor,
+                                              color: Config.appTheme.buttonColor,
                                               fontSize: 16)),
                                       SizedBox(width: 8),
                                     ],
@@ -1354,7 +1350,7 @@ class _AllFamiliesState extends State<AllFamilies> {
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   border: Border.all(
-                                      color: Config.appTheme.themeColor,
+                                      color: Config.appTheme.buttonColor,
                                       width: 1.5),
                                   borderRadius: BorderRadius.circular(10)),
                               width: devWidth * 0.29,
@@ -1391,11 +1387,11 @@ class _AllFamiliesState extends State<AllFamilies> {
                                     WhatsappIcon(
                                         height: 18.0,
                                         width: 18.0,
-                                        color: Config.appTheme.themeColor),
+                                        color: Config.appTheme.buttonColor),
                                     SizedBox(width: 5),
                                     Text("Portfolio",
                                         style: AppFonts.f40016.copyWith(
-                                            color: Config.appTheme.themeColor,
+                                            color: Config.appTheme.buttonColor,
                                             fontSize: 16)),
                                     SizedBox(width: 8),
                                   ],
@@ -1465,6 +1461,7 @@ class _AllFamiliesState extends State<AllFamilies> {
                         ),
                         TextButton(
                           onPressed: () {
+                            String? mobile = numberController!.text;
                             _sendMessage(
                                 familyHead, mobile, mfSummary, mfSchemeSummaryList);
                             Get.back();
@@ -1570,9 +1567,9 @@ ${client_name.toUpperCase()}''';
 
     var whatsappUrl =
         "https://wa.me/$mobile?text=${Uri.encodeComponent(websiteUrl)}";
-    if (await canLaunch(whatsappUrl)) {
+    print("Generated WhatsApp URL: $whatsappUrl");
+    if (await canLaunch(whatsappUrl) != null) {
       await launch(whatsappUrl);
-      print("Url" + whatsappUrl);
     } else {
       throw 'Could not launch $whatsappUrl';
     }
@@ -1605,21 +1602,21 @@ ${client_name.toUpperCase()}''';
         height: 50,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Config.appTheme.themeColor)),
+            border: Border.all(color: Config.appTheme.buttonColor)),
         child: Center(
             child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
               Image.asset("assets/bulletList.png",
-                  height: 20, color: Config.appTheme.themeColor),
+                  height: 20, color: Config.appTheme.buttonColor,),
               SizedBox(width: 10),
               Text("View Dashboard",
                   style: TextStyle(
-                      color: Config.appTheme.themeColor,
+                      color: Config.appTheme.buttonColor,
                       fontWeight: FontWeight.w500)),
               Spacer(),
-              Icon(Icons.arrow_forward, color: Config.appTheme.themeColor)
+              Icon(Icons.arrow_forward, color: Config.appTheme.buttonColor)
             ],
           ),
         )),

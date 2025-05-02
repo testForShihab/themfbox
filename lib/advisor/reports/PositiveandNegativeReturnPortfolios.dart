@@ -493,7 +493,7 @@ class _MyWidgetState extends State<PositiveandNegativeReturnPortfolios> {
                           },
                           trailing:
                               Icon(Icons.arrow_forward, color: Colors.white),
-                          bgColor: Config.appTheme.themeColor),
+                          bgColor: Config.appTheme.buttonColor),
                       SizedBox(height: 15),
                     ],
                   ),
@@ -1060,6 +1060,7 @@ class _MyWidgetState extends State<PositiveandNegativeReturnPortfolios> {
     searchKey = "";
     if (type == ButtonType.plain)
       return PlainButton(
+        color: Config.appTheme.buttonColor,
         padding: EdgeInsets.symmetric(horizontal: devWidth * 0.10, vertical: 2),
         text: "CLEAR ALL",
         onPressed: () {
@@ -1068,6 +1069,7 @@ class _MyWidgetState extends State<PositiveandNegativeReturnPortfolios> {
       );
     else
       return RpFilledButton(
+        color: Config.appTheme.buttonColor,
         text: "APPLY",
         onPressed: () async {
           print("startReturn $startReturn");

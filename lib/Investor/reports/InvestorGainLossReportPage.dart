@@ -827,6 +827,7 @@ Widget getCancelApplyButton(
 ) {
   if (type == ButtonType.plain)
     return PlainButton(
+      color: Config.appTheme.buttonColor,
       text: "RESET",
       onPressed: () {
         gainLossController.resetFilterData();
@@ -835,6 +836,7 @@ Widget getCancelApplyButton(
     );
   else
     return RpFilledButton(
+      color: Config.appTheme.buttonColor,
       text: "APPLY",
       onPressed: () {
         gainLossController.fetchGainLossData();

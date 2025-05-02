@@ -541,6 +541,7 @@ class _ClosedStpState extends State<ClosedStp> {
                         Expanded(
                             child: PlainButton(
                           text: "CLEAR ALL",
+                              color: Config.appTheme.buttonColor,
                           padding: EdgeInsets.symmetric(vertical: 8),
                           onPressed: () async {
                             Get.back();
@@ -558,6 +559,7 @@ class _ClosedStpState extends State<ClosedStp> {
                         Expanded(
                           child: RpFilledButton(
                             text: "APPLY",
+                            color: Config.appTheme.buttonColor,
                             padding: EdgeInsets.symmetric(vertical: 8),
                             onPressed: () async {
                               Get.back();

@@ -141,13 +141,13 @@ class _AdminMenuState extends State<AdminMenu> {
       'image': "assets/compare_funds.png",
       'allowed': [],
     },
-    {
+   /* {
       'title': "Investment Proposal",
       "subTitle": "",
       'goTo': InvestmentProposal(),
       'image': "assets/investment_proposal.png",
       'allowed': [],
-    },
+    },*/
     {
       'title': "Model Portfolio",
       "subTitle": "",
@@ -338,9 +338,9 @@ class _AdminMenuState extends State<AdminMenu> {
                     children: [
                       listContainer(data.getRange(0, 4).toList()),
                       listContainer(data.getRange(4, 12).toList()),
-                      listContainer(data.getRange(12, 15).toList()),
-                      listContainer(data.getRange(15, 17).toList()),
-                      listContainer(data.getRange(17, 20).toList()),
+                      listContainer(data.getRange(12, 14).toList()),
+                      listContainer(data.getRange(14, 16).toList()),
+                      listContainer(data.getRange(16, 19).toList()),
                       Theme(
                         data: ThemeData()
                             .copyWith(dividerColor: Colors.transparent),
@@ -367,7 +367,7 @@ class _AdminMenuState extends State<AdminMenu> {
                             children: [
                               Container(
                                 child: listContainer(
-                                    data.getRange(20, 25).toList()),
+                                    data.getRange(19, 24).toList()),
                               ),
                             ],
                           ),
@@ -541,12 +541,12 @@ class AdminMenuController extends GetxController {
       'goTo': CompareMF(),
       'image': "assets/compare_funds.png",
     },
-    {
+   /* {
       'title': "Investment Proposal",
       "subTitle": "",
       'goTo': InvestmentProposal(),
       'image': "assets/investment_proposal.png",
-    },
+    },*/
     {
       'title': "Model Portfolio",
       "subTitle": "",

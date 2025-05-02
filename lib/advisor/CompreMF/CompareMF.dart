@@ -57,6 +57,10 @@ class _CompareMFState extends State<CompareMF> {
   String selectedbroadCategory = "All";
   String compareType = "";
   List selectedItemsNew = [];
+  String sensex = 'false';
+  String ppf = 'false';
+  String fd = 'false';
+  String gold = 'false';
 
   String getFirst13(String text) {
     String s = text.split(":").last;
@@ -79,7 +83,8 @@ class _CompareMFState extends State<CompareMF> {
   @override
   void initState() {
     super.initState();
-    investedAmountController = TextEditingController(text: "");
+    investedAmountController = TextEditingController(text: "10000");
+    investedAmount = '10000';
   }
 
   Future getDatas() async {
@@ -140,9 +145,7 @@ class _CompareMFState extends State<CompareMF> {
         'scheme_amfi_short_name': fund['scheme_amfi_short_name']
       };
       fundList.add(fundData);
-      print("fund name ${fund['scheme_amfi']}");
     }
-    print("fundList.length ${fundList.length}");
     return 0;
   }
 
@@ -245,13 +248,10 @@ class _CompareMFState extends State<CompareMF> {
                                   await ReportApi.downLoadCompareMutualFundPdf(
                                 userId: userId,
                                 clientName: client_name,
-                                endDate: Utils.getFormattedDate(
-                                    date: selectedEndDate),
-                                startDate: Utils.getFormattedDate(
-                                  date: selectedStartDate,
-                                ),
+                                endDate: '${formatDate(selectedEndDate)}',
+                                startDate: '${formatDate(selectedStartDate)}',
                                 amount: amount.toInt(),
-                                schemes: schemes,
+                                schemes: schemes, sensex: sensex, ppf: ppf, fd: fd, gold: gold,
                               );
 
                               if (res['status'] != 200) {
@@ -346,20 +346,20 @@ class _CompareMFState extends State<CompareMF> {
                           showCompareMutualFundBottomSheet();
                         },
                         child: appBarColumn(
-                            "Invested Amount",
-                            getFirst13(
-                              "$rupee ${Utils.formatNumber(double.parse(investedAmount).round(), isAmount: false)}",
-                            ),
+                            "Select Up To 5 Funds",
+                            getFirst16(selectedFund),
                             Icon(Icons.keyboard_arrow_down,
                                 color: Config.appTheme.themeColor)),
                       ),
                       GestureDetector(
                         onTap: () {
-                          showCompareMutualFundBottomSheet();
+                          showAmountBottomSheet()();
                         },
                         child: appBarColumn(
-                            "Select Up To 5 Funds",
-                            getFirst16(selectedFund),
+                            "Invested Amount",
+                            getFirst13(
+                              "$rupee ${Utils.formatNumber(double.parse(investedAmount).round(), isAmount: false)}",
+                            ),
                             Icon(Icons.keyboard_arrow_down,
                                 color: Config.appTheme.themeColor)),
                       ),
@@ -371,7 +371,7 @@ class _CompareMFState extends State<CompareMF> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          showCompareMutualFundBottomSheet();
+                          showAmountBottomSheet()();
                         },
                         child: appBarColumn(
                             "Start Date",
@@ -381,7 +381,7 @@ class _CompareMFState extends State<CompareMF> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          showCompareMutualFundBottomSheet();
+                          showAmountBottomSheet()();
                         },
                         child: appBarColumn(
                             "End Date",
@@ -762,6 +762,78 @@ class _CompareMFState extends State<CompareMF> {
                     categoryExpansionTile(context, bottomState),
                     SizedBox(height: 16),
                     schemeExpansionTile(context, bottomState),
+                   /* Padding(
+                      padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
+                      child: Row(
+                        children: [
+                          Text("Investment Amount",
+                              style: AppFonts.f50014Black),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    investedAmountArea(),
+                    startDateExpansionTile(context, bottomState),
+                    SizedBox(height: 16),
+                    endDateExpansionTile(context, bottomState),*/
+                    SizedBox(height: 16),
+                    compareFundsExpansionTile(context, bottomState),
+                    SizedBox(height: 16),
+                    buttonCard(),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+      },
+    );
+  }
+
+  showAmountBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+      ),
+      builder: (context) {
+        return StatefulBuilder(builder: (_, bottomState) {
+          return Container(
+            color: Config.appTheme.mainBgColor,
+            child: Container(
+              height: devHeight * 0.90,
+              padding: EdgeInsets.all(8),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        // Padding(
+                        //   padding: EdgeInsets.only(left: 10),
+                        //   child: Text(
+                        //     "Select Investor",
+                        //     style: TextStyle(
+                        //         fontWeight: FontWeight.bold, fontSize: 16),
+                        //   ),
+                        // ),
+                        IconButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          icon: Icon(Icons.close),
+                        )
+                      ],
+                    ),
+                    Divider(),
+                    SizedBox(height: 16),
+                   /* categoryExpansionTile(context, bottomState),
+                    SizedBox(height: 16),
+                    schemeExpansionTile(context, bottomState),*/
                     Padding(
                       padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
                       child: Row(
@@ -776,9 +848,9 @@ class _CompareMFState extends State<CompareMF> {
                     startDateExpansionTile(context, bottomState),
                     SizedBox(height: 16),
                     endDateExpansionTile(context, bottomState),
-                    SizedBox(height: 16),
+                   /* SizedBox(height: 16),
                     compareFundsExpansionTile(context, bottomState),
-                    SizedBox(height: 16),
+                    SizedBox(height: 16),*/
                     buttonCard(),
                   ],
                 ),
@@ -1242,6 +1314,16 @@ class _CompareMFState extends State<CompareMF> {
                         checkedValues.add(item);
                       }
                       compareType = checkedValues.join(',');
+                      print("compareType-- $compareType");
+                      if(compareType.contains('Nifty 50 TRI')){
+                        sensex = 'true';
+                      } if(compareType.contains('PPF')){
+                        ppf = 'true';
+                      } if(compareType.contains('Fixed Deposit')){
+                        fd = 'true';
+                      } if(compareType.contains('Gold')){
+                        gold = 'true';
+                      }
                     });
                   },
                   child: Row(
@@ -1257,6 +1339,16 @@ class _CompareMFState extends State<CompareMF> {
                             }
                             compareType = checkedValues.join(',');
                           });
+                          print("compareType-- $compareType");
+                          if(compareType.contains('Nifty 50 TRI')){
+                            sensex = 'true';
+                          } if(compareType.contains('PPF')){
+                            ppf = 'true';
+                          } if(compareType.contains('Fixed Deposit')){
+                            fd = 'true';
+                          } if(compareType.contains('Gold')){
+                            gold = 'true';
+                          }
                         },
                       ),
                       Expanded(
@@ -1312,7 +1404,7 @@ class _CompareMFState extends State<CompareMF> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            backgroundColor: Config.appTheme.themeColor,
+            backgroundColor: Config.appTheme.buttonColor,
             foregroundColor: Colors.white,
           ),
           child: Text("SUBMIT"),
@@ -1395,156 +1487,162 @@ class _CompareMFState extends State<CompareMF> {
   }
 
   Widget basicInfoDataTable() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: SizedBox(
-        height: 140,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: DataTable(
-                headingRowHeight: 35,
-                horizontalMargin: 12,
-                headingRowColor: MaterialStateProperty.resolveWith<Color?>(
-                  (Set<MaterialState> states) {
-                    return Config.appTheme.themeColor;
-                  },
-                ),
-                columns: [
-                  DataColumn(
-                    label: SizedBox(
-                      width: 80,
-                      child: Text(
-                        'Fund',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
+    return Scrollbar(
+      thickness: 5.0,
+      thumbVisibility: true,
+      radius: Radius.circular(10),
+      controller: ScrollController(),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: SizedBox(
+          height: 140,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: DataTable(
+                  headingRowHeight: 35,
+                  horizontalMargin: 12,
+                  headingRowColor: MaterialStateProperty.resolveWith<Color?>(
+                    (Set<MaterialState> states) {
+                      return Config.appTheme.themeColor;
+                    },
                   ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 80,
-                      child: Text(
-                        'Category',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 60,
-                      child: Text(
-                        'AUM(Cr)',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 80,
-                      child: Text(
-                        'Latest Nav',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 26,
-                      child: Text(
-                        'TER',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 64,
-                      child: Text(
-                        'Inception',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ],
-                rows:
-                    List<DataRow>.generate(basicInfoTableData.length, (index) {
-                  final rowData = basicInfoTableData[index];
-
-                  String schemeAmfi = rowData['scheme_amfi_short_name'] ?? "";
-                  num aum = rowData['scheme_assets'] ?? 0;
-                  num price = rowData['price'] ?? 0;
-                  num ter = rowData['ter'] ?? 0;
-                  String inceptionDateStr = rowData['inception_date_str'] ?? "";
-
-                  final color = index == 0 ? Colors.white : Colors.white;
-                  return DataRow(
-                    color: MaterialStateProperty.resolveWith<Color?>(
-                        (Set<MaterialState> states) {
-                      return color;
-                    }),
-                    cells: [
-                      DataCell(
-                        Row(
-                          children: [
-                            //Image.network(rowData['amc_logo'] ?? "", height: 32,),
-                            Utils.getImage(rowData['amc_logo'], 32),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: SizedBox(
-                                width: 160,
-                                child: Text(
-                                  schemeAmfi,
-                                  maxLines: 2,
-                                  softWrap: true,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppFonts.f40013
-                                      .copyWith(color: Colors.black),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                            ),
-                          ],
+                  columns: [
+                    DataColumn(
+                      label: SizedBox(
+                        width: 80,
+                        child: Text(
+                          'Fund',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.left,
                         ),
                       ),
-                      DataCell(
-                        Expanded(
-                          child: SizedBox(
-                            width: 160,
-                            child: Text(
-                              selectedSubCategory,
-                              maxLines: 2,
-                              softWrap: true,
-                              overflow: TextOverflow.ellipsis,
-                              style:
-                                  AppFonts.f40013.copyWith(color: Colors.black),
-                              textAlign: TextAlign.left,
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 80,
+                        child: Text(
+                          'Category',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 60,
+                        child: Text(
+                          'AUM(Cr)',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 80,
+                        child: Text(
+                          'Latest Nav',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 26,
+                        child: Text(
+                          'TER',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 64,
+                        child: Text(
+                          'Inception',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows:
+                      List<DataRow>.generate(basicInfoTableData.length, (index) {
+                    final rowData = basicInfoTableData[index];
+
+                    String schemeAmfi = rowData['scheme_amfi_short_name'] ?? "";
+                    num aum = rowData['scheme_assets'] ?? 0;
+                    num price = rowData['price'] ?? 0;
+                    num ter = rowData['ter'] ?? 0;
+                    String inceptionDateStr = rowData['inception_date_str'] ?? "";
+
+                    final color = index == 0 ? Colors.white : Colors.white;
+                    return DataRow(
+                      color: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        return color;
+                      }),
+                      cells: [
+                        DataCell(
+                          Row(
+                            children: [
+                              //Image.network(rowData['amc_logo'] ?? "", height: 32,),
+                              Utils.getImage(rowData['amc_logo'], 32),
+                              SizedBox(width: 8),
+                              Expanded(
+                                child: SizedBox(
+                                  width: 160,
+                                  child: Text(
+                                    schemeAmfi,
+                                    maxLines: 2,
+                                    softWrap: true,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppFonts.f40013
+                                        .copyWith(color: Colors.black),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataCell(
+                          Expanded(
+                            child: SizedBox(
+                              width: 160,
+                              child: Text(
+                                selectedSubCategory,
+                                maxLines: 2,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                                style:
+                                    AppFonts.f40013.copyWith(color: Colors.black),
+                                textAlign: TextAlign.left,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      DataCell(Text(
-                          Utils.formatNumber(aum / 10, isAmount: false),
-                          textAlign: TextAlign.center)),
-                      DataCell(Text("${price.toStringAsFixed(2)}%",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text("${ter.toStringAsFixed(2)}%",
-                          textAlign: TextAlign.center)),
-                      DataCell(
-                          Text(inceptionDateStr, textAlign: TextAlign.center)),
-                    ],
-                  );
-                }),
+                        DataCell(Text(
+                            Utils.formatNumber(aum / 10, isAmount: false),
+                            textAlign: TextAlign.center)),
+                        DataCell(Text("${price.toStringAsFixed(2)}%",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text("${ter.toStringAsFixed(2)}%",
+                            textAlign: TextAlign.center)),
+                        DataCell(
+                            Text(inceptionDateStr, textAlign: TextAlign.center)),
+                      ],
+                    );
+                  }),
+                ),
               ),
             ),
           ),
@@ -1686,185 +1784,191 @@ class _CompareMFState extends State<CompareMF> {
   }
 
   Widget trailingReturnsDataTable() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: SizedBox(
-        height: 140,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: DataTable(
-                headingRowHeight: 35,
-                horizontalMargin: 12,
-                headingRowColor: MaterialStateProperty.resolveWith<Color?>(
-                  (Set<MaterialState> states) {
-                    return Config.appTheme.themeColor;
-                  },
-                ),
-                columns: [
-                  DataColumn(
-                    label: SizedBox(
-                      width: 80,
-                      child: Text(
-                        'Fund',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
+    return Scrollbar(
+      thickness: 5.0,
+      thumbVisibility: true,
+      radius: Radius.circular(10),
+      controller: ScrollController(),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: SizedBox(
+          height: 140,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: DataTable(
+                  headingRowHeight: 35,
+                  horizontalMargin: 12,
+                  headingRowColor: MaterialStateProperty.resolveWith<Color?>(
+                    (Set<MaterialState> states) {
+                      return Config.appTheme.themeColor;
+                    },
                   ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 30,
-                      child: Text(
-                        '1M',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 30,
-                      child: Text(
-                        '3M',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 30,
-                      child: Text(
-                        '6M',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 30,
-                      child: Text(
-                        '1Y',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 30,
-                      child: Text(
-                        '3Y',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 30,
-                      child: Text(
-                        '5Y',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 30,
-                      child: Text(
-                        '10Y',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 150,
-                      child: Text(
-                        'Since Inception Rtn',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ),
-                ],
-                rows:
-                    List<DataRow>.generate(basicInfoTableData.length, (index) {
-                  final rowData = basicInfoTableData[index];
-
-                  String schemeAmfi = rowData['scheme_amfi_short_name'] ?? "";
-                  num returnsAbsOneMonth = rowData['returns_abs_1month'] ?? 0;
-                  num returnsAbsThreeMonth = rowData['returns_abs_3month'] ?? 0;
-                  num returnsAbsSixMonth = rowData['returns_abs_6month'] ?? 0;
-                  num returnsAbsOneYear = rowData['returns_abs_1year'] ?? 0;
-                  num returnsCmpThreeYear = rowData['returns_cmp_3year'] ?? 0;
-                  num returnsCmpFiveYear = rowData['returns_cmp_5year'] ?? 0;
-                  num returnsCmpTenYear = rowData['returns_cmp_10year'] ?? 0;
-                  num returnsCmpInception =
-                      rowData['returns_cmp_inception'] ?? 0;
-
-                  final color = index == 0 ? Colors.white : Colors.white;
-                  return DataRow(
-                    color: MaterialStateProperty.resolveWith<Color?>(
-                        (Set<MaterialState> states) {
-                      return color;
-                    }),
-                    cells: [
-                      DataCell(
-                        Row(
-                          children: [
-                            //Image.network(rowData['amc_logo'] ?? "", height: 32,),
-                            Utils.getImage(rowData['amc_logo'], 32),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: SizedBox(
-                                width: 160,
-                                child: Text(
-                                  schemeAmfi,
-                                  maxLines: 2,
-                                  softWrap: true,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppFonts.f40013
-                                      .copyWith(color: Colors.black),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                            ),
-                          ],
+                  columns: [
+                    DataColumn(
+                      label: SizedBox(
+                        width: 80,
+                        child: Text(
+                          'Fund',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.left,
                         ),
                       ),
-                      DataCell(Text("${returnsAbsOneMonth.toStringAsFixed(2)}%",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text(
-                          "${returnsAbsThreeMonth.toStringAsFixed(2)}%",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text("${returnsAbsSixMonth.toStringAsFixed(2)}%",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text("${returnsAbsOneYear.toStringAsFixed(2)}%",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text(
-                          "${returnsCmpThreeYear.toStringAsFixed(2)}%",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text("${returnsCmpFiveYear.toStringAsFixed(2)}%",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text("${returnsCmpTenYear.toStringAsFixed(2)}%",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text(
-                          "${returnsCmpInception.toStringAsFixed(2)}%",
-                          textAlign: TextAlign.center)),
-                    ],
-                  );
-                }),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 30,
+                        child: Text(
+                          '1M',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 30,
+                        child: Text(
+                          '3M',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 30,
+                        child: Text(
+                          '6M',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 30,
+                        child: Text(
+                          '1Y',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 30,
+                        child: Text(
+                          '3Y',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 30,
+                        child: Text(
+                          '5Y',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 30,
+                        child: Text(
+                          '10Y',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 150,
+                        child: Text(
+                          'Since Inception Rtn',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows:
+                      List<DataRow>.generate(basicInfoTableData.length, (index) {
+                    final rowData = basicInfoTableData[index];
+
+                    String schemeAmfi = rowData['scheme_amfi_short_name'] ?? "";
+                    num returnsAbsOneMonth = rowData['returns_abs_1month'] ?? 0;
+                    num returnsAbsThreeMonth = rowData['returns_abs_3month'] ?? 0;
+                    num returnsAbsSixMonth = rowData['returns_abs_6month'] ?? 0;
+                    num returnsAbsOneYear = rowData['returns_abs_1year'] ?? 0;
+                    num returnsCmpThreeYear = rowData['returns_cmp_3year'] ?? 0;
+                    num returnsCmpFiveYear = rowData['returns_cmp_5year'] ?? 0;
+                    num returnsCmpTenYear = rowData['returns_cmp_10year'] ?? 0;
+                    num returnsCmpInception =
+                        rowData['returns_cmp_inception'] ?? 0;
+
+                    final color = index == 0 ? Colors.white : Colors.white;
+                    return DataRow(
+                      color: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        return color;
+                      }),
+                      cells: [
+                        DataCell(
+                          Row(
+                            children: [
+                              //Image.network(rowData['amc_logo'] ?? "", height: 32,),
+                              Utils.getImage(rowData['amc_logo'], 32),
+                              SizedBox(width: 8),
+                              Expanded(
+                                child: SizedBox(
+                                  width: 160,
+                                  child: Text(
+                                    schemeAmfi,
+                                    maxLines: 2,
+                                    softWrap: true,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppFonts.f40013
+                                        .copyWith(color: Colors.black),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataCell(Text("${returnsAbsOneMonth.toStringAsFixed(2)}%",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text(
+                            "${returnsAbsThreeMonth.toStringAsFixed(2)}%",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text("${returnsAbsSixMonth.toStringAsFixed(2)}%",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text("${returnsAbsOneYear.toStringAsFixed(2)}%",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text(
+                            "${returnsCmpThreeYear.toStringAsFixed(2)}%",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text("${returnsCmpFiveYear.toStringAsFixed(2)}%",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text("${returnsCmpTenYear.toStringAsFixed(2)}%",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text(
+                            "${returnsCmpInception.toStringAsFixed(2)}%",
+                            textAlign: TextAlign.center)),
+                      ],
+                    );
+                  }),
+                ),
               ),
             ),
           ),
@@ -1874,140 +1978,146 @@ class _CompareMFState extends State<CompareMF> {
   }
 
   Widget lumpsumReturnsDataTable() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: SizedBox(
-        height: 140,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: DataTable(
-                headingRowHeight: 35,
-                horizontalMargin: 12,
-                headingRowColor: MaterialStateProperty.resolveWith<Color?>(
-                  (Set<MaterialState> states) {
-                    return Config.appTheme.themeColor;
-                  },
-                ),
-                columns: [
-                  DataColumn(
-                    label: SizedBox(
-                      width: 80,
-                      child: Text(
-                        'Fund',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
+    return Scrollbar(
+      thickness: 5.0,
+      thumbVisibility: true,
+      radius: Radius.circular(10),
+      controller: ScrollController(),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: SizedBox(
+          height: 140,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: DataTable(
+                  headingRowHeight: 35,
+                  horizontalMargin: 12,
+                  headingRowColor: MaterialStateProperty.resolveWith<Color?>(
+                    (Set<MaterialState> states) {
+                      return Config.appTheme.themeColor;
+                    },
                   ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 30,
-                      child: Text(
-                        '1Y',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 30,
-                      child: Text(
-                        '3Y',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 30,
-                      child: Text(
-                        '5Y',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 30,
-                      child: Text(
-                        '10Y',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ],
-                rows:
-                    List<DataRow>.generate(basicInfoTableData.length, (index) {
-                  final rowData = basicInfoTableData[index];
-
-                  String schemeAmfi = rowData['scheme_amfi_short_name'] ?? "";
-                  num lumpOneYearCurrValue =
-                      rowData['lump_1yr_current_value'].round() ?? 0;
-
-                  num lumpThreeYearCurrValue =
-                      rowData['lump_3yr_current_value'].round() ?? 0;
-
-                  num lumpFiveYearCurrValue =
-                      rowData['lump_5yr_current_value'].round() ?? 0;
-
-                  num lumpTenYearCurrValue =
-                      rowData['lump_10yr_current_value'].round() ?? 0;
-
-                  final color = index == 0 ? Colors.white : Colors.white;
-                  return DataRow(
-                    color: MaterialStateProperty.resolveWith<Color?>(
-                        (Set<MaterialState> states) {
-                      return color;
-                    }),
-                    cells: [
-                      DataCell(
-                        Row(
-                          children: [
-                            //Image.network(rowData['amc_logo'] ?? "", height: 32,),
-                            Utils.getImage(rowData['amc_logo'], 32),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: SizedBox(
-                                width: 160,
-                                child: Text(
-                                  schemeAmfi,
-                                  maxLines: 2,
-                                  softWrap: true,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppFonts.f40013
-                                      .copyWith(color: Colors.black),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                            ),
-                          ],
+                  columns: [
+                    DataColumn(
+                      label: SizedBox(
+                        width: 80,
+                        child: Text(
+                          'Fund',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.left,
                         ),
                       ),
-                      DataCell(Text(
-                          "$rupee ${Utils.formatNumber(lumpOneYearCurrValue, isAmount: true)}",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text(
-                          "$rupee ${Utils.formatNumber(lumpThreeYearCurrValue, isAmount: true)}",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text(
-                          "$rupee ${Utils.formatNumber(lumpFiveYearCurrValue, isAmount: true)}",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text(
-                          "$rupee ${Utils.formatNumber(lumpTenYearCurrValue, isAmount: true)}",
-                          textAlign: TextAlign.center)),
-                    ],
-                  );
-                }),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 30,
+                        child: Text(
+                          '1Y',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 30,
+                        child: Text(
+                          '3Y',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 30,
+                        child: Text(
+                          '5Y',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 30,
+                        child: Text(
+                          '10Y',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows:
+                      List<DataRow>.generate(basicInfoTableData.length, (index) {
+                    final rowData = basicInfoTableData[index];
+
+                    String schemeAmfi = rowData['scheme_amfi_short_name'] ?? "";
+                    num lumpOneYearCurrValue =
+                        rowData['lump_1yr_current_value'].round() ?? 0;
+
+                    num lumpThreeYearCurrValue =
+                        rowData['lump_3yr_current_value'].round() ?? 0;
+
+                    num lumpFiveYearCurrValue =
+                        rowData['lump_5yr_current_value'].round() ?? 0;
+
+                    num lumpTenYearCurrValue =
+                        rowData['lump_10yr_current_value'].round() ?? 0;
+
+                    final color = index == 0 ? Colors.white : Colors.white;
+                    return DataRow(
+                      color: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        return color;
+                      }),
+                      cells: [
+                        DataCell(
+                          Row(
+                            children: [
+                              //Image.network(rowData['amc_logo'] ?? "", height: 32,),
+                              Utils.getImage(rowData['amc_logo'], 32),
+                              SizedBox(width: 8),
+                              Expanded(
+                                child: SizedBox(
+                                  width: 160,
+                                  child: Text(
+                                    schemeAmfi,
+                                    maxLines: 2,
+                                    softWrap: true,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppFonts.f40013
+                                        .copyWith(color: Colors.black),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataCell(Text(
+                            "$rupee ${Utils.formatNumber(lumpOneYearCurrValue, isAmount: true)}",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text(
+                            "$rupee ${Utils.formatNumber(lumpThreeYearCurrValue, isAmount: true)}",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text(
+                            "$rupee ${Utils.formatNumber(lumpFiveYearCurrValue, isAmount: true)}",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text(
+                            "$rupee ${Utils.formatNumber(lumpTenYearCurrValue, isAmount: true)}",
+                            textAlign: TextAlign.center)),
+                      ],
+                    );
+                  }),
+                ),
               ),
             ),
           ),
@@ -2017,137 +2127,143 @@ class _CompareMFState extends State<CompareMF> {
   }
 
   Widget sipReturnsDataTable() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: SizedBox(
-        height: 140,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: DataTable(
-                headingRowHeight: 35,
-                horizontalMargin: 12,
-                headingRowColor: MaterialStateProperty.resolveWith<Color?>(
-                  (Set<MaterialState> states) {
-                    return Config.appTheme.themeColor;
-                  },
-                ),
-                columns: [
-                  DataColumn(
-                    label: SizedBox(
-                      width: 80,
-                      child: Text(
-                        'Fund',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
+    return Scrollbar(
+      thickness: 5.0,
+      thumbVisibility: true,
+      radius: Radius.circular(10),
+      controller: ScrollController(),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: SizedBox(
+          height: 140,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: DataTable(
+                  headingRowHeight: 35,
+                  horizontalMargin: 12,
+                  headingRowColor: MaterialStateProperty.resolveWith<Color?>(
+                    (Set<MaterialState> states) {
+                      return Config.appTheme.themeColor;
+                    },
                   ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 30,
-                      child: Text(
-                        '1Y',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 30,
-                      child: Text(
-                        '3Y',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 30,
-                      child: Text(
-                        '5Y',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 30,
-                      child: Text(
-                        '10Y',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ],
-                rows:
-                    List<DataRow>.generate(basicInfoTableData.length, (index) {
-                  final rowData = basicInfoTableData[index];
-
-                  String schemeAmfi = rowData['scheme_amfi_short_name'] ?? "";
-                  num sipOneYearCurrValue =
-                      rowData['sip_1yr_current_value'].round() ?? 0;
-                  num sipThreeYearCurrValue =
-                      rowData['sip_3yr_current_value'].round() ?? 0;
-                  num sipFiveYearCurrValue =
-                      rowData['sip_5yr_current_value'].round() ?? 0;
-                  num sipTenYearCurrValue =
-                      rowData['sip_10yr_current_value'].round() ?? 0;
-
-                  final color = index == 0 ? Colors.white : Colors.white;
-                  return DataRow(
-                    color: MaterialStateProperty.resolveWith<Color?>(
-                        (Set<MaterialState> states) {
-                      return color;
-                    }),
-                    cells: [
-                      DataCell(
-                        Row(
-                          children: [
-                            //Image.network(rowData['amc_logo'] ?? "", height: 32,),
-                            Utils.getImage(rowData['amc_logo'], 32),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: SizedBox(
-                                width: 160,
-                                child: Text(
-                                  schemeAmfi,
-                                  maxLines: 2,
-                                  softWrap: true,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppFonts.f40013
-                                      .copyWith(color: Colors.black),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                            ),
-                          ],
+                  columns: [
+                    DataColumn(
+                      label: SizedBox(
+                        width: 80,
+                        child: Text(
+                          'Fund',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.left,
                         ),
                       ),
-                      DataCell(Text(
-                          "$rupee ${Utils.formatNumber(sipOneYearCurrValue, isAmount: true)}",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text(
-                          "$rupee ${Utils.formatNumber(sipThreeYearCurrValue, isAmount: true)}",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text(
-                          "$rupee ${Utils.formatNumber(sipFiveYearCurrValue, isAmount: true)}",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text(
-                          "$rupee ${Utils.formatNumber(sipTenYearCurrValue, isAmount: true)}",
-                          textAlign: TextAlign.center)),
-                    ],
-                  );
-                }),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 30,
+                        child: Text(
+                          '1Y',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 30,
+                        child: Text(
+                          '3Y',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 30,
+                        child: Text(
+                          '5Y',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 30,
+                        child: Text(
+                          '10Y',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows:
+                      List<DataRow>.generate(basicInfoTableData.length, (index) {
+                    final rowData = basicInfoTableData[index];
+
+                    String schemeAmfi = rowData['scheme_amfi_short_name'] ?? "";
+                    num sipOneYearCurrValue =
+                        rowData['sip_1yr_current_value'].round() ?? 0;
+                    num sipThreeYearCurrValue =
+                        rowData['sip_3yr_current_value'].round() ?? 0;
+                    num sipFiveYearCurrValue =
+                        rowData['sip_5yr_current_value'].round() ?? 0;
+                    num sipTenYearCurrValue =
+                        rowData['sip_10yr_current_value'].round() ?? 0;
+
+                    final color = index == 0 ? Colors.white : Colors.white;
+                    return DataRow(
+                      color: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        return color;
+                      }),
+                      cells: [
+                        DataCell(
+                          Row(
+                            children: [
+                              //Image.network(rowData['amc_logo'] ?? "", height: 32,),
+                              Utils.getImage(rowData['amc_logo'], 32),
+                              SizedBox(width: 8),
+                              Expanded(
+                                child: SizedBox(
+                                  width: 160,
+                                  child: Text(
+                                    schemeAmfi,
+                                    maxLines: 2,
+                                    softWrap: true,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppFonts.f40013
+                                        .copyWith(color: Colors.black),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataCell(Text(
+                            "$rupee ${Utils.formatNumber(sipOneYearCurrValue, isAmount: true)}",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text(
+                            "$rupee ${Utils.formatNumber(sipThreeYearCurrValue, isAmount: true)}",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text(
+                            "$rupee ${Utils.formatNumber(sipFiveYearCurrValue, isAmount: true)}",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text(
+                            "$rupee ${Utils.formatNumber(sipTenYearCurrValue, isAmount: true)}",
+                            textAlign: TextAlign.center)),
+                      ],
+                    );
+                  }),
+                ),
               ),
             ),
           ),
@@ -2157,155 +2273,161 @@ class _CompareMFState extends State<CompareMF> {
   }
 
   Widget riskRatiosDataTable() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: SizedBox(
-        height: 200,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: DataTable(
-                headingRowHeight: 35,
-                horizontalMargin: 12,
-                headingRowColor: MaterialStateProperty.resolveWith<Color?>(
-                  (Set<MaterialState> states) {
-                    return Config.appTheme.themeColor;
-                  },
-                ),
-                columns: [
-                  DataColumn(
-                    label: SizedBox(
-                      width: 80,
-                      child: Text(
-                        'Fund',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
+    return Scrollbar(
+      thickness: 5.0,
+      thumbVisibility: true,
+      radius: Radius.circular(10),
+      controller: ScrollController(),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: SizedBox(
+          height: 140,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: DataTable(
+                  headingRowHeight: 35,
+                  horizontalMargin: 12,
+                  headingRowColor: MaterialStateProperty.resolveWith<Color?>(
+                    (Set<MaterialState> states) {
+                      return Config.appTheme.themeColor;
+                    },
                   ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 60,
-                      child: Text(
-                        'Std Dev',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 40,
-                      child: Text(
-                        'Mean',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 90,
-                      child: Text(
-                        'Sortino Ratio',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 40,
-                      child: Text(
-                        'Alpha',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 40,
-                      child: Text(
-                        'Beta',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: SizedBox(
-                      width: 120,
-                      child: Text(
-                        'Sharp Ratio',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ),
-                ],
-                rows:
-                    List<DataRow>.generate(basicInfoTableData.length, (index) {
-                  final rowData = basicInfoTableData[index];
-
-                  String schemeAmfi = rowData['scheme_amfi_short_name'] ?? "";
-                  num standardDeviation = rowData['standard_deviation'] ?? 0;
-                  num mean = rowData['mean'] ?? 0;
-                  num sortinoRatio = rowData['sortino_ratio'] ?? 0;
-                  num alpha = rowData['alpha'] ?? 0;
-                  num beta = rowData['beta'] ?? 0;
-                  num sharpRatio = rowData['sharpratio'] ?? 0;
-
-                  final color = index == 0 ? Colors.white : Colors.white;
-                  return DataRow(
-                    color: MaterialStateProperty.resolveWith<Color?>(
-                        (Set<MaterialState> states) {
-                      return color;
-                    }),
-                    cells: [
-                      DataCell(
-                        Row(
-                          children: [
-                            //Image.network(rowData['amc_logo'] ?? "", height: 32,),
-                            Utils.getImage(rowData['amc_logo'], 32),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: SizedBox(
-                                width: 160,
-                                child: Text(
-                                  schemeAmfi,
-                                  maxLines: 2,
-                                  softWrap: true,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppFonts.f40013
-                                      .copyWith(color: Colors.black),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                            ),
-                          ],
+                  columns: [
+                    DataColumn(
+                      label: SizedBox(
+                        width: 80,
+                        child: Text(
+                          'Fund',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.left,
                         ),
                       ),
-                      DataCell(Text("${standardDeviation.toStringAsFixed(2)}%",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text("${mean.toStringAsFixed(2)}%",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text("${sortinoRatio.toStringAsFixed(2)}%",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text("${alpha.toStringAsFixed(2)}%",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text("${beta.toStringAsFixed(2)}%",
-                          textAlign: TextAlign.center)),
-                      DataCell(Text("${sharpRatio.toStringAsFixed(2)}%",
-                          textAlign: TextAlign.center)),
-                    ],
-                  );
-                }),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 60,
+                        child: Text(
+                          'Std Dev',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 40,
+                        child: Text(
+                          'Mean',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 90,
+                        child: Text(
+                          'Sortino Ratio',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 40,
+                        child: Text(
+                          'Alpha',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 40,
+                        child: Text(
+                          'Beta',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 120,
+                        child: Text(
+                          'Sharp Ratio',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows:
+                      List<DataRow>.generate(basicInfoTableData.length, (index) {
+                    final rowData = basicInfoTableData[index];
+
+                    String schemeAmfi = rowData['scheme_amfi_short_name'] ?? "";
+                    num standardDeviation = rowData['standard_deviation'] ?? 0;
+                    num mean = rowData['mean'] ?? 0;
+                    num sortinoRatio = rowData['sortino_ratio'] ?? 0;
+                    num alpha = rowData['alpha'] ?? 0;
+                    num beta = rowData['beta'] ?? 0;
+                    num sharpRatio = rowData['sharpratio'] ?? 0;
+
+                    final color = index == 0 ? Colors.white : Colors.white;
+                    return DataRow(
+                      color: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        return color;
+                      }),
+                      cells: [
+                        DataCell(
+                          Row(
+                            children: [
+                              //Image.network(rowData['amc_logo'] ?? "", height: 32,),
+                              Utils.getImage(rowData['amc_logo'], 32),
+                              SizedBox(width: 8),
+                              Expanded(
+                                child: SizedBox(
+                                  width: 160,
+                                  child: Text(
+                                    schemeAmfi,
+                                    maxLines: 2,
+                                    softWrap: true,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppFonts.f40013
+                                        .copyWith(color: Colors.black),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataCell(Text("${standardDeviation.toStringAsFixed(2)}%",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text("${mean.toStringAsFixed(2)}%",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text("${sortinoRatio.toStringAsFixed(2)}%",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text("${alpha.toStringAsFixed(2)}%",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text("${beta.toStringAsFixed(2)}%",
+                            textAlign: TextAlign.center)),
+                        DataCell(Text("${sharpRatio.toStringAsFixed(2)}%",
+                            textAlign: TextAlign.center)),
+                      ],
+                    );
+                  }),
+                ),
               ),
             ),
           ),

@@ -228,9 +228,9 @@ class _BrokerageDashboardState extends State<BrokerageDashboard> {
       Map data = await BrokerageApi.getBranchRmSubBrokerWiseBrokerage(
           user_id: user_id,
           client_name: client_name,
-          month: selectedBranchMonth,
+          month: selectedMonth,
           search: "",
-          type: "Rm");
+          type: "Branch");
 
       if (data['status'] != 200) {
         branchError.value = data['msg'];
@@ -251,7 +251,7 @@ class _BrokerageDashboardState extends State<BrokerageDashboard> {
       Map data = await BrokerageApi.getBranchRmSubBrokerWiseBrokerage(
           user_id: user_id,
           client_name: client_name,
-          month: selectedBranchMonth,
+          month: selectedMonth,
           fin_year: selectedFinancialYear,
           search: "",
           type: "Rm");
@@ -275,10 +275,10 @@ class _BrokerageDashboardState extends State<BrokerageDashboard> {
       Map data = await BrokerageApi.getBranchRmSubBrokerWiseBrokerage(
           user_id: user_id,
           client_name: client_name,
-          month: selectedBranchMonth,
-          fin_year: selectedFinancialYear,
+          month: selectedMonth,
           search: "",
-          type: "SubBroker");
+          type: "SubBroker",
+          fin_year: selectedFinancialYear,);
 
       if (data['status'] != 200) {
         branchError.value = data['msg'];
@@ -307,8 +307,8 @@ class _BrokerageDashboardState extends State<BrokerageDashboard> {
     }
     brokerageMonthList = data['result'];
     // selectedAmcMonth = brokerageMonthList.first;
-    selectedInvMonth = brokerageMonthList.first;
-    selectedBranchMonth = brokerageMonthList.first;
+    // selectedInvMonth = brokerageMonthList.first;
+    // selectedBranchMonth = brokerageMonthList.first;
 
     return 0;
   }
@@ -405,7 +405,7 @@ class _BrokerageDashboardState extends State<BrokerageDashboard> {
     });
   }
 
-  String selectedBranchMonth = "";
+  String selectedMonth = "";
   String RmAssTitle = "";
 
   Widget branchRmCard() {
@@ -443,19 +443,18 @@ class _BrokerageDashboardState extends State<BrokerageDashboard> {
                 SortButton(
                   title: selectedFinancialYear.isNotEmpty
                       ? selectedFinancialYear
-                      : selectedAmcMonth.isNotEmpty
-                      ? selectedAmcMonth
+                      : selectedMonth.isNotEmpty
+                      ? selectedMonth
                       : "Select Period",
                   textStyle: AppFonts.f50012,
                   onTap: () {
                     rmAssociateWiseBottomSheet(
                       selectfinancial: selectedFinancialYear,
-                      groupValue: selectedBranchMonth,
+                      selectMonth: selectedMonth,
                       monthList: brokerageMonthList,
                       financial_branchonChanged: (val) async {
-                        selectedBranchMonth = "";
+                        selectedMonth = "";
                         selectedFinancialYear = val!;
-
                         Get.back();
                         branchList = [];
                         setState(() {});
@@ -465,9 +464,8 @@ class _BrokerageDashboardState extends State<BrokerageDashboard> {
                           await getAssociateWiseBrokerage();
                       },
                       AMC_branchonChanged: (val) async {
-                        selectedBranchMonth = val!;
+                        selectedMonth = val!;
                         selectedFinancialYear = "";
-
                         Get.back();
                         branchList = [];
                         setState(() {});
@@ -572,7 +570,7 @@ class _BrokerageDashboardState extends State<BrokerageDashboard> {
     );
   }
 
-  String selectedInvMonth = "";
+  String selectedInvMonth = "MAR-2025";
 
 
   Widget invFamCard() {
@@ -915,8 +913,8 @@ class _BrokerageDashboardState extends State<BrokerageDashboard> {
 
   rmAssociateWiseBottomSheet({
      String? selectfinancial,
-    required String groupValue,
-    Function(String?)? onChanged,
+    required String selectMonth,
+    // Function(String?)? onChanged,
     required List monthList,
     Function(String?)? financial_branchonChanged,
     Function(String?)? AMC_branchonChanged,
@@ -978,28 +976,58 @@ class _BrokerageDashboardState extends State<BrokerageDashboard> {
                         ),
                         // Right content
                         Expanded(
-                          child: selectedLeft == "Month Wise"
+                          child: selectedLeft == "Financial Year"
                               ? ListView.builder(
+                            itemCount: financialYearList.length,
+                            itemBuilder: (context, index) {
+                              String title = financialYearList[index];
+                              return InkWell(
+                                onTap: () {
+                                  bottomState(() {
+                                    selectfinancial = title;
+                                  });
+                                  financial_branchonChanged?.call(title);
+                                },
+                                child: Row(
+                                  children: [
+                                    Radio<String>(
+                                      value: title,
+                                      groupValue: selectfinancial,
+                                      onChanged: (value) {
+                                        bottomState(() {
+                                          selectfinancial = value!;
+                                        });
+                                        financial_branchonChanged?.call(value);
+                                      },
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text(title),
+                                  ],
+                                ),
+                              );
+                            },
+                          )
+                              :ListView.builder(
                                   itemCount: monthList.length,
                                   itemBuilder: (context, index) {
                                     String title = monthList[index];
                                     return InkWell(
                                       onTap: () {
                                         bottomState(() {
-                                          selectfinancial = title;
+                                          selectMonth = title;
                                         });
-                                        financial_branchonChanged?.call(title);
+                                        AMC_branchonChanged?.call(title);
                                       },
                                       child: Row(
                                         children: [
                                           Radio<String>(
                                             value: title,
-                                            groupValue: selectfinancial,
+                                            groupValue: selectMonth,
                                             onChanged: (value) {
                                               bottomState(() {
-                                                selectfinancial = value!;
+                                                selectMonth = value!;
                                               });
-                                              financial_branchonChanged?.call(value);
+                                              AMC_branchonChanged?.call(value);
                                             },
                                           ),
                                           SizedBox(width: 5),
@@ -1009,37 +1037,7 @@ class _BrokerageDashboardState extends State<BrokerageDashboard> {
                                     );
                                   },
                                 )
-                              : ListView.builder(
-                                  itemCount: financialYearList.length,
-                                  itemBuilder: (context, index) {
-                                    String title = financialYearList[index];
-                                    return InkWell(
-                                      onTap: () {
 
-                                        bottomState(() {
-                                          selectfinancial = title;
-                                        });
-                                        financial_branchonChanged?.call(title);
-                                      },
-                                      child: Row(
-                                        children: [
-                                          Radio<String>(
-                                            value: title,
-                                            groupValue: selectfinancial,
-                                            onChanged: (value) {
-                                              bottomState(() {
-                                                selectfinancial = value!;
-                                              });
-                                              financial_branchonChanged?.call(value);
-                                            },
-                                          ),
-                                          SizedBox(width: 5),
-                                          Text(title),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                ),
                         ),
                       ],
                     ),

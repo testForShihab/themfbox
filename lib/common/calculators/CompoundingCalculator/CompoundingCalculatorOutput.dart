@@ -127,7 +127,7 @@ class _CompoundingCalculatorOutputState
                             value:
                                 "${compoundingCalculatorResult['period']} Years"),
                         ColumnText(
-                          title: "Interest Rate",
+                          title: "Interest Rate (% per annum)",
                           value:
                               "${compoundingCalculatorResult['interest_rate']} %",
                           alignment: CrossAxisAlignment.end,
@@ -152,7 +152,7 @@ class _CompoundingCalculatorOutputState
                 children: [
                   Expanded(
                     child: Text(
-                      "Total Maturity",
+                      "Total Maturity Amount",
                       style: AppFonts.f50014Black,
                     ),
                   ),

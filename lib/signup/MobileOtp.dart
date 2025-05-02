@@ -12,6 +12,8 @@ import 'package:mymfbox2_0/utils/Constants.dart';
 import 'package:mymfbox2_0/utils/Utils.dart';
 import 'package:pinput/pinput.dart';
 
+import '../api/ApiConfig.dart';
+
 class MobileOtp extends StatefulWidget {
   const MobileOtp({super.key, required this.signUpData});
   final Map signUpData;
@@ -85,7 +87,7 @@ class _MobileOtpState extends State<MobileOtp> {
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
                         Config.appTheme.themeColor, BlendMode.color))
-                : (Config.app_client_name == "themfbox") ? DecorationImage(
+                : (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? DecorationImage(
                 image: AssetImage("assets/green-bg.png"),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
@@ -123,20 +125,20 @@ class _MobileOtpState extends State<MobileOtp> {
                       padding: EdgeInsets.all(4),
                       child: (Config.appLogo.contains("http"))
                           ? Image.network(Config.appLogo, height: setImageSize(100))
-                          : (Config.app_client_name == "themfbox") ?Image.asset(Config.appLogo)
+                          : (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ?Image.asset(Config.appLogo)
                           : Image.asset(Config.appLogo, width: setImageSize(350)),
               ),
               SizedBox(height: devHeight * 0.06),
               Text("Verify Mobile Number",
                   style: TextStyle(
                       color:
-                      (Config.app_client_name == "themfbox") ? Colors.white : Config.appTheme.themeColor,
+                      (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? Colors.white : Config.appTheme.themeColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 20)),
               SizedBox(height: devHeight * 0.01),
               Text("Please enter the OTP sent to ${signUpData['mobile']}",
                   style: TextStyle(
-                    color: (Config.app_client_name == "themfbox") ? Colors.white : Config.appTheme.themeColor,
+                    color: (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? Colors.white : Config.appTheme.themeColor,
                   )),
               SizedBox(height: devHeight * 0.05),
               Expanded(

@@ -99,7 +99,7 @@ class _GoalLumpsumCalculatorOutputState
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Target Amount",
+                          "Your Targeted Amount",
                           style: AppFonts.f40013,
                         ),
                       ],

@@ -94,7 +94,7 @@ class _CrorepatiCalculatorInputState extends State<CrorepatiCalculatorInput> {
                   ),
                   SizedBox(height: 16),
                   SliderInputCard(
-                    title: "Your current age",
+                    title: "Your current age (in years)",
                     controller: ageTodayController,
                     sliderValue: ageToday.toDouble(),
                     inputFormatters: [
@@ -129,7 +129,7 @@ class _CrorepatiCalculatorInputState extends State<CrorepatiCalculatorInput> {
                   ),
                   SizedBox(height: 16),
                   SliderInputCard(
-                    title: "The age when you want to become a Crorepati",
+                    title: "The age when you want to become a Crorepati (in years)",
                     controller: ageBecomeController,
                     inputFormatters: [
                       MaxValueFormatter(100, isDecimal: false),
@@ -158,12 +158,12 @@ class _CrorepatiCalculatorInputState extends State<CrorepatiCalculatorInput> {
                   ),
                   SizedBox(height: 16),
                   SliderInputCard(
-                    title: "The expected rate of inflation over the years",
+                    title: "The expected rate of inflation over the years (% per annum)",
                     sliderValue: annualInflationRate.toDouble(),
                     controller: annualInflationRateController,
-                    sliderMaxValue: 15,
+                    sliderMaxValue: 10,
                     inputFormatters: [
-                      MaxValueFormatter(15),
+                      MaxValueFormatter(10),
                       DoubleDecimalFormatter(),
                     ],
                     suffixText: "%",
@@ -191,14 +191,14 @@ class _CrorepatiCalculatorInputState extends State<CrorepatiCalculatorInput> {
                   SizedBox(height: 16),
                   SliderInputCard(
                     title:
-                        "What rate of return would you expect your SIP investment to generate",
+                        "What rate of return would you expect your SIP investment to generate (% per annum)",
                     sliderValue: annualRateReturn.toDouble(),
                     inputFormatters: [
-                      MaxValueFormatter(50),
+                      MaxValueFormatter(20),
                       DoubleDecimalFormatter(),
                     ],
                     controller: annualRateReturnController,
-                    sliderMaxValue: 50,
+                    sliderMaxValue: 20,
                     suffixText: "%",
                     tfOnChange: (val) {
                       num temp = num.tryParse(val) ?? 0;
@@ -206,7 +206,7 @@ class _CrorepatiCalculatorInputState extends State<CrorepatiCalculatorInput> {
 
                       if (!isValid && temp <= 0) {
                         Utils.showError(context,
-                            "Expected Annual Rate of Return should be in-between 1-50");
+                            "Expected Annual Rate of Return should be in-between 1-20");
                         return;
                       }
 
@@ -224,10 +224,10 @@ class _CrorepatiCalculatorInputState extends State<CrorepatiCalculatorInput> {
                   ),
                   SizedBox(height: 16),
                   AmountInputCard(
-                    title: "Your Current Savings",
+                    title: "How much savings you have now (Rs)",
                     initialValue: "2500000",
                     inputFormatters: [
-                      MaxValueFormatter(1000000000, isDecimal: false),
+                      MaxValueFormatter(10000000, isDecimal: false),
                       NoLeadingZeroInputFormatter(),
                       FilteringTextInputFormatter.digitsOnly,
                     ],
@@ -273,7 +273,7 @@ class _CrorepatiCalculatorInputState extends State<CrorepatiCalculatorInput> {
                         EasyLoading.dismiss();
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Config.appTheme.themeColor,
+                          backgroundColor: Config.appTheme.buttonColor,
                           foregroundColor:
                               Colors.white // Set the background color here
                           ),
@@ -318,7 +318,7 @@ class _CrorepatiCalculatorInputState extends State<CrorepatiCalculatorInput> {
 
     if (annualRateReturn > 50 || annualRateReturn <= 0.0) {
       EasyLoading.showError(
-          "Please enter valid expected annual rate of return. It Should be in-between 1-50");
+          "Please enter valid expected annual rate of return. It Should be in-between 1-20");
       return false;
     }
     if (ageToday >= ageBecome) {
@@ -347,14 +347,14 @@ class _CrorepatiCalculatorInputState extends State<CrorepatiCalculatorInput> {
   }
 
   bool isinflationValidSlider(num temp) {
-    if (temp < 0 || temp > 15)
+    if (temp < 0 || temp > 10)
       return false;
     else
       return true;
   }
 
   bool isreturnValidSlider(num temp) {
-    if (temp < 0 || temp > 50)
+    if (temp < 0 || temp > 20)
       return false;
     else
       return true;

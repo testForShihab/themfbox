@@ -8,8 +8,8 @@ void main() {
     ..appClientName = "saverspoint"
     ..appArn = "292842"
     ..appLogo = "https://themfbox.com/resources/bootstrap/images/saverspoint_logo.png"
-    ..apiKey = ""
-    ..appTheme = PurpleTheme()
+    ..apiKey = "96d6dd29-c83a-46f4-9887-4af896d197b8"
+    ..appTheme = DarkBlueTheme()
     ..supportEmail = ""
     ..supportMobile = ""
     ..privacyPolicy = ""

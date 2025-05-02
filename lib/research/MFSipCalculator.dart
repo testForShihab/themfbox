@@ -417,7 +417,7 @@ class _MFSipCalculatorState extends State<MFSipCalculator> {
                           padding:
                           EdgeInsets.symmetric(horizontal: 18, vertical: 7),
                           decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: Config.appTheme.universalTitle,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text("Submit",
@@ -832,7 +832,7 @@ class _MFSipCalculatorState extends State<MFSipCalculator> {
                         Get.back();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Config.appTheme.themeColor,
+                        backgroundColor: Config.appTheme.buttonColor,
                         foregroundColor: Colors.white,
                       ),
                       child: Text('Apply'),

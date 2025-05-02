@@ -225,6 +225,7 @@ class _MandateSuccessState extends State<MandateSuccess> {
                         Get.to(InvestorDashboard());
                       },
                       child: RpFilledButton(
+                        color: Config.appTheme.buttonColor,
                         text: "DASHBOARD",
                         padding: EdgeInsets.symmetric(vertical: 14),
                       ),

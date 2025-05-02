@@ -144,6 +144,7 @@ class _SwpPaymentSuccessState extends State<SwpPaymentSuccess> {
                           ),
                           SizedBox(height: 16),
                           RpFilledButton(
+                            color: Config.appTheme.buttonColor,
                             text: "DASHBOARD",
                             onPressed: () {
                               Get.back();

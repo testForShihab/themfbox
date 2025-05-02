@@ -826,7 +826,7 @@ class _CreateClientState extends State<CreateClient> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            backgroundColor: Config.appTheme.themeColor,
+            backgroundColor: Config.appTheme.buttonColor,
             foregroundColor: Colors.white,
           ),
           child: Text(

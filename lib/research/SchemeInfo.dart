@@ -548,6 +548,7 @@ class _SchemeInfoState extends State<SchemeInfo> {
           }
         },
         labels: schemeInfoController.chartFilterList,
+
         activeBgColor: [Colors.black],
         inactiveBgColor: Colors.white,
         borderColor: [Colors.grey.shade300],
@@ -1180,7 +1181,7 @@ class _SchemeInfoState extends State<SchemeInfo> {
         children: [
           rcGreenArea(),
           SizedBox(height: 16),
-        /*  Obx(() => schemeInfoController.isLoadingReturns.value
+          /*Obx(() => schemeInfoController.isLoadingReturns.value
               ? Utils.shimmerWidget(100)
               : rcMidGreyArea()),
           SizedBox(height: 16),*/
@@ -1480,185 +1481,179 @@ class _SchemeInfoState extends State<SchemeInfo> {
           thumbVisibility: true,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: SizedBox(
-              height: devHeight * 0.30,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: DataTable(
-                        horizontalMargin: 10,
-                        headingRowHeight: 35,
-                        headingRowColor:
-                            MaterialStateProperty.resolveWith<Color?>(
-                          (Set<MaterialState> states) {
-                            return Config.appTheme.themeColor;
-                          },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: DataTable(
+                    horizontalMargin: 10,
+                    headingRowHeight: 35,
+                    headingRowColor:
+                        MaterialStateProperty.resolveWith<Color?>(
+                      (Set<MaterialState> states) {
+                        return Config.appTheme.themeColor;
+                      },
+                    ),
+                    columns: [
+                      DataColumn(
+                        label: SizedBox(
+                          width: 50,
+                          child: Text(
+                            'Fund',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.left,
+                          ),
                         ),
-                        columns: [
-                          DataColumn(
-                            label: SizedBox(
-                              width: 50,
-                              child: Text(
-                                'Fund',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.left,
-                              ),
-                            ),
+                      ),
+                     /* DataColumn(
+                        label: SizedBox(
+                          width: 60,
+                          child: Text(
+                            'Aum (Cr)',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
                           ),
-                         /* DataColumn(
-                            label: SizedBox(
-                              width: 60,
-                              child: Text(
-                                'Aum (Cr)',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),*/
-                          DataColumn(
-                            label: SizedBox(
-                              width: 100,
-                              child: Text(
-                                'Inception Date',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
+                        ),
+                      ),*/
+                      DataColumn(
+                        label: SizedBox(
+                          width: 100,
+                          child: Text(
+                            'Inception Date',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
                           ),
-                          DataColumn(
-                            label: SizedBox(
-                              width: 50,
-                              child: Text(
-                                '1Y',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
+                        ),
+                      ),
+                      DataColumn(
+                        label: SizedBox(
+                          width: 50,
+                          child: Text(
+                            '1Y',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
                           ),
-                          DataColumn(
-                            label: SizedBox(
-                              width: 30,
-                              child: Text(
-                                '2Y',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
+                        ),
+                      ),
+                      DataColumn(
+                        label: SizedBox(
+                          width: 30,
+                          child: Text(
+                            '2Y',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
                           ),
-                          DataColumn(
-                            label: SizedBox(
-                              width: 30,
-                              child: Text(
-                                '3Y',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
+                        ),
+                      ),
+                      DataColumn(
+                        label: SizedBox(
+                          width: 30,
+                          child: Text(
+                            '3Y',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
                           ),
-                          DataColumn(
-                            label: SizedBox(
-                              width: 30,
-                              child: Text(
-                                '5Y',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
+                        ),
+                      ),
+                      DataColumn(
+                        label: SizedBox(
+                          width: 30,
+                          child: Text(
+                            '5Y',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
                           ),
-                          DataColumn(
-                            label: SizedBox(
-                              width: 30,
-                              child: Text(
-                                '10Y',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
+                        ),
+                      ),
+                      DataColumn(
+                        label: SizedBox(
+                          width: 30,
+                          child: Text(
+                            '10Y',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
                           ),
-                        ],
-                        rows: List<DataRow>.generate(
-                            schemeInfoController
-                                .peerComparisionTableData.length, (index) {
-                          final rowData = schemeInfoController.peerComparisionTableData[index];
-                          String schemeShort =
-                              rowData['scheme_amfi_short_name'] ?? "";
-                          String amcLogo = rowData['amc_logo'] ?? "";
-                          num aum = rowData['scheme_assets'] ?? 0;
-                          num oneYear = rowData['returns_abs_1year'] ?? 0;
-                          num twoYear = rowData['returns_cmp_2year'] ?? 0;
-                          num threeYear = rowData['returns_cmp_3year'] ?? 0;
-                          num fiveYear = rowData['returns_cmp_5year'] ?? 0;
-                          num tenYear = rowData['returns_cmp_10year'] ?? 0;
-                          String inceptiondate = rowData['inception_date_str'] ?? "";
-                          final color = index == 0
-                              ? Config.appTheme.themeColor.withOpacity(0.1)
-                              : Colors.white;
-                          return DataRow(
-                            color: MaterialStateProperty.resolveWith<Color?>(
-                                (Set<MaterialState> states) {
-                              return color;
-                            }),
-                            cells: [
-                              DataCell(
-                                Row(
-                                  children: [
-                                    (amcLogo.isNotEmpty &&
-                                            Uri.parse(amcLogo).isAbsolute
-                                        ? Image.network(
-                                            amcLogo,
-                                            height: 28,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                              return SizedBox(
-                                                width: 32,
-                                                height: 32,
-                                              );
-                                            },
-                                          )
-                                        : SizedBox(
+                        ),
+                      ),
+                    ],
+                    rows: List<DataRow>.generate(
+                        schemeInfoController
+                            .peerComparisionTableData.length, (index) {
+                      final rowData = schemeInfoController.peerComparisionTableData[index];
+                      String schemeShort =
+                          rowData['scheme_amfi_short_name'] ?? "";
+                      String amcLogo = rowData['amc_logo'] ?? "";
+                      num aum = rowData['scheme_assets'] ?? 0;
+                      num oneYear = rowData['returns_abs_1year'] ?? 0;
+                      num twoYear = rowData['returns_cmp_2year'] ?? 0;
+                      num threeYear = rowData['returns_cmp_3year'] ?? 0;
+                      num fiveYear = rowData['returns_cmp_5year'] ?? 0;
+                      num tenYear = rowData['returns_cmp_10year'] ?? 0;
+                      String inceptiondate = rowData['inception_date_str'] ?? "";
+                      final color = index == 0
+                          ? Config.appTheme.themeColor.withOpacity(0.1)
+                          : Colors.white;
+                      return DataRow(
+                        color: MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                          return color;
+                        }),
+                        cells: [
+                          DataCell(
+                            Row(
+                              children: [
+                                (amcLogo.isNotEmpty &&
+                                        Uri.parse(amcLogo).isAbsolute
+                                    ? Image.network(
+                                        amcLogo,
+                                        height: 28,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return SizedBox(
                                             width: 32,
                                             height: 32,
-                                          )),
-                                    SizedBox(width: 8),
-                                    Expanded(
-                                      child: SizedBox(
-                                        width: 160,
-                                        child: Text(
-                                          schemeShort,
-                                          maxLines: 2,
-                                          softWrap: true,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: AppFonts.f40013
-                                              .copyWith(color: Colors.black),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ),
+                                          );
+                                        },
+                                      )
+                                    : SizedBox(
+                                        width: 32,
+                                        height: 32,
+                                      )),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: SizedBox(
+                                    width: 160,
+                                    child: Text(
+                                      schemeShort,
+                                      maxLines: 2,
+                                      softWrap: true,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: AppFonts.f40013
+                                          .copyWith(color: Colors.black),
+                                      textAlign: TextAlign.left,
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                             // DataCell(Text("$rupee ${Utils.formatNumber(aum)}", textAlign: TextAlign.center)),
-                              DataCell(Text("$inceptiondate", textAlign: TextAlign.center)),
-                              DataCell(Text("$oneYear%",
-                                  textAlign: TextAlign.center)),
-                              DataCell(Text("$twoYear%",
-                                  textAlign: TextAlign.center)),
-                              DataCell(Text("$threeYear%",
-                                  textAlign: TextAlign.center)),
-                              DataCell(Text("$fiveYear%",
-                                  textAlign: TextAlign.center)),
-                              DataCell(Text("$tenYear%",
-                                  textAlign: TextAlign.center)),
-                            ],
-                          );
-                        })),
-                  ),
-                ),
+                              ],
+                            ),
+                          ),
+                         // DataCell(Text("$rupee ${Utils.formatNumber(aum)}", textAlign: TextAlign.center)),
+                          DataCell(Text("$inceptiondate", textAlign: TextAlign.center)),
+                          DataCell(Text("$oneYear%",
+                              textAlign: TextAlign.center)),
+                          DataCell(Text("$twoYear%",
+                              textAlign: TextAlign.center)),
+                          DataCell(Text("$threeYear%",
+                              textAlign: TextAlign.center)),
+                          DataCell(Text("$fiveYear%",
+                              textAlign: TextAlign.center)),
+                          DataCell(Text("$tenYear%",
+                              textAlign: TextAlign.center)),
+                        ],
+                      );
+                    })),
               ),
             ),
           ),
@@ -1673,6 +1668,13 @@ class _SchemeInfoState extends State<SchemeInfo> {
     Color(0xff4155B9),
     Color(0xff3C9AB6)
   ];
+  // SingleChildScrollView(
+  // scrollDirection: Axis.horizontal,
+  // child: SizedBox(
+  // height: devHeight * 0.30,
+  // child: SingleChildScrollView(
+  // scrollDirection: Axis.vertical,
+  // child: Container(
 
   Widget historicalDataTable() {
     return Scrollbar(
@@ -1856,8 +1858,7 @@ class _SchemeInfoState extends State<SchemeInfo> {
                       padding: EdgeInsets.symmetric(horizontal: 16),
                       child: Obx(() {
                         final list =
-                            schemeInfoController.selectedReturns.value ==
-                                    "Lumpsum"
+                            schemeInfoController.selectedReturns.value == "Lumpsum"
                                 ? schemeInfoController.lumpsumPeriodList
                                 : schemeInfoController.sipPeriodList;
                         return ListView.builder(
@@ -1876,13 +1877,10 @@ class _SchemeInfoState extends State<SchemeInfo> {
                                 children: [
                                   Radio(
                                       value: curr,
-                                      groupValue:
-                                          schemeInfoController.rcPeriod.value,
+                                      groupValue: schemeInfoController.rcPeriod.value,
                                       onChanged: (val) {
-                                        schemeInfoController.rcPeriod.value =
-                                            curr;
-                                        schemeInfoController
-                                            .getReturnsTableCalc(schemeName);
+                                        schemeInfoController.rcPeriod.value = curr;
+                                        schemeInfoController.getReturnsTableCalc(schemeName);
                                         Get.back();
                                       }),
                                   Text("$curr Year")
@@ -1926,54 +1924,54 @@ class _SchemeInfoState extends State<SchemeInfo> {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: list.length,
-                        itemBuilder: (context, index) {
-                          String curr = list[index];
-                          num tempNum = num.parse(curr);
-                          return InkWell(
-                            onTap: () {
-                              schemeInfoController.rcAmount.value = curr;
-                              if (schemeInfoController.selectedReturns.value ==
-                                  "Lumpsum")
-                                schemeInfoController.lumpsumReturnsList.clear();
-                              else
-                                schemeInfoController.sipReturnsList.clear();
-                              schemeInfoController
-                                  .getReturnsTableCalc(schemeName);
+                      child: Obx(() {
+                        schemeInfoController.selectedReturns.value == "Lumpsum"
+                            ? schemeInfoController.lumpsumPeriodList
+                            : schemeInfoController.sipPeriodList;
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: list.length,
+                          itemBuilder: (context, index) {
+                            String curr = list[index];
+                            num tempNum = num.parse(curr);
+                            return InkWell(
+                              onTap: () async {
+                                schemeInfoController.rcAmount.value = curr;
+                                schemeInfoController.getReturnsTableCalc(schemeName);
+                                if (schemeInfoController.selectedReturns.value ==
+                                    "Lumpsum")
+                                  schemeInfoController.lumpsumReturnsList.clear();
+                                else
+                                  schemeInfoController.sipReturnsList.clear();
+                                schemeInfoController.getReturnsTableCalc(schemeName);
 
-                              Get.back();
-                            },
-                            child: Row(
-                              children: [
-                                Radio(
-                                    value: curr,
-                                    groupValue:
-                                        schemeInfoController.rcAmount.value,
-                                    onChanged: (val) {
-                                      schemeInfoController.rcAmount.value =
-                                          curr;
-                                      if (schemeInfoController
-                                              .selectedReturns.value ==
-                                          "Lumpsum")
-                                        schemeInfoController.lumpsumReturnsList
-                                            .clear();
-                                      else
-                                        schemeInfoController.sipReturnsList
-                                            .clear();
-                                      // schemeInfoController.rcPeriod.value = curr;
-                                      // schemeInfoController
-                                      //     .getReturnsTableCalc(schemeName);
-                                      Get.back();
-                                      //setState(() {});
-                                    }),
-                                Text("$rupee ${Utils.formatNumber(tempNum)}")
-                              ],
-                            ),
-                          );
-                        },
-                      ),
+                                Get.back();
+                              },
+                              child: Row(
+                                children: [
+                                  Radio(
+                                      value: curr,
+                                      groupValue: schemeInfoController.rcAmount.value,
+                                      onChanged: (val) {
+                                        schemeInfoController.rcAmount.value = curr;
+                                        schemeInfoController.getReturnsTableCalc(schemeName);
+                                        if (schemeInfoController.selectedReturns.value == "Lumpsum")
+                                          schemeInfoController.lumpsumReturnsList.clear();
+                                        else
+                                          schemeInfoController.sipReturnsList.clear();
+                                        // schemeInfoController.rcPeriod.value = curr;
+                                        // schemeInfoController
+                                        //     .getReturnsTableCalc(schemeName);
+                                        Get.back();
+                                        //setState(() {});
+                                      }),
+                                  Text("$rupee ${Utils.formatNumber(tempNum)}")
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      }),
                     ),
                   )
                 ],
@@ -2126,7 +2124,7 @@ class SchemeInfoController extends GetxController {
   var chartData = <ChartData>[].obs;
   var chartReturns = 0.0.obs;
   var isLoadingNavGraph = false.obs;
-  final chartFilterList = ["1M", "3M", "6M", "1Y", "3Y", "5Y", "All"];
+  final chartFilterList = ["1M", "3M", "6M", "1Y", "3Y", "5Y", "10Y","All"];
   var selectedChartPeriod = "1M".obs;
 
   Future<int> getSchemeInfo({

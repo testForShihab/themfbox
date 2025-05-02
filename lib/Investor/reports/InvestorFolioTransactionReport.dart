@@ -124,7 +124,7 @@ class _InvestorFolioTransactionReportState
                           Icon(Icons.arrow_back),
                           SizedBox(width: 5),
                           Text(
-                            "Folio Wise Transaction",
+                            "Folio Wise Transaction Report",
                             style: AppFonts.f50014Black
                                 .copyWith(fontSize: 18, color: Colors.white),
                           ),

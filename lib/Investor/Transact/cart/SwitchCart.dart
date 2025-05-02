@@ -418,6 +418,7 @@ class _SwitchCartState extends State<SwitchCart> {
 
     if (type == ButtonType.plain) {
       return PlainButton(
+        color: Config.appTheme.buttonColor,
         text: text,
         padding: padding,
         onPressed: () {
@@ -426,6 +427,7 @@ class _SwitchCartState extends State<SwitchCart> {
       );
     } else {
       return RpFilledButton(
+        color: Config.appTheme.buttonColor,
         text: text,
         padding: padding,
         onPressed: () async {

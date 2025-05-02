@@ -4,13 +4,13 @@ import 'package:mymfbox2_0/utils/AppThemes.dart';
 
 void main() {
   mainCommon(FlavorConfig()
-    ..appTitle = "FinsShip"
+    ..appTitle = "FINSSHIP"
     ..appClientName = "finsshipfinancialservices"
     ..appArn = "254273"
     ..appLogo =
         "https://themfbox.com/resources/bootstrap/images/finsshipfinancialservices_logo.png"
     ..apiKey = "cb478bc7-b3f7-4593-b972-97641d67d45f"
-    ..appTheme = PurpleTheme()
+    ..appTheme = CoralTheme()
     ..supportEmail = ""
     ..supportMobile = ""
     ..privacyPolicy = ""

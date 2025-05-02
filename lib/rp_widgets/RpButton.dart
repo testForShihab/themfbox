@@ -19,13 +19,13 @@ class RpButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: devWidth * 0.15, vertical: 2),
         decoration: BoxDecoration(
-            border: Border.all(color: Config.appTheme.themeColor),
+            border: Border.all(color: Config.appTheme.buttonColor),
             borderRadius: BorderRadius.circular(10)),
         child: Center(
           child: Text(
             "Cancel",
             style: AppFonts.f50014Black
-                .copyWith(color: Config.appTheme.themeColor),
+                .copyWith(color: Config.appTheme.buttonColor),
           ),
         ),
       ),
@@ -39,7 +39,7 @@ class RpButton extends StatelessWidget {
           padding:
               EdgeInsets.symmetric(horizontal: devWidth * 0.15, vertical: 2),
           decoration: BoxDecoration(
-              color: Config.appTheme.themeColor,
+              color: Config.appTheme.buttonColor,
               borderRadius: BorderRadius.circular(10)),
           child: Center(
               child: Text(

@@ -60,7 +60,7 @@ class _RetirementCalculatorOutputState
     return Scaffold(
       backgroundColor: Config.appTheme.mainBgColor,
       appBar: rpAppBar(
-          title: "Retirement Calculator",
+          title: "Retirement Planning Calculator",
           bgColor: Config.appTheme.themeColor,
           foregroundColor: Colors.white,
           actions: [
@@ -128,7 +128,7 @@ class _RetirementCalculatorOutputState
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ColumnText(
-                            title: "Period",
+                            title: "Number of years you need to save",
                             value:
                                 "${retirementCalculatorResult['years']} Years"),
                         ColumnText(
@@ -192,7 +192,7 @@ class _RetirementCalculatorOutputState
                     children: [
                       Expanded(
                         child: Text(
-                          "Growth of Current Savings",
+                          "Growth of your Savings Amount",
                           style: AppFonts.f50014Black,
                         ),
                       )
@@ -234,7 +234,7 @@ class _RetirementCalculatorOutputState
                     children: [
                       Expanded(
                         child: Text(
-                          "(Minus growth of current\nsavings)",
+                          "(Minus growth of your \nsavings amount)",
                           style: AppFonts.f40013,
                         ),
                       ),
@@ -297,7 +297,7 @@ class _RetirementCalculatorOutputState
     List<SipData> chartData = [];
 
     chartData.add(SipData(
-      category: 'Total Amount Invested',
+      category: 'Total Amount Invested ',
       percentage: retirementCalculatorResult['invested_amount'].toDouble(),
     ));
 
@@ -361,8 +361,8 @@ class _RetirementCalculatorOutputState
                       ),
                       if (index == 0)
                         Text(
-                          "(Through SIP In ${retirementCalculatorResult['years']} Years)",
-                          style: AppFonts.f40013,
+                        'in ${retirementCalculatorResult['years']} Years',
+                          style: AppFonts.f40013.copyWith(color: Colors.black,fontSize: 16),
                         ),
                     ],
                   ),

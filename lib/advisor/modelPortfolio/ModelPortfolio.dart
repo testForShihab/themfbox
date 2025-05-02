@@ -281,7 +281,7 @@ class _ModelPortfolioState extends State<ModelPortfolio> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          backgroundColor: Config.appTheme.themeColor,
+                          backgroundColor: Config.appTheme.buttonColor,
                           foregroundColor: Colors.white,
                         ),
                         child: Text(
@@ -416,7 +416,7 @@ class _ModelPortfolioState extends State<ModelPortfolio> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          backgroundColor: Config.appTheme.themeColor,
+                          backgroundColor:  Config.appTheme.buttonColor,
                           foregroundColor: Colors.white,
                         ),
                         child: Text(
@@ -614,13 +614,14 @@ class _ModelPortfolioState extends State<ModelPortfolio> {
       return PlainButton(
         text: text,
         padding: padding,
+        color: Config.appTheme.themeColor,
         onPressed: () {
           selectedType = text;
           setState(() {});
         },
       );
     } else {
-      return RpFilledButton(text: selectedType, padding: padding);
+      return RpFilledButton(text: selectedType, padding: padding,color: Config.appTheme.themeColor,);
     }
   }
 

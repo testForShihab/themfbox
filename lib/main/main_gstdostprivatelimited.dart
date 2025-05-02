@@ -10,8 +10,8 @@ void main() {
     ..appLogo = "https://api.mymfbox.com/images/logo/prospera.png"
     ..apiKey = "134b94a0-cfc8-421d-af11-9ed1213dc284"
     ..appTheme = DarkBlueTheme()
-    ..supportEmail = "ashvinitripathi@gmail.com"
-    ..supportMobile = "9918229999"
+    ..supportEmail = ""
+    ..supportMobile = ""
     ..privacyPolicy = "https://www.prosperaapp.com/privacy-policy"
     ..pdfURL = "https://api.themfbox.com");
 }

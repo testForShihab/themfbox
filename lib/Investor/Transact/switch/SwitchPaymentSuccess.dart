@@ -195,6 +195,7 @@ class _SwitchPaymentSuccessState extends State<SwitchPaymentSuccess> {
                     ),
                     SizedBox(height: 16),
                     RpFilledButton(
+                      color: Config.appTheme.buttonColor,
                       text: "DASHBOARD",
                       onPressed: () {
                         Get.back();
@@ -271,7 +272,7 @@ class _SwitchPaymentSuccessState extends State<SwitchPaymentSuccess> {
         height: 45,
         child:ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Config.appTheme.themeColor,
+            backgroundColor: Config.appTheme.buttonColor,
             foregroundColor: Colors.white,
           ),
           onPressed: () async {

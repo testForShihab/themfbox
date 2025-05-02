@@ -10,6 +10,7 @@ import 'package:mymfbox2_0/login/Login.dart';
 import 'package:mymfbox2_0/utils/Config.dart';
 import 'package:mymfbox2_0/utils/Constants.dart';
 
+import '../api/ApiConfig.dart';
 import '../utils/Utils.dart';
 
 class Biometric extends StatefulWidget {
@@ -63,6 +64,7 @@ class _BiometricState extends State<Biometric> {
           options: const AuthenticationOptions(
             stickyAuth: false,
             biometricOnly: false,
+            //ios true android false
             // This forces biometric authentication when available
             useErrorDialogs: true,
           ),
@@ -142,7 +144,7 @@ class _BiometricState extends State<Biometric> {
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
                       Config.appTheme.themeColor, BlendMode.color))
-              : (Config.app_client_name == "themfbox")
+              : (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32")
                   ? DecorationImage(
                       image: AssetImage("assets/green-bg.png"),
                       fit: BoxFit.cover,
@@ -181,15 +183,15 @@ class _BiometricState extends State<Biometric> {
                     padding: EdgeInsets.all(2),
                     child: (Config.appLogo.contains("http"))
                         ? Image.network(Config.appLogo,
-                            height: setImageSize(60))
-                        : (Config.app_client_name == "themfbox")
+                            height: setImageSize(100))
+                        : (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32")
                             ? Image.asset(Config.appLogo)
                             : Image.asset(Config.appLogo,
-                                width: setImageSize(400))),
+                                width: setImageSize(350))),
             SizedBox(height: devHeight * 0.06),
             Text(name,
                 style: TextStyle(
-                    color: (Config.app_client_name == "themfbox")
+                    color: (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32")
                         ? Colors.white
                         : Config.appTheme.themeColor,
                     fontWeight: FontWeight.bold,
@@ -197,7 +199,7 @@ class _BiometricState extends State<Biometric> {
             SizedBox(height: devHeight * 0.01),
             Text("Unlock your device",
                 style: TextStyle(
-                    color: (Config.app_client_name == "themfbox")
+                    color: (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32")
                         ? Colors.white
                         : Config.appTheme.themeColor)),
             SizedBox(height: devHeight * 0.05),
@@ -227,7 +229,7 @@ class _BiometricState extends State<Biometric> {
                               borderRadius: BorderRadius.circular(8), //
                             ),
                             padding: EdgeInsets.symmetric(vertical: 18),
-                            backgroundColor: Colors.black,
+                            backgroundColor: Config.appTheme.universalTitle,
                             foregroundColor: Colors.white),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

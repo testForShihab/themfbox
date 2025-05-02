@@ -511,6 +511,7 @@ class _ClosedSwpState extends State<ClosedSwp> {
                             child: PlainButton(
                           text: "CLEAR ALL",
                           padding: EdgeInsets.symmetric(vertical: 8),
+                              color: Config.appTheme.buttonColor,
                           onPressed: () async {
                             Get.back();
                             selectedBranch = [];
@@ -527,6 +528,7 @@ class _ClosedSwpState extends State<ClosedSwp> {
                         Expanded(
                           child: RpFilledButton(
                             text: "APPLY",
+                            color: Config.appTheme.buttonColor,
                             padding: EdgeInsets.symmetric(vertical: 8),
                             onPressed: () async {
                               Get.back();

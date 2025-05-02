@@ -8,6 +8,7 @@ import 'package:mymfbox2_0/utils/Config.dart';
 import 'package:mymfbox2_0/utils/Utils.dart';
 import 'package:mymfbox2_0/rp_widgets/RpTextField.dart';
 
+import '../api/ApiConfig.dart';
 import '../utils/Constants.dart';
 
 class SignUp extends StatefulWidget {
@@ -73,7 +74,7 @@ class _SignUpState extends State<SignUp> {
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
                         Config.appTheme.themeColor, BlendMode.color))
-                : (Config.app_client_name == "themfbox")
+                : (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32")
                     ? DecorationImage(
                         image: AssetImage("assets/green-bg.png"),
                         fit: BoxFit.cover,
@@ -111,16 +112,14 @@ class _SignUpState extends State<SignUp> {
                       color: logobgcolor,
                       padding: EdgeInsets.all(4),
                       child: (Config.appLogo.contains("http"))
-                          ? Image.network(Config.appLogo,
-                              height: setImageSize(100))
-                          : (Config.app_client_name == "themfbox")
-                              ? Image.asset(Config.appLogo)
-                              : Image.asset(Config.appLogo),
+                          ? Image.network(Config.appLogo, height: setImageSize(100))
+                          : (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? Image.asset(Config.appLogo)
+                          : Image.asset(Config.appLogo,width:setImageSize(350)),
                     ),
               SizedBox(height: devHeight * 0.06),
               Text("Sign Up",
                   style: TextStyle(
-                      color: (Config.app_client_name == "themfbox")
+                      color: (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32")
                           ? Colors.white
                           : Config.appTheme.themeColor,
                       fontWeight: FontWeight.bold,
@@ -128,7 +127,7 @@ class _SignUpState extends State<SignUp> {
               SizedBox(height: devHeight * 0.01),
               Text("Welcome",
                   style: TextStyle(
-                    color: (Config.app_client_name == "themfbox")
+                    color: (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32")
                         ? Colors.white
                         : Config.appTheme.themeColor,
                   )),
@@ -216,8 +215,7 @@ class _SignUpState extends State<SignUp> {
                               Utils.showError(context, data['msg']);
                               return;
                             } else if (data['status'] == 200) {
-                              await GetStorage()
-                                  .write("client_name", data["client_name"]);
+                              await GetStorage().write("client_name", data["client_name"]);
                               Get.to(BasicDetails(arn: arn));
                             }
                           },
@@ -227,7 +225,7 @@ class _SignUpState extends State<SignUp> {
                                 borderRadius:
                                     BorderRadius.circular(8), // <-- Radius
                               ),
-                              backgroundColor: Colors.black,
+                              backgroundColor: Config.appTheme.universalTitle,
                               foregroundColor: Colors.white),
                           child: Text("Continue",
                               style: TextStyle(

@@ -1028,6 +1028,7 @@ class _TaxReportState extends State<TaxReport> {
   Widget getCancelApplyButton(ButtonType type) {
     if (type == ButtonType.plain)
       return PlainButton(
+        color: Config.appTheme.buttonColor,
         text: "RESET",
         onPressed: () {
           Get.back();
@@ -1035,6 +1036,7 @@ class _TaxReportState extends State<TaxReport> {
       );
     else
       return RpFilledButton(
+        color: Config.appTheme.buttonColor,
         text: "APPLY",
         onPressed: () {
           Get.back();

@@ -619,7 +619,7 @@ class _MfStpCalculatorState extends State<MfStpCalculator> {
                           padding:
                           EdgeInsets.symmetric(horizontal: 18, vertical: 7),
                           decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: Config.appTheme.universalTitle,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text("Submit",

@@ -159,8 +159,11 @@ class ReportType {
 }
 
 const List RemoveWhitebg = [
+  'nidhicapital',
+  'walletwealth',
+  'wealthforest',
+  'finzyme',
   'mrSmart',
-  'themfbox',
   'finatrium',
   'giarinvestments',
   'perpetualinvestments',
@@ -180,7 +183,17 @@ const List RemoveWhitebg = [
   'keenvestor',
   'eureka',
   'amigowealth',
+  'assetvilla',
   'finsshipfinancialservices',
+  'priyabratathatoi',
+  'saverspoint',
+  'ankitkumar',
+  'srncapitaldistributionservicespvtltd',
+  'meharsolutio',
+  'themfbox',
+  'mfonline',
+  'gstdostprivatelimited',
+  'wealthfincorp'
 ];
 
 Color logobgcolor =

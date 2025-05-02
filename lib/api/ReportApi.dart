@@ -472,6 +472,10 @@ class ReportApi {
     required int amount,
     required String startDate,
     required String endDate,
+    required String sensex,
+    required String ppf,
+    required String fd,
+    required String gold,
   }) async {
     // String scheme = '';
     // for (int i = 0; i < schemes.length; i++) {
@@ -483,14 +487,16 @@ class ReportApi {
     // }
 
     String url =
-        "${ApiConfig.apiUrl}/admin/download/downloadCompareFundsPDF?key=${ApiConfig.apiKey}&user_id=$userId&client_name=$clientName&schemes=$schemes&amount=$amount&start_date=$startDate&end_date=$endDate&test_api=1";
+        "${ApiConfig.apiUrl}/admin/download/downloadCompareFundsPDF?key=${ApiConfig.apiKey}"
+        "&user_id=$userId&client_name=$clientName&schemes=$schemes&amount=$amount&start_date=$startDate&end_date=$endDate"
+        "&sensex=$sensex&ppf=$ppf&fd=$fd&gold=$gold";
 
-    print("downloadGainLossReportPDF url = $url");
+    print("downloadCompareFundsPDF url = $url");
 
     http.Response response = await http.post(Uri.parse(url));
     Map data = jsonDecode(response.body);
 
-    print("downloadGainLossReportPDF response = $data");
+    print("downloadCompareFundsPDF response = $data");
     return data;
   }
 

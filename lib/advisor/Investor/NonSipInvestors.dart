@@ -459,7 +459,7 @@ class _NonSipInvestorsState extends State<NonSipInvestors> {
                             },
                             trailing:
                                 Icon(Icons.arrow_forward, color: Colors.white),
-                            bgColor: Config.appTheme.themeColor),
+                            bgColor: Config.appTheme.buttonColor),
                       ],
                     ),
                   ),

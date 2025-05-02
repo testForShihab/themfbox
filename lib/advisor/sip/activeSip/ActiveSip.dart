@@ -586,6 +586,7 @@ class _ActiveSipState extends State<ActiveSip> {
                         Expanded(
                             child: PlainButton(
                           text: "CLEAR ALL",
+                              color: Config.appTheme.buttonColor,
                           padding: EdgeInsets.symmetric(vertical: 8),
                           onPressed: () async {
                             Get.back();
@@ -610,6 +611,7 @@ class _ActiveSipState extends State<ActiveSip> {
                           child: RpFilledButton(
                             text: "APPLY",
                             padding: EdgeInsets.symmetric(vertical: 8),
+                            color: Config.appTheme.buttonColor,
                             onPressed: () async {
                               Get.back();
                               if (selectedLeft == 'Date') {

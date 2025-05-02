@@ -1284,4 +1284,15 @@ class Api {
     print("getLatestVersion response = $data");
     return data;
   }
+///advisor/getAdvisorNotices?key=29c5a2ec-3910-4d71-acf7-c6f51e3e9c32&user_id=1017486&client_name=milansamajder
+  static Future getAdvisorNotices({
+    required String client_name,
+    required int user_id}) async{
+    String url = "${ApiConfig.apiUrl}/advisor/getAdvisorNotices?key=${ApiConfig.apiKey}&user_id=$user_id&client_name=$client_name";
+    print("getAdvisorNotices url = $url");
+    http.Response response = await http.post(Uri.parse(url));
+    Map data = jsonDecode(response.body);
+    print("getAdvisorNotices response = $data");
+    return data;
+  }
 }

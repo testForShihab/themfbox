@@ -144,6 +144,7 @@ class _StpPaymentSuccessState extends State<StpPaymentSuccess> {
                           ),
                           SizedBox(height: 16),
                           RpFilledButton(
+                            color: Config.appTheme.buttonColor,
                             text: "DASHBOARD",
                             onPressed: () {
                               Get.back();

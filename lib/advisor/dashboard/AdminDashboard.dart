@@ -341,13 +341,13 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(8),
-                                          color: Color(0Xff333333),
+                                          color: Config.appTheme.buttonColor,
                                           border: Border.all(
                                               color: Config
-                                                  .appTheme.universalTitle),
-                                          image: DecorationImage(
-                                              image: AssetImage(
-                                                  "assets/noise.png")),
+                                                  .appTheme.buttonColor),
+                                         /* image: DecorationImage(
+                                              image: AssetImage("assets/noise.png")
+                                          ),*/
                                         ),
                                       ),
                                     ),
@@ -431,7 +431,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                     title: "Tools & Calculators",
                                     subTitle: "10+ calculators",
                                     isWhite: false,
-                                    color: Config.appTheme.universalTitle,
+                                    color:Config.appTheme.universalTitle,
                                     goTo: Calculators(),
                                   ),
                                   ResearchCard(
@@ -447,7 +447,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                     title: 'News',
                                     subTitle: 'Latest industry news and update',
                                     isWhite: false,
-                                    color: Config.appTheme.universalTitle,
+                                    color:Config.appTheme.universalTitle,
                                     goTo: News(),
                                   )
                                 ],
@@ -1113,7 +1113,7 @@ class AdminCard extends StatelessWidget {
                   title,
                   style: AppFonts.f40016.copyWith(fontWeight: FontWeight.w500),
                 ),
-                Icon(Icons.arrow_forward, color: Config.appTheme.universalTitle)
+                Icon(Icons.arrow_forward, color:Config.appTheme.themeColor)
               ],
             ),
             SizedBox(height: 16),

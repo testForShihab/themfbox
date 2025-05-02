@@ -166,7 +166,7 @@ class _SipSummaryState extends State<SipSummary> {
     String amfiShortName =  scheme['scheme_amfi_short_name'];
     String encoded_amfi = amfiShortName.replaceAll("&", "%26");
 
-    print("Daychange - ${scheme['day_change_percentage']}");
+   // print("Daychange - ${scheme['day_change_percentage']}");
 
     return SingleChildScrollView(
       child: InkWell(

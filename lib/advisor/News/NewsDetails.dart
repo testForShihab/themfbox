@@ -83,13 +83,12 @@ class _NewsDetailsState extends State<NewsDetails> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8,0 , 8, 0),
                   child: Card(
-
                     elevation: 0,
                     color: Colors.white,
                     child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(15),
                           child: Column(
                             children: [
 

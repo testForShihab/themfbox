@@ -502,6 +502,9 @@ class _SipAmountInputState extends State<SipAmountInput> {
               text: "CONTINUE",
               onPress: () async {
                 DateTime sipStartDate = transactController.startDate.value;
+
+                print("sipStartDate $sipStartDate");
+
                 if (client_code_map['bse_nse_mfu_flag'] == "MFU") {
                   sipStartDate = transactControllermfu.startDate.value;
                 }

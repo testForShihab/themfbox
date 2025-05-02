@@ -732,6 +732,7 @@ class _AmcWiseBrokerageState extends State<AmcWiseBrokerage> {
       margin: EdgeInsets.only(top: 16),
       child: SfCartesianChart(
         primaryXAxis: CategoryAxis(
+
           labelRotation: 270,
           labelStyle: TextStyle(
               fontSize: 10,
@@ -757,6 +758,7 @@ class _AmcWiseBrokerageState extends State<AmcWiseBrokerage> {
             xValueMapper: (data, _) => data.month,
             yValueMapper: (data, _) => data.brokerageAmount,
             name: 'Brokerage',
+            color: Config.appTheme.themeColor,
             dataLabelSettings: DataLabelSettings(
               isVisible: true,
               textStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),

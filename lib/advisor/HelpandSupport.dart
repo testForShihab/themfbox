@@ -282,7 +282,7 @@ class _HelpandSupportState extends State<HelpandSupport> {
           height: 45,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Config.appTheme.themeColor,
+              backgroundColor: Config.appTheme.buttonColor,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),

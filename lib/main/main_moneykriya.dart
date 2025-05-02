@@ -11,9 +11,9 @@ void main() {
     ..appLogo = "assets/moneykriyalogo.png"
     ..apiKey = "d73b215e-1dc1-4b03-98ec-41886bd6c594"
     ..theme = ThemeData.dark()
-    ..appTheme = GreenTheme()
-    ..supportEmail = "moneykriya@gmail.com"
-    ..supportMobile = "+91 7305068154"
+    ..appTheme = nextFreedomTheme()
+    ..supportEmail = ""
+    ..supportMobile = ""
     ..privacyPolicy = "https://www.moneykriya.com/privacy_policies"
     ..pdfURL = "https://api.themfbox.com");
 }

@@ -385,12 +385,14 @@ class _FamilyInvestmentSummaryDetailsState
   Widget getCancelApplyButton(ButtonType type) {
     if (type == ButtonType.plain)
       return PlainButton(
+        color: Config.appTheme.buttonColor,
         padding: EdgeInsets.symmetric(horizontal: devWidth * 0.09),
         text: "SELL FUND",
         onPressed: () {},
       );
     else
       return RpFilledButton(
+        color: Config.appTheme.buttonColor,
         padding: EdgeInsets.symmetric(horizontal: devWidth * 0.09),
         text: "INVEST MORE",
         onPressed: () {},

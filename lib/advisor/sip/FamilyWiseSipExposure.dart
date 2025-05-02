@@ -561,6 +561,7 @@ class _FamilyWiseSipExposureState extends State<FamilyWiseSipExposure> {
                         Expanded(
                             child: PlainButton(
                           text: "CLEAR ALL",
+                              color: Config.appTheme.buttonColor,
                           padding: EdgeInsets.symmetric(vertical: 8),
                           onPressed: () async {
                             selectedBranch = [];
@@ -574,6 +575,7 @@ class _FamilyWiseSipExposureState extends State<FamilyWiseSipExposure> {
                         Expanded(
                           child: RpFilledButton(
                             text: "APPLY",
+                            color: Config.appTheme.buttonColor,
                             padding: EdgeInsets.symmetric(vertical: 8),
                             onPressed: () async {
                               Get.back();

@@ -7,10 +7,12 @@ import 'package:mymfbox2_0/utils/Config.dart';
 import 'package:mymfbox2_0/utils/Utils.dart';
 import 'package:mymfbox2_0/rp_widgets/RpTextField.dart';
 
+import '../api/ApiConfig.dart';
 import '../utils/Constants.dart';
 
 class ForgotPassword extends StatefulWidget {
-  const ForgotPassword({super.key});
+  const ForgotPassword({super.key ,required this.mobile});
+  final String mobile;
   @override
   State<ForgotPassword> createState() => _ForgotPasswordState();
 }
@@ -30,11 +32,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   String appArn = "${Config.appArn}";
   TextEditingController mobController = TextEditingController();
   String arn = "";
+  String mobile_pan = '';
 
   @override
   void initState() {
     //  implement initState
     super.initState();
+    mobile_pan = widget.mobile;
+    mobileNo = mobile_pan;
     focusNode.addListener(() {
       setState(() {
         borderColor =
@@ -60,7 +65,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
                         Config.appTheme.themeColor, BlendMode.color))
-                :(Config.app_client_name == "themfbox") ? DecorationImage(
+                :(Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? DecorationImage(
                     image: AssetImage("assets/green-bg.png"),
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(Config.appTheme.themeColor , BlendMode.color))
@@ -96,18 +101,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       padding: EdgeInsets.all(2),
                       child: (Config.appLogo.contains("http"))
                           ? Image.network(Config.appLogo,
-                              height: setImageSize(60))
-                          : (Config.app_client_name == "themfbox") ? Image.asset(Config.appLogo)
-                          : Image.asset(Config.appLogo,width:setImageSize(400))),
+                              height: setImageSize(100))
+                          : (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? Image.asset(Config.appLogo)
+                          : Image.asset(Config.appLogo,width:setImageSize(350))),
               SizedBox(height: devHeight * 0.06),
               Text("Forgot Password",
                   style: TextStyle(
-                      color: (Config.app_client_name == "themfbox") ? Colors.white : Config.appTheme.themeColor,
+                      color: (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? Colors.white : Config.appTheme.themeColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 20)),
               SizedBox(height: devHeight * 0.01),
               Text("Please Enter Mobile No",
-                  style: TextStyle(color: (Config.app_client_name == "themfbox") ? Colors.white : Config.appTheme.themeColor)),
+                  style: TextStyle(color: (Config.apiKey == "29c5a2ec-3910-4d71-acf7-c6f51e3e9c32") ? Colors.white : Config.appTheme.themeColor)),
               SizedBox(height: devHeight * 0.05),
               Expanded(
                 child: Container(
@@ -124,10 +129,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       RpTextField(
                           focusNode: focusNode,
                           borderColor: borderColor,
+                          initialValue: mobile_pan,
                           maxLines: 1,
                           maxLength: 10,
                           capitalization: TextCapitalization.characters,
-                          onChange: (val) => mobileNo = val,
+                          onChange: (val) => {
+                            mobileNo = val,
+                          },
                           label: "Mobile / PAN"),
                       Visibility(
                         visible: hasError,
@@ -157,6 +165,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         child: TextButton(
                           onPressed: () async {
                             if (mobileNo.length != 10) {
+                              print("mobilepan $mobile_pan");
                               hasError = true;
                               setState(() {});
                               return;
@@ -204,7 +213,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 borderRadius:
                                     BorderRadius.circular(8), // <-- Radius
                               ),
-                              backgroundColor: Colors.black,
+                              backgroundColor: Config.appTheme.universalTitle,
                               foregroundColor: Colors.white),
                           child: Text("Continue",
                               style: TextStyle(

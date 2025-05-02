@@ -32,7 +32,7 @@ class FamilyReportMenu extends StatefulWidget {
 
 class _FamilyReportMenuState extends State<FamilyReportMenu> {
   late double devHeight, devWidth;
-  String mfd_name = GetStorage().read("mfd_name") ?? "null";
+  String client_name = GetStorage().read("client_name") ?? "";
   String str_name = "";
 
   List data = [
@@ -54,6 +54,7 @@ class _FamilyReportMenuState extends State<FamilyReportMenu> {
       'goTo': FamilyInvestmentSummary(),
       'img': "assets/familyMenu/investment_summary.png",
     },
+    if (GetStorage().read("client_name") != "walletwealth")
     {
       'title': "Family SIP Report",
       'subTitle': "",
@@ -78,14 +79,13 @@ class _FamilyReportMenuState extends State<FamilyReportMenu> {
       'goTo': FamilyAllTransactionReport(),
       'img': "assets/familyMenu/all_trnx.png",
     },
-
   ];
 
   @override
   void initState() {
     //  implement initState
     super.initState();
-    str_name = mfd_name;
+    str_name = client_name;
     loadAppVersion();
   }
 
@@ -119,7 +119,7 @@ class _FamilyReportMenuState extends State<FamilyReportMenu> {
           padding: EdgeInsets.all(16),
           child: Column(
             children: [
-              listContainer(list: data.getRange(0, 7).toList()),
+              listContainer(list: data.getRange(0, data.length).toList()),
               //familyMemberContainer(),
             //  listContainer(list: data.getRange(1, 4).toList()),
              //listContainer(list: data.getRange(6, 8).toList()),

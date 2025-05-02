@@ -170,7 +170,7 @@ class _SipTopUpCalculatorOutputState extends State<SipTopUpCalculatorOutput> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Future Value",
+                        "Total Future Value \n(Your SIP Investment Amount + Growth) ",
                         style: AppFonts.f50014Black,
                       ),
                     ],
@@ -253,7 +253,7 @@ class _SipTopUpCalculatorOutputState extends State<SipTopUpCalculatorOutput> {
          // SizedBox(height: 5),
           DottedLine(),
          // SizedBox(height: 5),
-          Row(
+          /*Row(
             children: [
               Text(
                 "Total Value ",
@@ -270,7 +270,7 @@ class _SipTopUpCalculatorOutputState extends State<SipTopUpCalculatorOutput> {
             ],
           ),
          //SizedBox(height: 5),
-          DottedLine(),
+          DottedLine(),*/
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -361,7 +361,7 @@ class _SipTopUpCalculatorOutputState extends State<SipTopUpCalculatorOutput> {
               position: LegendPosition.bottom),
         ),
         ...chartBottom(
-            title: "Invested Amount",
+            title: "Total SIP Amount Invested",
             color: colorPalate[0],
             withTopUp: investedWithTopUp,
             withoutTopUp: investedWithoutTopUp),
@@ -369,7 +369,7 @@ class _SipTopUpCalculatorOutputState extends State<SipTopUpCalculatorOutput> {
         DottedLine(),
         SizedBox(height: 5),
         ...chartBottom(
-            title: "Growth Amount",
+            title: "Total Growth",
             color: colorPalate[1],
             withTopUp: growthWithTopUp,
             withoutTopUp: growthWithoutTopUp),

@@ -73,6 +73,11 @@ class _TopSipFundsState extends State<TopSipFunds> {
     '18',
     '19',
     '20',
+    '21',
+    '22',
+    '23',
+    '24',
+    '25',
   ];
   bool isLoading = true;
 
@@ -335,13 +340,14 @@ class _TopSipFundsState extends State<TopSipFunds> {
   }
 
   Widget displayPage() {
+    num fundcount = performanceList.length;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            child: Text("${performanceList.length} funds",
+            child: Text((fundcount<=1) ? "$fundcount Fund" : "$fundcount Funds",
                 style: TextStyle(
                     color: Color(0XFFB4B4B4), fontWeight: FontWeight.bold)),
           ),
@@ -570,6 +576,7 @@ class _TopSipFundsState extends State<TopSipFunds> {
                           performanceList = [];
                           bottomState(() {});
                           setState(() {});
+                          selectedSort = "Returns";
                         },
                         child: Row(
                           children: [
@@ -583,6 +590,7 @@ class _TopSipFundsState extends State<TopSipFunds> {
                                   bottomState(() {});
                                   // EasyLoading.show();
                                   await getTopSIPFunds();
+                                  selectedSort = "Returns";
                                   // EasyLoading.dismiss();
                                   Get.back();
                                   setState(() {
@@ -746,6 +754,7 @@ class _TopSipFundsState extends State<TopSipFunds> {
                                 selectedPeriod = sipPeriodSOfReturns[index];
                                 print(selectedPeriod);
                                 performanceList = [];
+                                selectedSort = "Returns";
                                 Get.back();
                                 setState(() {});
                               },
@@ -764,6 +773,7 @@ class _TopSipFundsState extends State<TopSipFunds> {
                                             sipPeriodSOfReturns[index];
                                         print(selectedPeriod);
                                         performanceList = [];
+                                        selectedSort = "Returns";
                                         Get.back();
                                         setState(() {});
                                       },
@@ -819,6 +829,7 @@ class _TopSipFundsState extends State<TopSipFunds> {
                                   selectedLumpsumAmount = sipAmountList[index];
                                   performanceList = [];
                                   setState(() {});
+                                  selectedSort = "Returns";
                                 },
                                 child: Row(
                                   children: [
@@ -832,6 +843,7 @@ class _TopSipFundsState extends State<TopSipFunds> {
                                             sipAmountList[index];
                                         performanceList = [];
                                         setState(() {});
+                                        selectedSort = "Returns";
                                       },
                                     ),
                                     Expanded(
@@ -952,14 +964,16 @@ class _TopSipFundsState extends State<TopSipFunds> {
                   // Image.network(fund.logo ?? "", height: 30),
                   Utils.getImage(fund.logo ?? "", 30),
                   SizedBox(width: 10),
-                  ColumnText(
-                    title: "$schemeShortName",
-                    value: "Launch Date : ${fund.schemeInceptionDate}",
-                    valueStyle: AppFonts.f40013.copyWith(fontSize: 12),
-                    titleStyle: AppFonts.f40016.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: Colors.black),
+                  Expanded(
+                    child: ColumnText(
+                      title: "$schemeShortName",
+                      value: "Launch Date : ${fund.schemeInceptionDate}",
+                      valueStyle: AppFonts.f40013.copyWith(fontSize: 12),
+                      titleStyle: AppFonts.f40016.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.black),
+                    ),
                   ),
 
                   /*  Spacer(),

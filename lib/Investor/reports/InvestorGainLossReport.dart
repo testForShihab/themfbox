@@ -383,7 +383,7 @@ class _InvestorGainLossReportState extends State<InvestorGainLossReport> {
   Widget reportActionContainer() {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+       // borderRadius: BorderRadius.circular(10),
         color: Colors.white,
       ),
       padding: EdgeInsets.all(16),
@@ -1022,6 +1022,7 @@ class _InvestorGainLossReportState extends State<InvestorGainLossReport> {
   Widget getCancelApplyButton(ButtonType type) {
     if (type == ButtonType.plain)
       return PlainButton(
+        color: Config.appTheme.buttonColor,
         text: "RESET",
         onPressed: () {
           Get.back();
@@ -1029,6 +1030,7 @@ class _InvestorGainLossReportState extends State<InvestorGainLossReport> {
       );
     else
       return RpFilledButton(
+        color: Config.appTheme.buttonColor,
         text: "APPLY",
         onPressed: () {
           Get.back();

@@ -579,6 +579,7 @@ class _FamilyDashboardState extends State<FamilyDashboard> {
                         ),
                         TextButton(
                           onPressed: () {
+                            String? mobile = numberController!.text;
                             _sendMessage(
                                 mobile, mfSummary, mfSchemeSummaryList);
                             Get.back();
@@ -675,9 +676,8 @@ ${client_name.toUpperCase()}''';
 
     var whatsappUrl =
         "https://wa.me/$mobile?text=${Uri.encodeComponent(websiteUrl)}";
-    if (await canLaunch(whatsappUrl)) {
+    if (await canLaunch(whatsappUrl) != null) {
       await launch(whatsappUrl);
-      print("Url" + whatsappUrl);
     } else {
       throw 'Could not launch $whatsappUrl';
     }
@@ -1345,7 +1345,7 @@ ${client_name.toUpperCase()}''';
               padding: EdgeInsets.all(16),
               margin: EdgeInsets.fromLTRB(16, 10, 16, 16),
               decoration: BoxDecoration(
-                color: Config.appTheme.overlay85,
+                color: Config.appTheme.whiteOverlay,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
@@ -1844,7 +1844,7 @@ ${client_name.toUpperCase()}''';
                 setState(() {});
               },
               labels: monthList.map((e) => "$e M").toList(),
-              activeBgColor: [Colors.black],
+              activeBgColor: [Config.appTheme.buttonColor],
               inactiveBgColor: Colors.white,
               borderColor: [Colors.grey.shade300],
               borderWidth: 1,

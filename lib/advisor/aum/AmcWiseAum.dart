@@ -379,7 +379,7 @@ class _AmcWiseAumState extends State<AmcWiseAum> {
                             },
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Config.appTheme.themeColor,
+                              color: Config.appTheme.buttonColor,
                             ),
                           ),
                         ),
@@ -494,7 +494,7 @@ class _AmcWiseAumState extends State<AmcWiseAum> {
                   e = e.replaceAll("20", "");
                   return "$e";
                 }).toList(),
-                activeBgColor: [Colors.black],
+                activeBgColor: [Config.appTheme.universalTitle],
                 inactiveBgColor: Colors.white,
                 borderColor: [Colors.grey.shade300],
                 borderWidth: 1,

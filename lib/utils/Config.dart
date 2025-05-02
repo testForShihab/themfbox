@@ -22,6 +22,8 @@ class Config {
   static String website = "";
   static AppTheme appTheme = GreenTheme();
 
+  static String apiKey = "";
+
   static bool isEkycProduction = false;
   static String ekycUsername = "";
   static String ekycPassword = "";

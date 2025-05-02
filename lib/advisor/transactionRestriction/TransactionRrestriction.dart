@@ -747,6 +747,7 @@ class _TransactionRestrictionState extends State<TransactionRestriction> {
                         Expanded(
                             child: PlainButton(
                           text: "CLEAR ALL",
+                          color: Config.appTheme.buttonColor,
                           padding: EdgeInsets.symmetric(vertical: 8),
                           onPressed: () async {
                             Get.back();
@@ -762,6 +763,7 @@ class _TransactionRestrictionState extends State<TransactionRestriction> {
                         SizedBox(width: 16),
                         Expanded(
                           child: RpFilledButton(
+                            color: Config.appTheme.buttonColor,
                             text: "APPLY",
                             padding: EdgeInsets.symmetric(vertical: 8),
                             onPressed: () async {

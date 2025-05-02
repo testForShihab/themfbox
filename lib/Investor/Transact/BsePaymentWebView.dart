@@ -325,7 +325,7 @@ class _PaymentCardPageState extends State<PaymentCardPage> {
                           ),
                           SizedBox(height: 10),
                           Text(
-                            "1. Lumpsum Purchase order placed Successfully.",
+                            "1. $purchase_type order placed Successfully.",
                             style: AppFonts.f50012.copyWith(
                                 color: Config.appTheme.readableGreyTitle),
                           ),
@@ -336,6 +336,7 @@ class _PaymentCardPageState extends State<PaymentCardPage> {
                     ),
                     SizedBox(height: 16),
                     RpFilledButton(
+                      color: Config.appTheme.buttonColor,
                       text: "DASHBOARD",
                       onPressed: () {
                         Get.to(InvestorDashboard());
@@ -469,7 +470,7 @@ class _PaymentCardPageState extends State<PaymentCardPage> {
         height: 45,
         child:ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Config.appTheme.themeColor,
+            backgroundColor: Config.appTheme.buttonColor,
             foregroundColor: Colors.white,
           ),
           onPressed: () async {
