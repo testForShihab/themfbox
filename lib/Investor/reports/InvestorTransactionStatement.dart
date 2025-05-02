@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
@@ -43,7 +46,7 @@ class _InvestorTransactionStatementState
   int checkDateDialog = 0;
 
   Future getMfTransactionReport() async {
-    if (scheme_list.isNotEmpty) return 0;
+    // if (scheme_list.isNotEmpty) return 0;
 
     Map data = await ReportApi.getMfTransactionReport(
       user_id: user_id,
@@ -64,7 +67,7 @@ class _InvestorTransactionStatementState
   }
 
   Future getInvestorFinancialYears() async {
-    if (financialYearList.isNotEmpty) return 0;
+    // if (financialYearList.isNotEmpty) return 0;
 
     Map data = await ReportApi.getInvestorFinancialYears(
       user_id: user_id,
@@ -83,6 +86,8 @@ class _InvestorTransactionStatementState
 
   bool isLoading = true;
 
+  late Future future;
+
   Future getDatas() async {
     isLoading = true;
     await getInvestorFinancialYears();
@@ -96,16 +101,34 @@ class _InvestorTransactionStatementState
     super.initState();
     startDateController.text = startDate;
     endDateController.text = endDate;
+    future = getDatas();
+  }
+
+  refreshState() {
+    setState(() {
+      future = getDatas();
+    });
   }
 
   late double devWidth, devHeight;
+
+  bool isValidDateRange() {
+    final st = convertStrToDt(startDate);
+    final ed = convertStrToDt(endDate);
+    if (st.isAfter(ed) || st.isAtSameMomentAs(ed)) {
+      Utils.showError(
+          context, 'Please choose an end date that comes after the start date');
+      return false;
+    }
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
     devHeight = MediaQuery.of(context).size.height;
     devWidth = MediaQuery.of(context).size.width;
     return FutureBuilder(
-        future: getDatas(),
+        future: future,
         builder: (context, snapshot) {
           return SideBar(
             child: Scaffold(
@@ -151,30 +174,55 @@ class _InvestorTransactionStatementState
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            startDateController.text = startDateController.text;
-                            checkDateDialog = 0;
-                            showDatePickerDialog(context, 0);
-                          },
-                          child: appBarColumn(
-                              "Start Date",
-                              getFirst13(startDateController.text),
-                              Icon(Icons.keyboard_arrow_down,
-                                  color: Config.appTheme.themeColor)),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              startDateController.text =
+                                  startDateController.text;
+                              checkDateDialog = 0;
+                              showDatePickerDialog(context, 0);
+                            },
+                            child: appBarColumn(
+                                "Start Date",
+                                getFirst13(startDateController.text),
+                                Icon(Icons.keyboard_arrow_down,
+                                    color: Config.appTheme.themeColor)),
+                          ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            endDateController.text = endDateController.text;
-                            checkDateDialog = 1;
-                            showDatePickerDialog(context, 1);
-                          },
-                          child: appBarColumn(
-                              "End Date",
-                              getFirst13(endDateController.text),
-                              Icon(Icons.keyboard_arrow_down,
-                                  color: Config.appTheme.themeColor)),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              endDateController.text = endDateController.text;
+                              checkDateDialog = 1;
+                              showDatePickerDialog(context, 1);
+                            },
+                            child: appBarColumn(
+                                "End Date",
+                                getFirst13(endDateController.text),
+                                Icon(Icons.keyboard_arrow_down,
+                                    color: Config.appTheme.themeColor)),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        SizedBox(
+                          height: 35,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Config.appTheme.overlay85,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                            ),
+                            onPressed: () {
+                              if (isValidDateRange()) {
+                                refreshState();
+                              }
+                            },
+                            child: Text('Apply'),
+                          ),
                         ),
                       ],
                     ),
@@ -219,7 +267,7 @@ class _InvestorTransactionStatementState
       }
 
       if (startDate.isNotEmpty && endDate.isNotEmpty) {
-        scheme_list = [];
+        // scheme_list = [];
         setState(() {});
       }
     }
@@ -572,7 +620,8 @@ class _InvestorTransactionStatementState
               children: [
                 ColumnText(
                   title: "Current Value",
-                  value: "$rupee $currValue",
+                  value:
+                      "$rupee ${double.tryParse(currValue?.split(',').join() ?? '0')?.round()}",
                 ),
                 ColumnText(
                   title: "Balance Units",
