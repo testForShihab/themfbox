@@ -444,7 +444,8 @@ class _InvestorFolioTransactionReportState
           String month = mainItem['folio_no'] ?? "";
           List portfolio_list =
               mainItem['investorSchemeWisePortfolioResponses'];
-          int trnxCount = portfolio_list.length;
+          num trnxCount = portfolio_list.fold(0,
+              (p, e) => p + e['investorSchemeWiseTransactionResponses'].length);
 
           return Container(
             color: Colors.white,

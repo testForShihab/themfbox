@@ -265,7 +265,7 @@ class _LumpsumPaymentState extends State<LumpsumPayment> {
     await getBankList();
     await getArnList();
     await getEuinList();
-   if(paymentMode.contains('Debit')) await getMandateList();
+    if(paymentMode == "Debit Mandate") await getMandateList();
     return 0;
   }
 
@@ -634,7 +634,7 @@ class _LumpsumPaymentState extends State<LumpsumPayment> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(bankName, style: AppFonts.f50014Black),
+                                Text(bankName, style: AppFonts.f50014Black.copyWith(fontSize: 13)),
                                 Text("$rupee ${Utils.formatNumber(amount)}",
                                     style:
                                         AppFonts.f40013.copyWith(fontSize: 14))
@@ -861,7 +861,9 @@ class _LumpsumPaymentState extends State<LumpsumPayment> {
                     paymentCode = statusCode;
                     print("statusCode $paymentCode");
                     paymentModeController.collapse();
-                    // validateTaxStatus();
+                    if(paymentMode == "Debit Mandate") {
+                      await getMandateList();
+                    }
                     setState(() {});
                   },
                   child: Row(
@@ -873,7 +875,9 @@ class _LumpsumPaymentState extends State<LumpsumPayment> {
                           paymentMode = status;
                           paymentCode = statusCode;
                           paymentModeController.collapse();
-                          // validateTaxStatus();
+                          if(paymentMode == "Debit Mandate") {
+                            await getMandateList();
+                          }
                           setState(() {});
                         },
                       ),
