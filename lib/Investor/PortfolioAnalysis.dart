@@ -1157,12 +1157,12 @@ class _PortfolioAnalysisState extends State<PortfolioAnalysis> {
                 children: [
                   ColumnText(title: "Cost", value: "$rupee $cost"),
                   ColumnText(
-                      title: "Gain/Loss",
+                      title: "Unrealised Gain",
                       value: "$rupee $gain",
                       alignment: CrossAxisAlignment.center),
                   ColumnText(
-                      title: "XIRR",
-                      value: "${pojo.totalXirr}%",
+                      title: "XIRR (%)",
+                      value: "${pojo.totalXirr}",
                       valueStyle: TextStyle(
                           color: ((pojo.totalXirr)! > 0)
                               ? Config.appTheme.defaultProfit

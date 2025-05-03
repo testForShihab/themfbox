@@ -67,6 +67,41 @@ class _FundDetailsState extends State<FundDetails> {
 
       result = data['scheme_details'];
       transctionData = data['transaction_list'];
+      
+      // Sort transactions by date in descending order (most recent first)
+      transctionData.sort((a, b) {
+        try {
+          String dateAStr = a['tranx_date'].toString();
+          String dateBStr = b['tranx_date'].toString();
+          
+          // Split the date string into parts (DD-MM-YYYY format)
+          List<String> partsA = dateAStr.split('-');
+          List<String> partsB = dateBStr.split('-');
+          
+          // Compare year first
+          int yearA = int.parse(partsA[2]); // Year is at index 2
+          int yearB = int.parse(partsB[2]); // Year is at index 2
+          if (yearB != yearA) {
+            return yearB.compareTo(yearA); // Descending order for years
+          }
+          
+          // If years are same, compare months
+          int monthA = int.parse(partsA[1]); // Month is at index 1
+          int monthB = int.parse(partsB[1]); // Month is at index 1
+          if (monthB != monthA) {
+            return monthB.compareTo(monthA); // Descending order for months
+          }
+          
+          // If months are same, compare days
+          int dayA = int.parse(partsA[0]); // Day is at index 0
+          int dayB = int.parse(partsB[0]); // Day is at index 0
+          return dayB.compareTo(dayA); // Descending order for days
+        } catch (e) {
+          print("Error sorting dates: $e");
+          return 0;
+        }
+      });
+      
       print("folio no = ${result['folio_no']}");
     } catch (e) {
       print("getSchemeTransactions exception = $e");
@@ -293,7 +328,7 @@ class _FundDetailsState extends State<FundDetails> {
     double currentValue = result['curr_value'] ?? 0.0;
     double dayChangeValue = result['day_change_value'] ?? 0.0;
     double dayChangePercentage = result['day_change_percentage'] ?? 0.0;
-    double gainOrLoss = result['realised_gain'] ?? 0.0;
+    double gainOrLoss = result['unrealised_gain'] ?? 0.0;
     String schemeName = result['scheme_amfi_short_name'] ?? "";
     String schemeCategory = result['scheme_category'] ?? "";
     return Container(

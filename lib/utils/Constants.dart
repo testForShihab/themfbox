@@ -193,7 +193,7 @@ const List RemoveWhitebg = [
   'themfbox',
   'mfonline',
   'gstdostprivatelimited',
-  'wealthfincorp'
+  'wealthfincorp',
 ];
 
 Color logobgcolor =

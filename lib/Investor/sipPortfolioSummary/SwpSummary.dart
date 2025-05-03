@@ -32,7 +32,7 @@ class _SwpSummaryState extends State<SwpSummary> {
   bool isFirst = true;
   Map swpSummary = {};
   List swpList = [];
-
+  bool isLoading = true;
 
   Future getStpSwpSummary () async{
     if (!isFirst) return 0;
@@ -74,7 +74,7 @@ class _SwpSummaryState extends State<SwpSummary> {
   Future getDatas(BuildContext context) async {
     await getStpSwpSummary();
     await getAllOnlineRestrictions();
-
+    isLoading = false;
     return 0;
   }
 
@@ -125,6 +125,7 @@ class _SwpSummaryState extends State<SwpSummary> {
                 ],
               ),
             ),
+            (isLoading) ? Utils.shimmerWidget(devHeight * 0.30,margin: EdgeInsets.all(8)) :
             swpList.length == 0 ? NoData() :
             Expanded(
               child: ListView.builder(
@@ -180,14 +181,14 @@ class _SwpSummaryState extends State<SwpSummary> {
                   schemeLogo: "${swpList['logo']}",
                   schemeShortName: encodedName,));
               },
-              child: RpListTile(
+              child: MFRpListTile(
                 showArrow: true,
                 subTitle: Text("Folio : ${swpList['folio_no']}",
                     style: f40012.copyWith(color: Colors.black)),
-                leading: Image.network(
+                /*leading: Image.network(
                   swpList['logo'] ?? "",
                   height: 32,
-                ),
+                ),*/
                 title: Text(
                   "${swpList['scheme_amfi_short_name']}",
                   style: AppFonts.f50014Grey.copyWith(color: Colors.blue),
@@ -221,6 +222,7 @@ class _SwpSummaryState extends State<SwpSummary> {
                   rpRow(
                       lhead: "XIRR (%)",
                       lSubHead: Utils.formatNumber(swpList['xirr']),
+                      lvalueStyle: AppFonts.f50016Grey.copyWith(color: (swpList['xirr']! < 0) ? Config.appTheme.defaultLoss : Config.appTheme.defaultProfit),
                       rhead: (userData.oneDayChange == 1 || ((keys.contains("adminAsInvestor")) || (keys.contains("adminAsFamily")) != false))
                           ? "1 Day Change" : " ",
                       rSubHead: (userData.oneDayChange == 1 || ((keys.contains("adminAsInvestor")) || (keys.contains("adminAsFamily")) != false))
@@ -245,12 +247,13 @@ class _SwpSummaryState extends State<SwpSummary> {
     required String cSubHead,
     final TextStyle? valueStyle,
     final TextStyle? titleStyle,
+    final TextStyle? lvalueStyle,
   }) {
     return Row(
       children: [
         Expanded(child: ColumnText(title: lhead, value: lSubHead,alignment: CrossAxisAlignment.start)),
         Expanded(child: ColumnText(title: rhead, value: rSubHead,alignment: CrossAxisAlignment.center,valueStyle: valueStyle,titleStyle: titleStyle,)),
-        Expanded(child: ColumnText(title: chead,value: cSubHead,alignment: CrossAxisAlignment.end)),
+        Expanded(child: ColumnText(title: chead,value: cSubHead,alignment: CrossAxisAlignment.end,valueStyle: lvalueStyle,)),
       ],
     );
   }

@@ -290,16 +290,30 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
                   children: [
                     mfSummaryCard(mfSummary),
                     Container(
-                      height: 125,
                       color: Config.appTheme.themeColor,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          SizedBox(width: 16),
-                          sipSummaryCard(),
-                          stpSummaryCard(),
-                          swpSummaryCard(),
-                        ],
+                      margin: EdgeInsets.only(top: 0),
+                      child: Theme(
+                        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                        child: ExpansionTile(
+                          title: Text("View Systematic Details", style: AppFonts.f50014Black.copyWith(color: Colors.white)),
+                          textColor: Colors.white,
+                          iconColor: Colors.white,
+                          collapsedIconColor: Colors.white,
+                          children: [
+                            Container(
+                              height: 125,
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  SizedBox(width: 16),
+                                  sipSummaryCard(),
+                                  stpSummaryCard(),
+                                  swpSummaryCard(),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Padding(
@@ -903,6 +917,7 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
       regain = "",
       totalDivReinv = "",
       totalDivPaidt = "",
+      absRtn = "",
       date = "";
   num xirr = 0;
 
@@ -913,6 +928,7 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
     regain = Utils.formatNumber(pojo.totalRealisedGain);
     totalDivReinv = Utils.formatNumber(pojo.totalDivReinv);
     totalDivPaidt = Utils.formatNumber(pojo.totalDivPaid);
+    absRtn = Utils.formatNumber(pojo.total_abs_rtn);
 
     date = Utils.getFormattedDate();
     xirr = pojo.totalXirr ?? 0;
@@ -921,7 +937,7 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
     return Container(
       color: Config.appTheme.themeColor,
       child: Container(
-        margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
+        margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
         decoration: BoxDecoration(
             color: Config.appTheme.whiteOverlay,
             borderRadius: BorderRadius.circular(10)),
@@ -949,7 +965,7 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
                             child: Icon(Icons.more_vert))
                       ],
                     ),
-                    SizedBox(height: 10),
+                   // SizedBox(height: 5),
                     Text(
                       "$rupee $value",
                       style: AppFonts.f70024
@@ -961,19 +977,19 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
                       DayChange(
                           change_value: pojo.dayChangeValue ?? 0,
                           percentage: pojo.dayChangePercentage ?? 0),
-                    SizedBox(height: 5),
+                   // SizedBox(height: 5),
                     DottedLine(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ColumnText(title: "Cost", value: "$rupee $cost"),
                         ColumnText(
-                            title: "Gain/Loss",
+                            title: "Unrealised Gain",
                             value: "$rupee $gain",
                             alignment: CrossAxisAlignment.center),
                         ColumnText(
-                            title: "XIRR",
-                            value: "$xirr%",
+                            title: "XIRR (%)",
+                            value: "$xirr",
                             alignment: CrossAxisAlignment.end,
                             valueStyle: AppFonts.f50014Black.copyWith(
                                 color: (xirr > 0)
@@ -982,22 +998,24 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
                       ],
                     ),
                     DottedLine(),
-                    InkWell(
-                      onTap: () {
-                        Get.to(() => PortfolioAnalysis(
+                    Row(
+                      children: [
+                        ColumnText( title: 'Abs Rtn (%)', value: absRtn,),
+                        Spacer(),
+                        InkWell(
+                          onTap: (){
+                            Get.to(() => PortfolioAnalysis(
                               mfSummary: pojo,
                               oneDayChange: oneDayChange,
                             ));
-                      },
-                      child: Row(
-                        children: [
-                          Text("View Portfolio Analysis",
+                          },
+                          child: Text("View Portfolio Analysis",
                               style: AppFonts.f50014Grey
                                   .copyWith(color: Config.appTheme.themeColor)),
-                          SizedBox(width: 10),
-                          Icon(Icons.arrow_forward, size: 20),
-                        ],
-                      ),
+                        ),
+                        SizedBox(width: 5),
+                        Icon(Icons.arrow_forward, size: 20),
+                      ],
                     ),
                   ],
                 ),
@@ -1218,7 +1236,7 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
                     schemeLogo: scheme.schemeAmcLogo,
                     schemeShortName: encodedSchemeName));
               },
-              child: RpListTile(
+              child: MFRpListTile(
                 showArrow: true,
                 subTitle: Row(
                   children: [
@@ -1229,10 +1247,10 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
                         style: f40012.copyWith(color: Colors.blue)),
                   ],
                 ),
-                leading: Image.network(
+                /*leading: Image.network(
                   scheme.schemeAmcLogo ?? "",
                   height: 32,
-                ),
+                ),*/
                 title: Text(
                   "${scheme.schemeAmfiShortName}",
                   style: AppFonts.f50014Grey.copyWith(color: Colors.blue),
@@ -1240,60 +1258,62 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 14, 0, 14),
-              child: Column(
-                //  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    height: 16,
-                  ),
-                  rpRow(
-                      lhead: "Units",
-                      lSubHead: Utils.formatNumber(scheme.units),
-                      rhead: "Current Cost",
-                      rSubHead: "$rupee $cost",
-                      chead: "Current Value",
-                      cSubHead: "$rupee $value"),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  rpRow(
-                      lhead: "Unrealised Gain",
-                      lSubHead:
-                          "$rupee ${Utils.formatNumber(scheme.unrealisedProfitLoss)}",
-                      rhead: "Realised Gain",
-                      rSubHead:
-                          "$rupee ${Utils.formatNumber(scheme.realisedProfitLoss)}",
-                      chead: "Abs Rtn (%)",
-                      cSubHead: Utils.formatNumber(scheme.absoluteReturn)),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  rpRow(
-                      lhead: "XIRR (%)",
-                      lSubHead: Utils.formatNumber(scheme.xirr),
-                      rhead: (userData.oneDayChange == 1 ||
-                              ((keys.contains("adminAsInvestor")) ||
-                                  (keys.contains("adminAsFamily")) != false))
-                          ? "1 Day Change"
-                          : "",
-                      rSubHead: (userData.oneDayChange == 1 ||
-                              ((keys.contains("adminAsInvestor")) ||
-                                  (keys.contains("adminAsFamily")) != false))
-                          ? "$rupee ${Utils.formatNumber(dayChange)}"
-                          : " ",
-                      titleStyle: AppFonts.f40014,
-                      valueStyle: AppFonts.f50016Grey.copyWith(
-                          color: (dayChange < 0)
-                              ? Config.appTheme.defaultLoss
-                              : Config.appTheme.defaultProfit),
-                      chead: "",
-                      cSubHead: "",
-                      // rhead: '', rSubHead: ''
-                  )
-                ],
-              ),
+            Column(
+              //  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  height: 16,
+                ),
+                rpRow(
+                    lhead: "Units",
+                    lSubHead: Utils.formatNumber(scheme.units),
+                    rhead: "Current Cost",
+                    rSubHead: "$rupee $cost",
+                    chead: "Current Value",
+                    cSubHead: "$rupee $value"),
+                SizedBox(
+                  height: 16,
+                ),
+                rpRow(
+                    lhead: "Unrealised Gain",
+                    lSubHead:
+                        "$rupee ${Utils.formatNumber(scheme.unrealisedProfitLoss)}",
+                    rhead: "Realised Gain",
+                    rSubHead:
+                        "$rupee ${Utils.formatNumber(scheme.realisedProfitLoss)}",
+                    chead: "Abs Rtn (%)",
+                    cSubHead: Utils.formatNumber(scheme.absoluteReturn)),
+                SizedBox(
+                  height: 16,
+                ),
+                rpRow(
+                    lhead: "XIRR (%)",
+                    lSubHead: Utils.formatNumber(scheme.xirr),
+                    lvalueStyle: AppFonts.f50016Grey.copyWith(
+                        color: (scheme.xirr! < 0)
+                            ? Config.appTheme.defaultLoss
+                            : Config.appTheme.defaultProfit),
+
+                    rhead: (userData.oneDayChange == 1 ||
+                            ((keys.contains("adminAsInvestor")) ||
+                                (keys.contains("adminAsFamily")) != false))
+                        ? "1 Day Change"
+                        : "",
+                    rSubHead: (userData.oneDayChange == 1 ||
+                            ((keys.contains("adminAsInvestor")) ||
+                                (keys.contains("adminAsFamily")) != false))
+                        ? "$rupee ${Utils.formatNumber(dayChange)}"
+                        : " ",
+                    titleStyle: AppFonts.f40014,
+                    valueStyle: AppFonts.f50016Grey.copyWith(
+                        color: (dayChange < 0)
+                            ? Config.appTheme.defaultLoss
+                            : Config.appTheme.defaultProfit),
+                    chead: "",
+                    cSubHead: "",
+                    // rhead: '', rSubHead: ''
+                )
+              ],
             ),
           ],
         ),
@@ -1310,6 +1330,7 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
     required String cSubHead,
     final TextStyle? valueStyle,
     final TextStyle? titleStyle,
+    final TextStyle? lvalueStyle,
   }) {
     return Row(
       children: [
@@ -1317,6 +1338,7 @@ class _MutualFundScreenState extends State<MutualFundScreen> {
             child: ColumnText(
                 title: lhead,
                 value: lSubHead,
+                valueStyle: lvalueStyle,
                 alignment: CrossAxisAlignment.start)),
         Expanded(
             child: ColumnText(
