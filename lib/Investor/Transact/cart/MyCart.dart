@@ -24,8 +24,10 @@ import '../../../pojo/OnlineTransactionRestrictionPojo.dart';
 class MyCart extends StatefulWidget {
   const MyCart(
       {super.key, this.defaultTitle = "Lumpsum", required this.defaultPage});
+
   final String defaultTitle;
   final Widget defaultPage;
+
   @override
   State<MyCart> createState() => _MyCartState();
 }
@@ -35,12 +37,12 @@ class _MyCartState extends State<MyCart> {
   String client_name = GetStorage().read("client_name");
   GetCartByUserIdPojo cart = GetCartByUserIdPojo();
 
-
   List pages = [];
 
   String selectedTitle = "Lumpsum";
   Map result = {};
   Iterable keys = GetStorage().getKeys();
+
   Future getCartCount({bool updateUi = false}) async {
     Map data =
         await Api.getCartCounts(user_id: user_id, client_name: client_name);
@@ -219,15 +221,14 @@ class _MyCartState extends State<MyCart> {
           'count': result['switch_count'],
           'display': SwitchCart()
         },
-
-      /*if (userData.stpAllowed == 1 ||
+      if (userData.stpAllowed == 1 ||
           (keys.contains("adminAsInvestor")) ||
           (keys.contains("adminAsFamily")) != false)
         {'title': "STP", 'count': result['stp_count'], 'display': StpCart()},
       if (userData.swpAllowed == 1 ||
           (keys.contains("adminAsInvestor")) ||
           (keys.contains("adminAsFamily")) != false)
-        {'title': "SWP", 'count': result['swp_count'], 'display': SwpCart()},*/
+        {'title': "SWP", 'count': result['swp_count'], 'display': SwpCart()},
     ];
   }
 }
@@ -262,7 +263,8 @@ class _DeleteAllCartState extends State<DeleteAllCart> {
     super.initState();
     cart_type = widget.carttype;
     bsensemfu = widget.bsensemfu!;
-    bsensemfu_flag = (bsensemfu.isEmpty) ? client_code_map['bse_nse_mfu_flag'] : bsensemfu;
+    bsensemfu_flag =
+        (bsensemfu.isEmpty) ? client_code_map['bse_nse_mfu_flag'] : bsensemfu;
   }
 
   Future getCartByUserId() async {
@@ -304,7 +306,7 @@ class _DeleteAllCartState extends State<DeleteAllCart> {
                     onPressed: () async {
                       EasyLoading.show();
                       Map data = await InvestorApi.deleteAllCart(
-                        bse_nse_mfu_flag: bsensemfu_flag,
+                          bse_nse_mfu_flag: bsensemfu_flag,
                           user_id: user_id,
                           client_name: client_name,
                           context: context,

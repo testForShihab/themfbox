@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:mymfbox2_0/Investor/Transact/TransactController.dart';
 import 'package:mymfbox2_0/Investor/Transact/cart/StpCart.dart';
 import 'package:mymfbox2_0/Investor/transact/cart/MyCart.dart';
@@ -32,6 +33,7 @@ class StpAmountInput extends StatefulWidget {
       required this.amccode,
       required this.amcName,
       required this.logo});
+
   final String fromSchemeAmfiShortName;
   final String fromSchemeAmfi;
   final String toSchemeAmfiShortName;
@@ -40,6 +42,7 @@ class StpAmountInput extends StatefulWidget {
   final String folio;
   final String amccode, amcName;
   final String logo;
+
   @override
   State<StpAmountInput> createState() => _StpAmountInputState();
 }
@@ -52,16 +55,19 @@ class _StpAmountInputState extends State<StpAmountInput> {
 
   num amount = 0;
   String trnxType = "Amount";
+
   // DateTime stpStartDate = DateTime.now();
   DateTime stpEndDate = DateTime.now();
+  DateTime stpStartDate = DateTime.now().add(Duration(days: 7));
   String stpEndType = "Until Cancelled";
   List stpEndTypeList = ["Until Cancelled", "Specific Date"];
 
   TextEditingController amountController = TextEditingController();
+
   // TextEditingController transferController = TextEditingController();
 
   ExpansionTileController frequencyController = ExpansionTileController();
-  ExpansionTileController stpDateController = ExpansionTileController();
+  ExpansionTileController stpStartDateController = ExpansionTileController();
   ExpansionTileController stpEndDateController = ExpansionTileController();
   String frequency = "Monthly";
   String frequencyCode = "";
@@ -98,7 +104,7 @@ class _StpAmountInputState extends State<StpAmountInput> {
     return 0;
   }
 
-  Future getSTpDays() async{
+  Future getSTpDays() async {
     Map data = await TransactionApi.getStpDays(
       user_id: user_id,
       client_name: client_name,
@@ -117,6 +123,7 @@ class _StpAmountInputState extends State<StpAmountInput> {
   String selectedFreqMap = "";
   List dateList = [];
   String bse_nse_mfu = " ";
+
   Future getStpSchemeFrequency() async {
     String marketType = client_code_map['bse_nse_mfu_flag'];
     bse_nse_mfu = client_code_map['bse_nse_mfu_flag'];
@@ -195,11 +202,11 @@ class _StpAmountInputState extends State<StpAmountInput> {
                           SizedBox(height: 16),
                           frequencyExpansionTile(context),
                           SizedBox(height: 16),
-                          if(frequency == "Weekly")
-                          paymentModeExpansionTile(context),
+                          stpStartDateTile(context),
                           SizedBox(height: 16),
-                          transactController.rpDatePicker("STP Start Date"),
+                          if (frequency == "Weekly") stpDayTile(context),
                           SizedBox(height: 16),
+                          // transactController.rpDatePicker("STP Start Date"),
                           stpEndDateExpansionTile(context),
                           SizedBox(height: 77),
                         ],
@@ -212,7 +219,7 @@ class _StpAmountInputState extends State<StpAmountInput> {
           }),
       bottomSheet: CalculateButton(
           onPress: () async {
-            DateTime stpStartDate = transactController.startDate.value;
+            // DateTime stpStartDate = transactController.startDate.value;
             if (amount == 0) {
               Utils.showError(context, "Please Enter Amount");
               return;
@@ -221,9 +228,12 @@ class _StpAmountInputState extends State<StpAmountInput> {
               Utils.showError(context, "Min Amount is $rupee $minAmount");
               return;
             }
-            String staryDay = stpStartDate.day.toString();
-            print("datelist $dateList $staryDay");
-            if (!dateList.contains(staryDay)) {
+            int startDay = int.tryParse(stpStartDate.day.toString()) ?? 01;
+            print("datelist $dateList $startDay");
+            final list =
+                dateList.map((e) => int.tryParse(e ?? '01') ?? 01).toList();
+            print('list: $list');
+            if (!list.contains(startDay)) {
               Utils.showError(context,
                   "Selected Date Not Allowed. \n Allowed dates are $dateList");
               return;
@@ -246,7 +256,7 @@ class _StpAmountInputState extends State<StpAmountInput> {
   }
 
   Future saveCartByUserId() async {
-    DateTime stpStartDate = transactController.startDate.value;
+    // DateTime stpStartDate = transactController.startDate.value;
 
     String fromDividendCode = Utils.getDividendCode(
         schemeAmfi: widget.fromSchemeAmfi,
@@ -281,7 +291,8 @@ class _StpAmountInputState extends State<StpAmountInput> {
       to_scheme_reinvest_tag: toDividendCode,
       context: context,
       amount_type: 'amount',
-      stp_date: /*transactController.startDate.value.day.toString()*/ (frequency == "Weekly") ? frequencyDayCode : "",
+      stp_date: /*transactController.startDate.value.day.toString()*/
+          (frequency == "Weekly") ? getFrequencyCodeFromSelectedSTPDay() : "",
       stp_type: 'amount',
       installment: '',
     );
@@ -500,7 +511,10 @@ class _StpAmountInputState extends State<StpAmountInput> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(title,
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 13, color: Config.appTheme.themeColor)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13,
+                      color: Config.appTheme.themeColor)),
               DottedLine(),
             ],
           ),
@@ -546,68 +560,36 @@ class _StpAmountInputState extends State<StpAmountInput> {
     );
   }
 
+  String getFrequencyCodeFromSelectedSTPDay() {
+    final map = frequencyDayList.firstWhereOrNull((e) =>
+        e['desc'].toString().toLowerCase() == selectedSTPDay.toLowerCase());
+    return map['code'];
+  }
+
   String frequencyDay = "";
   String frequencyDayCode = "";
 
   List frequencyDayList = [];
   ExpansionTileController paymentModeController = ExpansionTileController();
-  Widget paymentModeExpansionTile(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(10)),
-      child: Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          controller: paymentModeController,
-          title: Text("Payment Mode", style: AppFonts.f50014Black),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(frequencyDay, style: AppFonts.f50012),
-            ],
-          ),
-          children: [
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: frequencyDayList.length,
-              itemBuilder: (context, index) {
-                Map map = frequencyDayList[index];
-                String status = map['desc'];
-                String statusCode = map['code'];
 
-                return InkWell(
-                  onTap: () async {
-                    frequencyDay = status;
-                    frequencyDayCode = statusCode;
-                    print("statusCode $frequencyDayCode");
-                    paymentModeController.collapse();
-                    // validateTaxStatus();
-                    setState(() {});
-
-                  },
-                  child: Row(
-                    children: [
-                      Radio(
-                        value: status,
-                        groupValue: frequencyDay,
-                        onChanged: (val) async {
-                          frequencyDay = status;
-                          frequencyDayCode = statusCode;
-                          paymentModeController.collapse();
-                          // validateTaxStatus();
-                          setState(() {});
-
-                        },
-                      ),
-                      Text(status, style: AppFonts.f50014Grey),
-                    ],
-                  ),
-                );
-              },
-            )
-          ],
-        ),
+  Widget stpDayTile(BuildContext context) {
+    return Opacity(
+      opacity: 0.56,
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        child: Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text("STP Day", style: AppFonts.f50014Black),
+                  Text(selectedSTPDay, style: AppFonts.f50012),
+                ],
+              ),
+            )),
       ),
     );
   }
@@ -668,6 +650,76 @@ class _StpAmountInputState extends State<StpAmountInput> {
   //     ),
   //   );
   // }
+
+  String selectedSTPDay = '';
+
+  showDatePickerDialogue(BuildContext context) async {
+    final allowedDays =
+        dateList.map((e) => int.tryParse(e ?? '1') ?? 1).toList();
+
+    DateTime now = DateTime.now().add(Duration(days: 7));
+    DateTime? initialDate;
+
+    if (allowedDays.contains(stpStartDate.day)) {
+      initialDate = stpStartDate;
+    } else {
+      for (int i = 0; i < 30; i++) {
+        final candidate = now.add(Duration(days: i));
+        if (allowedDays.contains(candidate.day)) {
+          initialDate = candidate;
+          break;
+        }
+      }
+
+      initialDate ??= now;
+    }
+
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime.now().add(Duration(days: 7)),
+      lastDate: DateTime(2100),
+      selectableDayPredicate: (DateTime day) {
+        return allowedDays.contains(day.day);
+      },
+    );
+
+    if (pickedDate != null) {
+      stpStartDate = pickedDate;
+      String dayName = DateFormat('EEEE').format(stpStartDate);
+      selectedSTPDay = dayName;
+      setState(() {});
+    }
+  }
+
+  Widget stpStartDateTile(context) {
+    return InkWell(
+      onTap: () {
+        showDatePickerDialogue(context);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        child: Theme(
+          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text("STP Start Date", style: AppFonts.f50014Black),
+                Text(convertDtToStr(stpStartDate), style: AppFonts.f50012),
+                Text(
+                  'This scheme allows only these STP days: ${dateList.map((e) => e).join(', ')}',
+                  style: TextStyle(fontSize: 10),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget stpEndDateExpansionTile(BuildContext context) {
     return Container(

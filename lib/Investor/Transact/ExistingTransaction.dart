@@ -29,16 +29,16 @@ import '../../utils/AppFonts.dart';
 import '../../utils/Utils.dart';
 
 class ExistingTransaction extends StatefulWidget {
-
-  const ExistingTransaction({super.key,
+  const ExistingTransaction({
+    super.key,
     this.cameFrom = "",
     this.bse_nse_mfu_flag = "",
     this.investor_code = "",
     this.tax_status_code = "",
     this.holding_nature_code = "",
     this.broker_code = "",
+  });
 
-    });
   final String cameFrom;
   final String bse_nse_mfu_flag;
   final String investor_code;
@@ -59,6 +59,7 @@ class _ExistingTransactionState extends State<ExistingTransaction> {
 
   String selectedAMC = "All";
   String selectedCategory = "All";
+
   //String selectedSubCategory = "Equity: Large Cap";
 
   List amcList = [];
@@ -93,6 +94,7 @@ class _ExistingTransactionState extends State<ExistingTransaction> {
   ];
 
   List<MfSchemeSummaryPojo> schemeList = [];
+
   /*Future getMutualFundPortfolio() async {
     if (schemeList.isNotEmpty) return 0;
     print("Broker Code ----> ${client_code_map['broker_code']}");
@@ -141,6 +143,7 @@ class _ExistingTransactionState extends State<ExistingTransaction> {
   }
 
   Iterable keys = GetStorage().getKeys();
+
   Future getDatas() async {
     isLoading = true;
     EasyLoading.show();
@@ -247,6 +250,7 @@ class _ExistingTransactionState extends State<ExistingTransaction> {
   }
 
   String searchKey = "";
+
   Widget topFilterArea() {
     return Padding(
       padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -286,9 +290,10 @@ class _ExistingTransactionState extends State<ExistingTransaction> {
           selectedScheme = scheme;
           if (widget.cameFrom.isEmpty) transactBottomSheet();
           if (widget.cameFrom == "Lumpsum") goToLumpsum();
-          if(client_code_map['bse_nse_mfu_flag'] == "BSE" && widget.cameFrom == "SIP") goToBseSip();
-          if(client_code_map['bse_nse_mfu_flag'] != "BSE" && widget.cameFrom == "SIP") goToSip();
-
+          if (client_code_map['bse_nse_mfu_flag'] == "BSE" &&
+              widget.cameFrom == "SIP") goToBseSip();
+          if (client_code_map['bse_nse_mfu_flag'] != "BSE" &&
+              widget.cameFrom == "SIP") goToSip();
         },
         child: Container(
           margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
@@ -377,12 +382,12 @@ class _ExistingTransactionState extends State<ExistingTransaction> {
                       (keys.contains("adminAsFamily")) != false))
                 listContainer(bottomSheetData.getRange(2, 3).toList()),
               SizedBox(height: 8),
-             if (userData.switchAllowed == 1 ||
+              if (userData.switchAllowed == 1 ||
                   ((keys.contains("adminAsInvestor")) ||
                       (keys.contains("adminAsFamily")) != false))
                 listContainer(bottomSheetData.getRange(3, 4).toList()),
               SizedBox(height: 8),
-              /*if (userData.stpAllowed == 1 ||
+              if (userData.stpAllowed == 1 ||
                   ((keys.contains("adminAsInvestor")) ||
                       (keys.contains("adminAsFamily")) != false))
                 listContainer(bottomSheetData.getRange(4, 5).toList()),
@@ -391,7 +396,7 @@ class _ExistingTransactionState extends State<ExistingTransaction> {
                   ((keys.contains("adminAsInvestor")) ||
                       (keys.contains("adminAsFamily")) != false))
                 listContainer(bottomSheetData.getRange(5, 6).toList()),
-              SizedBox(height: 8),*/
+              SizedBox(height: 8),
             ],
           ),
         );
@@ -422,14 +427,15 @@ class _ExistingTransactionState extends State<ExistingTransaction> {
         ));
   }
 
-  goToBseSip(){
+  goToBseSip() {
     Get.to(() => BseSipAmountInput(
-      trnx_type: "AP",
-      logo: "${selectedScheme.schemeAmcLogo}",
-      shortName: "${selectedScheme.schemeAmfiShortName}",
-      schemeAmfi: "${selectedScheme.schemeAmfi}",
-      folio: "${selectedScheme.folio}",
-      amc: "${selectedScheme.schemeAmc}",));
+          trnx_type: "AP",
+          logo: "${selectedScheme.schemeAmcLogo}",
+          shortName: "${selectedScheme.schemeAmfiShortName}",
+          schemeAmfi: "${selectedScheme.schemeAmfi}",
+          folio: "${selectedScheme.folio}",
+          amc: "${selectedScheme.schemeAmc}",
+        ));
   }
 
   goToRedemption() {
@@ -458,7 +464,6 @@ class _ExistingTransactionState extends State<ExistingTransaction> {
 
   goToStp() {
     Get.to(() => NewStpTransaction(
-
           amcName: '${selectedScheme.schemeAmc}',
           amcCode: '${selectedScheme.schemeAmcCode}',
           currValue: selectedScheme.currValue ?? 0,
@@ -502,6 +507,7 @@ class _ExistingTransactionState extends State<ExistingTransaction> {
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(8)),
       child: ListView.separated(
+        padding: EdgeInsets.zero,
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         itemCount: list.length,
@@ -514,8 +520,10 @@ class _ExistingTransactionState extends State<ExistingTransaction> {
             onTap: () {
               Get.back();
               if (title == 'Purchase') goToLumpsum();
-              if(client_code_map['bse_nse_mfu_flag'] == "BSE" &&  title == 'Start SIP') goToBseSip();
-              if(client_code_map['bse_nse_mfu_flag'] != "BSE" && title == "Start SIP") goToSip();
+              if (client_code_map['bse_nse_mfu_flag'] == "BSE" &&
+                  title == 'Start SIP') goToBseSip();
+              if (client_code_map['bse_nse_mfu_flag'] != "BSE" &&
+                  title == "Start SIP") goToSip();
               if (title == 'Redemption') goToRedemption();
               if (title.contains("Switch")) goToSwitch();
               if (title.contains("STP")) goToStp();

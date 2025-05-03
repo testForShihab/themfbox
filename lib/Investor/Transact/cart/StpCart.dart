@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:mymfbox2_0/Investor/Transact/ExistingTransaction.dart';
 import 'package:mymfbox2_0/Investor/Transact/TransactController.dart';
 import 'package:mymfbox2_0/Investor/Transact/cart/MyCart.dart';
@@ -39,6 +42,9 @@ class _StpCartState extends State<StpCart> {
   ExpansionTileController frequencyController = ExpansionTileController();
   ExpansionTileController stpDateController = ExpansionTileController();
   ExpansionTileController stpEndDateController = ExpansionTileController();
+  final startDateController = Get.put(StartDateController());
+
+  // DateTime stpStartDate = DateTime.now().add(Duration(days: 7));
   String frequency = "";
 
   Future getCartByUserId() async {
@@ -62,6 +68,7 @@ class _StpCartState extends State<StpCart> {
   }
 
   num minAmount = 0;
+
   Future getStpMinAmount(SchemeList item) async {
     String folio = "${item.folioNo}";
     Map data = await TransactionApi.getStpMinAmount(
@@ -83,6 +90,7 @@ class _StpCartState extends State<StpCart> {
 
   List dateAndFreq = [];
   List dateList = [];
+
   Future getStpSchemeFrequency(SchemeList item) async {
     if (dateAndFreq.isNotEmpty) return 0;
     String schemAmfi = Uri.encodeComponent(item.schemeName!);
@@ -116,6 +124,7 @@ class _StpCartState extends State<StpCart> {
   }
 
   TransactController transactController = Get.put(TransactController());
+
   @override
   Widget build(BuildContext context) {
     devHeight = MediaQuery.sizeOf(context).height;
@@ -156,7 +165,7 @@ class _StpCartState extends State<StpCart> {
       itemBuilder: (context, index) {
         Result result = overallList[index];
         List<SchemeList> schemeList = result.schemeList ?? [];
-        String? bsensemfu = result.bseNseMfuFlag ;
+        String? bsensemfu = result.bseNseMfuFlag;
         print("bsensemfu $bsensemfu");
 
         return Container(
@@ -236,6 +245,7 @@ class _StpCartState extends State<StpCart> {
 
   editBottomSheet(SchemeList item, Result result) async {
     Rx<DateTime> stpStartDate = transactController.startDate;
+    // DateTime stpStartDate = DateTime.now();
     num amount = num.tryParse(item.amount ?? "0") ?? 0;
     Map client_code_map = result.toJson();
     client_code_map.remove('scheme_list');
@@ -243,7 +253,7 @@ class _StpCartState extends State<StpCart> {
     await getStpMinAmount(item);
     await getStpSchemeFrequency(item);
     // stpDate.value = "${item.sipDate}";
-    stpStartDate.value = convertStrToDt("${item.startDate}");
+    startDateController.startDate.value = convertStrToDt("${item.startDate}");
     frequencyCode = "${item.frequency}";
     stpEndType = (item.untilCancel!) ? "Until Cancelled" : "${item.endDate}";
     stpEndDate = convertStrToDt("${item.endDate}");
@@ -278,7 +288,10 @@ class _StpCartState extends State<StpCart> {
                         frequencyExpansionTile(bottomState),
                         SizedBox(height: 16),
                         // stpDateExpansionTile(bottomState),
-                        transactController.rpDatePicker("STP Start Date"),
+                        // transactController.rpDatePicker("STP Start Date"),
+                        stpStartDateTile(context, bottomState),
+                        // SizedBox(height: 16),
+                        // if (frequency == "Weekly") stpDayTile(context),
                         SizedBox(height: 16),
                         stpEndDateExpansionTile(bottomState),
                         SizedBox(height: 16),
@@ -287,18 +300,30 @@ class _StpCartState extends State<StpCart> {
                   ),
                   CalculateButton(
                       onPress: () async {
-                        Get.back();
                         String folio = "${item.folioNo}";
 
-                        DateTime stpStartDate =
-                            transactController.startDate.value;
+                        // DateTime stpStartDate =
+                        //     transactController.startDate.value;
 
-                        String staryDay =
-                            stpStartDate.day.toString().padLeft(2, '0');
-                        print("startDay $staryDay");
+                        if (amount < minAmount) {
+                          Utils.showError(context,
+                              'Please select a SIP amount greater than $minAmount');
+                          return 0;
+                        }
+
+                        int startDay = int.tryParse(startDateController
+                                .startDate.value.day
+                                .toString()) ??
+                            01;
+                        print("startDay $startDay");
                         print("startDay $dateList");
 
-                        if (!dateList.contains(staryDay)) {
+                        final list = dateList
+                            .map((e) => int.tryParse(e ?? '01') ?? 01)
+                            .toList();
+                        print('list: $list');
+
+                        if (!list.contains(startDay)) {
                           Utils.showError(context,
                               "Selected Date Not Allowed. \n Allowed dates are $dateList");
                           return 0;
@@ -316,7 +341,8 @@ class _StpCartState extends State<StpCart> {
                           units: "",
                           frequency: frequencyCode,
                           sip_date: "",
-                          start_date: convertDtToStr(stpStartDate),
+                          start_date: convertDtToStr(
+                              startDateController.startDate.value),
                           end_date: convertDtToStr(stpEndDate),
                           until_cancelled:
                               stpEndType.contains('Until') ? "1" : "0",
@@ -330,7 +356,8 @@ class _StpCartState extends State<StpCart> {
                           amount_type: 'amount',
                           stp_type: 'amount',
                           installment: " ${item.installment}",
-                          stp_date: stpStartDate.day.toString(),
+                          stp_date: startDateController.startDate.value.day
+                              .toString(),
                         );
                         if (data['status'] != 200) {
                           Utils.showError(context, data['msg']);
@@ -340,6 +367,7 @@ class _StpCartState extends State<StpCart> {
                         cart.msg = null;
                         EasyLoading.dismiss();
                         setState(() {});
+                        Get.back();
                       },
                       text: "UPDATE"),
                 ],
@@ -464,6 +492,102 @@ class _StpCartState extends State<StpCart> {
   //   } else
   //     stpStartDate = DateTime(minStart.year, minStart.month, date);
   // }
+
+  String selectedSTPDay = '';
+
+  showDatePickerDialogue(BuildContext context, bottomState) async {
+    final allowedDays =
+        dateList.map((e) => int.tryParse(e ?? '1') ?? 1).toList();
+
+    DateTime now = DateTime.now().add(Duration(days: 7));
+    DateTime? initialDate;
+
+    if (allowedDays.contains(startDateController.startDate.value.day)) {
+      initialDate = startDateController.startDate.value;
+    } else {
+      for (int i = 0; i < 30; i++) {
+        final candidate = now.add(Duration(days: i));
+        if (allowedDays.contains(candidate.day)) {
+          initialDate = candidate;
+          break;
+        }
+      }
+
+      initialDate ??= now;
+    }
+
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime.now().add(Duration(days: 7)),
+      lastDate: DateTime(2100),
+      selectableDayPredicate: (DateTime day) {
+        return allowedDays.contains(day.day);
+      },
+    );
+
+    if (pickedDate != null) {
+      // handle pickedDate
+      startDateController.startDate.value = pickedDate;
+      String dayName =
+          DateFormat('EEEE').format(startDateController.startDate.value);
+      selectedSTPDay = dayName;
+      bottomState(() {});
+      // setState(() {});
+    }
+  }
+
+  Widget stpStartDateTile(context, bottomState) {
+    return InkWell(
+      onTap: () {
+        showDatePickerDialogue(context, bottomState);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        child: Theme(
+          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text("STP Start Date", style: AppFonts.f50014Black),
+                Text(convertDtToStr(startDateController.startDate.value),
+                    style: AppFonts.f50012),
+                Text(
+                  'This scheme allows only these STP days: ${dateList.map((e) => e).join(', ')}',
+                  style: TextStyle(fontSize: 10),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget stpDayTile(BuildContext context) {
+    return Opacity(
+      opacity: 0.56,
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        child: Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text("STP Day", style: AppFonts.f50014Black),
+                  Text(selectedSTPDay, style: AppFonts.f50012),
+                ],
+              ),
+            )),
+      ),
+    );
+  }
 
   List stpEndTypeList = ["Until Cancelled", "Specific Date"];
   String stpEndType = "Until Cancelled";
@@ -701,4 +825,8 @@ class _StpCartState extends State<StpCart> {
       },
     );
   }
+}
+
+class StartDateController extends GetxController {
+  Rx<DateTime> startDate = DateTime.now().obs;
 }
