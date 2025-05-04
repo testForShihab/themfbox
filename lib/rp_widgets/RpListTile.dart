@@ -36,3 +36,33 @@ class RpListTile extends StatelessWidget {
     );
   }
 }
+
+class MFRpListTile extends StatelessWidget {
+  const MFRpListTile({
+    super.key,
+    required this.title,
+    this.subTitle,
+    this.showArrow = true,
+  });
+  final Widget title;
+  final Widget? subTitle;
+  final bool showArrow;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              title,
+              subTitle ?? Text("data"),
+            ],
+          ),
+        ),
+        if (showArrow)
+          Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 20),
+      ],
+    );
+  }
+}

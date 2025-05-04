@@ -305,7 +305,7 @@ class _TaxReportState extends State<TaxReport> {
                     startDate: startDate,
                     endDate: endDate,
                     option: option,
-                    financial_year: selectedFinancialYear);
+                    financial_year: (option== "range") ? "" :selectedFinancialYear);
                 if (data['status'] != 200) {
                   Utils.showError(context, data['msg']);
                   return;

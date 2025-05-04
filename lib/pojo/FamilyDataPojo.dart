@@ -36,6 +36,7 @@ class FamilyDataPojo {
   num? familyMfHoldings;
   num? portfolioReturn;
   String? address;
+  num? absolute_return;
 
   FamilyDataPojo({
     this.id,
@@ -74,6 +75,7 @@ class FamilyDataPojo {
     this.unRealisedGain,
     this.familyMfHoldings,
     this.portfolioReturn,
+    this.absolute_return,
     this.address,
   });
 
@@ -115,6 +117,7 @@ class FamilyDataPojo {
     familyMfHoldings = json['family_mf_holdings'];
     portfolioReturn = json['portfolio_return'];
     address = json['address'];
+    absolute_return = json['absolute_return'];
   }
 
   Map<String, dynamic> toJson() {
@@ -156,6 +159,7 @@ class FamilyDataPojo {
     data['family_mf_holdings'] = familyMfHoldings;
     data['portfolio_return'] = portfolioReturn;
     data['address'] = address;
+    data['absolute_return'] = absolute_return;
     return data;
   }
 }

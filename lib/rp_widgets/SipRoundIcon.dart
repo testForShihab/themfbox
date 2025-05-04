@@ -14,6 +14,6 @@ class SipRoundIcon extends StatelessWidget {
             border: Border.all(color: Config.appTheme.themeColor),
             color: Config.appTheme.overlay85),
         child: Image.asset("assets/sipFund.png",
-            color: Config.appTheme.themeColor, height: 30));
+            color: Config.appTheme.themeColor, height: 20));
   }
 }

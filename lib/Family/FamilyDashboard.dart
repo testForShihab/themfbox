@@ -705,6 +705,7 @@ ${client_name.toUpperCase()}''';
 
   Widget normalBottomSheet({BorderRadius? borderRadius}) {
     return SizedBox(
+      // height: 81, // Try increasing the height to give more space
       child: ClipRRect(
         borderRadius: borderRadius ??
             BorderRadius.only(

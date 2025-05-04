@@ -97,7 +97,8 @@ class _PaymentWebViewState extends State<PaymentWebView> {
                     backgroundColor: Config.appTheme.themeColor,
                     foregroundColor: Colors.white),
                 onPressed: () {
-                  for (int i = 0; i < 3; i++) Get.back();
+                  // for (int i = 0; i < 3; i++) Get.back();
+                  Get.off(() => InvestorDashboard());
                 },
                 child: Text("Yes"))
           ],

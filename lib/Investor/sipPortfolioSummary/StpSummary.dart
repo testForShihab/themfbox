@@ -54,6 +54,9 @@ class _StpSummaryState extends State<StpSummary> {
   late Map<String, dynamic> datas;
   OnlineTransactionRestrictionPojo userData =
   OnlineTransactionRestrictionPojo();
+
+  bool isLoading = true;
+
   Future getAllOnlineRestrictions() async {
     Map data = await InvestorApi.getOnlineRestrictionsByUserId(
       user_id: user_id,
@@ -73,7 +76,7 @@ class _StpSummaryState extends State<StpSummary> {
   Future getDatas(BuildContext context) async {
     await getStpSwpSummary();
     await getAllOnlineRestrictions();
-
+    isLoading = false;
     return 0;
   }
 
@@ -123,6 +126,7 @@ class _StpSummaryState extends State<StpSummary> {
                 ],
               ),
             ),
+            (isLoading) ? Utils.shimmerWidget(devHeight * 0.30,margin: EdgeInsets.all(8)) :
             stpList.length == 0
                 ? NoData()
                 : Expanded(
@@ -177,14 +181,14 @@ class _StpSummaryState extends State<StpSummary> {
                   schemeLogo: "${stpList['logo']}",
                   schemeShortName: encodedName));
               },
-              child: RpListTile(
+              child: MFRpListTile(
                 showArrow: true,
                 subTitle: Text("Folio : ${stpList['folio_no']}",
                     style: f40012.copyWith(color: Colors.black)),
-                leading: Image.network(
+               /* leading: Image.network(
                   stpList['logo'] ?? "",
                   height: 32,
-                ),
+                ),*/
                 title: Text(
                   "${stpList['scheme_amfi_short_name']}",
                   style: AppFonts.f50014Grey.copyWith(color: Colors.blue),
@@ -219,6 +223,7 @@ class _StpSummaryState extends State<StpSummary> {
                   rpRow(
                       lhead: "XIRR (%)",
                       lSubHead: Utils.formatNumber(stpList['xirr']),
+                      lvalueStyle: AppFonts.f50016Grey.copyWith(color: (stpList['xirr']! < 0) ? Config.appTheme.defaultLoss : Config.appTheme.defaultProfit),
                       rhead: (userData.oneDayChange == 1 || ((keys.contains("adminAsInvestor")) || (keys.contains("adminAsFamily")) != false))
                           ? "1 Day Change" : " ",
                       rSubHead: (userData.oneDayChange == 1 || ((keys.contains("adminAsInvestor")) || (keys.contains("adminAsFamily")) != false))
@@ -243,10 +248,11 @@ class _StpSummaryState extends State<StpSummary> {
     required String cSubHead,
     final TextStyle? valueStyle,
     final TextStyle? titleStyle,
+    final TextStyle? lvalueStyle,
   }) {
     return Row(
       children: [
-        Expanded(child: ColumnText(title: lhead, value: lSubHead,alignment: CrossAxisAlignment.start)),
+        Expanded(child: ColumnText(title: lhead, value: lSubHead,alignment: CrossAxisAlignment.start,valueStyle: lvalueStyle,)),
         Expanded(child: ColumnText(title: rhead, value: rSubHead,alignment: CrossAxisAlignment.center,valueStyle: valueStyle,titleStyle: titleStyle,)),
         Expanded(child: ColumnText(title: chead,value: cSubHead,alignment: CrossAxisAlignment.end)),
       ],

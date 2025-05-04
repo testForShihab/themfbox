@@ -8,6 +8,7 @@ class MfSummaryPojo {
   num? totalXirr;
   num? dayChangeValue;
   num? dayChangePercentage;
+  num? total_abs_rtn;
 
   MfSummaryPojo(
       {this.totalCurrCost,
@@ -18,7 +19,8 @@ class MfSummaryPojo {
       this.totalRealisedGain,
       this.totalXirr,
       this.dayChangeValue,
-      this.dayChangePercentage});
+      this.dayChangePercentage,
+      this.total_abs_rtn});
 
   MfSummaryPojo.fromJson(Map<String, dynamic> json) {
     totalCurrCost = json['total_curr_cost'];
@@ -30,6 +32,7 @@ class MfSummaryPojo {
     totalXirr = json['total_xirr'];
     dayChangeValue = json['day_change_value'];
     dayChangePercentage = json['day_change_percentage'];
+    total_abs_rtn = json['total_abs_rtn'];
   }
 
   Map<String, dynamic> toJson() {

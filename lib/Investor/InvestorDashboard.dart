@@ -40,12 +40,15 @@ import 'package:mymfbox2_0/rp_widgets/SipRoundIcon.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../api/ReportApi.dart';
 import '../common/MFInvestPerformanceResponse.dart';
 import '../research/Calculators.dart';
 import '../rp_widgets/BottomSheetTitle.dart';
 import 'package:http/http.dart' as http;
+
+import '../rp_widgets/DottedLine.dart';
 
 /// InvestorDashboard displays the main dashboard screen for investors
 /// Shows portfolio summary, SIPs, transactions and other investment details
@@ -592,7 +595,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
             talkToExpert(),
             SizedBox(height: 16),
             if (sipList.isNotEmpty) sideHeading("My SIPs"),
-            if (sipList.isNotEmpty) SizedBox(height: 16),
+            if (sipList.isNotEmpty) SizedBox(height: 10),
             if (sipList.isNotEmpty) sipArea(),
             if (sipList.isNotEmpty)
               viewAllBtn(
@@ -665,6 +668,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                     Get.to(MutualFundScreen());
                     // EasyLoading.showInfo("Design Pending");
                   }),
+            // Cont(),
             performanceComparisonCard(),
             /*if ((userDataPojo.mfresearchFlag == true ||
                 userDataPojo.calculatorFlag == true))
@@ -720,100 +724,97 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
     return Obx(() {
       return Container(
         padding: EdgeInsets.all(16),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Color(0XFFF5F8FC),
-            border: Border.all(color: Config.appTheme.themeColor, width: 1),
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-          ),
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                    color: Config.appTheme.whiteOverlay,
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(5),
-                        topLeft: Radius.circular(6))),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Performance Comparison of Different Assets",
-                        style: AppFonts.f40016),
-                    SizedBox(height: 15),
-                    Text("Investment Amount",
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF6F828E))),
-                    SizedBox(height: 5),
-                    GestureDetector(
-                      onTap: () async {
-                        showAmountBottomSheet(context,
-                            groupValue: controller.spinnerAmount.value,
-                            monthList: controller.spinnerAmountList);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Color(0XFFFFFFFF),
-                          shape: BoxShape.rectangle,
-                          border: Border.all(color: Colors.black12, width: 1),
-                          borderRadius: BorderRadius.all(Radius.circular(1)),
-                        ),
-                        height: 40.0,
-                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: DropdownButton<String>(
-                          isExpanded: true,
-                          focusColor: Config.appTheme.themeColor,
-                          underline: SizedBox(),
-                          value: controller.spinnerAmount.value,
-                          style:
-                              TextStyle(color: Color(0xFF6F85A6), fontSize: 16),
-                          icon: const Icon(Icons.keyboard_arrow_down_sharp,
-                              size: 28),
-                          iconEnabledColor: Color(0xFF6F85A6),
-                          items: controller.spinnerAmountList
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: null,
-                          onTap: () {
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  color: Config.appTheme.whiteOverlay,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(12),
+                      topLeft: Radius.circular(12))),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(16,16,16,0),
+                    child: Text("Performance Comparison of Different Assets",
+                        style: AppFonts.f50014Black),
+                  ),
+                  SizedBox(height: 5),
+                  DottedLine1(),
+                  SizedBox(height: 8),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(16,0,16,16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Investment Amount",
+                            style: AppFonts.f50014Black.copyWith(fontSize: 14)),
+                        SizedBox(height: 5),
+                        GestureDetector(
+                          onTap: () async {
                             showAmountBottomSheet(context,
                                 groupValue: controller.spinnerAmount.value,
                                 monthList: controller.spinnerAmountList);
                           },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color(0XFFFFFFFF),
+                              shape: BoxShape.rectangle,
+                              border: Border.all(color: Colors.black12, width: 1),
+                              borderRadius: BorderRadius.all(Radius.circular(8)),
+                            ),
+                            height: 40.0,
+                            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            child: DropdownButton<String>(
+                              isExpanded: true,
+                              focusColor: Config.appTheme.themeColor,
+                              underline: SizedBox(),
+                              value: controller.spinnerAmount.value,
+                              style:
+                              TextStyle(fontSize: 16),
+                              icon: const Icon(Icons.keyboard_arrow_down_sharp,
+                                  size: 28),
+                              iconEnabledColor: Color(0xFF6F85A6),
+                              items: controller.spinnerAmountList
+                                  .map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value,style: TextStyle(color: Colors.black),),
+                                );
+                              }).toList(),
+                              onChanged: null,
+                              onTap: () {
+                                showAmountBottomSheet(context,
+                                    groupValue: controller.spinnerAmount.value,
+                                    monthList: controller.spinnerAmountList);
+                              },
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Container(
-                      child: Column(
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        SizedBox(height: 20),
+                        Container(
+                          child: Column(
                             children: [
-                              Text("Mutual Funds",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xFF6F828E))),
-                              Text("(Average CAGR of top 5 FlexiCap Funds)",
-                                  style: TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xFF6F828E))),
-                              Row(
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Expanded(
-                                      flex: 2,
-                                      child: Container(
+                                  Text("Mutual Funds",
+                                      style: AppFonts.f50014Black.copyWith(fontSize: 14)),
+                                  Text("(Average CAGR of top 5 FlexiCap Funds)",
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xFF6F828E))),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
                                         margin:
-                                            EdgeInsets.symmetric(vertical: 10),
+                                        EdgeInsets.symmetric(vertical: 10),
                                         width: 160,
                                         height: 10,
                                         child: ClipRRect(
@@ -829,22 +830,22 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                                               data: SliderTheme.of(context)
                                                   .copyWith(
                                                 activeTickMarkColor:
-                                                    Colors.transparent,
+                                                Colors.transparent,
                                                 inactiveTickMarkColor:
-                                                    Colors.transparent,
+                                                Colors.transparent,
                                                 activeTrackColor:
-                                                    Color(0XFF50B432),
+                                                Colors.black,
                                                 inactiveTrackColor:
-                                                    Color(0xFFF6F7F9),
+                                                Color(0xFFF6F7F9),
                                                 trackHeight: 5,
-                                                thumbColor: Colors.transparent,
+                                                // thumbColor: Colors.transparent,
                                                 thumbShape:
-                                                    RoundSliderThumbShape(
-                                                        enabledThumbRadius:
-                                                            0.0),
+                                                RoundSliderThumbShape(
+                                                    enabledThumbRadius:
+                                                    0.0),
                                                 overlayShape:
-                                                    RoundSliderOverlayShape(
-                                                        overlayRadius: 0.0),
+                                                RoundSliderOverlayShape(
+                                                    overlayRadius: 0.0),
                                               ),
                                               child: Slider(
                                                   value: controller
@@ -856,44 +857,35 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                                                   max: controller
                                                       .sliderMaxValue.value,
                                                   label:
-                                                      '${controller.mfReturn.value}',
+                                                  '${controller.mfReturn.value}',
                                                   onChanged: (values) {}),
                                             ),
                                           ),
                                         ),
-                                      )),
-                                  Expanded(
-                                      flex: 2,
-                                      child: Container(
+                                      ),
+                                      Container(
                                         padding: EdgeInsets.only(left: 10),
                                         child: Text(
                                             "\u{20B9} ${Utils.formatNumber(controller.mfValue.value)} (${controller.mfReturn.value}%)",
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w500,
-                                                color: Color(0xFF1FC094))),
-                                      )),
+                                            style: AppFonts.f50014Black.copyWith(fontSize: 13,color: Color(0xFF1FC094))),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
-                            ],
-                          ),
-                          SizedBox(height: 5),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("NIFTY",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xFF6F828E))),
-                              Row(
+                              SizedBox(height: 5),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Expanded(
-                                      flex: 1,
-                                      child: Container(
+                                  Text("NIFTY",
+                                      style: AppFonts.f50014Black.copyWith(fontSize: 14)),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
                                         margin:
-                                            EdgeInsets.symmetric(vertical: 10),
+                                        EdgeInsets.symmetric(vertical: 10),
                                         width: 160,
                                         height: 10,
                                         child: ClipRRect(
@@ -909,22 +901,22 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                                               data: SliderTheme.of(context)
                                                   .copyWith(
                                                 activeTickMarkColor:
-                                                    Colors.transparent,
+                                                Colors.transparent,
                                                 inactiveTickMarkColor:
-                                                    Colors.transparent,
+                                                Colors.transparent,
                                                 activeTrackColor:
-                                                    Colors.lightBlueAccent,
+                                                Colors.black,
                                                 inactiveTrackColor:
-                                                    Color(0xFFF6F7F9),
+                                                Color(0xFFF6F7F9),
                                                 trackHeight: 5,
                                                 thumbColor: Colors.transparent,
                                                 thumbShape:
-                                                    RoundSliderThumbShape(
-                                                        enabledThumbRadius:
-                                                            0.0),
+                                                RoundSliderThumbShape(
+                                                    enabledThumbRadius:
+                                                    0.0),
                                                 overlayShape:
-                                                    RoundSliderOverlayShape(
-                                                        overlayRadius: 0.0),
+                                                RoundSliderOverlayShape(
+                                                    overlayRadius: 0.0),
                                               ),
                                               child: Slider(
                                                   value: controller
@@ -936,44 +928,35 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                                                   max: controller
                                                       .sliderMaxValue.value,
                                                   label:
-                                                      '${controller.niftyReturn.value}',
+                                                  '${controller.niftyReturn.value}',
                                                   onChanged: (values) {}),
                                             ),
                                           ),
                                         ),
-                                      )),
-                                  Expanded(
-                                      flex: 2,
-                                      child: Container(
+                                      ),
+                                      Container(
                                         padding: EdgeInsets.only(left: 10),
                                         child: Text(
                                             "\u{20B9} ${Utils.formatNumber(controller.niftyValue.value)} (${controller.niftyReturn.value}%)",
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w500,
-                                                color: Color(0xFF6F828E))),
-                                      )),
+                                            style: AppFonts.f50014Black.copyWith(fontSize: 13)),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
-                            ],
-                          ),
-                          SizedBox(height: 5),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Gold",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xFF6F828E))),
-                              Row(
+                              SizedBox(height: 5),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Expanded(
-                                      flex: 1,
-                                      child: Container(
+                                  Text("Gold",
+                                      style: AppFonts.f50014Black.copyWith(fontSize: 14)),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
                                         margin:
-                                            EdgeInsets.symmetric(vertical: 10),
+                                        EdgeInsets.symmetric(vertical: 10),
                                         width: 160,
                                         height: 10,
                                         child: ClipRRect(
@@ -989,22 +972,22 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                                               data: SliderTheme.of(context)
                                                   .copyWith(
                                                 activeTickMarkColor:
-                                                    Colors.transparent,
+                                                Colors.transparent,
                                                 inactiveTickMarkColor:
-                                                    Colors.transparent,
+                                                Colors.transparent,
                                                 activeTrackColor:
-                                                    Color(0XFFDDDF00),
+                                                Colors.black,
                                                 inactiveTrackColor:
-                                                    Color(0xFFF6F7F9),
+                                                Color(0xFFF6F7F9),
                                                 trackHeight: 5,
                                                 thumbColor: Colors.transparent,
                                                 thumbShape:
-                                                    RoundSliderThumbShape(
-                                                        enabledThumbRadius:
-                                                            0.0),
+                                                RoundSliderThumbShape(
+                                                    enabledThumbRadius:
+                                                    0.0),
                                                 overlayShape:
-                                                    RoundSliderOverlayShape(
-                                                        overlayRadius: 0.0),
+                                                RoundSliderOverlayShape(
+                                                    overlayRadius: 0.0),
                                               ),
                                               child: Slider(
                                                   value: controller
@@ -1016,44 +999,35 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                                                   max: controller
                                                       .sliderMaxValue.value,
                                                   label:
-                                                      '${controller.goldReturn.value}',
+                                                  '${controller.goldReturn.value}',
                                                   onChanged: (values) {}),
                                             ),
                                           ),
                                         ),
-                                      )),
-                                  Expanded(
-                                      flex: 2,
-                                      child: Container(
+                                      ),
+                                      Container(
                                         padding: EdgeInsets.only(left: 10),
                                         child: Text(
                                             "\u{20B9} ${Utils.formatNumber(controller.goldValue.value)} (${controller.goldReturn.value}%)",
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w500,
-                                                color: Color(0xFF6F828E))),
-                                      )),
+                                            style: AppFonts.f50014Black.copyWith(fontSize: 13)),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
-                            ],
-                          ),
-                          SizedBox(height: 5),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("FD",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xFF6F828E))),
-                              Row(
+                              SizedBox(height: 5),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Expanded(
-                                      flex: 1,
-                                      child: Container(
+                                  Text("FD",
+                                      style: AppFonts.f50014Black.copyWith(fontSize: 14)),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
                                         margin:
-                                            EdgeInsets.symmetric(vertical: 10),
+                                        EdgeInsets.symmetric(vertical: 10),
                                         width: 160,
                                         height: 10,
                                         child: ClipRRect(
@@ -1069,22 +1043,22 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                                               data: SliderTheme.of(context)
                                                   .copyWith(
                                                 activeTickMarkColor:
-                                                    Colors.transparent,
+                                                Colors.transparent,
                                                 inactiveTickMarkColor:
-                                                    Colors.transparent,
+                                                Colors.transparent,
                                                 activeTrackColor:
-                                                    Color(0XFF24CBE5),
+                                                Colors.black,
                                                 inactiveTrackColor:
-                                                    Color(0xFFF6F7F9),
+                                                Color(0xFFF6F7F9),
                                                 trackHeight: 5,
                                                 thumbColor: Colors.transparent,
                                                 thumbShape:
-                                                    RoundSliderThumbShape(
-                                                        enabledThumbRadius:
-                                                            0.0),
+                                                RoundSliderThumbShape(
+                                                    enabledThumbRadius:
+                                                    0.0),
                                                 overlayShape:
-                                                    RoundSliderOverlayShape(
-                                                        overlayRadius: 0.0),
+                                                RoundSliderOverlayShape(
+                                                    overlayRadius: 0.0),
                                               ),
                                               child: Slider(
                                                   value: controller
@@ -1096,151 +1070,639 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                                                   max: controller
                                                       .sliderMaxValue.value,
                                                   label:
-                                                      '${controller.fdReturn.value}',
+                                                  '${controller.fdReturn.value}',
                                                   onChanged: (values) {}),
                                             ),
                                           ),
                                         ),
-                                      )),
-                                  Expanded(
-                                      flex: 2,
-                                      child: Container(
+                                      ),
+                                      Container(
                                         padding: EdgeInsets.only(left: 10),
                                         child: Text(
                                             "\u{20B9} ${Utils.formatNumber(controller.fdValue.value)} (${controller.fdReturn.value}%)",
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w500,
-                                                color: Color(0xFF6F828E))),
-                                      )),
+                                            style: AppFonts.f50014Black.copyWith(fontSize: 13)),
+                                      ),
+                                    ],
+                                  ),
                                 ],
-                              ),
+                              )
                             ],
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text("Investment Period",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF9099A7))),
-                    SizedBox(height: 10),
-                    Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ToggleButtons(
-                            children: <Widget>[
-                              Container(
-                                padding: EdgeInsets.only(left: 16, right: 16),
-                                child: Text("6M",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: txtcolor)),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(left: 16, right: 16),
-                                child: Text("1Y",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: txtcolor)),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(left: 16, right: 16),
-                                child: Text("3Y",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: txtcolor)),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(left: 16, right: 16),
-                                child: Text("5Y",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: txtcolor)),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(left: 16, right: 16),
-                                child: Text("10Y",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: txtcolor)),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(left: 14, right: 16),
-                                child: Text("20Y",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: txtcolor)),
-                              ),
-                            ],
-                            borderColor: Color(0xFFD9DFE7),
-                            selectedBorderColor: Config.appTheme.themeColor,
-                            color: Color(0xFFFFFFFF),
-                            borderRadius: BorderRadius.circular(3),
-                            borderWidth: 1.2,
-                            isSelected: controller.isSelected,
-                            onPressed: (int index) {
-                              for (int buttonIndex = 0;
-                                  buttonIndex < controller.isSelected.length;
-                                  buttonIndex++) {
-                                controller.isSelected[buttonIndex] =
-                                    (buttonIndex == index);
-                              }
-                              switch (index) {
-                                case 0:
-                                  controller.togglePeriod.value = "6M";
-                                  break;
-                                case 1:
-                                  controller.togglePeriod.value = "1Y";
-                                  break;
-                                case 2:
-                                  controller.togglePeriod.value = "3Y";
-                                  break;
-                                case 3:
-                                  controller.togglePeriod.value = "5Y";
-                                  break;
-                                case 4:
-                                  controller.togglePeriod.value = "10Y";
-                                  break;
-                                case 5:
-                                  controller.togglePeriod.value = "20Y";
-                                  break;
-                              }
-                              controller.getInvestPerformance();
-                            },
                           ),
-                        ],
-                      ),
+                        )
+                      ],
                     ),
-                    SizedBox(height: 10),
-                  ],
-                ),
-              )
-            ],
-          ),
+                  ),
+
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(16,5,16,16,),
+              decoration: BoxDecoration(
+                  color:Colors.white,
+                  borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(12),
+                      bottomLeft: Radius.circular(12))
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text("Investment Period",
+                      textAlign: TextAlign.left,
+                      style: AppFonts.f50014Black.copyWith(fontSize: 15)),
+                  SizedBox(height: 10),
+                  Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ToggleSwitch(
+                          minWidth: 55,
+                          minHeight: 40,
+                          cornerRadius: 6.0,
+                          activeBgColor: [Config.appTheme.buttonColor],
+                          activeFgColor: Colors.white,
+                          inactiveBgColor: Colors.white,
+                          inactiveFgColor: Colors.black,
+                          initialLabelIndex: controller.isSelected.indexWhere((e) => e),
+                          totalSwitches: 6,
+                          borderColor: [Colors.grey.shade300],
+                          dividerColor: Colors.grey.shade300,
+                          borderWidth: 1,
+                          labels: ["6M", "1Y", "3Y", "5Y", "10Y", "20Y"],
+                          fontSize: 14,
+                          // customTextStyles: [],
+                          onToggle: (index) {
+                            for (int i = 0; i < controller.isSelected.length; i++) {
+                              controller.isSelected[i] = (i == index);
+                            }
+                            switch (index) {
+                              case 0:
+                                controller.togglePeriod.value = "6M";
+                                break;
+                              case 1:
+                                controller.togglePeriod.value = "1Y";
+                                break;
+                              case 2:
+                                controller.togglePeriod.value = "3Y";
+                                break;
+                              case 3:
+                                controller.togglePeriod.value = "5Y";
+                                break;
+                              case 4:
+                                controller.togglePeriod.value = "10Y";
+                                break;
+                              case 5:
+                                controller.togglePeriod.value = "20Y";
+                                break;
+                            }
+                            controller.getInvestPerformance();
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                ],
+              ),
+            )
+          ],
         ),
       );
     });
   }
+
+  // Widget performanceComparisonCard() {
+  //   print("MF Value: ${controller.mfValue.value}");
+  //   print("niftyReturn Value: ${controller.niftyReturn.value}");
+  //   print("goldValue Value: ${controller.goldValue.value}");
+  //   print("sliderMinValue Value: ${controller.sliderMinValue.value}");
+  //
+  //   return Obx(() {
+  //     return Container(
+  //       padding: EdgeInsets.all(16),
+  //       child: Container(
+  //         decoration: BoxDecoration(
+  //           color: Color(0XFFF5F8FC),
+  //           border: Border.all(color: Config.appTheme.themeColor, width: 1),
+  //           borderRadius: BorderRadius.all(Radius.circular(5)),
+  //         ),
+  //         child: Column(
+  //           children: [
+  //             Container(
+  //               padding: EdgeInsets.all(16),
+  //               decoration: BoxDecoration(
+  //                   color: Config.appTheme.whiteOverlay,
+  //                   borderRadius: BorderRadius.only(
+  //                       topRight: Radius.circular(5),
+  //                       topLeft: Radius.circular(6))),
+  //               child: Column(
+  //                 mainAxisAlignment: MainAxisAlignment.start,
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   Text("Performance Comparison of Different Assets",
+  //                       style: AppFonts.f40016),
+  //                   SizedBox(height: 15),
+  //                   Text("Investment Amount",
+  //                       style: TextStyle(
+  //                           fontSize: 14,
+  //                           fontWeight: FontWeight.bold,
+  //                           color: Color(0xFF6F828E))),
+  //                   SizedBox(height: 5),
+  //                   GestureDetector(
+  //                     onTap: () async {
+  //                       showAmountBottomSheet(context,
+  //                           groupValue: controller.spinnerAmount.value,
+  //                           monthList: controller.spinnerAmountList);
+  //                     },
+  //                     child: Container(
+  //                       decoration: BoxDecoration(
+  //                         color: Color(0XFFFFFFFF),
+  //                         shape: BoxShape.rectangle,
+  //                         border: Border.all(color: Colors.black12, width: 1),
+  //                         borderRadius: BorderRadius.all(Radius.circular(1)),
+  //                       ),
+  //                       height: 40.0,
+  //                       padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+  //                       child: DropdownButton<String>(
+  //                         isExpanded: true,
+  //                         focusColor: Config.appTheme.themeColor,
+  //                         underline: SizedBox(),
+  //                         value: controller.spinnerAmount.value,
+  //                         style:
+  //                             TextStyle(color: Color(0xFF6F85A6), fontSize: 16),
+  //                         icon: const Icon(Icons.keyboard_arrow_down_sharp,
+  //                             size: 28),
+  //                         iconEnabledColor: Color(0xFF6F85A6),
+  //                         items: controller.spinnerAmountList
+  //                             .map<DropdownMenuItem<String>>((String value) {
+  //                           return DropdownMenuItem<String>(
+  //                             value: value,
+  //                             child: Text(value),
+  //                           );
+  //                         }).toList(),
+  //                         onChanged: null,
+  //                         onTap: () {
+  //                           showAmountBottomSheet(context,
+  //                               groupValue: controller.spinnerAmount.value,
+  //                               monthList: controller.spinnerAmountList);
+  //                         },
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   SizedBox(height: 20),
+  //                   Container(
+  //                     child: Column(
+  //                       children: [
+  //                         Column(
+  //                           mainAxisAlignment: MainAxisAlignment.start,
+  //                           crossAxisAlignment: CrossAxisAlignment.start,
+  //                           children: [
+  //                             Text("Mutual Funds",
+  //                                 style: TextStyle(
+  //                                     fontSize: 14,
+  //                                     fontWeight: FontWeight.w500,
+  //                                     color: Color(0xFF6F828E))),
+  //                             Text("(Average CAGR of top 5 FlexiCap Funds)",
+  //                                 style: TextStyle(
+  //                                     fontSize: 10,
+  //                                     fontWeight: FontWeight.w500,
+  //                                     color: Color(0xFF6F828E))),
+  //                             Row(
+  //                               children: [
+  //                                 Expanded(
+  //                                     flex: 2,
+  //                                     child: Container(
+  //                                       margin:
+  //                                           EdgeInsets.symmetric(vertical: 10),
+  //                                       width: 160,
+  //                                       height: 10,
+  //                                       child: ClipRRect(
+  //                                         borderRadius: BorderRadius.all(
+  //                                             Radius.circular(8)),
+  //                                         child: Container(
+  //                                           margin: EdgeInsets.only(
+  //                                               left: 0,
+  //                                               top: 0,
+  //                                               right: 0,
+  //                                               bottom: 0),
+  //                                           child: SliderTheme(
+  //                                             data: SliderTheme.of(context)
+  //                                                 .copyWith(
+  //                                               activeTickMarkColor:
+  //                                                   Colors.transparent,
+  //                                               inactiveTickMarkColor:
+  //                                                   Colors.transparent,
+  //                                               activeTrackColor:
+  //                                                   Color(0XFF50B432),
+  //                                               inactiveTrackColor:
+  //                                                   Color(0xFFF6F7F9),
+  //                                               trackHeight: 5,
+  //                                               thumbColor: Colors.transparent,
+  //                                               thumbShape:
+  //                                                   RoundSliderThumbShape(
+  //                                                       enabledThumbRadius:
+  //                                                           0.0),
+  //                                               overlayShape:
+  //                                                   RoundSliderOverlayShape(
+  //                                                       overlayRadius: 0.0),
+  //                                             ),
+  //                                             child: Slider(
+  //                                                 value: controller
+  //                                                     .mfReturn.value
+  //                                                     .round()
+  //                                                     .toDouble(),
+  //                                                 min: controller
+  //                                                     .sliderMinValue.value,
+  //                                                 max: controller
+  //                                                     .sliderMaxValue.value,
+  //                                                 label:
+  //                                                     '${controller.mfReturn.value}',
+  //                                                 onChanged: (values) {}),
+  //                                           ),
+  //                                         ),
+  //                                       ),
+  //                                     )),
+  //                                 Expanded(
+  //                                     flex: 2,
+  //                                     child: Container(
+  //                                       padding: EdgeInsets.only(left: 10),
+  //                                       child: Text(
+  //                                           "\u{20B9} ${Utils.formatNumber(controller.mfValue.value)} (${controller.mfReturn.value}%)",
+  //                                           style: TextStyle(
+  //                                               fontSize: 13,
+  //                                               fontWeight: FontWeight.w500,
+  //                                               color: Color(0xFF1FC094))),
+  //                                     )),
+  //                               ],
+  //                             ),
+  //                           ],
+  //                         ),
+  //                         SizedBox(height: 5),
+  //                         Column(
+  //                           mainAxisAlignment: MainAxisAlignment.start,
+  //                           crossAxisAlignment: CrossAxisAlignment.start,
+  //                           children: [
+  //                             Text("NIFTY",
+  //                                 style: TextStyle(
+  //                                     fontSize: 14,
+  //                                     fontWeight: FontWeight.w500,
+  //                                     color: Color(0xFF6F828E))),
+  //                             Row(
+  //                               children: [
+  //                                 Expanded(
+  //                                     flex: 1,
+  //                                     child: Container(
+  //                                       margin:
+  //                                           EdgeInsets.symmetric(vertical: 10),
+  //                                       width: 160,
+  //                                       height: 10,
+  //                                       child: ClipRRect(
+  //                                         borderRadius: BorderRadius.all(
+  //                                             Radius.circular(8)),
+  //                                         child: Container(
+  //                                           margin: EdgeInsets.only(
+  //                                               left: 0,
+  //                                               top: 0,
+  //                                               right: 0,
+  //                                               bottom: 0),
+  //                                           child: SliderTheme(
+  //                                             data: SliderTheme.of(context)
+  //                                                 .copyWith(
+  //                                               activeTickMarkColor:
+  //                                                   Colors.transparent,
+  //                                               inactiveTickMarkColor:
+  //                                                   Colors.transparent,
+  //                                               activeTrackColor:
+  //                                                   Colors.lightBlueAccent,
+  //                                               inactiveTrackColor:
+  //                                                   Color(0xFFF6F7F9),
+  //                                               trackHeight: 5,
+  //                                               thumbColor: Colors.transparent,
+  //                                               thumbShape:
+  //                                                   RoundSliderThumbShape(
+  //                                                       enabledThumbRadius:
+  //                                                           0.0),
+  //                                               overlayShape:
+  //                                                   RoundSliderOverlayShape(
+  //                                                       overlayRadius: 0.0),
+  //                                             ),
+  //                                             child: Slider(
+  //                                                 value: controller
+  //                                                     .niftyReturn.value
+  //                                                     .round()
+  //                                                     .toDouble(),
+  //                                                 min: controller
+  //                                                     .sliderMinValue.value,
+  //                                                 max: controller
+  //                                                     .sliderMaxValue.value,
+  //                                                 label:
+  //                                                     '${controller.niftyReturn.value}',
+  //                                                 onChanged: (values) {}),
+  //                                           ),
+  //                                         ),
+  //                                       ),
+  //                                     )),
+  //                                 Expanded(
+  //                                     flex: 2,
+  //                                     child: Container(
+  //                                       padding: EdgeInsets.only(left: 10),
+  //                                       child: Text(
+  //                                           "\u{20B9} ${Utils.formatNumber(controller.niftyValue.value)} (${controller.niftyReturn.value}%)",
+  //                                           style: TextStyle(
+  //                                               fontSize: 13,
+  //                                               fontWeight: FontWeight.w500,
+  //                                               color: Color(0xFF6F828E))),
+  //                                     )),
+  //                               ],
+  //                             ),
+  //                           ],
+  //                         ),
+  //                         SizedBox(height: 5),
+  //                         Column(
+  //                           mainAxisAlignment: MainAxisAlignment.start,
+  //                           crossAxisAlignment: CrossAxisAlignment.start,
+  //                           children: [
+  //                             Text("Gold",
+  //                                 style: TextStyle(
+  //                                     fontSize: 14,
+  //                                     fontWeight: FontWeight.w500,
+  //                                     color: Color(0xFF6F828E))),
+  //                             Row(
+  //                               children: [
+  //                                 Expanded(
+  //                                     flex: 1,
+  //                                     child: Container(
+  //                                       margin:
+  //                                           EdgeInsets.symmetric(vertical: 10),
+  //                                       width: 160,
+  //                                       height: 10,
+  //                                       child: ClipRRect(
+  //                                         borderRadius: BorderRadius.all(
+  //                                             Radius.circular(8)),
+  //                                         child: Container(
+  //                                           margin: EdgeInsets.only(
+  //                                               left: 0,
+  //                                               top: 0,
+  //                                               right: 0,
+  //                                               bottom: 0),
+  //                                           child: SliderTheme(
+  //                                             data: SliderTheme.of(context)
+  //                                                 .copyWith(
+  //                                               activeTickMarkColor:
+  //                                                   Colors.transparent,
+  //                                               inactiveTickMarkColor:
+  //                                                   Colors.transparent,
+  //                                               activeTrackColor:
+  //                                                   Color(0XFFDDDF00),
+  //                                               inactiveTrackColor:
+  //                                                   Color(0xFFF6F7F9),
+  //                                               trackHeight: 5,
+  //                                               thumbColor: Colors.transparent,
+  //                                               thumbShape:
+  //                                                   RoundSliderThumbShape(
+  //                                                       enabledThumbRadius:
+  //                                                           0.0),
+  //                                               overlayShape:
+  //                                                   RoundSliderOverlayShape(
+  //                                                       overlayRadius: 0.0),
+  //                                             ),
+  //                                             child: Slider(
+  //                                                 value: controller
+  //                                                     .goldReturn.value
+  //                                                     .round()
+  //                                                     .toDouble(),
+  //                                                 min: controller
+  //                                                     .sliderMinValue.value,
+  //                                                 max: controller
+  //                                                     .sliderMaxValue.value,
+  //                                                 label:
+  //                                                     '${controller.goldReturn.value}',
+  //                                                 onChanged: (values) {}),
+  //                                           ),
+  //                                         ),
+  //                                       ),
+  //                                     )),
+  //                                 Expanded(
+  //                                     flex: 2,
+  //                                     child: Container(
+  //                                       padding: EdgeInsets.only(left: 10),
+  //                                       child: Text(
+  //                                           "\u{20B9} ${Utils.formatNumber(controller.goldValue.value)} (${controller.goldReturn.value}%)",
+  //                                           style: TextStyle(
+  //                                               fontSize: 13,
+  //                                               fontWeight: FontWeight.w500,
+  //                                               color: Color(0xFF6F828E))),
+  //                                     )),
+  //                               ],
+  //                             ),
+  //                           ],
+  //                         ),
+  //                         SizedBox(height: 5),
+  //                         Column(
+  //                           mainAxisAlignment: MainAxisAlignment.start,
+  //                           crossAxisAlignment: CrossAxisAlignment.start,
+  //                           children: [
+  //                             Text("FD",
+  //                                 style: TextStyle(
+  //                                     fontSize: 14,
+  //                                     fontWeight: FontWeight.w500,
+  //                                     color: Color(0xFF6F828E))),
+  //                             Row(
+  //                               children: [
+  //                                 Expanded(
+  //                                     flex: 1,
+  //                                     child: Container(
+  //                                       margin:
+  //                                           EdgeInsets.symmetric(vertical: 10),
+  //                                       width: 160,
+  //                                       height: 10,
+  //                                       child: ClipRRect(
+  //                                         borderRadius: BorderRadius.all(
+  //                                             Radius.circular(8)),
+  //                                         child: Container(
+  //                                           margin: EdgeInsets.only(
+  //                                               left: 0,
+  //                                               top: 0,
+  //                                               right: 0,
+  //                                               bottom: 0),
+  //                                           child: SliderTheme(
+  //                                             data: SliderTheme.of(context)
+  //                                                 .copyWith(
+  //                                               activeTickMarkColor:
+  //                                                   Colors.transparent,
+  //                                               inactiveTickMarkColor:
+  //                                                   Colors.transparent,
+  //                                               activeTrackColor:
+  //                                                   Color(0XFF24CBE5),
+  //                                               inactiveTrackColor:
+  //                                                   Color(0xFFF6F7F9),
+  //                                               trackHeight: 5,
+  //                                               thumbColor: Colors.transparent,
+  //                                               thumbShape:
+  //                                                   RoundSliderThumbShape(
+  //                                                       enabledThumbRadius:
+  //                                                           0.0),
+  //                                               overlayShape:
+  //                                                   RoundSliderOverlayShape(
+  //                                                       overlayRadius: 0.0),
+  //                                             ),
+  //                                             child: Slider(
+  //                                                 value: controller
+  //                                                     .fdReturn.value
+  //                                                     .round()
+  //                                                     .toDouble(),
+  //                                                 min: controller
+  //                                                     .sliderMinValue.value,
+  //                                                 max: controller
+  //                                                     .sliderMaxValue.value,
+  //                                                 label:
+  //                                                     '${controller.fdReturn.value}',
+  //                                                 onChanged: (values) {}),
+  //                                           ),
+  //                                         ),
+  //                                       ),
+  //                                     )),
+  //                                 Expanded(
+  //                                     flex: 2,
+  //                                     child: Container(
+  //                                       padding: EdgeInsets.only(left: 10),
+  //                                       child: Text(
+  //                                           "\u{20B9} ${Utils.formatNumber(controller.fdValue.value)} (${controller.fdReturn.value}%)",
+  //                                           style: TextStyle(
+  //                                               fontSize: 13,
+  //                                               fontWeight: FontWeight.w500,
+  //                                               color: Color(0xFF6F828E))),
+  //                                     )),
+  //                               ],
+  //                             ),
+  //                           ],
+  //                         )
+  //                       ],
+  //                     ),
+  //                   )
+  //                 ],
+  //               ),
+  //             ),
+  //             Container(
+  //               padding: EdgeInsets.all(16),
+  //               child: Column(
+  //                 mainAxisAlignment: MainAxisAlignment.start,
+  //                 crossAxisAlignment: CrossAxisAlignment.stretch,
+  //                 children: [
+  //                   Text("Investment Period",
+  //                       textAlign: TextAlign.left,
+  //                       style: TextStyle(
+  //                           fontSize: 16,
+  //                           fontWeight: FontWeight.w500,
+  //                           color: Color(0xFF9099A7))),
+  //                   SizedBox(height: 10),
+  //                   Container(
+  //                     child: Column(
+  //                       mainAxisAlignment: MainAxisAlignment.center,
+  //                       crossAxisAlignment: CrossAxisAlignment.center,
+  //                       children: [
+  //                         ToggleButtons(
+  //                           borderColor: Color(0xFFD9DFE7),
+  //                           selectedBorderColor: Config.appTheme.themeColor,
+  //                           color: Color(0xFFFFFFFF),
+  //                           borderRadius: BorderRadius.circular(3),
+  //                           borderWidth: 1.2,
+  //                           isSelected: controller.isSelected,
+  //                           onPressed: (int index) {
+  //                             for (int buttonIndex = 0;
+  //                                 buttonIndex < controller.isSelected.length;
+  //                                 buttonIndex++) {
+  //                               controller.isSelected[buttonIndex] =
+  //                                   (buttonIndex == index);
+  //                             }
+  //                             switch (index) {
+  //                               case 0:
+  //                                 controller.togglePeriod.value = "6M";
+  //                                 break;
+  //                               case 1:
+  //                                 controller.togglePeriod.value = "1Y";
+  //                                 break;
+  //                               case 2:
+  //                                 controller.togglePeriod.value = "3Y";
+  //                                 break;
+  //                               case 3:
+  //                                 controller.togglePeriod.value = "5Y";
+  //                                 break;
+  //                               case 4:
+  //                                 controller.togglePeriod.value = "10Y";
+  //                                 break;
+  //                               case 5:
+  //                                 controller.togglePeriod.value = "20Y";
+  //                                 break;
+  //                             }
+  //                             controller.getInvestPerformance();
+  //                           },
+  //                           children: <Widget>[
+  //                             Container(
+  //                               padding: EdgeInsets.only(left: 16, right: 16),
+  //                               child: Text("6M",
+  //                                   style: TextStyle(
+  //                                       fontSize: 14,
+  //                                       fontWeight: FontWeight.bold,
+  //                                       color: txtcolor)),
+  //                             ),
+  //                             Container(
+  //                               padding: EdgeInsets.only(left: 16, right: 16),
+  //                               child: Text("1Y",
+  //                                   style: TextStyle(
+  //                                       fontSize: 14,
+  //                                       fontWeight: FontWeight.bold,
+  //                                       color: txtcolor)),
+  //                             ),
+  //                             Container(
+  //                               padding: EdgeInsets.only(left: 16, right: 16),
+  //                               child: Text("3Y",
+  //                                   style: TextStyle(
+  //                                       fontSize: 14,
+  //                                       fontWeight: FontWeight.bold,
+  //                                       color: txtcolor)),
+  //                             ),
+  //                             Container(
+  //                               padding: EdgeInsets.only(left: 16, right: 16),
+  //                               child: Text("5Y",
+  //                                   style: TextStyle(
+  //                                       fontSize: 14,
+  //                                       fontWeight: FontWeight.bold,
+  //                                       color: txtcolor)),
+  //                             ),
+  //                             Container(
+  //                               padding: EdgeInsets.only(left: 16, right: 16),
+  //                               child: Text("10Y",
+  //                                   style: TextStyle(
+  //                                       fontSize: 14,
+  //                                       fontWeight: FontWeight.bold,
+  //                                       color: txtcolor)),
+  //                             ),
+  //                             Container(
+  //                               padding: EdgeInsets.only(left: 14, right: 16),
+  //                               child: Text("20Y",
+  //                                   style: TextStyle(
+  //                                       fontSize: 14,
+  //                                       fontWeight: FontWeight.bold,
+  //                                       color: txtcolor)),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                   SizedBox(height: 10),
+  //                 ],
+  //               ),
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //     );
+  //   });
+  // }
 
   void showAmountBottomSheet(BuildContext context,
       {required String groupValue,
@@ -1251,19 +1713,22 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      shape: RoundedRectangleBorder(borderRadius: cornerBorder),
       builder: (context) {
         return StatefulBuilder(
           builder: (context, bottomState) {
             return SingleChildScrollView(
-              child: Container(
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                child: Column(
-                  children: [
-                    BottomSheetTitle(title: "Select Amount"),
-                    ListView.builder(
+              child: Column(
+                children: [
+                  BottomSheetTitle(title: "Select Amount"),
+                  Divider(height: 0),
+                  // SizedBox(height: 10),
+                  Container(
+                    color: Colors.white,
+                    padding: EdgeInsets.symmetric(horizontal: 30,vertical: 10),
+                    child: ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      // physics: NeverScrollableScrollPhysics(),
                       itemCount: controller.spinnerAmountList.length,
                       itemBuilder: (context, index) {
                         String title = controller.spinnerAmountList[index];
@@ -1275,53 +1740,32 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                             controller.getInvestPerformance();
                             Get.back();
                           },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border(
-                                top: BorderSide(
-                                  width: 1.0,
-                                  color: Color(0XFFE8F1FF),
+                          child: Row(
+                            children: [
+                              Obx(() {
+                                return Radio(
+                                  activeColor: Colors.blue,
+                                  groupValue: controller.spinnerAmount.value,
+                                  value: controller.spinnerAmountList[index],
+                                  onChanged: (val) async {
+                                    controller.spinnerAmount.value = val!;
+                                    controller.getInvestPerformance();
+                                    Get.back();
+                                  },
+                                );
+                              }),
+                              Expanded(
+                                child: Text(
+                                  controller.spinnerAmountList[index]
                                 ),
                               ),
-                              color: Colors.white,
-                            ),
-                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: Row(
-                              children: [
-                                Obx(() {
-                                  return Radio(
-                                    activeColor: Colors.blue,
-                                    groupValue: controller.spinnerAmount.value,
-                                    value: controller.spinnerAmountList[index],
-                                    onChanged: (val) async {
-                                      controller.spinnerAmount.value = val!;
-                                      controller.getInvestPerformance();
-                                      Get.back();
-                                    },
-                                  );
-                                }),
-                                Expanded(
-                                  child: Container(
-                                    child: Text(
-                                      controller.spinnerAmountList[index],
-                                      maxLines: 2,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: 'Mulish',
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0XFF9099A7),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            ],
                           ),
                         );
                       },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           },
@@ -1363,10 +1807,10 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
         children: [
           Row(
             children: [
-              Image.network("${sip.logo}", height: 32),
-              SizedBox(width: 10),
+              //Image.network("${sip.logo}", height: 32),
+              // SizedBox(width: 10),
               SizedBox(
-                width: devWidth * 0.4,
+                width: devWidth * 0.6,
                 child: Text("${sip.schemeAmfiShortName}",
                     style: AppFonts.f50014Black),
               ),
@@ -1431,8 +1875,8 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
         children: [
           Row(
             children: [
-              Image.network("${trnx.logo}", height: 32),
-              SizedBox(width: 10),
+              /* Image.network("${trnx.logo}", height: 32),
+              SizedBox(width: 10),*/
               Expanded(
                 // width: devWidth * 0.4,
                 child: Text("${trnx.schemeAmfiShortName}",
@@ -1521,18 +1965,29 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              "Current Value",
-                              style: TextStyle(
-                                  color: Config.appTheme.themeColor,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 16),
+                            RichText(
+                              text: TextSpan(children: [
+                                TextSpan(
+                                  text: "Total Portfolio Value",
+                                  style: TextStyle(
+                                      color: Config.appTheme.themeColor,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16),
+                                ),
+                                TextSpan(
+                                  text: "\n(Includes all Assets)",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12),
+                                ),
+                              ]),
                             ),
                             Icon(Icons.arrow_forward,
                                 color: Config.appTheme.themeColor)
                           ],
                         ),
-                        SizedBox(height: devHeight * 0.02),
+                        SizedBox(height: devHeight * 0.01),
                         Text(
                           "$rupee ${Utils.formatNumber(total)}",
                           style: TextStyle(
@@ -1642,10 +2097,10 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
               SipRoundIcon(),
               SizedBox(width: 5),
               Text("Mutual Fund",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16,
-                  )),
+                  style: AppFonts.f70024.copyWith(
+                      fontSize: 20,
+                      color: Config.appTheme.themeColor,
+                      fontWeight: FontWeight.w600)),
               Spacer(),
               Icon(Icons.arrow_forward, color: Config.appTheme.themeColor)
             ],
@@ -1673,10 +2128,20 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               columnText("Cost", "$rupee $cost"),
-              columnText("Gain/Loss", "$rupee $gainLoss",
+              columnText("Unrealised Gain", "$rupee $gainLoss",
                   alignment: CrossAxisAlignment.center),
-              columnText("XIRR", "${mutualFund.mutualFundCagr}%",
-                  alignment: CrossAxisAlignment.end,
+              columnText("Abs Rtn (%)", "${mutualFund.mutualFundReturn}",
+                  alignment: CrossAxisAlignment.end)
+            ],
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              columnText("XIRR (%)", "${mutualFund.mutualFundCagr}",
+                  alignment: CrossAxisAlignment.start,
                   valueColor: (xirr > 0)
                       ? Config.appTheme.defaultProfit
                       : Config.appTheme.defaultLoss),
@@ -2079,5 +2544,31 @@ class InvestorPerformanceController extends GetxController {
       return;
     }
     return MFInvestPerformanceResponse.fromJson(data['result']);
+  }
+}
+
+class DottedLine1 extends StatelessWidget {
+  const DottedLine1(
+      {super.key,
+        this.height = 20,
+        this.count = 100,
+        this.verticalPadding = 0});
+
+  final double height;
+  final int count;
+  final double verticalPadding;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: verticalPadding),
+      child: SizedBox(
+          height: height,
+          child: Text('-' * 100,
+              maxLines: 1,
+              style: TextStyle(
+                color: Colors.grey[300],
+              ))),
+    );
   }
 }

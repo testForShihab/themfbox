@@ -32,6 +32,7 @@ class _SipSummaryState extends State<SipSummary> {
   Map sipSummary = {};
   List sipList = [];
   bool isFirst = true;
+  bool isLoading = true;
 
   Future getMutualFundPortfolio() async {
     if (!isFirst) return 0;
@@ -83,6 +84,7 @@ class _SipSummaryState extends State<SipSummary> {
   Future getDatas(BuildContext context) async {
     await getMutualFundPortfolio();
     await getAllOnlineRestrictions();
+    isLoading = false;
 
     return 0;
   }
@@ -136,6 +138,7 @@ class _SipSummaryState extends State<SipSummary> {
                 ],
               ),
             ),
+            (isLoading) ? Utils.shimmerWidget(devHeight * 0.30,margin: EdgeInsets.all(8)) :
             (sipList.isEmpty)
                 ? NoData()
                 : Expanded(
@@ -200,7 +203,7 @@ class _SipSummaryState extends State<SipSummary> {
                        schemeLogo: "${scheme['scheme_amc_logo']}",
                       schemeShortName: encoded_amfi));
                 },
-                child: RpListTile(
+                child: MFRpListTile(
                   showArrow: true,
                   subTitle: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -212,10 +215,10 @@ class _SipSummaryState extends State<SipSummary> {
                           style: f40012.copyWith(color: Colors.black)),
                     ],
                   ),
-                  leading: Image.network(
+                  /*leading: Image.network(
                     "${scheme['scheme_amc_logo']}" ?? "",
                     height: 32,
-                  ),
+                  ),*/
                   title: Text(
                     "${scheme['scheme_amfi_short_name']}",
                     style: AppFonts.f50014Grey.copyWith(color: Colors.blue),
@@ -249,6 +252,7 @@ class _SipSummaryState extends State<SipSummary> {
                     rpRow(
                         lhead: "XIRR (%)",
                         lSubHead: Utils.formatNumber(scheme['xirr']),
+                        lvalueStyle: AppFonts.f50016Grey.copyWith(color: (scheme['xirr'] < 0) ? Config.appTheme.defaultLoss : Config.appTheme.defaultProfit),
                         rhead: (userData.oneDayChange == 1 || ((keys.contains("adminAsInvestor")) || (keys.contains("adminAsFamily")) != false)) ? "1 Day Change" : " ",
                         rSubHead: (userData.oneDayChange == 1 || ((keys.contains("adminAsInvestor")) || (keys.contains("adminAsFamily")) != false)) ? "$rupee ${Utils.formatNumber(scheme['day_change_value'])}" : " " ,titleStyle: AppFonts.f40014,
                         valueStyle: AppFonts.f50016Grey.copyWith(color: (day_change < 0) ? Config.appTheme.defaultLoss : Config.appTheme.defaultProfit),
@@ -272,10 +276,11 @@ class _SipSummaryState extends State<SipSummary> {
     required String cSubHead,
     final TextStyle? valueStyle,
     final TextStyle? titleStyle,
+    final TextStyle? lvalueStyle,
   }) {
     return Row(
       children: [
-        Expanded(child: ColumnText(title: lhead, value: lSubHead,alignment: CrossAxisAlignment.start)),
+        Expanded(child: ColumnText(title: lhead, value: lSubHead,alignment: CrossAxisAlignment.start,valueStyle: lvalueStyle,)),
         Expanded(child: ColumnText(title: rhead, value: rSubHead,alignment: CrossAxisAlignment.center,valueStyle: valueStyle,titleStyle: titleStyle,)),
         Expanded(child: ColumnText(title: chead,value: cSubHead,alignment: CrossAxisAlignment.end)),
       ],

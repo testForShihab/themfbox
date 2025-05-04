@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -458,11 +460,13 @@ class _StpAmountInputState extends State<StpAmountInput> {
             children: [
               Image.network(widget.logo, height: 32),
               SizedBox(width: 10),
-              ColumnText(
-                title: widget.fromSchemeAmfiShortName,
-                value: "Folio : ${widget.folio}",
-                titleStyle: AppFonts.f50014Black,
-                valueStyle: AppFonts.f40013,
+              Flexible(
+                child: ColumnText(
+                  title: widget.fromSchemeAmfiShortName,
+                  value: "Folio : ${widget.folio}",
+                  titleStyle: AppFonts.f50014Black,
+                  valueStyle: AppFonts.f40013,
+                ),
               ),
             ],
           ),
